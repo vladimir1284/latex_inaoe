@@ -395,7 +395,7 @@ For example consider the basic matrix of Table~\ref{table1}, with N=5 attributes
     \end{minipage}%
     \begin{minipage}{.5\linewidth}
       \centering
-        \caption{Ordered Basic Matrix}\label{table2}
+        \caption{Ordered Basic Matrix.}\label{table2}
         \begin{tabular}{ ccccc }
  			\hline                       
   			$x_0$ & $x_3$ & $x_4$ & $x_1$ & $x_2$ \\
@@ -410,16 +410,16 @@ For example consider the basic matrix of Table~\ref{table1}, with N=5 attributes
 
 \newcommand{\lcell}[2][2.5in]{$\vcenter{\hsize#1\baselineskip11pt\vspace*{3.5pt}\raggedright#2\strut\par}$}
 
-      \centering
+      %\centering
         \begin{longtable}{cccccl}
-		\caption[CT-EXT example]{CT-EXT algorithm example.} \label{tab_example} \\
+		\caption[CT-EXT example.]{CT-EXT algorithm example.} \label{tab_example} \\
  			\hline                       
   			$\mathbf{T}$ & $\mathbf{\sum_T f^0}$ & $\mathbf{X_j}$ & $\mathbf{T \cup \{X_j\}}$ &
   			$\mathbf{\sum_{T \cup \{X_j\}} f^0}$ & 
   			\multicolumn{1}{>{\centering\arraybackslash}m{2.5in}}{\textbf{Comments}}\\
   			\hline
   			$\{~\}$ & $\infty$ & $x_0$ & $\mathbf{\{x_0\}}$ & 1 & 
-  			\lcell{$x_0$ contributes but $\{x_0\}$ isn't a testor. Add a new attribute (step 7).}\\
+  			\lcell{$x_0$ contributes but $\{x_0\}$ isn't a testor. Add a new attribute (step~7).}\\
   			$\{x_0\}$ & 1 & $x_3$ & $\mathbf{\{x_0,x_3\}}$ & 1 &
   			\lcell{$x_3$ doesn't contributes. Eliminate $x_3$ (step 6). Add a new attribute.}\\
   			$\{x_0\}$ & 1 & $x_4$ & $\mathbf{\{x_0,x_4\}}$ & 0 &
@@ -470,32 +470,30 @@ performance for practical problems. An interesting alternative is to
 migrate to custom hardware architectures based on programmable logic
 to take advantage of the parallelism inherent in this type of
 algorithms. 
-%TODO update these sentences %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 This work is a continuation of our previous work
-\citep{R10} \citep{R11} and reports the development of a
+\citep{R10,R11,R21} and reports the development of a
 hardware-software platform for computing irreducible testors using
-the BT algorithm. 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+the CT-EXT algorithm. 
 The proposed platform is shown in
-Fig.\,\ref{fig:2}. A description of all the platform modules is
+Fig.\,\ref{figArq}. A description of all the platform modules is
 given in the next sections.
 
-\begin{figure}[b]
+\begin{figure}[htb]
     \begin{center}
-        %\includegraphics[width=13cm]{Fig2.eps}
+        %\includegraphics[width=13cm]{Arquitecture.eps}
     \end{center}
 \caption{Proposed hardware-software platform.}
-\label{fig:2}
+\label{figArq}
 \end{figure}
 
 \section{Hardware architecture}
 \label{sect:4}
 
-\begin{figure}[b]
+\begin{figure}[htb]
     \begin{center}
-        %\includegraphics[width=13cm]{Fig3.eps}
+        %\includegraphics[width=13cm]{CT-ext_arq.eps}
     \end{center}
-\caption{BT Architecture.}
+\caption{CT-EXT Architecture.}
 \label{fig:3}
 \end{figure}
 
@@ -503,10 +501,12 @@ The process of deciding if an $N$-tuple is a testor of $BM$ involves
 comparing the candidate against each one of the $BM$'s rows. For
 software-only implementations, this is a big disadvantage, in
 particular for large matrices with many rows. The proposed hardware
-architecture exploits the parallelism inherent in the BT algorithm
-and evaluates whether a candidate is a testor or not in a single
-clock cycle. It is composed by three main modules as seen in
-Fig.\,\ref{fig:3}. The BM module stores the input matrix and
+architecture exploits the parallelism inherent in the CT-EXT algorithm
+and evaluates whether a candidate is an irreducible testor or not in a single
+clock cycle. It is composed by two main modules as seen in
+Fig.\,\ref{fig:3}. 
+%TODO change from here
+The BM module stores the input matrix and
 includes logic to decide if an $N$-tuple is a testor. The candidate
 generator module produces the candidates ($N$-tuples) to be
 evaluated by the BM module. In order to calculate the next candidate
@@ -525,33 +525,100 @@ is eliminated. This final process does not introduce delays, thus
 the architecture is still capable of evaluating a candidate in a
 single clock cycle.
 
-\begin{figure}[t]
+\begin{figure}[htb]
     \begin{center}
-        %\includegraphics[height=6cm]{Fig4.eps}
+        %\includegraphics[height=6cm]{BM_module.eps}
     \end{center}
 \caption{BM module.}
 \label{fig:4}
 \end{figure}
 
-The BM module is composed of $M$ sub-modules named $V_{x}$, as shown
-in Fig.\,\ref{fig:4}. Each $V_{x}$ module contains a row ($N$ bits)
+The BM module is composed of $M$ sub-modules named \textit{row~x}, as shown
+in Fig.\,\ref{fig:4}. Each \textit{row~x} module contains a row ($N$ bits)
 of the $BM$ matrix and logic to perform testor evaluation. To decide
 if an $N$-tuple is a testor, a bitwise AND operation is performed
-between the constant stored in each $V_{x}$ module and the current
-candidate. If at least one bit of the AND operation result is TRUE,
-then the output $is_testor$ of that particular $V_{x}$ sub-module
-will be TRUE, and if the outputs of all $V_{x}$ sub-modules are
-TRUE, then the output $is_testor$ of the BM module will be TRUE,
+between the constant stored in each \textit{row~x} module and the current
+candidate as shown in Fig.\,\ref{fig:row}. If at least one bit of the AND operation result is TRUE,
+then the output \textit{Testor} of that particular \textit{row~x} sub-module
+will be TRUE. The same operation is performed over the previous candidate.
+If the count of rows asserting the output \textit{Testor} is different from
+the those asserting the output \textit{Contributes} of that particular \textit{row~x} sub-module, 
+then output \textit{Contributes} from the BM module is TRUE.
+If the outputs of all  \textit{row~x} sub-modules are
+TRUE, then the output \textit{Testor} of the BM module will be TRUE,
 which means that the candidate is declared a testor of $BM$.
 
-When a candidate fails to be a testor of $BM$, the output $V$ of the
-BM module contains the value of the row closest to the top that
-caused the failure. If the candidate is declared as testor, the
-output $V$ is just ignored. The value of $V$ is obtained by using
-the output of a priority encoder as the $select$ signal of a
-multiplexer that can select among all the rows of BM. This is
-similar to having a read address in a register file to access the
-value stored in a particular row.
+\begin{figure}[htb]
+    \begin{center}
+        %\includegraphics[height=6cm]{BM_row.eps}
+    \end{center}
+\caption{BM row.}
+\label{fig:row}
+\end{figure}
+
+In order to check for irreducible condition of testors, the module \textit{N to N decoder}
+receives as input the result of AND operation between the current candidate and the $BM$ row.
+The output from module \textit{N to N decoder} repeats the input in case there is only one bit set
+in it, and returns zero otherwise. For those rows with only one bit set after anded with candidate,
+attribute in the position of setted bit is indispensable in case of candidate been a testor.
+According to definition~\ref{def2}, every attribute in a testor should be indispensable to be an
+irreducible testor. This idea is stated in definition~1 of \citep{R13}.
+
+\setlength{\tabcolsep}{3pt}
+\begin{table}[!htb]
+    \begin{minipage}{.5\linewidth}
+      \caption{Irreducible testor.}\label{table4}
+      \centering
+        \begin{tabular}{ ccccc|ccccc }
+ 			\hline                       
+  			\multicolumn{5}{c|}{Cand. $(x_0 x_1)$} & 
+  			\multicolumn{5}{c}{Decoder output} \\
+  			\hline
+  			%\multicolumn{5}{c|}{$x_0~x_3~x_4~x_1~x_2$}&\multicolumn{5}{c}{$x_0~x_3~x_4~x_1~x_2$}\\
+  			$x_0$ & $x_3$ & $x_4$ & $x_1$ & $x_2$ &
+  			$x_0$ & $x_3$ & $x_4$ & $x_1$ & $x_2$ \\
+  			\hline
+  			1 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0\\
+  			0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 1 & 0\\
+  			1 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\
+  			\hline  
+  			\multicolumn{5}{c|}{Candidate $=$} & 1 & 0 & 0 & 1 & 0\\
+  			\hline  
+		\end{tabular}
+	%\end{table}
+	%\begin{table}[!htb]
+    \end{minipage}%
+    \begin{minipage}{.5\linewidth}
+      \centering
+        \caption{Non irreducible testor.}\label{table5}
+        \begin{tabular}{ ccccc|ccccc }
+ 			\hline                       
+  			\multicolumn{5}{c|}{Cand. $(x_0 x_4)$} & 
+  			\multicolumn{5}{c}{Decoder output} \\
+  			\hline
+  			%\multicolumn{5}{c|}{$x_0~x_3~x_4~x_1~x_2$}&\multicolumn{5}{c}{$x_0~x_3~x_4~x_1~x_2$}\\
+  			$x_0$ & $x_3$ & $x_4$ & $x_1$ & $x_2$ &
+  			$x_0$ & $x_3$ & $x_4$ & $x_1$ & $x_2$ \\
+  			\hline
+  			1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+  			0 & 0 & 1 & 0 & 0 & 0 & 0 & 1 & 0 & 0\\
+  			1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+  			\hline  
+  			\multicolumn{5}{c|}{Candidate $\neq$} & 0 & 0 & 1 & 0 & 0\\
+  			\hline  
+		\end{tabular}
+    \end{minipage} 
+\end{table}
+
+
+%When a candidate fails to be a testor of $BM$, the output $V$ of the
+%BM module contains the value of the row closest to the top that
+%caused the failure. If the candidate is declared as testor, the
+%output $V$ is just ignored. The value of $V$ is obtained by using
+%the output of a priority encoder as the $select$ signal of a
+%multiplexer that can select among all the rows of BM. This is
+%similar to having a read address in a register file to access the
+%value stored in a particular row.
 
 \begin{figure}[t]
     \begin{center}
@@ -1055,7 +1122,6 @@ Mora-Gonz\'alez, M and Salinas-Luna, J. (2010). A Fast Implementation of the CT-
 %TODO change these bellow for corect ones
 \bibitem[Xilinx (2007)]{R14}Virtex-II Pro Data Sheet Version 4.7. Xilinx Inc.
 \bibitem[Xilinx (2003)]{R15}XtremeDSP Development Kit Pro User Guide Version 1.0. Xilinx Inc.
-
 
 
 %% \bibitem must have one of the following forms:
