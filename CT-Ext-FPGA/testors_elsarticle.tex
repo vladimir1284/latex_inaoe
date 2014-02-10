@@ -622,23 +622,45 @@ irreducible testor. This idea is stated in definition~1 of \citep{R13}.
 
 \begin{figure}[t]
     \begin{center}
-        %\includegraphics[height=6cm]{Fig5.eps}
+        %\includegraphics[height=6cm]{CandGen.eps}
     \end{center}
 \caption{Candidate Generator module.}
 \label{fig:5}
 \end{figure}
 
 The candidate generator module uses the feedback from the BM module
-to calculate the next candidate to be evaluated. As specified by the
-BT algorithm, there are two ways of generating the next candidate
-according to the evaluation result of the previous one. The
-candidate generator module (Fig.\,\ref{fig:5}) consists of two
-sub-modules, the first sub-module (jump\_1) generates the next
-candidate when the previous one is a testor and the second
-sub-module (jump\_2) generates the next candidate when the previous
-one fails to be a testor. The next candidate is selected by a
-multiplexer according to the evaluation result of the previous
-candidate.
+to calculate the next candidate to be evaluated. The
+candidate generator module (Fig.\,\ref{fig:5}) consists of three
+registers for holding the current candidate (\textit{Curr$\_$cand}), the previous candidate
+(\textit{Prev$\_$cand}) and the last added attribute ($J$). 
+
+ \begin{table}[htb]
+		\caption{Candidate Generator Selector.} \label{tab_CandGen}
+		\centering
+ 	\begin{tabular}{ccc}
+ 			\hline
+ 			Priority & Condition & Registers update\\
+ 			\hline
+ 			1 & \multicolumn{1}{>{\centering\arraybackslash}m{1in}}{$J=J_{max}$
+ 				($J_{max}=$ max value of $J$)} & \multicolumn{1}{>{\centering\arraybackslash}m{2in}}{
+ 				curr$\_$cand $\leftarrow$ E2A
+ 				prev$\_$cand~$\leftarrow$~E2A
+ 				$J$~$\leftarrow$~E2A}\\
+ 			\hline
+ 			2 & \multicolumn{1}{>{\centering\arraybackslash}m{1.2in}}{Contributes $=0$ or Testor $=1$} &
+ 			\multicolumn{1}{>{\centering\arraybackslash}m{2in}}{
+ 				curr$\_$cand $\leftarrow$ E1A
+ 				prev$\_$cand~$\leftarrow$~E1A
+ 				$J$~$\leftarrow$~E1A}\\
+ 			\hline
+ 			3 & \multicolumn{1}{>{\centering\arraybackslash}m{1.2in}}{Contributes $=1$ or Testor $=0$}&
+ 			\multicolumn{1}{>{\centering\arraybackslash}m{2in}}{
+ 				curr$\_$cand $\leftarrow$ A
+ 				prev$\_$cand~$\leftarrow$~curr$\_$cand
+ 				$J$~$\leftarrow$~A}\\
+ 			\hline       
+ 	\end{tabular}             
+ \end{table}
 
 The jump\_1 sub-module uses a priority encoder to obtain the index,
 $k$, of the last `1' in the previous candidate value. The next
