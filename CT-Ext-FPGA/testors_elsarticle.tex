@@ -118,11 +118,6 @@
 %% \address[label1]{<address>}
 %% \address[label2]{<address>}
 
-\author{Vlad\'imir Rodr\'iguez}
-\author{Ren\'e Cumplido}
-\author{J. Ariel Carrasco-Ochoa}
-\author{Claudia Feregrino}
-\author{J. Francisco Mart\'inez-Trinidad}
 
 \address{Computer Science Department}
 \address{National Institute for Astrophysics, Optics and Electronics}
@@ -527,7 +522,7 @@ single clock cycle.
 
 \begin{figure}[htb]
     \begin{center}
-        %\includegraphics[height=6cm]{BM_module.eps}
+        \includegraphics[height=6cm]{BM_module.eps}
     \end{center}
 \caption{BM module.}
 \label{fig:4}
@@ -550,7 +545,7 @@ which means that the candidate is declared a testor of $BM$.
 
 \begin{figure}[htb]
     \begin{center}
-        %\includegraphics[height=6cm]{BM_row.eps}
+        \includegraphics[height=6cm]{BM_row.eps}
     \end{center}
 \caption{BM row.}
 \label{fig:row}
@@ -610,19 +605,11 @@ irreducible testor. This idea is stated in definition~1 of \citep{R13}.
     \end{minipage} 
 \end{table}
 
-
-%When a candidate fails to be a testor of $BM$, the output $V$ of the
-%BM module contains the value of the row closest to the top that
-%caused the failure. If the candidate is declared as testor, the
-%output $V$ is just ignored. The value of $V$ is obtained by using
-%the output of a priority encoder as the $select$ signal of a
-%multiplexer that can select among all the rows of BM. This is
-%similar to having a read address in a register file to access the
-%value stored in a particular row.
+Take for example the ordered basic matrix in table~\ref{table2}. In the table~\ref{table4} the irreducibility of candidate $(x_0 x_1)$ is evaluated while did the same for candidate $(x_0 x_4)$ in table~\ref{table5}. In left rows the result of the AND operation between each row of $BM$ and the candidate, while those in the right show decoder output taking as input the cell in its left. In the lower right corner the result of OR operation over all cells above is shown. According to our previous explanation, candidate $(x_0 x_1)$ is an irreducible testor been equal to the OR operation result while candidate $(x_0 x_4)$ isn't. This can be corroborated in table~\ref{tab_example}.
 
 \begin{figure}[t]
     \begin{center}
-        %\includegraphics[height=6cm]{CandGen.eps}
+        \includegraphics[height=6cm]{CandGen.eps}
     \end{center}
 \caption{Candidate Generator module.}
 \label{fig:5}
@@ -632,7 +619,14 @@ The candidate generator module uses the feedback from the BM module
 to calculate the next candidate to be evaluated. The
 candidate generator module (Fig.\,\ref{fig:5}) consists of three
 registers for holding the current candidate (\textit{Curr$\_$cand}), the previous candidate
-(\textit{Prev$\_$cand}) and the last added attribute ($J$). 
+(\textit{Prev$\_$cand}) and the last added attribute ($J$). These registers values are updated
+by the modules EA1, EA2 and A.
+
+Depending on the combination of inputs values, outputs are taken E1A,
+E2A or A to update the records accordingly. Table~\ref{tab_CandGen} shows the
+conditions that must be met by \textit{Testor}, \textit{Contributes} and $J$ inputs, for each
+register to receive the correct value and the priority which should be evaluated. This
+operation is computed in module \textit{sel} from figure~\ref{fig:5}.
 
  \begin{table}[htb]
 		\caption{Candidate Generator Selector.} \label{tab_CandGen}
