@@ -522,7 +522,7 @@ single clock cycle.
 
 \begin{figure}[htb]
     \begin{center}
-        \includegraphics[height=6cm]{BM_module.eps}
+%        \includegraphics[height=6cm]{BM_module.eps}
     \end{center}
 \caption{BM module.}
 \label{fig:4}
@@ -545,7 +545,7 @@ which means that the candidate is declared a testor of $BM$.
 
 \begin{figure}[htb]
     \begin{center}
-        \includegraphics[height=6cm]{BM_row.eps}
+%        \includegraphics[height=6cm]{BM_row.eps}
     \end{center}
 \caption{BM row.}
 \label{fig:row}
@@ -609,7 +609,7 @@ Take for example the ordered basic matrix in table~\ref{table2}. In the table~\r
 
 \begin{figure}[t]
     \begin{center}
-        \includegraphics[height=6cm]{CandGen.eps}
+%        \includegraphics[height=6cm]{CandGen.eps}
     \end{center}
 \caption{Candidate Generator module.}
 \label{fig:5}
@@ -656,49 +656,44 @@ operation is computed in module \textit{sel} from figure~\ref{fig:5}.
  	\end{tabular}             
  \end{table}
 
-The jump\_1 sub-module uses a priority encoder to obtain the index,
-$k$, of the last `1' in the previous candidate value. The next
-candidate value is obtained by adding $2^{N-k}$ to the previous
-candidate as indicated by the step 3 of the BT algorithm.
+Submodule $A$ from Fig.\,\ref{fig:subA} sets the attribute following the last bit setted in
+the input candidate. Its outputs are the new candidate and the incremented by one $J$ value.
+Submodule $E1A$ 
 
-Besides the value of the previous candidate, the jump\_2 sub-module
-uses an input $V$ that contains the value of the row of $BM$ that
-caused the previous candidate not to be a testor. A priority decoder
-obtains the index $k$ of the last `1' of $V$. By taking the value of
-the previous candidate, the next candidate is obtained by letting
-all bits to the left of the $k^{th}$ position unchanged, the bits to
-the right are changed to `0', and the $k^{th}$ bit is set to `1'.
-See step 4 of the algorithm.
 
-\begin{figure}[b]
-    \begin{center}
-        %\includegraphics[width=13cm]{Fig6.eps}
-    \end{center}
-\caption{Dismiss Testors module.}
-\label{fig:6}
+\begin{figure}[htb]
+\centering
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=.7\linewidth , height=3cm]{Add1.eps}
+  \caption{Submodule A.}
+  \label{fig:subA}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth , height=3cm]{EA1.eps}
+  \caption{Submodule E1A.}
+  \label{fig:subEA1}
+\end{minipage}
 \end{figure}
 
-\begin{table*}[t]%[tpb]
-\caption{Remaining testors using the Dismiss Testors module, with different amount of REG\_DT sub-modules.}
-\label{table:4}
-\begin{center}
-    %\scalebox{.55}{
-    \begin{tabular}{rrrrrrrrrr}\hline
-           &  Received & \multicolumn{8}{c}{\bf \small Amount of registers in the dismiss testors module} \\ \cline{3-10}
-        \raisebox{1.5ex}[0pt]{$BM$} & Testors & 8 & 16 & 32 & 64 & 128 & 256 & 512 & 1024 \\ \hline
-        21 & 173,957 & 57,020 & 36,243 & 26,014 & 19,943 & 15,081 & 11,934 & 9,965 & 7,870 \\
-        22 & 280,926 & 85,624 & 51,667 & 36,643 & 27,302 & 20,776 & 16,875 & 13,978 & 11,176 \\
-        23 & 476,445 & 134,068 & 80,296 & 55,491 & 39,314 & 28,679 & 22,982 & 18,852 & 14,800 \\
-        24 & 822,454 & 214,127 & 121,877 & 79,440 & 55,398 & 40,731 & 32,869 & 26,962 & 21,348 \\
-        25 & 1,483,468 & 352,075 & 192,316 & 124,136 & 84,781 & 59,736 & 47,075 & 37,549 & 29,356 \\
-        26 & 2,506,239 & 537,179 & 281,416 & 176,384 & 117,335 & 84,304 & 67,515 & 54,513 & 42,936 \\
-        27 & 4,492,643 & 839,811 & 443,758 & 272,190 & 175,103 & 123,866 & 98,442 & 77,682 & 61,278 \\
-        28 & 6,712,871 & 1,236,039 & 637,972 & 385,418 & 246,115 & 170,057 & 133,463 & 105,581 & 84,056 \\
-        29 & 9,956,854 & 1,727,804 & 892,049 & 551,305 & 355,303 & 247,730 & 193,879 & 151,596 & 120,986 \\ \hline
-    \end{tabular}%}
-\end{center}
-\end{table*}
 
+
+\begin{figure}[htb]
+\centering
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth , height=3cm]{Rem1.eps}
+  \caption{Submodule Rem_1.}
+  \label{fig:subRem1}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth , height=3cm]{EA2.eps}
+  \caption{Submodule E2A.}
+  \label{fig:subEA2}
+\end{minipage}
+\end{figure}
 
 The Dismiss Testors (DT) module (Fig.\,\ref{fig:6}) discards some
 candidates that were evaluated as testors in the BM module, but they
