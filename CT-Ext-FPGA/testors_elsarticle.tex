@@ -111,7 +111,7 @@
 %% \address{Address\fnref{label3}}
 %% \fntext[label3]{}
 
-\title{Hardware-Software Platform for Computing Irreducible Testors}
+\title{Hardware Platform for Computing Irreducible Testors}
 
 %% use optional labels to link authors explicitly to addresses:
 %% \author[label1,label2]{<author name>}
@@ -475,7 +475,7 @@ given in the next sections.
 
 \begin{figure}[htb]
     \begin{center}
-        %\includegraphics[width=13cm]{Arquitecture.eps}
+        \includegraphics[width=13cm]{Arquitecture.eps}
     \end{center}
 \caption{Proposed hardware-software platform.}
 \label{figArq}
@@ -486,7 +486,7 @@ given in the next sections.
 
 \begin{figure}[htb]
     \begin{center}
-        %\includegraphics[width=13cm]{CT-ext_arq.eps}
+        \includegraphics[width=13cm]{CT-ext_arq.eps}
     \end{center}
 \caption{CT-EXT Architecture.}
 \label{fig:3}
@@ -500,7 +500,7 @@ architecture exploits the parallelism inherent in the CT-EXT algorithm
 and evaluates whether a candidate is an irreducible testor or not in a single
 clock cycle. It is composed by two main modules as seen in
 Fig.\,\ref{fig:3}. 
-%TODO change from here
+
 The BM module stores the input matrix and
 includes logic to decide if an $N$-tuple is a testor. The candidate
 generator module produces the candidates ($N$-tuples) to be
@@ -522,7 +522,7 @@ single clock cycle.
 
 \begin{figure}[htb]
     \begin{center}
-%        \includegraphics[height=6cm]{BM_module.eps}
+        \includegraphics[height=6cm]{BM_module.eps}
     \end{center}
 \caption{BM module.}
 \label{fig:4}
@@ -545,7 +545,7 @@ which means that the candidate is declared a testor of $BM$.
 
 \begin{figure}[htb]
     \begin{center}
-%        \includegraphics[height=6cm]{BM_row.eps}
+        \includegraphics[height=6cm]{BM_row.eps}
     \end{center}
 \caption{BM row.}
 \label{fig:row}
@@ -609,7 +609,7 @@ Take for example the ordered basic matrix in table~\ref{table2}. In the table~\r
 
 \begin{figure}[t]
     \begin{center}
-%        \includegraphics[height=6cm]{CandGen.eps}
+        \includegraphics[height=6cm]{CandGen.eps}
     \end{center}
 \caption{Candidate Generator module.}
 \label{fig:5}
@@ -656,9 +656,18 @@ operation is computed in module \textit{sel} from figure~\ref{fig:5}.
  	\end{tabular}             
  \end{table}
 
-Submodule $A$ from Fig.\,\ref{fig:subA} sets the attribute following the last bit setted in
+The submodule $A$ from Fig.\,\ref{fig:subA} sets the attribute following the last bit setted in
 the input candidate. Its outputs are the new candidate and the incremented by one $J$ value.
-Submodule $E1A$ 
+
+The submodule $E1A$  from Fig.\,\ref{fig:subEA1} comprises the \textit{Rem$\_1$} 
+(Fig.\,\ref{fig:subRem1}) and $A$ submodules. 
+The submodule \textit{Rem$\_1$} deletes the last attribute added to the input candidate. 
+This action is performed by a priority encoder which locates the last bit setted in the input candidate. 
+\textit{Rem$\_1$} outputs are the index of cleared bit: $J$ and \textit{candidate} which is the 
+input candidate without the last attribute. These outputs are connected to the corresponding inputs of 
+submodule $A$ to add an attribute in the corresponding position. Finally, the outputs of $E1A$ are 
+the new candidate to be evaluated, and the index where the new attribute is added to the 
+candidate, both outputs of $A$.
 
 
 \begin{figure}[htb]
@@ -677,14 +686,22 @@ Submodule $E1A$
 \end{minipage}
 \end{figure}
 
+Finally, submodule $E2A$ is responsible for removing the last two attributes from
+input candidate, and then add the following corresponding attribute. This 
+operation is performed by means of two \textit{Rem$\_1$} submodules and a submodule $A$, as 
+shown in Fig.\,\ref{fig:subEA2}.
 
+To check for algorithm termination the result of AND operation between current candidate and
+the first row of the basic matrix is compared to the null $N$-tuple ($0,...,0$), as shown in 
+upper right corner of Fig.\,\ref{fig:5}. In case of asserted comparison the output done is activated
+ because no further combination can be a testor by not satisfying the condition over the first row.
 
 \begin{figure}[htb]
 \centering
 \begin{minipage}{.5\textwidth}
   \centering
   \includegraphics[width=\linewidth , height=3cm]{Rem1.eps}
-  \caption{Submodule Rem_1.}
+  \caption{Submodule Rem$\_1$.}
   \label{fig:subRem1}
 \end{minipage}%
 \begin{minipage}{.5\textwidth}
@@ -695,92 +712,27 @@ Submodule $E1A$
 \end{minipage}
 \end{figure}
 
-The Dismiss Testors (DT) module (Fig.\,\ref{fig:6}) discards some
-candidates that were evaluated as testors in the BM module, but they
-are supersets of other testors, thus they are not irreducible
-testors. The DT module has a predefined number of REG\_DT
-sub-modules that store equal number of testors. These sub-modules
-are initialized with the $N$-tuple $1\ldots11$. A new testor is
-evaluated in each sub-module. If the input testor is a superset of
-any of the stored ones, it must be disposed, else, it is sent to the
-output $testor$ and furthermore, it is stored in the first REG\_DT
-sub-module. Each time a new testor is stored, each REG\_DT
-sub-module passes its value to the next one. As the number of
-registers within the REG\_DT sub-modules is limited, a discarding
-policy must be implemented to delete a testor once all sub-modules
-are filled. Because the last testor is more likely to be a superset
-of one or more of the previously generated testors, the selected
-discarding policy consists in eliminating the oldest testor stored
-within the DT module.
-
-On each REG\_DT sub-module, a bitwise AND operation is performed
-between the stored value in the register and the input $Candidate$.
-The $N$-tuple stored is compared again, this time against the result
-of the previous operation. If both are equal, it means that the
-input testor is a superset of the stored one. The output of each
-REG\_DT sub-module always takes the value stored in the register,
-moving out this value to the next register in case of being
-necessary.
-
-The used prototyping kit allows partitioning the functionality of the application between software and
-hardware effectively. It provides a set of functions that allows the user to communicate data between the
-hardware architecture in the FPGA and the host application running on the PC using high level calls. An
-interface core provided with the kit offers a communication mechanism to build a simplified interface for
-connecting the user architecture in the FPGA to the PCI bus using a FIFO memory as buffer. This abstracts the
-complexities of the communication process.  In turn, for the host application, a set of Application Program
-Interfaces (APIs) provides functions for sending and receiving data from across the PCI \citep{R15}.
-
-Table \ref{table:4} summarizes experiments made for deciding the
-appropriate number of registers in the dismiss testors module. As
-results show, the more REG\_DT sub-modules, the higher the
-percentage of non irreducible testors eliminated. However, as the
-number of REG\_DT sub-modules impacts directly on hardware
-requirements, we concluded that 16 REG\_DT provide a good tradeoff
-for two reasons: 1) the percentage of non irreducible testors
-eliminated was always over 79\%; and 2) as shown in
-Table\,\ref{table:7} (in Sect.\,\ref{sect:6}), the hardware
-requirements are still modest when compared against the rest of the
-architecture. This number of REG\_DT is used for all the
-experiments.
+The prototyping board used \citep{R15} allows the communication between the PC and the FPGA 
+through USB port. Irreducible testors are buffered into a FIFO in order to be split into
+bytes which are then buffered into a double clocked FIFO \citep{R26} to be read from the PC using 
+DSTM  \citep{R25} protocol.
 
 \section{Software Description}
 \label{sect:5}
 
-The software component of the hardware-software platform works as an
-interface between the user, the computer, and the FPGA board.
-Fig\,\ref{fig:7} shows the user interface, which requests the
-location of the input file containing the basic matrix, and allows
-starting and stopping the irreducible testor computing process. The
+The software component works as an
+interface between the user, the computer, and the FPGA board. The
 input data file must be in plain text following the format shown in
 Fig.\,\ref{fig:8}.
 
-The process of deciding if a testor obtained by the architecture is
-an irreducible testor by the host application is straightforward. It
-consists in deciding for each new testor, if it is a superset of any
-previously stored testor, which indicates that the new testor is not
-an irreducible testor, and it must be discarded. This process starts
-once the first testor is received by the host application, from that
-moment until the last testor is received, both the hardware
-architecture and the host application work alternately. Thus the
-processing times reported in Table \ref{table:5} for the irreducible
-testors processing is mostly the time spent by the hardware
-architecture to produce the testors, including the time needed for
-deciding which of the testors obtained by the architecture are
-indeed irreducible testor. The platform is able to extract all
-irreducible testors independently of the number of Reg\_DTs. The
-purpose of the DT module is to reduce the number of testors sent to
-the host application in order to avoid having a bottleneck in the
-system. The amount of the reduction can be seen in table
-\ref{table:4}.
-
-The testor computing process begins when the user clicks the $Start$
-button. First the basic matrix is read from the input file. Once the
-matrix is loaded into the computer's memory, the basic matrix is
-reorganized by swapping rows and columns in such a way the resulting
-basic matrix is close to be a lower-left-triangular matrix, this
-with the purpose of optimizing the jumps that BT algorithm performs.
-Afterward, in order to complete the project files, three VHDL files
-are generated and used to create a project for ISE (implementation
+The testor computing process begins on command line program call. 
+First the basic matrix is read from the input file argument. Once the
+matrix is loaded into memory, the basic matrix is reorganized by 
+setting the row with minimum amount of ones as the first row and
+swapping columns in such a way the ones in first row appear on the left,
+no matters the order between them.
+Afterward, in order to complete the project files, one VHDL file
+is generated and used to create a project for ISE (implementation
 tool from Xilinx), which produces the programming file for the FPGA
 device.
 
@@ -788,236 +740,216 @@ In the next stage, the interaction between hardware and software is
 started. First, the board and the FPGA are located, then the device
 is programmed with the bit-file obtained from the previous stage,
 and both, the board and the device are initialized. Now, the
-hardware architecture starts computing testors. Each testor is
-temporally stored in a FIFO memory, when there are 512 elements in
-the FIFO they are sent to the software through the PCI bus. The
-software stores the incoming testor set into a buffer. When the
-buffer is full, the hardware is paused while a selection process
-empties the buffer by choosing and storing only irreducible testors.
-After this, the hardware architecture and the software alternate
-until the last candidate is verified.
+hardware architecture starts computing irreducible testors. 
+Software keeps pulling through USB for new irreducible testors in the output 
+FIFO until done is activate in the FPGA.
+
+Finally irreducible testors are codified according to the original order of
+columns and written to output file.
 
 \begin{figure}[t]
     \begin{center}
-        %\includegraphics[height=6cm]{Fig7.eps}
+        \includegraphics[height=2.8cm]{infile.eps}
     \end{center}
-\caption{User interface for BT hardware-software platform.}
-\label{fig:7}
-\end{figure}
-
-\begin{figure}[t]
-    \begin{center}
-       % \includegraphics[height=2.8cm]{Fig8.eps}
-    \end{center}
-\caption{$BM$ input file format.}
+\caption{Input file format.}
 \label{fig:8}
 \end{figure}
 
 \section{Evaluation}
 \label{sect:6}
 
-\begin{table*}[t]%[tpb]
-    \caption{Processing time in seconds (broken down for each stage) for 45X100 low, medium and high density matrices.}
-    \label{table:5}
-    \begin{center}
-        %\scalebox{.7}{
-        \begin{tabular}{ccccccc} \cline{2-7}
-             & \multicolumn{2}{c}{\bf Low Density} & \multicolumn{2}{c}{\bf Medium Density} & \multicolumn{2}{c}{\bf High Density} \\ \hline
-            Stages & HW/SW & SW-O & HW/SW & SW-O & HW/SW & SW-O \\ \hline
-            Load BM & 0.031 & 0.031 & 0.031 & 0.031 & 0.032 & 0.031 \\
-            BM arrangement & 0.281 & 0.281 & 0.281 & 0.024 & 0.282 & 0.01 \\
-            Files creation & 0.032 & N/A \footnote[1]{Not Applicable} & 0.031 & N/A\footnote[1]{Not Applicable} & 0.046 & N/A\footnote[1]{Not Applicable} \\
-            Synthesis & 691 & N/A\footnote[1]{Not Applicable} & 1,032 & N/A\footnote[1]{Not Applicable} & 930 & N/A\footnote[1]{Not Applicable} \\
-            IT\footnote[2]{Irreducible testors.} computing & 316 & 170,830 & 1,303 & 51,777 & 8 & 0.06 \\ \hline
-            TOTAL & 1,008 & 170,831 & 2,336 & 51,778 & 939 & 0.11 \\ \hline
-        \end{tabular}%}
-    \end{center}
-\end{table*}
+%\begin{table*}[t]%[tpb]
+%    \caption{Processing time in seconds (broken down for each stage) for 45X100 low, medium and high density matrices.}
+%    \label{table:5}
+%    \begin{center}
+%        %\scalebox{.7}{
+%        \begin{tabular}{ccccccc} \cline{2-7}
+%             & \multicolumn{2}{c}{\bf Low Density} & \multicolumn{2}{c}{\bf Medium Density} & \multicolumn{2}{c}{\bf High Density} \\ \hline
+%            Stages & HW/SW & SW-O & HW/SW & SW-O & HW/SW & SW-O \\ \hline
+%            Load BM & 0.031 & 0.031 & 0.031 & 0.031 & 0.032 & 0.031 \\
+%            BM arrangement & 0.281 & 0.281 & 0.281 & 0.024 & 0.282 & 0.01 \\
+%            Files creation & 0.032 & N/A \footnote[1]{Not Applicable} & 0.031 & N/A\footnote[1]{Not Applicable} & 0.046 & N/A\footnote[1]{Not Applicable} \\
+%            Synthesis & 691 & N/A\footnote[1]{Not Applicable} & 1,032 & N/A\footnote[1]{Not Applicable} & 930 & N/A\footnote[1]{Not Applicable} \\
+%            IT\footnote[2]{Irreducible testors.} computing & 316 & 170,830 & 1,303 & 51,777 & 8 & 0.06 \\ \hline
+%            TOTAL & 1,008 & 170,831 & 2,336 & 51,778 & 939 & 0.11 \\ \hline
+%        \end{tabular}%}
+%    \end{center}
+%\end{table*}
 
-In order to show the performance of the proposed hardware-software
-platform, it was compared against a software-only implementation of
-the BT algorithm. For experimentation purposes, three kinds of basic
-matrices were randomly generated. Each type containing different
-amount of 1's per row:
+%- 2 dif dens y 1 real
+%- dependence on BM
+%- sintesis overhead
 
-\begin{enumerate}
-\renewcommand{\labelenumi}{\arabic{enumi})}
-    \item High density matrices: between 90\% and 98\%.
-    \item Low density matrices: between 4\% and 12\%.
-    \item Medium density matrices: between 47\% and 53\%.
-\end{enumerate}
 
-\footnotetext[1]{Not Applicable}
-\footnotetext[2]{Irreducible Testors}
+In order to show the performance of the proposed platform, it was compared against a software 
+implementation of the CT-EXT algorithm and BT hardware platform from \citep{R21}. 
+For experimentation purposes, BT hardware platform was modified for finding irreducible testors 
+on the FPGA as we explained in section~\ref{sect:4}.
 
-High density matrices represent datasets with well separated
-classes, so it is very easy to find out subsets of features that
-allow differentiating objects from different classes; in consequence
-it is easy to compute all irreducible testors. On the other hand,
-low density matrices represent datasets where objects from different
-classes are very similar, which results in a low amount of 1's;
-therefore it is difficult to find a feature subset that allows to
-distinguish between objects belonging to different classes and
-computing all irreducible testors would be more difficult. Medium
-density matrices contain a balanced amount of 1's and 0's, and they
-come from datasets where the classes are not well separated, but
-there still be enough difference between objects from different
-classes. These are difficult matrices for computing all irreducible
-testors, and in practice, most of the interesting pattern
-recognition problems produce this kind of matrices.
+In order to understand experiments design, some ideas on algorithms and implementations must be said. 
+Either CT-EXT or BT (modified) hardware implementations are capable of evaluating a candidate per clock 
+cycle. If both architectures are running at the same frequency, as will be the case in our experiments, 
+there are two reasons for differences in running time. The first one is the time taken to matrix 
+reorganization, which is a more complex process for BT, but can be neglected as shown in \citep{R21}. 
+The second and relevant one, is the amount of candidates to be evaluated. It is not a difficult task 
+to find a $BM$ in which BT evaluate less candidates than CT-EXT or vice versa.
 
-Several basic matrices of different sizes were randomly generated
-for each density, from 35 to 50 columns and all of them with 100
-rows. On the hardware-software platform the runtimes for the
-following stages: load basic matrix to memory, matrix arrangement,
-project files creation, synthesis of ISE project, and irreducible
-testor computing (with a hardware frequency of 40MHz), were
-measured. Figs.\,\ref{fig:9},\,\ref{fig:10} and \,\ref{fig:11} show
-graphs of the whole processing time for high, medium and low density
-matrices respectively. In these graphs, it is possible to see that
-the proposed platform obtains better performance than the
-software-only implementation of BT for low and medium density
-matrices. For high density matrices the software-only implementation
-required less time, because computing irreducible testors is very
-easy for this kind of matrices, and the synthesis time required for
-the proposed platform is much higher than the irreducible testor
-computing time.
+In relation to software implementation, the CT-EXT hardware platform has two disadvantages. First, 
+VHDL code is generated with $BM$ data and a process of synthesis is executed previous to algorithm 
+execution while this is unnecessary in software platform. Secondly, the software will be running in 
+a PC at a frequency of +3GHz while FPGA architecture will be at 50MHz. 
 
-The processing time $t$, of the last stage of the proposed platform,
-for a specific matrix is given by:
+These disadvantages make the hardware approach useful (faster) under two conditions. The algorithm 
+execution must require the evaluation of a number of candidates big enough to overcome the synthesis 
+overhead; and the dimensions of the $BM$ must be big enough to provide a gain in a single candidate 
+evaluation. Although hardware architecture could be design for a fixed maximum matrix size and 
+receive the $BM$ through USB, the size of the problem would be significantly reduced. The synthesis 
+process comprehend an optimization of the design, taking advantage of $BM$ data for the reduction of 
+generated hardware. The number of operations for the evaluation of a single candidate in the software 
+approach is proportional to the number of rows and has a relation with the number of columns in the 
+$BM$. CPU operations will be increased every time the number of attributes exceeds a multiple of 
+microprocessor word width. This way we can have a gain, even at a much lower running frequency, from 
+evaluating a candidate every clock cycle.
 
-\begin{equation}
-    \label{eq:1}
-    t = \left( \frac{2^{N}}{f} \right) \left( \frac{c}{100} \right)
-\end{equation}
+With these restrictions in mind, to show the usability of proposed platform, 
+two kinds of basic matrices were randomly generated. Each type containing different amount of 1's per 
+row and different amount of rows. In addition, a basic matrix obtained from real data (\textbf{CITE}) 
+is solved.
 
-\begin{figure}[t]
-    \begin{center}
-       % \includegraphics[width=13.0cm,height=6cm]{Fig9.eps}
-%        \includegraphics{Fig9.eps}
-    \end{center}
-\caption{Whole processing time in hours for high density matrices.}
-\label{fig:9}
+Several basic matrices of different sizes were randomly generated for each kind. On hardware platforms 
+the runtimes for the following stages: $BM$ input parsing and VHDL code generation, synthesis of ISE project, 
+and irreducible testor computing (with a hardware frequency of 50MHz), were measured. 
+Figs.\,\ref{fig:result1}, and \,\ref{fig:result2} show graphs of the whole processing time for the two kind 
+of basic matrices. 
+
+\begin{figure}[htb]
+\centering
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth , height=5.5cm]{low_density.eps}
+  \caption{Total runtime for density 8\%.}
+  \label{fig:result1}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth , height=5.5cm]{med_density.eps}
+  \caption{Total runtime for density 30\%.}
+  \label{fig:result2}
+\end{minipage}
 \end{figure}
 
-\begin{figure}[t]
-    \begin{center}
-       % \includegraphics[width=13cm,height=6.0cm]{Fig10.eps}
-%        \includegraphics{Fig10.eps}
-    \end{center}
-\caption{Whole processing time in hours for medium density matrices.}
-\label{fig:10}
-\end{figure}
+Tables~\ref{sect:6} and~\ref{table:7} summarize the FPGA resources utilization on our prototyping board. 
+As we can see, CT-EXT implementation is smaller than modified BT implementation. Resources utilization is 
+related to $BM$ dimensions and density and to a lesser extent to data organization.
 
-\begin{figure}[t]
-    \begin{center}
-        %\includegraphics[width=13cm,height=6.0cm]{Fig11.eps}
-%        \includegraphics{Fig11.eps}
-    \end{center}
-\caption{$BM$ Whole processing time in hours for low density matrices.}
-\label{fig:11}
-\end{figure}
-
-
-\begin{table}[t]%[tpb]
-\caption{Synthesis summary of FPGA Resources utilization a operating
-frequency for the architecture targeted for a Virtex-II XC2V3000
-FPGA device (N = 100, M = 325).} \label{table:6}
+\begin{table}[htb]
+\caption{Synthesis summary of resources utilization for $BM$ with 8\% density on Spartan-6 LX45 
+FPGA device.} \label{table:6}
 \begin{center}
-    \begin{tabular}{ccccc}   \hline
-        Number of Slices & 11,137 (77\%)  \\
-        Number of 4-input LUTs & 2,484 (8\%) \\
-        Number of Flip-Flops & 2,1262 (74\%) \\
-        Maximum clock frequency & 55.510 MHz \\ \hline
+    \begin{tabular}{lcccc}   \hline
+    	    Dimensions & \multicolumn{2}{c}{400x40} & \multicolumn{2}{c}{400x44} \\ \hline
+    	    Algorithm & BT & CT-EXT & BT & CT-EXT \\ \hline
+        Slices & 1,398 (20\%) & 983 (14\%) & 1,554 (22\%) & 1,209 (17\%)  \\
+        6-input LUTs & 4,010 (14\%) & 2,806 (10\%)& 4,475 (16\%)  & 3,004 (11\%)\\
+        Flip-Flops & 832 (1\%) & 852 (1\%) & 876 (1\%) & 938 (1\%)\\
+        Max clock freq & 80.44MHz & 179.58MHz & 84.56MHz & 173.24MHz\\ \hline
     \end{tabular}
 \end{center}
 \end{table}
 
-
-\begin{table*}[t]%[tpb]
-\caption{FPGA Resource utilization for Virtex II XC2V3000 for $N=50$ and $M=100$ (Whole
-architecture vs Dismis testors module).}
- \label{table:7}
+\begin{table}[htb]
+\caption{Synthesis summary of resources utilization for $BM$ with 30\% density on Spartan-6 LX45 
+FPGA device.} \label{table:7}
 \begin{center}
-    %\scalebox{.68}{
-    \begin{tabular}{ccccccc} \cline{2-7}
-         & \multicolumn{2}{c}{\bf8 REG\_DT} & \multicolumn{2}{c}{\bf16 REG\_DT} & \multicolumn{2}{c}{\bf32 REG\_DT} \\ \hline
-         & Whole & Dismiss & Whole & Dismiss & Whole & Dismiss \\
-        \raisebox{1.5ex}[0pt]{\bf Resources} & architecture & Testors & architecture & Testors & architecture & Testors \\ \hline
-        Slices & 2365 & 338 & 2676 & 679 & 3331 & 1342 \\
-        Flip-flops & 1024 & 400 & 1451 & 800 & 2236 & 1600 \\
-        LUTs & 4256 & 258 & 4472 & 472 & 4871 & 892 \\ \hline
-    \end{tabular}%}
+    \begin{tabular}{lcccc}   \hline
+    	    Dimensions & \multicolumn{2}{c}{225x50} & \multicolumn{2}{c}{225x55} \\ \hline
+    	    Algorithm & BT & CT-EXT & BT & CT-EXT \\ \hline 
+        Slices & 1,381 (20\%) & 1,554 (22\%) & 1,455 (21\%) & 1,562 (22\%) \\
+        6-input LUTs & 3,769 (13\%) & 4,315 (15\%) & 4,135 (15\%) & 5,026 (18\%)\\
+        Flip-Flops & 949 (1\%) & 980 (1\%) & 1,002 (1\%) & 1,039 (1\%)\\
+        Max clock freq & 87.46MHz & 155.40MHz & 85.27MHz & 156.35MHz\\ \hline
+    \end{tabular}
 \end{center}
-\end{table*}
+\end{table}
 
-where $f$ is the clock frequency of the architecture and $c$ is the
-percentage of candidates tested. Note that the value of $c$ is data
-dependent, i.e. it varies for each basic matrix, $BM$.
+%\begin{table*}[t]%[tpb]
+%\caption{FPGA Resource utilization for Virtex II XC2V3000 for $N=50$ and $M=100$ (Whole
+%architecture vs Dismis testors module).}
+% \label{table:7}
+%\begin{center}
+%    %\scalebox{.68}{
+%    \begin{tabular}{ccccccc} \cline{2-7}
+%         & \multicolumn{2}{c}{\bf8 REG\_DT} & \multicolumn{2}{c}{\bf16 REG\_DT} & \multicolumn{2}{c}{\bf32 REG\_DT} \\ \hline
+%         & Whole & Dismiss & Whole & Dismiss & Whole & Dismiss \\
+%        \raisebox{1.5ex}[0pt]{\bf Resources} & architecture & Testors & architecture & Testors & architecture & Testors \\ \hline
+%        Slices & 2365 & 338 & 2676 & 679 & 3331 & 1342 \\
+%        Flip-flops & 1024 & 400 & 1451 & 800 & 2236 & 1600 \\
+%        LUTs & 4256 & 258 & 4472 & 472 & 4871 & 892 \\ \hline
+%    \end{tabular}%}
+%\end{center}
+%\end{table*}
 
-It is important to notice that the processing time for computing
-irreducible testors does not only depend on the size and density of
-the $BM$, but also on the distribution of 0's and 1's inside the
-matrix. This assertion can be appreciated in points 43 to 45 of
-Fig\,\ref{fig:11}.
+%where $f$ is the clock frequency of the architecture and $c$ is the
+%percentage of candidates tested. Note that the value of $c$ is data
+%dependent, i.e. it varies for each basic matrix, $BM$.
+%
+%It is important to notice that the processing time for computing
+%irreducible testors does not only depend on the size and density of
+%the $BM$, but also on the distribution of 0's and 1's inside the
+%matrix. This assertion can be appreciated in points 43 to 45 of
+%Fig\,\ref{fig:11}.
 
-Table\,\ref{table:5} shows the processing time for each stage of the data flow, for 45X100 low, medium, and
-high density matrices. This table shows that the proposed platform allows running BT 169 times faster that
-the software-only implementation, for a 45X100 low density matrix and 22 times faster for the medium density
-matrix of the same size. Moreover, taking into account only the last stage of the data flow, the improvement
-over the software is 540X for the low density matrix and 39X for the medium density one. The only type of
-matrices where the proposed platform does not perform better that the software-only BT implementation was the
-high density ones, this is because of computing irreducible testors is very fast for this kind of matrices.
-The software-only implementation of BT was executed on a PC with an Intel Centrino Duo processor running at
-1.6GHz, with 1024 MB of RAM.
+%Table\,\ref{table:5} shows the processing time for each stage of the data flow, for 45X100 low, medium, and
+%high density matrices. This table shows that the proposed platform allows running BT 169 times faster that
+%the software-only implementation, for a 45X100 low density matrix and 22 times faster for the medium density
+%matrix of the same size. Moreover, taking into account only the last stage of the data flow, the improvement
+%over the software is 540X for the low density matrix and 39X for the medium density one. The only type of
+%matrices where the proposed platform does not perform better that the software-only BT implementation was the
+%high density ones, this is because of computing irreducible testors is very fast for this kind of matrices.
+%The software-only implementation of BT was executed on a PC with an Intel Centrino Duo processor running at
+%1.6GHz, with 1024 MB of RAM.
 
-The proposed platform has been designed to process variable sizes of the $BM$ matrix. The maximum size of the
-matrix that can be implemented is only limited by the available resources on the specific FPGA board. For
-example, for the Virtex-II XC2V3000 from Xilinx\cite{R14} embedded on an XtremeDSP board \citep{R15}, the
-biggest medium density matrix that can fit into the FPGA is about 100X325. Table\,\ref{table:6} summarizes
-the resource utilization for this matrix.
-
-Finally, Table\,\ref{table:7} summarizes the resource utilization
-for a 50X100 matrix for different buffer sizes on the Dismiss Testor
-module, all for the same device. Although 8 and 32 are good choices,
-16 results in a better trade-off between resource utilization (small
-when compared against the whole architecture), and the non
-irreducible testors eliminated (always over 79\%, as
-Table\,\ref{table:4} shows).
+%The proposed platform has been designed to process variable sizes of the $BM$ matrix. The maximum size of the
+%matrix that can be implemented is only limited by the available resources on the specific FPGA board. For
+%example, for the Virtex-II XC2V3000 from Xilinx\cite{R14} embedded on an XtremeDSP board \citep{R15}, the
+%biggest medium density matrix that can fit into the FPGA is about 100X325. Table\,\ref{table:6} summarizes
+%the resource utilization for this matrix.
+%
+%Finally, Table\,\ref{table:7} summarizes the resource utilization
+%for a 50X100 matrix for different buffer sizes on the Dismiss Testor
+%module, all for the same device. Although 8 and 32 are good choices,
+%16 results in a better trade-off between resource utilization (small
+%when compared against the whole architecture), and the non
+%irreducible testors eliminated (always over 79\%, as
+%Table\,\ref{table:4} shows).
 
 \section{Discussion}
 \label{sect:7}
 
-The proposed hardware-software platform provides higher processing
-performance than the software-only implementation of the BT
-algorithm for two of the three kinds of matrices used in the
-experimentation. This behavior is possible because the hardware
-component of the proposed platform is capable of testing if an
-$N$-tuple is a testor of a $BM$ in a single clock cycle,
+The proposed hardware platform provides higher processing
+performance than the software implementation of the CT-EXT
+algorithm for matrices used in the experimentation. 
+This behaviour is possible because the hardware
+component of the proposed platform is capable of testing if a 
+candidate is a testor of a $BM$ in a single clock cycle,
 independently of the number of columns and rows, whereas
-software-only implementation processing time will significantly
+software implementation processing time will significantly
 increase for matrices with a large number of rows.
 
 Moreover, the performance improvement is directly related to the
 percentage of candidates tested ($c$), which heavily depends on
-density and distribution of the values into the $BM$ matrix. Proofs
-for this dependence are the resulting processing times of high
-density matrices. This kind of matrices has a high amount of 1's,
-thus there are low chances to find a row with only 0's when an
-$N$-tuple is evaluated, which results in a great reduction in the
-number of operations made by the BT algorithm. This occurs in the
-software-only as well as in the hardware-software implementations,
+density and distribution of the values into the $BM$ matrix. This occurs in the
+software as well as in the hardware implementation,
 but the proposed platform also needs to synthesize the specific
-architecture. Therefore, the best choice for computing all
-irreducible testors for high density matrices is the software-only
-implementation of BT algorithm. However, most of the real world
-pattern recognition problems produce medium density matrices, where
-using the proposed platform is the best choice for computing all
-irreducible testors.
+architecture. For practical purposes, a concurrent approach can be used 
+in computation of irreducible testors. This way, the same $BM$ is provided 
+to hardware and software implementations of BT and CT-EXT algorithms at the same time. 
+We can get the answer from the faster one without knowing which will be the best 
+for the given data.
 
 Experiment results show that the proposed platform allows computing
-irreducible testors faster than the software-only implementation of
-the BT algorithm, with improvements in the range of 2 orders of
+irreducible testors faster than the software implementation of
+the CT-EXT algorithm, with improvements in the range of \textbf{one order} of
 magnitude. However, for very large real data this improvement could
 be significantly higher.
 
@@ -1025,7 +957,7 @@ be significantly higher.
 \label{sect:8}
 
 The high performance of the proposed platform is feasible due to the
-high level of parallelism implicit in the BT algorithm which can be
+high level of parallelism implicit in candidates evaluation of algorithms which can be
 efficiently implemented on an FPGA. The proposed architecture is
 capable of evaluating a testor candidate in a single clock cycle for
 any $BM$ matrix, regardless of the number of columns and rows, the
@@ -1036,13 +968,9 @@ high performance processing module in a hardware-in-the-loop
 approach\cite{R16}.
 
 Even though the proposed architecture offers an improvement compared
-with a previously reported hardware implementation, further
+with a previously reported hardware implementations, further
 improvements, such as testing two or more candidates per iteration,
-are still possible. Also, because resource requirements are
-relatively small, a scheme where the processing core can be
-replicated will also be explored; this will effectively reduce the
-processing time, in proportion to the number of processing cores
-that can be accommodated on the FPGA device.
+are still possible.
 
 
 %% The Appendices part is started with the command \appendix;
@@ -1097,7 +1025,7 @@ that can be accommodated on the FPGA device.
 
 
 %% References with bibTeX database:
-
+\section*{References}
 \bibliographystyle{elsarticle-harv}
 %%\bibliography{<your-bib-database>}
 
@@ -1131,8 +1059,10 @@ that can be accommodated on the FPGA device.
 Mora-Gonz\'alez, M and Salinas-Luna, J. (2010). A Fast Implementation of the CT-EXT Algorithm for the Testor Property Identification. Lecture Notes in Computer Science, 6438, 92-103.
 \bibitem[Valev et al. (2004)]{R7}Valev, V. and Sankur, B. (2004). Generalized non-reducible descriptors. Pattern Recognition, 37, 1809-1815.
 %TODO change these bellow for corect ones
-\bibitem[Xilinx (2007)]{R14}Virtex-II Pro Data Sheet Version 4.7. Xilinx Inc.
-\bibitem[Xilinx (2003)]{R15}XtremeDSP Development Kit Pro User Guide Version 1.0. Xilinx Inc.
+%\bibitem[Xilinx (2007)]{R14}Virtex-II Pro Data Sheet Version 4.7. Xilinx Inc.
+\bibitem[Digilent (2013)]{R15}Atlys Board Reference Manual. Digilent, Inc.
+\bibitem[Digilent (2010)]{R25}Digilent Synchronous Parallel Interface (DSTM) Programmer?s Reference Manual. Digilent, Inc.
+\bibitem[Xilinx (2012)]{R26}LogiCORE IP FIFO Generator v9.2. Xilinx Inc.
 
 
 %% \bibitem must have one of the following forms:
