@@ -26,7 +26,7 @@ xlim((49,91))
 grid('on')
 xlabel('Attributes')
 ylabel('Time (Hrs)')
-title('Density 30% and 225 rows')
+title('Density 33% and 225 rows')
 legend(('CTH','CTS','BTH'), loc=2)
 img.savefig('med_density.eps')
 
@@ -34,7 +34,7 @@ img.savefig('med_density.eps')
 n = [48,50,52,54,56,58,60,62,64,66,68,70]
 ct = r_[639, 763, 727, 822, 958, 978, 1170, 1253, 1407, 2560, 3511, 2701]/3600.
 bt = r_[78077.6]/3600.
-sf = r_[1857, 2656, 3324, 4800, 6660, 0, 0, 17040, 26460, 43920, 59580, 76800]/3600.
+sf = r_[1857, 2656, 3324, 4800, 6660, 10140, 14580, 17040, 26460, 43920, 59580, 76800]/3600.
 
 img = figure(figsize=(4,4)) # figsize=(4,8)
 plot(n,ct,'k-*',n,sf,'k-s')#,n[0],bt,'k-^')
@@ -42,6 +42,6 @@ xlim((47,71))
 grid('on')
 xlabel('Attributes')
 ylabel('Time (Hrs)')
-title('Density 48% and 255 rows')
+title('Density 45% and 255 rows')
 legend(('CTH','CTS'), loc=2)
 img.savefig('med48_density.eps')
