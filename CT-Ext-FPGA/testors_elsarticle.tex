@@ -121,7 +121,7 @@
 %% \address{Address\fnref{label3}}
 %% \fntext[label3]{}
 
-\title{Hardware Platform Based on the CT-EXT Algorithm for Computing Irreducible Testors}
+\title{A New Fast Hardware Software Platform for Computing Irreducible Testors}
 
 %% use optional labels to link authors explicitly to addresses:
 %% \author[label1,label2]{<author name>}
@@ -135,14 +135,14 @@
 
 \begin{abstract}
 Feature selection is an important task in pattern recognition. Given a dataset described by a set of attributes, a minimum subset of attributes that preserves the ability to discern between objects from different classes is needed. The computation of this minimum subset is a problem whose space complexity grows
-exponentially regarding the number of attributes. Testor Theory is a convenient way to solve this problem. A testor is defined as a subset of attributes that can discern between objects of different classes; and an irreducible testor is a minimal subset with this property. Although there are efficient algorithms for computing irreducible testors, hardware implementations of these algorithms can improve their performance; taking advantage of the inherent parallelism in the evaluation of testor candidates. In this paper, a hardware platform based on the CT-EXT algorithm for computing irreducible testors for feature selection is presented. Results from a prototype implementation on an FPGA board, showing the advantages of the proposed platform, are presented and discussed.
+exponentially regarding the number of attributes. Testor Theory is a convenient way to solve this problem. A testor is defined as a subset of attributes that can discern between objects of different classes; and an irreducible testor is a minimal subset with this property. Although there are efficient algorithms for computing irreducible testors, hardware implementations of these algorithms can improve their performance; taking advantage of the inherent parallelism in the evaluation of testor candidates. In this paper, a new fast hardware software platform for computing irreducible testors is presented. Results from a prototype implementation showing the advantages of the proposed platform, are presented and discussed.
 
 \end{abstract}
 
 \begin{keyword}
 %% keywords here, in the form: keyword \sep keyword
-Feature Selection \sep Testor Theory \sep Custom Architectures \sep
-FPGAs
+Feature Selection \sep Testor Theory \sep Hardware Architecture \sep
+FPGA
 %% MSC codes here, in the form: \MSC code \sep code
 %% or \MSC[2008] code \sep code (2000 is the default)
 
@@ -165,18 +165,18 @@ FPGAs
 
 Feature selection for supervised classification consists in identifying those attributes that 
 provide relevant information for the classification process. This procedure does not only reduce the 
-computational cost of classification process by eliminating superfluous information, but in some cases 
-it can even provide better classification accuracy. 
+computational cost of the classification process by eliminating superfluous information, but in some cases 
+it could even provide better classification accuracy. 
 %Several algorithms have been proposed to overcome 
 %the exponential complexity intrinsic to feature selection, however, most of them were restricted to 
 %numeric attributes \citep{R3,R4}. 
-Testor Theory can be used for feature selection as shown in~\citep{R27,R5}. A testor is defined as a subset of attributes that can discern objects from different classes. An irreducible testor is a subset of features such that every attribute is indispensable for satisfying the testor condition. Finding all irreducible testors is a computationally complex problem.
+Testor Theory can be used for feature selection as shown in~\citep{R27,R5}. A testor is defined as a subset of attributes that can discern objects from different classes. An irreducible testor is a subset of features such that every attribute is indispensable for satisfying the testor condition. Finding all irreducible testors has been proven as an NP-hard problem~\citep{R40}.
 
-Recently, there is an increasing popularity of FPGA-based architectures for solving complex 
-computational problems. Several hardware-software platforms based on this technology have been 
-reported \citep{R29,R30}. 
+Recently, there is an increasing popularity of architectures based on Field Programmable Gate-Array (FPGA) 
+for solving complex computational problems. Several hardware-software platforms based on this technology have 
+been reported \citep{R29,R30}. 
 In these platforms, the software component handles those tasks less suited for hardware implementation, 
-and it is also responsible of configuring the FPGA, as well as handling communication with hardware component. 
+and it is also responsible of configuring the FPGA, as well as handling communication with the hardware component. 
 The hardware component, on the other hand, performs those operations with a high parallelism degree.
 
 In spite of advances in the theoretical aspects of computing
@@ -185,33 +185,34 @@ no hardware implementations reported aside from \citep{R10,R11,R21}.
 In the first work, an FPGA-based brute force approach for computing testors was proposed
 \citep{R10}. This first approach did not take advantage of dataset characteristics to reduce the number 
 of candidates to be tested; thus all $2^n$ combinations of $n$ features have to be tested. 
-Then in \citep{R11} a hardware architecture of the BT algorithm for computing irreducible testors was implemented. 
-This algorithm used a candidate pruning process that avoids unnecessary candidate evaluation, 
+Then, in \citep{R11} a hardware architecture of the BT algorithm for computing irreducible testors was implemented. 
+This algorithm uses a candidate pruning process for avoiding many unnecessary candidate evaluation, 
 reducing the number of verifications of the irreducible testor condition. 
-These two previous works computed the whole set of testors on the FPGA device whilst irreducible condition 
+These two previous works computed a set of testors on the FPGA device whilst irreducible condition 
 was evaluated afterwards by the software component in the hosting PC. 
 Thus \cite{R21} proposed a hardware-software platform for computing irreducible testors that 
 implemented the BT algorithm, as in \citep{R11}, but it also included a new module that eliminates most of 
 the non irreducible testors before transferring them to a host software application for final filtering. 
 One disadvantage of these approaches is the huge amount of data that must be transferred to the PC.  
-Following this idea, in this paper, we develop an efficient hardware-software platform for computing irreducible
+For this reason, in this paper, we develop an efficient hardware-software platform for computing irreducible
 testors for feature selection %\citep{R2,R3,R17,R18,R19} 
 using the CT-EXT algorithm proposed in~\citep{R22} which computes only typical testors, 
 reducing the amount of data that must be transferred to the PC. Additionally, CT-EXT has proven being, 
 in most cases, more efficient in finding irreducible testors than BT~\citep{R22, R23}.
 
 The intensive computational requirements due to the exponential
-complexity, with respect to the number of attributes, of the CT-EXT algorithm 
-can be met by a combination of technological improvements and efficient hardware architectures based on parallel
-computational models. 
+complexity, regarding the number of attributes, of the CT-EXT algorithm,
+can be met by a combination of technological improvements and efficient hardware architectures based on 
+parallel computational models. 
 %Further optimizations such as incremental
 %processing and the use of multiple processing elements are also
 %possible as will be shown later in this paper.
 
 The rest of this paper is structured as follows. Section~\ref{sect:2} introduces the basic concepts of 
 Testor Theory and the CT-EXT algorithm. Section~\ref{sect:3} introduces the proposed platform. 
-Subsection~\ref{sect:4} describes the hardware architecture. Subsection~\ref{sect:5} depicts the 
-software component. Evaluation of the proposed platform and a discussion of experimental results are 
+%Subsection~\ref{sect:4} describes the hardware architecture. 
+%Subsection~\ref{sect:5} depicts the software component. 
+Evaluation of the proposed platform and a discussion of the experimental results are 
 presented in sections~\ref{sect:6} 
 and~\ref{sect:7}. Finally, section~\ref{sect:8} shows our conclusions and some directions for future work.
 
@@ -226,7 +227,7 @@ way to deal with this problem is through Testor Theory. The concept of testor fo
 introduced by \cite{R12}. They defined a testor as a subset of features that allows
 differentiating objects from different classes. Testors are quite useful, especially when object descriptions
 contain both numeric and non-numeric features, and maybe they are incomplete (mixed incomplete data)
-\citep{R5}. This concept has been developed from its study in different contexts \citep{R1}. From an 
+\citep{R5}. This concept has been developed in different contexts \citep{R1}. From an 
 algorithmic point of view, Testor Theory has shown a continuous development from its origins to the present 
 \citep{R31,R13,R23}.
 
@@ -251,8 +252,8 @@ classes that are similar on all the features of $T$, that is, a
 testor $T$ allows differentiating objects from different
 classes. From definition~\ref{def1}, if $T$ is a testor then, any superset of $T$ is a testor too.
 
-The number of rows in $DM$ could be too large, therefore a strategy to reduce this matrix without losing
-relevant information for computing irreducible testors is eliminating redundant rows \citep{R1}.
+The number of rows in $DM$ could be too large, therefore a strategy to reduce this matrix, without losing
+relevant information for computing irreducible testors, is eliminating redundant rows \citep{R1}.
 
 %% DEFINICION 
 \begin{definition}
@@ -268,7 +269,9 @@ A row $f$ of $DM$ is a basic row if no row of the matrix $DM$ is a sub-row of $f
 
 %% DEFINICION 
 \begin{definition}
-The sub-matrix of $DM$ formed only by the basic rows (without repetitions) is the basic matrix of DM and is denoted as $BM$.
+The basic matrix of $DM$, denoted as $BM$, is the sub-matrix of $DM$ formed only by the basic rows (without 
+repetitions).
+
 \end{definition}
 
 Let $TT(DM)$ and $TT(BM)$ be the sets of all irreducible testors of $DM$ and $BM$ respectively, it is relatively easy to prove that $TT(DM)=TT(BM)$, see \citep{R32}; i.e., we can conclude that usually $DM$ contains redundant information. In addition, the construction of $BM$ from $DM$ is a very fast process, then we work over $BM$.
@@ -296,7 +299,7 @@ at least one zero row will appear, and the testor property would not be fulfille
 We say that $x_j$ contributes to T if, and only if, $\sum_{T\cup\{x_j\}} f^0 < \sum_T f^0$.
 \end{definition}
 This definition indicates that a feature contributes to a feature subset $T$
-if for at least one zero row in $BM$, considering only $T$, the new feature has 1 in 
+if for at least one zero row in $BM$, considering only $T$, the new feature has a 1 in 
 this row. So, adding this feature to $T$, there are less
 zero rows than the amount of zero rows for $T$.
 
@@ -329,12 +332,12 @@ then $T \cup Z$ is a testor too, but it is not an irreducible testor.
 Algorithm~\ref{ctext_algo} exposes the pseudo code for CT-EXT, a detailed explanation for 
 this algorithm can be seen in~\citep{R22}. The function SortBM$(BM)$ sorts the basic matrix as follows.
 Randomly select one of the rows of $BM$ with the fewest number of 1's. The selected row goes first and 
-all columns in which it has 1 are moved to the left.  
+all columns in which it has a 1 are moved to the left.  
 
-The function Evaluate$(BM,T)$ returns  $testor$, $irreducible$ and $zero\_rows$. The value of $testor$ is TRUE if the set $T$ is a testor of $BM$ and FALSE otherwise. The value of $irreducible$ is TRUE if the set $T$ is an irreducible testor and FALSE otherwise. The value of $zero\_rows$ is the amount of zero rows of $T$. 
+The function Evaluate$(BM,T)$ returns three values: $testor$, $irreducible$ and $zero\_rows$. $testor$ is TRUE if the set $T$ is a testor of $BM$ and FALSE otherwise. $irreducible$ is TRUE if the set $T$ is an irreducible testor and FALSE otherwise. $zero\_rows$ is the amount of zero rows of $T$. 
 
-\begin{spacing}{1.0}
 \begin{algorithm}
+	\begin{spacing}{1.0}
 	\caption{CT-EXT algorithm}\label{ctext_algo}
 	\begin{algorithmic}[1]	
 		%\Procedure{CT-EXT}{}
@@ -377,8 +380,8 @@ The function Evaluate$(BM,T)$ returns  $testor$, $irreducible$ and $zero\_rows$.
 			\EndWhile
 		%\EndProcedure
 	\end{algorithmic}
+	\end{spacing}
 \end{algorithm}
-\end{spacing}
 %\begin{enumerate}
 %\item Select a row of $BM$ that has fewest 1's. The selected row goes first and all columns in which it has a 1 
 %are moved to the left. The order of the columns into each group (with the same value in the first column, 
@@ -403,6 +406,7 @@ The function Evaluate$(BM,T)$ returns  $testor$, $irreducible$ and $zero\_rows$.
 %\item The next non-analysed feature in the current combination is selected. If $j < n$ then $j = j + 1$, 
 %and go to step 4; otherwise, go to step 6.
 %\end{enumerate}
+
 
 Example. Let us consider the basic matrix of Table~\ref{table1}, with $m=3$ rows and $n=5$ attributes. After the  ordering step we obtain the basic matrix of Table~\ref{table2}. Table~\ref{tab_example} illustrates the 
 application of the CT-EXT algorithm over this basic matrix.
@@ -442,50 +446,50 @@ application of the CT-EXT algorithm over this basic matrix.
         \begin{longtable}{cccccl}
 		\caption[CT-EXT example.]{CT-EXT algorithm example.} \label{tab_example} \\
  			\hline                       
-  			$\mathbf{T}$ & \multicolumn{1}{>{\centering\arraybackslash}m{.5in}}{Evaluate $(BM,\mathbf{T})$} &
-  			$\mathbf{x_j}$ & $\mathbf{T \cup \{x_j\}}$ &
-  			 \multicolumn{1}{>{\centering\arraybackslash}m{.5in}}{Evaluate $(BM,$ $\mathbf{T \cup \{x_j\}})$} & 
-  			\multicolumn{1}{>{\centering\arraybackslash}m{2.5in}}{\textbf{Comments}}\\
+  			$T$ & \multicolumn{1}{>{\centering\arraybackslash}m{.5in}}{Evaluate $(BM,T)$} &
+  			$x_j$ & $T \cup \{x_j\}$ &
+  			 \multicolumn{1}{>{\centering\arraybackslash}m{.7in}}{Evaluate $(BM,T\cup\{x_j\})$} & 
+  			\multicolumn{1}{>{\centering\arraybackslash}m{2.5in}}{Comments}\\
   			\hline
-  			$\{~\}$ & F, F, $\infty$ & $x_0$ & $\mathbf{\{x_0\}}$ & F, F, 1 & 
+  			$\{~\}$ & F, F, $\infty$ & $x_0$ & $\{x_0\}$ & F, F, 1 & 
   			\lcell{$\{x_0\}$ is not a testor. Add a new attribute.}\\
-  			$\{x_0\}$ & F, F, 1 & $x_3$ & $\mathbf{\{x_0,x_3\}}$ & F, F, 1 &
+  			$\{x_0\}$ & F, F, 1 & $x_3$ & $\{x_0,x_3\}$ & F, F, 1 &
   			\lcell{$x_3$ does not contribute. Eliminate $x_3$. Add a new attribute.}\\
-  			$\{x_0\}$ & F, F, 1 & $x_4$ & $\mathbf{\{x_0,x_4\}}$ & T, F, 0 &
+  			$\{x_0\}$ & F, F, 1 & $x_4$ & $\{x_0,x_4\}$ & T, F, 0 &
   			\lcell{$x_4$ contributes, $\{x_0,x_4\}$ is testor but is not irreducible.
   			 	Eliminate $x_4$. Add a new attribute.}\\
-  			$\{x_0\}$ & F, F, 1 & $x_1$ & $\mathbf{\{x_0,x_1\}}$ & T, T, 0 &
+  			$\{x_0\}$ & F, F, 1 & $x_1$ & $\{x_0,x_1\}$ & T, T, 0 &
   			\lcell{$x_1$ contributes, $\{x_0,x_1\}$ is an irreducible testor.
   				It is saved ($TT = \{\{x_0,x_1\}\}$).
   			 	Eliminate $x_1$. Add a new attribute.}\\
-  			$\{x_0\}$ & F, F, 1 & $x_2$ & $\mathbf{\{x_0,x_2\}}$ & T, T, 0 &
+  			$\{x_0\}$ & F, F, 1 & $x_2$ & $\{x_0,x_2\}$ & T, T, 0 &
   			\lcell{$x_2$ contributes, $\{x_0,x_2\}$ is an irreducible testor.
   				It is saved ($TT = \{\{x_0,x_1\},\{x_0,x_2\}\}$).
   			 	Eliminate $x_2$. Add a new attribute.}\\
   			$\{x_0\}$ & \multicolumn{5}{>{\centering\arraybackslash}m{5in}}{All attributes tested. 
   			Eliminate $x_0$ and add a new one.}\\
   			\hline 
-  			$\{~\}$ & F, F, $\infty$ & $x_3$ & $\mathbf{\{x_3\}}$ & F, F, 2 & 
+  			$\{~\}$ & F, F, $\infty$ & $x_3$ & $\{x_3\}$ & F, F, 2 & 
   			\lcell{$\{x_3\}$ is not a testor. Add a new attribute.}\\
-  			$\{x_3\}$ & F, F, 2 & $x_4$ & $\mathbf{\{x_3,x_4\}}$ & T, F, 0 &
+  			$\{x_3\}$ & F, F, 2 & $x_4$ & $\{x_3,x_4\}$ & T, F, 0 &
   			\lcell{$x_4$ contributes, $\{x_3,x_4\}$ is testor but is not irreducible.
   			 	Eliminate $x_4$. Add a new attribute.}\\
-  			$\{x_3\}$ & F, F, 2 & $x_1$ & $\mathbf{\{x_3,x_1\}}$ & T, T, 0 &
+  			$\{x_3\}$ & F, F, 2 & $x_1$ & $\{x_3,x_1\}$ & T, T, 0 &
   			\lcell{$x_1$ contributes, $\{x_3,x_1\}$ is an irreducible testor.
   				It is saved ($TT = \{\{x_0,x_1\},\{x_0,x_2\},\{x_3,x_1\}\}$).
   			 	Eliminate $x_1$. Add a new attribute.}\\
-  			$\{x_3\}$ & F, F, 2 & $x_2$ & $\mathbf{\{x_3,x_2\}}$ & F, F, 1 & 
+  			$\{x_3\}$ & F, F, 2 & $x_2$ & $\{x_3,x_2\}$ & F, F, 1 & 
   			\lcell{$x_2$ contributes but $\{x_3,x_2\}$ is not a testor. Add a new attribute.}\\
   			$\{x_3\}$ & \multicolumn{5}{>{\centering\arraybackslash}m{5in}}{All attributes tested. 
   			Eliminate $x_3$ and add a new one.}\\
   			\hline 
-  			$\{~\}$ & F, F, $\infty$ & $x_4$ & $\mathbf{\{x_4\}}$ & T, T, 0 & 
+  			$\{~\}$ & F, F, $\infty$ & $x_4$ & $\{x_4\}$ & T, T, 0 & 
   			\lcell{$\{x_4\}$ is an irreducible testor.
   				It is saved ($TT = \{\{x_0,x_1\},\{x_0,x_2\},\{x_3,x_1\},\{x_4\}\}$).
   			 	Eliminate $x_4$. Add a new attribute.}\\
   			\hline  
-  			$\{~\}$ & F, F, $\infty$ &  $\mathbf{\{x_1\}}$ & \multicolumn{3}{>{\centering\arraybackslash}m{4in}}{
-  			$x_1$ has '0' in first row of $BM$, Algorithm finishes.}\\
+  			$\{~\}$ & F, F, $\infty$ &  $\{x_1\}$ & \multicolumn{3}{>{\centering\arraybackslash}m{4in}}{
+  			$x_1$ has a 0 in first row of $BM$, Algorithm finishes.}\\
   			\hline  
 		\end{longtable}
 
@@ -495,9 +499,10 @@ application of the CT-EXT algorithm over this basic matrix.
 Since algorithms for computing all irreducible testors have
 exponential complexity regarding the number of attributes, 
 software based implementations may take an unacceptable amount of time. 
-A common stage to all algorithms is the verification of each candidate combination over 
-the basic matrix. This is an intrinsic parallel operation and a hardware implementation 
-could take advantage of it.
+A common stage to all algorithms for computing irreducible testors is 
+the verification of each candidate combination over the basic matrix. 
+This is an intrinsic parallel operation that hardware implementation 
+could take advantage of.
 Our platform consists in the implementation of a
 hardware architecture for computing all irreducible testors based on
 the CT-EXT algorithm. 
@@ -524,21 +529,21 @@ given below.
 \label{fig:3}
 \end{figure}
 
-In the hardware platform, a feature subset is handled as an $N$-tuple, using a positional 
-representation for all the $N$ attributes of a basic matrix $BM$. Given a subset $T$, its $N$-tuple representation 
-has 1 in the corresponding position $j$ for each $x_j \in T$ and 0 otherwise.
-The process of deciding whether an $N$-tuple is a testor of $BM$ involves
+In the hardware platform, a feature subset is handled as an $n$-tuple, using a positional 
+representation for all the $n$ attributes of a basic matrix $BM$. Given a subset $T$, its $n$-tuple representation 
+has a 1 in the corresponding position $j$ for each $x_j \in T$ and 0 otherwise.
+The process of deciding whether an $n$-tuple is a testor of $BM$ involves
 comparing the candidate against each one of the $BM$'s rows. For
-software-only implementations, this is a big disadvantage, in
-particular for large matrices with many rows. The proposed hardware
-architecture exploits the parallelism inherent in the CT-EXT algorithm
+software-only implementations, this is a big disadvantage, specially for large 
+matrices with many rows. The proposed hardware architecture exploits the parallelism 
+inherent in the CT-EXT algorithm
 and evaluates whether a candidate is an irreducible testor, or not, in a single
-clock cycle. The hardware implementation of CT-EXT is composed by two main modules as seen in
+clock cycle. The hardware implementation of CT-EXT is composed of two modules as seen in
 Fig.\,\ref{fig:3}. 
 
 The $BM$ module stores the input matrix and
-includes logic to decide whether an $N$-tuple is a testor. The candidate
-generator module produces the candidates ($N$-tuples) to be
+includes logic to decide whether an $n$-tuple is a testor. The candidate
+generator module produces the candidates ($n$-tuples) to be
 evaluated by the $BM$ module. In order to calculate the next candidate
 according to the CT-EXT algorithm, the architecture feedbacks the
 evaluation result of the previous candidate to the generator module;
@@ -565,16 +570,16 @@ consequently the number of iterations needed by the algorithm.
 \end{figure}
 
 The $BM$ module is composed of $M$ sub-modules named \textit{row~i}, as shown
-in Fig.\,\ref{fig:4}. Each \textit{row~i} module contains a row ($N$ bits)
+in Fig.\,\ref{fig:4}. Each \textit{row~i} module contains a row ($n$ bits)
 of the $BM$ matrix and the logic needed to perform testor evaluation. To decide
-whether an $N$-tuple is a testor, a bitwise AND operation is performed
+whether an $n$-tuple is a testor, a bitwise AND operation is performed
 between the constant stored in each \textit{row~i} module and the current
 candidate, as shown in Fig.\,\ref{fig:row}. If at least one bit of the AND operation is TRUE,
 then the output \textit{Testor} of that particular \textit{row~i} sub-module
 will be TRUE. The same operation is performed over the previous candidate.
 If the output \textit{Testor} is different from
 the output \textit{Contributes} for any \textit{row~i} sub-module, 
-then output \textit{Contributes} from the $BM$ module becomes TRUE.
+then the output \textit{Contributes} from the $BM$ module becomes TRUE.
 If the output $Testor$ of all  \textit{row~i} sub-modules is
 TRUE, then the output \textit{Testor} of the $BM$ module will be TRUE,
 which means that the candidate is a testor of $BM$.
@@ -590,10 +595,10 @@ which means that the candidate is a testor of $BM$.
 % Support for the use of ANDed in other papers
 % A fully bypassed six-issue integer datapath and register file on the itanium-2 microprocessor
 % Implementing associative search and responder resolution
-In order to verify the irreducible condition, the module \textit{N~to~N~Decoder}
+In order to verify the irreducible condition, an \textit{N~to~N~Decoder}
 receives as input the result of the AND operation between the current candidate and the corresponding $BM$ row.
-The output from the module \textit{N~to~N~Decoder} repeats the input in case there is only one bit set
-in it, and returns zero otherwise. For those rows with only one bit having a 1 after ANDed with the candidate,
+The output from the \textit{N~to~N~Decoder} repeats the input when there is only one bit set
+to 1, and returns zero otherwise. For those rows with only one bit having a 1 after ANDed with the candidate,
 the attribute in the position of that bit is indispensable if the candidate is a testor.
 According to definition~\ref{def24}, every attribute in a testor must be indispensable to be an
 irreducible testor. %This idea is stated in definition~1 of \citep{R13}.
@@ -605,7 +610,7 @@ irreducible testor. %This idea is stated in definition~1 of \citep{R13}.
       \centering
         \begin{tabular}{ ccccc|ccccc }
  			\hline                       
-  			\multicolumn{5}{c|}{Cand. $(x_0 x_1)$} & 
+  			\multicolumn{5}{c|}{Cand. $\{x_0, x_1\}$} & 
   			\multicolumn{5}{c}{Decoder output} \\
   			\hline
 			  $x_0$ &   $x_3$ &   $x_4$ &   $x_1$ &   $x_2$ &
@@ -626,7 +631,7 @@ irreducible testor. %This idea is stated in definition~1 of \citep{R13}.
         \caption{An example of not irreducible testor.}\label{table5}
         \begin{tabular}{ ccccc|ccccc }
  			\hline                       
-  			\multicolumn{5}{c|}{Cand. $(x_0 x_4)$} & 
+  			\multicolumn{5}{c|}{Cand. $\{x_0, x_4\}$} & 
   			\multicolumn{5}{c}{Decoder output} \\
   			\hline
   			%\multicolumn{5}{c|}{$x_0~x_3~x_4~x_1~x_2$}&\multicolumn{5}{c}{$x_0~x_3~x_4~x_1~x_2$}\\
@@ -643,7 +648,7 @@ irreducible testor. %This idea is stated in definition~1 of \citep{R13}.
     \end{minipage} 
 \end{table}
 
-Taking as example the ordered basic matrix of Table~\ref{table2}. In Table~\ref{table4} the irreducibility of candidate $\{x_0,x_1\}$ is evaluated while the same is done for candidate $\{x_0,x_4\}$ in Table~\ref{table5}. Left rows show the result of the AND operation between each row of $BM$ and the candidate, while those rows in the right show the decoder output taking as input its corresponding left row. In the last row, the result of an OR operation over all above bits is shown. According to our previous explanation, the candidate $\{x_0,x_1\}$ is an irreducible testor given that the result of the OR operation is equal to the candidate itself; while candidate $\{x_0,x_4\}$ is not. This can be corroborated in Table~\ref{tab_example}.
+Taking as example the ordered basic matrix of Table~\ref{table2}. In Table~\ref{table4} the irreducibility of  $\{x_0,x_1\}$ is evaluated while the same is done for $\{x_0,x_4\}$ in Table~\ref{table5}. Left rows show the result of the AND operation between each row of $BM$ and the candidate, while those rows in the right show the decoder output taking as input its corresponding left row. In the last row, the result of an OR operation over all above bits is shown. According to our previous explanation, the candidate $\{x_0,x_1\}$ is an irreducible testor given that the result of the OR operation is equal to the candidate itself; while candidate $\{x_0,x_4\}$ is not. This can be corroborated in Table~\ref{tab_example}.
 
 \begin{figure}[t]
     \begin{center}
@@ -661,9 +666,9 @@ registers for holding the current candidate (\textit{$Curr\_cand$}), the previou
 by the modules EA1, EA2 and A.
 
 Depending on the combination of the input values, the outputs E1A,
-E2A or A are taken to update the records accordingly. Table~\ref{tab_CandGen} shows the
-conditions that must be met by \textit{Testor}, \textit{Contributes} and $J$ inputs, such that each
-register receives the correct value. This operation is computed in module \textit{sel} from Fig.\,\ref{fig:5}.
+E2A or A are used for updating the records. Table~\ref{tab_CandGen} shows how the records are updated 
+according to the values of \textit{Testor}, \textit{Contributes} and $J$ inputs. 
+This operation is computed in the \textit{sel} module from Fig.\,\ref{fig:5}.
 
  \begin{table}[htb]
 		\caption{Candidate Generator Selector.} \label{tab_CandGen}
@@ -693,8 +698,8 @@ register receives the correct value. This operation is computed in module \texti
  	\end{tabular}             
  \end{table}
 
-The submodule $A$, from Fig.\,\ref{fig:subA}, sets the attribute following the last bit with 1 in
-the input candidate. The outputs of submodule $A$ are the new candidate and $J+1$.
+The submodule $A$, from Fig.\,\ref{fig:subA}, assigns 1 to the attribute following the last bit with 1 in
+the input candidate. The outputs of the submodule $A$ are the new candidate and $J+1$.
 
 The submodule $E1A$,  from Fig.\,\ref{fig:subEA1}, comprises the \textit{Rem$\_1$} 
 (Fig.\,\ref{fig:subRem1}) and $A$ submodules. 
@@ -705,7 +710,7 @@ This action is performed by a priority encoder which locates the last bit with 1
 These outputs are connected to the corresponding inputs of the
 submodule $A$, in order to add an attribute in the corresponding position. Finally, the outputs of $E1A$ 
 represent the new candidate to be evaluated, the previous candidate and the index where the new attribute 
-is added to the current candidate.
+was added to the current candidate.
 
 \begin{figure}[htb]
 \centering
@@ -728,9 +733,11 @@ input candidate, and then adding the following corresponding attribute. This
 operation is performed by means of two \textit{Rem$\_1$} submodules and an $A$ submodule, as 
 shown in Fig.\,\ref{fig:subEA2}.
 
-In order to check the termination  of the algorithm, the result of an AND operation between the current 
-candidate and the first row of the basic matrix is compared to the null $N$-tuple ($0,...,0$), as shown in the 
-upper right corner of Fig.\,\ref{fig:5}. If the result of this comparison is TRUE, then the output $done$ is activated because any further candidate will not satisfy the testor condition over the first row of $BM$ 
+In order to check if the execution of the CT-EXT  algorithm has finished, the result of an AND 
+operation between the current candidate and the first row of the basic matrix is compared to 
+the null $n$-tuple ($0,...,0$), as shown in the upper right corner of Fig.\,\ref{fig:5}. If the 
+result of this comparison is TRUE, then the output $done$ is activated because any further 
+candidate will not satisfy the testor condition over the first row of $BM$ 
 (see line~\ref{row1condition} of algorithm~\ref{ctext_algo}).
 
 \begin{figure}[htb]
@@ -763,15 +770,15 @@ programming the FPGA device and communicating with the board during irreducible 
 
 
 Once the basic matrix is loaded, it is reorganized by setting one of the rows with the
-minimum amount of ones as the first row and swapping columns in such a way the ones in 
-the first row appear on the left. Then, in order to complete the project files, one VHDL file
+minimum amount of ones as the first row and swapping columns in such a way those with a 1 in 
+the first row appear on the left. Then, a VHDL file
 is generated and the synthesis process is started, producing the programming file for the FPGA
 device.
 
 On the running stage, the software component interacts with the hardware architecture. 
 First, the device is programmed with the bit-file obtained from the previous stage. Then, the
 hardware architecture starts computing irreducible testors. 
-The software component keeps pulling through USB for new irreducible testors in the output 
+The software component keeps pulling through a USB port for new irreducible testors in the output 
 FIFO until the $done$ signal is activated in the FPGA.
 
 Finally, irreducible testors are codified according to the order of columns in the original 
@@ -785,20 +792,20 @@ basic matrix and written to an output file.
 \label{fig:8}
 \end{figure}
 
-\section{Evaluation}
+\section{Evaluation and Discussion}
 \label{sect:6}
 
 
 In order to show the performance of the proposed platform, it was compared against a software 
 implementation of the CT-EXT algorithm and the BT hardware platform previously reported in \citep{R21}. 
 For experimentation purposes, the BT hardware platform was modified for finding irreducible testors 
-on the FPGA as we explained in section~\ref{sect:4}. This modification avoids the final filtering stage 
+on the FPGA as we did for CT-EXT. This modification avoids the final filtering stage 
 proposed by \cite{R21}.
 
 In order to understand the design of our experiments, first some important points about algorithms and 
 implementations are commented. 
 Either CT-EXT or BT (modified) hardware implementations are capable of evaluating a candidate per clock 
-cycle. If both architectures are running at the same frequency, as will be the case in our experiments, 
+cycle. If both architectures are running at the same frequency, as it will be the case in our experiments, 
 there are two reasons for differences in running time. The first one is the time taken for reorganization 
 of basic matrix, which is a more complex process in BT, but it can be neglected as shown in \citep{R21}. 
 The second and the most relevant, is the amount of candidates to be evaluated. It is not a difficult task 
@@ -810,14 +817,14 @@ executing the algorithm; while this is unnecessary in the software version of CT
 software will be running in a PC at a frequency of 3.10GHz while FPGA architecture will run at 50MHz. 
 
 These disadvantages make the hardware approach useful (faster) under two conditions. First, the number of 
-candidates to be evaluated must be big enough to overcome the synthesis overhead. Second, the dimensions of the 
-$BM$ must be big enough to provide a considerable speed up of the candidate evaluation process. Although 
+candidates to be evaluated is big enough to overcome the synthesis overhead. Second, the dimensions of the 
+$BM$ is big enough to provide a considerable speed up of the candidate evaluation process. Although 
 the hardware architecture could be designed for a fixed maximum matrix size and receive the $BM$ through the 
 USB port, by doing this, the size of the problem which can be solved would be significantly reduced. The 
 synthesis process comprehend an optimization of the design, taking advantage of the $BM$ data distribution for 
 the reduction of the generated hardware configuration. The number of operations for the evaluation of a single 
-candidate, in the software approach, is proportional to the number of rows and has a relation with the number 
-of columns in the $BM$. This way we can have an advantage, even at a much lower running frequency, from 
+candidate, in the software approach, is proportional to the number of rows and it is directly related to the 
+number of columns in the $BM$. This way we can have an advantage, even at a much lower running frequency, from 
 evaluating a candidate every clock cycle.
 
 With these points in mind, in order to show the usability of the proposed platform, 
@@ -856,15 +863,16 @@ density of~1's.
 \label{fig:result3}
 \end{figure}
 
-A total of 28 basic matrices of different sizes were randomly generated, representing the three types. For the
+For our experiments, basic matrices of different sizes were randomly generated, for the three types. For the
 hardware platforms, we measure the runtimes including the time for the following stages: $BM$ input parsing 
-and VHDL code generation, synthesis of ISE project, and irreducible testor computation (with a hardware 
-frequency of 50MHz). The number of rows for each type of matrices is conditioned by the dimensions of the biggest 
-matrix that may be synthesized at the desired running frequency.
+and VHDL code generation, synthesis of ISE project, and irreducible testor computation (with the hardware 
+component running at 50MHz). The number of rows for each type of matrices is conditioned by the dimensions of 
+the biggest matrix that may be synthesized at the desired running frequency.
 
 All experiments are performed using an Intel(R) Core(TM) i5-2400 CPU @ 3.10GHz for software executions and 
 an Atlys board \citep{R15}, powered by a Spartan-6 LX45 FPGA device, for the hardware components.
-Figs.\,\ref{fig:result1}, \,\ref{fig:result2}, and \,\ref{fig:result3} show graphs of the runtime for the three kind of basic matrices. 
+Figs.\,\ref{fig:result1}, \,\ref{fig:result2}, and \,\ref{fig:result3} show graphs of the runtime (in hours) 
+for the three kind of basic matrices. 
 
 The proposed CT-EXT hardware platform (CTH) results were taken as reference for axis limits in 
 Figs.\,\ref{fig:result1}, \,\ref{fig:result2}, and \,\ref{fig:result3}.
@@ -879,13 +887,13 @@ This is the case for all missing BTH executions in Figs.\,\ref{fig:result1}, \,\
 
 \cite{R21} stated that the time for computing irreducible testors does not only depend on the size and 
 density of the $BM$, but also on the distribution of 0's and 1's inside the matrix. This assertion can 
-be also appreciated in points 68 and 70 of Fig.\,\ref{fig:result3}.
+be also confirmed in points 68 and 70 of Fig.\,\ref{fig:result3}.
 
 Table~\ref{table:8} shows the runtime for each stage of the data flow, for 
 400x40, 400x42 and 400x44 very-low density matrices. This table shows that the synthesis time 
 becomes less significative regarding the total time when the problem size increases. 
 From this table, it can also be seen that the main difference between the BT and CT-EXT hardware 
-implementations is the runtime of the irreducible testor computation process. The only reason for 
+implementations is the runtime of the irreducible testor computation process. The main reason for 
 this difference is the number of candidates evaluated by each algorithm. This is an explanation 
 about why the BT hardware implementation is slower than the software version of CT-EXT for the 
 largest matrix in Table~\ref{table:8}.
@@ -902,7 +910,7 @@ largest matrix in Table~\ref{table:8}.
     	    Load and file generation & 0.05& 0.07& 0.05& 0.06& 0.06& 0.06\\
     	    Synthesis process        & 253 & 656 & 401 & 564 & 452 & 612\\
     	    Algorithm execution      & 300 & 1071& 970 & 3826& 2031& 13311\\ \hline
-    	    Total time               & 554 & 17278& 1372& 4390& 2484& 13924\\ \hline
+    	    Total time               & 554 & 1727& 1372& 4390& 2484& 13924\\ \hline
     	    CTS total time               & \multicolumn{2}{c}{3238} & \multicolumn{2}{c}{7320} 
     	    								& \multicolumn{2}{c}{12420}\\ \hline
     	    
@@ -944,10 +952,10 @@ FPGA device.} \label{table:7}
 \end{center}
 \end{table}
 
-\section{Discussion}
-\label{sect:7}
+%\section{Discussion}
+%\label{sect:7}
 
-The proposed hardware platform provides higher processing
+As we have shown in previous section, the proposed hardware platform provides higher processing
 performance than the software implementation of the CT-EXT
 algorithm for the matrices used in our experimentation. 
 This behaviour is possible because the hardware
@@ -957,9 +965,9 @@ independently of the number of columns and rows, whereas
 the software implementation runtime will significantly
 increase for matrices with a large number of rows.
 
-Moreover, the performance improvement is directly related to the
-number of candidates tested, which heavily depends on the
-density and distribution of the 1's into the basic matrix. 
+%Moreover, the performance improvement is directly related to the
+%number of candidates tested, which heavily depends on the
+%density and distribution of the 1's into the basic matrix. 
 %This occurs in the
 %software as well as in the hardware implementation,
 %but the proposed platform also needs to synthesize the specific
@@ -981,7 +989,7 @@ high level of parallelism implicit in candidates evaluation of the CT-EXT algori
 efficiently implemented on an FPGA. 
 The proposed platform improves the previously reported architecture \citep{R21} by finding 
 \textit{irreducible} testors in a single clock cycle. This new feature solves problems arising 
-from transmission of irrelevant data to the hosting PC; while it improves total runtime. 
+from transmission of irrelevant data to the hosting PC; improving the total runtime. 
 
 %Main drawback of proposed platform is the limitation in matrix dimensions depending on FPGA 
 %device capacity. Reducing the clock frequency allows the implementation of larger matrices at the 
@@ -990,11 +998,10 @@ from transmission of irrelevant data to the hosting PC; while it improves total 
 The proposed architecture offers an alternative to the hardware implementation of BT which is faster in most 
 of the cases. 
 
-Our experiments show that the proposed platform uses less FPGA resources and is able to run at a higher 
-frequency than the BT hardware implementation. The maximum size of the problem that can be solved in hardware 
-architectures is conditioned by its resource utilization. The search for new algorithms that could be efficiently 
-implemented in an FPGA constitutes future work. Improvements, such as testing two or more candidates per 
-iteration, are still unexplored and could be evaluated in further studies.
+Our experiments also show that the proposed platform uses fewer hardware resources and is able to run at a higher 
+frequency than the BT hardware implementation, which allows processing larger matrices, since the maximum size of 
+the problem that can be solved in a hardware architecture is conditioned by its resource utilization. The search for new algorithms that could be efficiently implemented in an FPGA constitutes future work. Improvements, such 
+as testing two or more candidates per iteration, are still unexplored and would be evaluated in further studies.
 
 
 
@@ -1023,14 +1030,16 @@ iteration, are still unexplored and could be evaluated in further studies.
 %\bibitem[Liu et al. (1998)]{R19} Liu, H. and Setiono, R. (1998).Some issues on scalable feature selection. Expert Systems with Applications, 15, 333-339.
 \bibitem[Mart\'inez-Trinidad et al.(2001)]{R5}Mart\'inez-Trinidad, J.F. and Guzm\'an-Arenas, A. (2001). The Logical Combinatorial Approach to Pattern Recognition an Overview through Selected Works. Pattern Recognition, 34, 741-751.
 \bibitem[Pocek et al.(2013)]{R30}Pocek, K., Tessier, R., and DeHon, A. (2013, April). Birth and adolescence of reconfigurable computing: A survey of the first 20 years of field-programmable custom computing machines. In Highlights of the First Twenty Years of the IEEE International Symposium on Field-Programmable Custom Computing Machines (pp. 3-19).
-\bibitem[Rojas et al.(2007)]{R11}Rojas, A., Cumplido, R., Carrasco-Ochoa, J. A., Feregrino, C. and Martínez-Trinidad, J. f. (2007). FPGA Based Architecture for Computing Testors. Lectures Notes on Computer Science, 4881, 188-197.
-\bibitem[Rojas et al.(2012)]{R21}Rojas, A., Cumplido, R., Carrasco-Ochoa, J. A., Feregrino, C. and Martínez-Trinidad, J. f. (2012). Hardware-software platform for computing irreducible testors. Expert Systems with Applications, 39, 2203 - 2210.
+\bibitem[Rojas et al.(2007)]{R11}Rojas, A., Cumplido, R., Carrasco-Ochoa, J. A., Feregrino, C. and Mart\'inez-Trinidad, J. f. (2007). FPGA Based Architecture for Computing Testors. Lectures Notes on Computer Science, 4881, 188-197.
+\bibitem[Rojas et al.(2012)]{R21}Rojas, A., Cumplido, R., Carrasco-Ochoa, J. A., Feregrino, C. and Mart\'inez-Trinidad, J. f. (2012). Hardware-software platform for computing irreducible testors. Expert Systems with Applications, 39, 2203 - 2210.
 \bibitem[Ruiz-Shulcloper et al.(1985)]{R31}Ruiz-Shulcloper, J., Aguila-Feros, L. and Bravo-Mart\'inez, A. (1985). BT and TB algorithms for computing all irreducible testors. Revista Ciencias Matem\'aticas, 2, 11-18.
 \bibitem[Ruiz-Shulcloper(2008)]{R27}Ruiz-Shulcloper, J. (2008). Pattern recognition with mixed and incomplete data. Pattern Recognition and Image Analysis, 18(4), 563-576.
 \bibitem[S\'anchez-D\'iaz et al.(2002)]{R13}S\'anchez-D\'iaz, G. and Lazo-Cort\'es, M. (2002). Modifying BT Algorithm for Improving its Runtimes. Revista Ciencias Matem\'aticas, 20, 129-136.
 \bibitem[S\'anchez-D\'iaz et al.(2007)]{R22}S\'anchez-D\'iaz, G. and Lazo-Cort\'es, M. (2007). CT-EXT: An Algorithm for Computing Typical Testor Set. Lecture Notes in Computer Science, 4756, 506-514.
 \bibitem[S\'anchez-D\'iaz et al.(2010)]{R23}S\'anchez-D\'iaz, G., Piza-Davila, I, Lazo-Cort\'es, M, 
 Mora-Gonz\'alez, M and Salinas-Luna, J. (2010). A Fast Implementation of the CT-EXT Algorithm for the Testor Property Identification. Lecture Notes in Computer Science, 6438, 92-103.
+\bibitem[Skowron et al.(1992)]{R40}Skowron, A and Rauszer, C. (1992). The discernibility matrices and functions in information systems. Handbook of Applications and Advances of the Rough Sets Theory, 331-362.
+
 %\bibitem[Valev et al. (2004)]{R7}Valev, V. and Sankur, B. (2004). Generalized non-reducible descriptors. Pattern Recognition, 37, 1809-1815.
 %\bibitem[Villuendas-Rey et al. (2008)]{R28}Villuendas-Rey, Y., García-Borroto, M., and Ruiz-Shulcloper, J. (2008). Selecting features and objects for mixed and incomplete data. In Progress in Pattern Recognition, Image Analysis and Applications (pp. 381-388). Springer Berlin Heidelberg.
 \bibitem[Digilent(2013)]{R15}Atlys Board Reference Manual. Digilent, Inc.
