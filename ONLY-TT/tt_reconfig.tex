@@ -127,6 +127,7 @@
 %
 \usepackage{graphicx}
 \usepackage{cite}
+\usepackage{array}
 \ifCLASSINFOpdf
   % declare the path(s) where your graphic files are
   % \graphicspath{{../pdf/}{../jpeg/}}
@@ -360,20 +361,20 @@
 % author names and affiliations
 % use a multiple column layout for up to three different
 % affiliations
-\author{\IEEEauthorblockN{Vlad\'imir Rodr\'iguez Diez}
-\IEEEauthorblockA{Electrical Engineering School\\
-University of Camaguey\\
-Camaguey, Cuba\\
-Email: vladimir.rodriguez@reduc.edu.cu}
-\and
-\IEEEauthorblockN{Jos\'e F. Mart\'inez,
-				 Jes\'us A. Carrasco\\
-				 Manuel S. Lazo,
-				 Ren\'e A. Cumplido\\
-				 and Claudia Feregrino}
-\IEEEauthorblockA{Computer Science Department\\
-				National Institute for Astrophysics, Optics and Electronics\\
-				Sta. Ma. Tonanzintla, Puebla, 72840, Mexico}}
+%\author{\IEEEauthorblockN{Vlad\'imir Rodr\'iguez Diez}
+%\IEEEauthorblockA{Electrical Engineering School\\
+%University of Camaguey\\
+%Camaguey, Cuba\\
+%Email: vladimir.rodriguez@reduc.edu.cu}
+%\and
+%\IEEEauthorblockN{Jos\'e F. Mart\'inez,
+%				 Jes\'us A. Carrasco\\
+%				 Manuel S. Lazo,
+%				 Ren\'e A. Cumplido\\
+%				 and Claudia Feregrino}
+%\IEEEauthorblockA{Computer Science Department\\
+%				National Institute for Astrophysics, Optics and Electronics\\
+%				Sta. Ma. Tonanzintla, Puebla, 72840, Mexico}}
 %Email: homer@thesimpsons.com}
 %\and
 %\IEEEauthorblockN{James Kirk\\ and Montgomery Scott}
@@ -446,20 +447,25 @@ exponentially regarding the number of attributes. Testor Theory is a convenient 
 
 
 \section{Introduction}
-Information systems in supervised classification consists in collection of objects described by some attributes.
-Usually, an information system is characterized by a large number of attributes. The feature selection process
-consists in identifying those attributes that provide relevant information for the classification process. 
-For rule discovery, the computation time increases exponentially regarding the size of database whilst the quality 
-of rules generated is degraded. Testor Theory is an effective way to deal with feature selection as shown
-in~\cite{Ruiz08, Martinez01}. A testor is defined as a subset of attributes capable of discerning objects from different
-classes. An irreducible testor is a testor such that every attribute is indispensable for satisfying the testor condition. The problem of finding all irreducible testors has been proven NP-hard~\cite{Skowron92}.
+Nowadays, the feature selection problem in pattern recognition is usually characterized by a large number of 
+attributes. The feature selection process consists in identifying those attributes that provide relevant 
+information for the classification process. 
+Testor Theory is an effective way to deal with feature selection.
+% as shownin~\cite{Ruiz08, Martinez01}. 
+ A testor is defined as a subset of attributes capable of discerning objects from 
+different classes. An irreducible testor is a testor such that every attribute is indispensable for satisfying 
+the testor condition. The problem of finding all irreducible testors has been proven NP-hard~\cite{Skowron92}.
 
 Reconfigurable computing using Field Programmable Gate-Array (FPGA) has become a powerful alternative to handle 
-complex computational problems. Recently, several hardware-software platforms using FPGA have been reported~ \cite{Compton02,Pocek13}. These platforms take advantage of custom design to perform those operations with a high
-parallelism degree. Complementary tasks are executed by a software component in a PC.
+complex computational problems. 
+%Recently, several hardware-software platforms using FPGA have been reported~ \cite{Compton02,Pocek13}. 
+Hardware-software platforms take advantage of custom design to perform those operations with a high
+parallelism degree on the FPGA device, while complementary tasks are executed by a software component in a PC.
 
-The first implementation of Testor Theory algorithms on FPGA~\cite{Cumplido06} was a brute force approach for computing
-testors. In this first approach all $2^n$ combinations of $n$ attributes had to be tested. Afterwards, in \cite{Rojas07} a hardware implementation of the BT algorithm for computing irreducible testors was introduced. 
+The first implementation of Testor Theory algorithms on FPGA~\cite{Cumplido06} was a brute force approach for 
+computing testors. In this first approach all the $2^n$ combinations of $n$ attributes are tested in order to 
+select only those which are testors. Afterwards, in \cite{Rojas07} a hardware implementation of the Bottom-Top 
+(BT) algorithm for computing irreducible testors was introduced. 
 The BT algorithm uses a candidate pruning process for avoiding unnecessary candidate evaluation, 
 reducing this way the number of iterations needed. These two previous platforms computed a set of testors on the 
 FPGA device whilst irreducible condition was evaluated afterwards by the software component in a hosting PC. 
@@ -469,8 +475,10 @@ the non irreducible testors before transferring them to a host software applicat
 
 Main disadvantages of these approaches are the huge amount of data that must be transferred to the PC and the 
 extra cost of the final filtering stage in the software component.  
-For these reasons, in this paper, we develop a hardware module for eliminating all non irreducible testors 
-on the FPGA device, reducing the amount of data that must be transferred to the PC. This architecture is applicable to all algorithms implementations, since it operates in the candidate evaluation process.
+For this reason, in this paper, we develop a hardware module for eliminating all non irreducible testors 
+on the FPGA device, reducing the amount of data that must be transferred to the PC. This architecture is 
+applicable to any algorithm for computing irreducible testors implemented in FPGA, since it operates in the 
+candidate evaluation process.
 
 The rest of this paper is structured as follows. Section~\ref{sect:2} introduces the basic concepts of 
 Testor Theory. Section~\ref{sect:3} introduces the proposed architecture. Evaluation of the proposed 
@@ -480,20 +488,21 @@ section~\ref{sect:8} shows our conclusions.
 \section{Basic concepts}
 \label{sect:2}
 
-In pattern recognition, feature selection is a very important task for supervised classification. In the logical
+In pattern recognition, feature selection is a very important task for Supervised Classification. In the logical
  combinatorial approach to pattern recognition \cite{Martinez01}, a useful
 way to deal with this problem is through Testor Theory. The concept of testor for pattern recognition was
 introduced by \cite{Dmitriev66}. They defined a testor as a subset of features that allows
 differentiating objects from different classes. Testors are quite useful, especially when object descriptions
 contain both numeric and non-numeric features, and maybe they are incomplete (mixed incomplete data)
-\cite{Martinez01}. This concept has been developed in different contexts \cite{Lazo01}. From an 
-algorithmic point of view, Testor Theory has shown a continuous development from its origins to the present 
-\cite{Ruiz85,Sanchez02,Sanchez10}.
+\cite{Martinez01}. 
+%This concept has been developed in different contexts \cite{Lazo01}. From an 
+%algorithmic point of view, Testor Theory has shown a continuous development from its origins to the present 
+%\cite{Ruiz85,Sanchez02,Sanchez10}.
 
 Let $TM$ be a training matrix with $k$ objects described through $n$
 features of any type $\{x_{1},\ldots,x_{n}\}$ and grouped in $r$
 classes. Let $DM$ be a Boolean dissimilarity matrix (0 = similar, 1 =
-dissimilar), obtained from feature by feature comparisons of every
+dissimilar), obtained from a feature by feature comparison of every
 pair of objects from $TM$ belonging to different classes. $DM$ has
 $m$ rows and $n$ columns, where usually $m>>k$.
 
@@ -561,23 +570,24 @@ at least one zero row will appear, and the testor property would not be fulfille
 \label{sect:3}
 
 Computing all irreducible testors has exponential complexity regarding the number of attributes. Each 
-algorithm for irreducible testors computation has its own strategy for traversing the search domain, 
-nevertheless, a necessary stage for all these algorithms is the verification of each candidate combination 
-over the basic matrix; to fulfill definition~\ref{def22}. Hardware implementations have a common module 
-holding the basic matrix data and responsible for this verification. Our proposed architecture consist in 
-a modification to this module which can be ported to any algorithm implementation. We will introduce the 
+algorithm for irreducible testors computation has its own strategy for traversing the search space 
+consisting of the $2^n$ combinations of $n$ attributes; nevertheless, no matter the strategy used,
+a necessary stage for all these algorithms is the verification of each candidate combination 
+over the basic matrix to fulfill definition~\ref{def22}. Hardware implementations have a common module 
+holding the basic matrix data, which is responsible for this verification. Our proposed architecture consists in 
+modifying this module which can be ported to any algorithm implementation. We will introduce the 
 new architecture in the top of the platform presented in~\cite{Rojas12}.
 
 In the hardware platform, a feature subset is handled as an $n$-tuple, using a positional 
 representation for all the $n$ attributes of a basic matrix $BM$. Given a subset $T$, its $n$-tuple 
 representation has a 1 in the corresponding position $j$ for each $x_j \in T$ and 0 otherwise.
 Fig.\,\ref{figOldArq} shows the original platform for testors computation as in \cite{Rojas12}. This 
-architecture consist of three main modules: the \textit{Candidate Generator}, the $BM$ and the 
+architecture consists of three main modules: the \textit{Candidate Generator}, the $BM$ and the 
 \textit{Dismiss Testors}.
 
 The \textit{Candidate Generator} module handles the sequence of candidates to be evaluated. In order to 
 calculate the next candidate, this module receives some feedback information from the $BM$ module. The 
-\textit{Candidate Generator} module is algorithm specific and its internals are beyond the goal of this paper.
+\textit{Candidate Generator} module is specific and its internal design is beyond the goal of this paper.
 The $BM$ module handles the process of deciding whether an $n$-tuple is a testor of $BM$,
 comparing the candidate against each one of the $BM$'s rows. Since our modifications take place in this 
 module, we will expose it in detail afterwards. Finally, the \textit{Dismiss Testors} module filters most 
@@ -585,7 +595,7 @@ non irreducible testors by checking inclusion of every new testor in each regist
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=9cm]{old_arq.eps}
+    \includegraphics[width=7cm]{old_arq.eps}
 	\caption{Previous Architecture.}
 	\label{figOldArq}
 \end{figure}
@@ -596,7 +606,7 @@ current candidate is an irreducible testor or not.
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=9cm]{new_arq.eps}
+    \includegraphics[width=7cm]{new_arq.eps}
 	\caption{Proposed Architecture.}
 	\label{figNewArq}
 \end{figure}
@@ -605,7 +615,7 @@ current candidate is an irreducible testor or not.
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=9cm]{BM_module_old.eps}
+    \includegraphics[width=7cm]{BM_module_old.eps}
 	\caption{Original $BM$ module.}
 	\label{figBMold}
 \end{figure}
@@ -616,28 +626,43 @@ of the basic matrix and the logic needed to perform testor evaluation. To decide
 whether an $n$-tuple is a testor, a bitwise AND operation is performed
 between the constant stored in each \textit{row~i} module and the current
 candidate, as shown in Fig.\,\ref{figBMrowOld}. If at least one bit of the AND operation is TRUE,
-then the output \textit{testor} of that particular \textit{row~i} sub-module
-is be TRUE. 
+then the output \textit{testor} of that particular \textit{row~i} sub-module is also TRUE. 
 If the output $testor$ of all  \textit{row~i} sub-modules is
 TRUE, then the output \textit{testor} of the $BM$ module is TRUE,
 which means that the candidate is a testor of $BM$.
 A priority encoder is used to select the $n$-tuple holding the data corresponding to the upper row 
-of $BM$ which do not satisfy the testor condition. This information is used by the \textit{Candidate Generator}
+of $BM$ which does not satisfy the testor condition. This information is used by the \textit{Candidate Generator}
 module given that the current candidate is not a testor \cite{Rojas12}.
 
 \begin{figure}[htb]
-    \centering
-    \includegraphics[width=7cm]{BM_row_old.eps}
+\centering
+\begin{minipage}{4cm}
+  \centering
+   \includegraphics[width=4cm]{BM_row_old.eps}
 	\caption{Original $BM$ row.}
 	\label{figBMrowOld}
-\end{figure}
-
-\begin{figure}[htb]
-    \centering
-    \includegraphics[width=7cm]{BM_row_new.eps}
+\end{minipage}%
+\begin{minipage}{4.8cm}
+  \centering
+  \includegraphics[width=4.8cm]{BM_row_new.eps}
 	\caption{Proposed $BM$ row.}
 	\label{figBMrowNew}
+\end{minipage}
 \end{figure}
+
+%\begin{figure}[htb]
+%    \centering
+%    \includegraphics[width=5cm]{BM_row_old.eps}
+%	\caption{Original $BM$ row.}
+%	\label{figBMrowOld}
+%\end{figure}
+%
+%\begin{figure}[htb]
+%    \centering
+%    \includegraphics[width=5cm]{BM_row_new.eps}
+%	\caption{Proposed $BM$ row.}
+%	\label{figBMrowNew}
+%\end{figure}
 
 In our proposed architecture, an \textit{N~to~N~Decoder} is introduced into each 
 \textit{row~i} module, as shown in Fig.\,\ref{figBMrowNew}. This new component receives as input 
@@ -656,7 +681,7 @@ the output $testor$ of the $BM$ module is TRUE.
 
 \begin{figure}[htb]
     \centering
-	\includegraphics[width=9cm]{BM_module_new.eps}
+	\includegraphics[width=7cm]{BM_module_new.eps}
 	\caption{Proposed $BM$ module.}
 	\label{figBMnew}
 \end{figure}
@@ -677,7 +702,7 @@ the output $testor$ of the $BM$ module is TRUE.
 	\end{tabular}
 \end{table}
 
-Lets take for example the basic matrix shown in Table~\ref{tabBM}. We are going to illustrate the 
+Lets us take for example the basic matrix shown in Table~\ref{tabBM}. We are going to illustrate the 
 operation of the proposed architecture using two testors for this basic matrix. First we will evaluate 
 the candidate $\{x_0,x_1\}$ which is an irreducible testor. Secondly, the candidate $\{x_0,x_1,x_2\}$ will 
 be evaluated. This last attribute set is a superset of $\{x_0,x_1\}$ and thus, it is not an irreducible testor.
@@ -735,7 +760,7 @@ Left rows of Tables~\ref{tabIrreducible} and~\ref{tabNotIrreducible} show the re
 \section{Evaluation and Discussion}
 \label{sect:6}
 
-The proposed architecture allows to send only irreducible testors from the FPGA device to the 
+The proposed architecture allows sending only irreducible testors from the FPGA device to the 
 host PC. This modification eliminates the final filtering stage in the software component of the 
 hardware-software platform~\cite{Rojas12}. The main draw back of our proposed modification is its 
 dependence with basic matrix dimensions which could lead to a larger hardware realization in some 
@@ -744,24 +769,55 @@ cases.
 Transferring huge amount of data from FPGA device to the host PC could saturate the communication 
 channel, causing the main candidate evaluation process to work intermittently. This runtime delay 
 can be neglected in most cases due to the high data transfer rate available in modern platforms. 
-In this sense the improvement achieved by our proposed architecture is not significative.
+%In this sense the improvement achieved by our proposed architecture is not significative.
 
 The final filtering stage in the software component needed in the original platform~\cite{Rojas12} checks 
 every pair of testors received from the FPGA. Testors which are superset of any other testor are 
 eliminated as they do not satisfy the irreducibility condition stated in definition~\ref{def1}. We 
 can establish the lower boundary of the computational complexity for this process as $N(N-1)/2$, 
 where $N$ is the number of irreducible testors in the basic matrix. This is the case when all testors 
-transferred to the hos PC are irreducible.
+transferred to the host PC are irreducible.
 
-For those basic matrices with a large number of irreducible testors the final filtering stage could be 
-even more expensive than the main testors computation. Table~\ref{tabTimes} shows the runtime, including 
+Table~\ref{tabTimes} shows the runtime, including 
 the testors computation and the final filtering stage, for some basic matrices obtained from real data. 
-For these runtime estimations, a frequency of 1GHz was assumed for software execution and 50MHz for the 
-FPGA architecture.
+For this purpose eight standard datasets from the UCI Repository of Machine Learning \cite{Bache13} were used.
+Columns in Table~\ref{tabTimes} show the dataset name, the number of candidates tested by the BT algorithm, 
+the number of irreducible testors found, the runtime for the main algorithm execution in the 
+FPGA device and the final filtering stage in the host PC. For these runtime calculations, 
+a frequency of 3.6GHz was used for software execution and 50MHz for the FPGA architecture.
+
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+\begin{table}[htb]
+	\renewcommand{\arraystretch}{1.3}
+	\caption{Algorithm execution and irreducible testors filtering stage runtimes for real datasets}
+	\label{tabTimes}
+	\centering
+	\begin{tabular}{lC{1.2cm}C{1.2cm}C{1.2cm}C{1cm}C{1cm}}
+	 	\hline                       
+	  	Dataset & Tested Candidates & Irreducible Testors & FPGA runtime ($ \mu $s) & PC runtime ($ \mu $s)\\
+	  	\hline
+	  	liverdisorder& 16   & 9    & 0.32  & 0.04 \\
+	  	zoo          & 20   & 7    & 0.40  & 0.02 \\
+	  	krvskp       & 36   & 4    & 0.72  & 0.01 \\	  	
+	  	shuttle      & 38   & 19   & 0.76  & 0.17 \\
+	  	tic-tac-toe  & 44   & 9    & 0.88  & 0.04 \\
+	  	australian   & 330  & 44   & 6.60  & 0.95 \\
+	  	lymphography & 802  & 75   & 16.04 & 2.77 \\
+	  	german       & 16921& 846  & 338.42& 357.44 \\
+	 	\hline 
+	\end{tabular}
+\end{table}
+
+For most of datasets shown in Table~\ref{tabTimes} the time taken for FPGA and PC executions are 
+of the same order of magnitude. For those basic matrices with a large number of irreducible testors, the final 
+filtering stage could be  even more expensive than the main testors computation, as is the case for the dataset 
+labelled \textit{german}. Although finding all irreducible testors for these datasets does not constitute 
+a complex computational problem, they serve to show our point.
 
 The original architecture includes a module for the elimination of most non irreducible testors, called 
-\textit{Dismiss Testors}. This module consist of a predefined number of registers which store previously 
-calculated testors. New testors are compared against each stored testor removing any superset. On every 
+\textit{Dismiss Testors}. This module consists of a predefined number of registers which store previously 
+calculated testors. New testors are compared against each previously stored testor removing any superset. On every 
 iteration, the remaining testors are shifted to the bottom of this FIFO while the new ones are introduced 
 on top. Outgoing testors from the \textit{Dismiss Testors} module are transferred to the host PC for final 
 filtering. The more registers in the FIFO, the higher the percentage of non irreducible testors eliminated.
@@ -808,28 +864,35 @@ basic matrices have 12\% and 45\% density of 1's for Tables~\ref{tabResource12} 
 
 The \textit{Dismiss Testors} module has a fixed size in the FPGA realization once the number of registers and  attributes is given. This fact is reflected in the high stability shown in the resource utilization for 
 two basic matrices with different density of 1's, as can be seen in Tables~\ref{tabResource12} and 
-\ref{tabResource45}. The proposed architecture, on the other hand, do benefits from the optimization process. 
+\ref{tabResource45}. The proposed architecture does, on the other hand, benefits from the logic optimization 
+accomplished by the synthesis process. The goal of synthesis is to provide the smallest possible implementation 
+of the design while meeting timing and power constraints.	 
 This means that the hardware utilization of the proposed module depends on the structure of data values in the 
 basic matrix. The high reduction achieved by optimization in the low density matrix, explains that the proposed 
 architecture is smaller than the original architecture, even with 8 registers, in Table~\ref{tabResource12}.
 
 \section{Conclusion}
 \label{sect:8}
-The hardware architecture presented in this work allows the computation of irreducible testors on the FPGA 
+The hardware architecture presented in this work allows us to compute irreducible testors on the FPGA 
 device. This characteristic implies a shorter runtime, avoiding the final filtering stage needed in previous 
-implementations. This final stage may consume a significative time in some cases, as our examples show.
+implementations. %This final stage may consume a significative time in some cases, as our examples show.
+The resource utilization of the proposed architecture depends on the basic matrix dimensions. 
+%This characteristic could be a drawback for very large problems. Nevertheless, 
+This new module is, however, sensitive to the logic optimization accomplished by the synthesis process. We found 
+that optimization may lead, in some cases, to smaller hardware realizations than previous architectures. 
+Another important issue of our proposed architecture is its algorithm independence. 
+%The irreducible condition verifications is performed in a stage common to any algorithm in Testor Theory. 
+Further works are directed to the implementation of different algorithms for computing irreducible testors using 
+the result of this work.
 
-The resource utilization of the proposed architecture depends on the basic matrix dimensions. This characteristic 
-could be a drawback for very large problems. Nevertheless, this new module is sensitive to the optimization 
-process. We found that optimization may lead, in some cases, to smaller hardware realizations than previous 
-architectures. 
+\section*{Acknowledgment}
+This work was partly supported by the National Council of Science and Technology of
+Mexico (CONACyT) through the project grant CB2008-106366.
 
-Another important issue of our proposed modification is its algorithm independence. The irreducible condition verifications is performed in a stage common to any algorithm in Testor Theory. Further works are directed to 
-the implementation of different algorithms for computing irreducible testors using our proposed architecture.
 
 \begin{thebibliography}{20}
-
-\bibitem{Compton02}Compton, K., and Hauck, S. (2002). Reconfigurable computing: a survey of systems and software. ACM Computing Surveys (csuR), 34(2), 171-210.
+\bibitem{Bache13}Bache, K., Lichman, M. (2013). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science.
+%\bibitem{Compton02}Compton, K., and Hauck, S. (2002). Reconfigurable computing: a survey of systems and software. ACM Computing Surveys (csuR), 34(2), 171-210.
 \bibitem{Cumplido06} Cumplido, R., Carrasco, A. and Feregrino, C. (2006). On the Design and Implementation of a High Performance Configurable Architecture for Testor Identification. Lectures Notes on Computer Science, 4225, 665-673.
 %\bibitem{Djukova05}Djukova, E. V. (2005). On the number of irreducible coverings of an integer Matrix. Computational Mathematics and Mathematical Physics, 45, 903-908.
 \bibitem{Dmitriev66} Dmitriev, A. N.,  Zhuravlev, Y. I. and Krendeliev, F. P. (1966). About Mathematical Principles of Objects and Phenomena Classification. Diskretni Analiz, 7, 3-17.
@@ -842,14 +905,14 @@ the implementation of different algorithms for computing irreducible testors usi
 \bibitem{Lazo01}Lazo-Cort\'es, M., Ruiz-shulcloper, J., and Alba-cabrera, E. (2001). An Overview of the Evolution of the Concept of Testor. Pattern Recognition, 34, 753-762.
 %\bibitem[Liu et al. (1998)]{R19} Liu, H. and Setiono, R. (1998).Some issues on scalable feature selection. Expert Systems with Applications, 15, 333-339.
 \bibitem{Martinez01}Mart\'inez-Trinidad, J.F. and Guzm\'an-Arenas, A. (2001). The Logical Combinatorial Approach to Pattern Recognition an Overview through Selected Works. Pattern Recognition, 34, 741-751.
-\bibitem{Pocek13}Pocek, K., Tessier, R., and DeHon, A. (2013, April). Birth and adolescence of reconfigurable computing: A survey of the first 20 years of field-programmable custom computing machines. In Highlights of the First Twenty Years of the IEEE International Symposium on Field-Programmable Custom Computing Machines (pp. 3-19).
+%\bibitem{Pocek13}Pocek, K., Tessier, R., and DeHon, A. (2013, April). Birth and adolescence of reconfigurable computing: A survey of the first 20 years of field-programmable custom computing machines. In Highlights of the First Twenty Years of the IEEE International Symposium on Field-Programmable Custom Computing Machines (pp. 3-19).
 \bibitem{Rojas07}Rojas, A., Cumplido, R., Carrasco-Ochoa, J. A., Feregrino, C. and Mart\'inez-Trinidad, J. f. (2007). FPGA Based Architecture for Computing Testors. Lectures Notes on Computer Science, 4881, 188-197.
 \bibitem{Rojas12}Rojas, A., Cumplido, R., Carrasco-Ochoa, J. A., Feregrino, C. and Mart\'inez-Trinidad, J. f. (2012). Hardware-software platform for computing irreducible testors. Expert Systems with Applications, 39, 2203 - 2210.
-\bibitem{Ruiz85}Ruiz-Shulcloper, J., Aguila-Feros, L. and Bravo-Mart\'inez, A. (1985). BT and TB algorithms for computing all irreducible testors. Revista Ciencias Matem\'aticas, 2, 11-18.
-\bibitem{Ruiz08}Ruiz-Shulcloper, J. (2008). Pattern recognition with mixed and incomplete data. Pattern Recognition and Image Analysis, 18(4), 563-576.
-\bibitem{Sanchez02}S\'anchez-D\'iaz, G. and Lazo-Cort\'es, M. (2002). Modifying BT Algorithm for Improving its Runtimes. Revista Ciencias Matem\'aticas, 20, 129-136.
+%\bibitem{Ruiz85}Ruiz-Shulcloper, J., Aguila-Feros, L. and Bravo-Mart\'inez, A. (1985). BT and TB algorithms for computing all irreducible testors. Revista Ciencias Matem\'aticas, 2, 11-18.
+%\bibitem{Ruiz08}Ruiz-Shulcloper, J. (2008). Pattern recognition with mixed and incomplete data. Pattern Recognition and Image Analysis, 18(4), 563-576.
+%\bibitem{Sanchez02}S\'anchez-D\'iaz, G. and Lazo-Cort\'es, M. (2002). Modifying BT Algorithm for Improving its Runtimes. Revista Ciencias Matem\'aticas, 20, 129-136.
 %\bibitem{Sanchez07}S\'anchez-D\'iaz, G. and Lazo-Cort\'es, M. (2007). CT-EXT: An Algorithm for Computing Typical Testor Set. Lecture Notes in Computer Science, 4756, 506-514.
-\bibitem{Sanchez10}S\'anchez-D\'iaz, G., Piza-Davila, I, Lazo-Cort\'es, M, Mora-Gonz\'alez, M and Salinas-Luna, J. (2010). A Fast Implementation of the CT-EXT Algorithm for the Testor Property Identification. Lecture Notes in Computer Science, 6438, 92-103.
+%\bibitem{Sanchez10}S\'anchez-D\'iaz, G., Piza-Davila, I, Lazo-Cort\'es, M, Mora-Gonz\'alez, M and Salinas-Luna, J. (2010). A Fast Implementation of the CT-EXT Algorithm for the Testor Property Identification. Lecture Notes in Computer Science, 6438, 92-103.
 \bibitem{Skowron92}Skowron, A and Rauszer, C. (1992). The discernibility matrices and functions in information systems. Handbook of Applications and Advances of the Rough Sets Theory, 331-362.
 \end{thebibliography}
 
