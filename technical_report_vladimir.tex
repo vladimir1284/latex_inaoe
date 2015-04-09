@@ -1,0 +1,884 @@
+%-------------------------------------------------------------------------
+\documentclass[11pt]{article}   % el estilo de documento
+\usepackage{latex8}             % la clase
+\usepackage{times}              % la letra
+\usepackage{graphicx}           % para manejar imagenes
+\usepackage{subfigure}          % para manejar subfiguras
+%-------------------------------------------------------------------------
+% Se definen los margenes para el documento
+\topmargin=0.5in \oddsidemargin=0in \evensidemargin=0in
+\textwidth=6.5in \textheight=8.5in
+%-------------------------------------------------------------------------
+
+
+\begin{document}
+
+\title{Efficient algorithms for reducts computation}
+\author{Vlad\'imir Rodr\'iguez Diez \and Jos\'e Francisco Mart\'inez Trinidad
+\affiliation{Computer Science Department\\National Institute of
+Astrophysics, Optics and Electronics\\
+Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
+72840, M\'{e}xico} \email{\{vladimir.rodriguez,fmartine\}@inaoep.mx}}
+\maketitle
+
+%\thispagestyle{empty}
+
+\begin{abstract}
+    Rough Set Theory reducts are minimal subsets of attributes preserving the semantics of an 
+    information system. The reducts computation problem has exponential complexity regarding the number of 
+    attributes in a dataset. Parallel acceleration of efficient algorithms have been made to
+    reduce the runtime for large datasets. The development of a new algorithm designed from scratch
+    for an efficient parallel implementation must improve the performance of existing alternatives. 
+    Throughout our research, most efficient reported algorithm for reducts computation are to be 
+    implemented in a parallel acceleration fashion for benchmarking. Experiences and difficulties 
+    encountered in these experiments will constitute the basis for the development of our resulting algorithm. 
+    We expect this new approach to reduce the runtime, and hence make the reducts computation viable for 
+    larger datasets than it is today.
+\end{abstract}
+
+\textbf{keywords.--} Rough Sets, Dimensionality Reduction, Reducts Computation, Parallel Acceleration.
+
+\pagebreak 
+\tableofcontents
+\pagebreak 
+
+%-------------------------------------------------------------------------------
+% your earth-shattering contribution
+
+\section{Introduction}
+  Rough set theory (RST), proposed by Professor Z. Pawlak in 1982 (\cite{Pawlak81},\cite{Pawlak81-2},
+  \cite{Pawlak82},\cite{Pawlak91}), is a relatively new mathematical theory 
+  to deal with imperfect knowledge, in particular with vague concepts. Information systems in RST 
+  are tables of objects described by some attributes (columns). 
+  When data is collected or recorded, every single aspect of the object under study is considered 
+  to have a complete representation and to ensure that no potentially useful information is lost.
+  As a result, information systems are usually characterized by a large number of attributes,
+  degrading the performance of machine learning tools \cite{Parthalain08}.
+  One of the main concepts in RST is the notion of reduct, which is a minimal subset of attributes 
+  preserving the required classification features \cite{Pawlak91}. A new information system using 
+  only those features in a reduct, is a reduced representation of the original data with the same 
+  classification quality. 
+  However, the main restriction in practical use of RST is that computing all reducts has been proven 
+  as an NP-hard problem~\cite{Skowron92}.
+  It is therefore of high importance the development of efficient algorithms for reducts computation.
+  
+  Several attempts to speedup computing of reducts are reported. Many of the presented algorithms are 
+  based on some heuristics. Main drawback of this approach is that these algorithm do not necessarily 
+  return the complete set of attributes and may obtain super-reducts (non minimal subsets). Another 
+  way to speedup computation of reducts is the parallelization \cite{Strakowski08}. There are also 
+  interesting alternatives such as the use of a parallel version of genetic algorithms \cite{Wroblewski98}
+  and the transformation of reducts computation to the well known problem SAT \cite{Jensen14}.
+  
+  Testor Theory (TT) was created by Yablonskii and Chegis in the middle of fifties 
+  of the last century as a tool for analysis of problems connected with control and 
+  diagnosis of faults in circuits. TT can be used for feature selection as shown in~\cite{Ruiz08}
+  and \cite{Martinez01}. The relation between the rough set reducts and typical testors from the
+  logical combinatorial approach to pattern recognition (TT) is exposed in \cite{Lazo15}. Algorithm for
+  typical testors computation:~\cite{Ruiz85},~\cite{Santiesteban03},~\cite{Sanchez07} and~\cite{Lias09},
+  may be applied to reducts computation because of the similarity between these two concepts. One strength 
+  of our research is that we will be testing, for the first time, these two families of algorithm in the 
+  same arena.
+  
+\subsection{Main Research Teams in Rough Set Theory}\label{mainGroups}{
+  Here we include an overview of main research teams in RST. Researchers working on TT will be 
+  considered as well due to its close relation to RST reducts.
+  
+\subsubsection{Poland}
+  Andrzej Skowron, professor at the University of Warsaw; and Roman Slowinski from Institute of Computing
+  Science at the Poznan University of Technology were co-authors of professor Zdzislaw Pawlak. Their works
+  constitute the basis of RST and have been expanding its capabilities and applications.
+  
+  Maciej Kopczynski,  Tomasz Grzes and Jaroslaw Stepaniuk from the Faculty of Computer Science at the Bialystok
+  University of Technology work on FPGA-based acceleration of RST algorithm.
+  
+\subsubsection{India}
+  Kanchan Tiwari from E{\&}TC Department at MESCOE, Pune and Ashwin Kothari from the Electronics \& Computer 
+  Sceince Department at VNIT, Nagpur; both from India, have been recently working on the development of FPGA 
+  architectures for reducts computations of informations systems.
+   
+\subsubsection{United Kingdom} 
+  Richard Jensen and Qiang Shen from Department of Computer Science at Aberystwyth University, Wales, United 
+  Kingdom work in the study of non-classic approaches to RST. Most of their works are on Fuzzy-rough sets and 
+  the application of optimization techniques to the computation of reducts in informations systems.
+  
+\subsubsection{Testors Theory} 
+  Jos\'e F. Mart\'inez Trinidad, Jes\'us A. Carrasco Ochoa and Manuel S. Lazo Cort\'es from 
+  Instituto Nacional de Astrof\'isica \'Optica y Electr\'onica (INAOE) work on theoretical aspects of TT 
+  and the development of new algorithms for reducts Computation in collaboration with Guillermo Sanchez 
+  Diaz from Universidad Autonoma de San Luis Potosi. They have been also working on hardware implementations
+  of algorithms for reducts Computation in collaboration with Ren\'e Cumplido Parra and Claudia Feregrino 
+  Uribe from INAOE.}
+  
+\subsection{Justification and Motivation}\label{Justification}{
+  RST can be used to reduce the number of attributes in a dataset without relevant information lost. 
+  Therefore, there has been much research in the area of finding reducts, particularly, reducts with 
+  minimal cardinality~\cite{Jensen14}. 
+  
+  Heuristic methods such as~\cite{Chouchoulas01,Jensen04,Lin04,Zhong01} are fast alternatives for finding 
+  reducts but they do not guarantee minimal reductions. Stochastic approaches~\cite{Wroblewski95,Jensen03,
+  Chen10,Wang07} still do not guarantee finding the smallest reducts, as we will see further. Techniques 
+  for finding the complete reducts set~\cite{Ruiz85,Santiesteban03,Sanchez07,Lias09} can, of course, find 
+  minimal cardinality reducts but with a higher computational effort.
+  
+  The motivation of this work is the development of an algorithm for finding reducts with minimal length 
+  in an information system. This is an NP-Hard problem which makes every attempt for reducing its execution
+  time, a challenging task. Our proposal must be competitive with the state of the art algorithm in all 
+  cases and will be faster in most datasets. The main arena for comparison will be a large set of synthetic,
+  randomly generated datasets and real datasets from~\cite{Bache13}. We will be dealing only with classical
+  reducts definition. The practical applications (or relevance) of shortest reducts in supervised classification
+  is beyond our goals.
+  
+  The results of this research will impact the supervised classification methods specially in large datasets.
+  Nowadays, data is automatically collected, thus generating huge databases in almost every field. The 
+  current growth of the size of data and the number of existing databases, is the justification for our
+  research on efficient algorithms for dimensionality reduction without semantics lost.}  
+    
+  Throughout our research we will conduct a comparative study between the most relevant algorithms for reduct 
+  computation. Although main focus will be on algorithm obtaining minimal cardinality reducts, experiences 
+  form heuristics approaches will be considered. The rest of this document is structure as follows. In section
+  \ref{basicConcepts}, some basic concepts of rough set theory are introduced. Our research questions are 
+  presented in section~\ref{ResearchQuestions}; and our research goals in section~\ref{Goals}. Finally, 
+  related work is discussed on section \ref{relatedWork}.
+
+\section{Basic Concepts}\label{basicConcepts}
+  RST philosophy is based on the assumption that every object in the universe of discourse is described by 
+  some information associated to it. This information constitutes the basis through which classification of 
+  objects can be achieved. RST motto is "Let the data speak for themselves". Moreover, RST is a formal 
+  framework to deal with imprecise and incomplete data with no need of additional information.
+  
+  From the RST point of view, two objects are indistinguishable (indiscernible) if they have an equivalent 
+  value for each attribute in their description. Indiscernibility relations arising this way constitute the
+  mathematical foundations of RST. Any partition of a dataset in which every pair of indiscernible objects
+  belongs to the same subdivision is called a crisp (precise) set; otherwise, the set is rough (imprecise, 
+  vague). Some basic concepts of RST are presented bellow. Although we will be following the explanation 
+  in~\cite{Polkowski00}, some modifications are introduced to provide sufficient basis for the further 
+  discussion.
+  
+\subsection{Information System}
+  The basic representation of data in RST is an \emph{Information System} (IS). An IS is a table with rows
+  representing objects while columns specify its attributes or features. Formally, an IS can be defined as 
+  $IS=(U,A)$ where $U$ is a finite non-empty set of objects $U=\lbrace x_1,x_2,...,x_n\rbrace$ and $A$ is a 
+  finite non-empty set
+  of attributes (features, variables). Every attribute in $A$ is a map: $a: U \rightarrow V_a$. The set $V_a$ is
+  called the \textit{value set} of $A$. Attributes in $A$ are further classified as condition attributes $C$ and 
+  decision attributes $D$ such that $A=C \cup D$ and $C \cap D =\emptyset$. We can of course define two 
+  value sets $V_c$ and $V_d$, for condition and decision attributes respectively, such that 
+  $V_a=V_c \cup V_d$. Table~\ref{tab_IS} shows a typical IS.
+  
+  
+ \begin{table}[htb]
+		\caption{An Information System.} \label{tab_IS}
+		\centering
+ 	\begin{tabular}{c||c|c||c}
+ 			  & $c_1$ & $c_2$ &  $d$ \\
+ 		\hline \hline
+		$x_1$ &   1   &    3  &   0   \\
+		$x_2$ &   1   &    0  &   0   \\
+		$x_3$ &   3   &    1  &   1   \\
+		$x_4$ &   3   &    1  &   1   \\
+		$x_5$ &   4   &    2  &   1   \\
+		$x_6$ &   1   &    2  &   0   \\
+		$x_7$ &   4   &    2  &   1   \\
+ 	\end{tabular}             
+ \end{table}
+ 
+   
+  \textit{Decision attributes} absolutely decide to which class the object belongs. In the IS of
+  table~\ref{tab_IS}, $d$ is the decision attribute column. For this example $V_d = \lbrace 0,1 \rbrace$;
+  hence this is a 2 classes system. \textit{Condition attributes} do not absolutely decide the class for 
+  an object but help to decide. In supervised classification condition attributes are the only information
+  available during classification of new objects while decision attributes are only present in the training set. 
+  IS with distinguished decision and condition attributes are called decision tables. In table~\ref{tab_IS},
+  $c_1$ and $c_2$ are condition attributes.
+ 
+\subsection{Indiscernibility Relations}
+  For an object $x \in U$, the information about $x$ with respect to a set $B \subseteq A$ may be defined as
+  \textit{the B-information set} 
+  
+  \begin{equation}
+  	Inf_B(x)=\lbrace (a,a(x)):a \in B \rbrace
+  \end{equation}  
+  
+  of $x$.
+  
+  \emph{Indiscernibility relation} of $B$ is defined as follows:
+  
+  \begin{equation}
+  	(x,y) \in IND_B \Longleftrightarrow Inf_B(x)=Inf_B(y)
+  \end{equation} 
+  
+  Equivalent classes $[x]_B$ of the relation $IND_B$ represent therefore elementary (atomic) portions
+  of knowledge represented by the subsystem $IS_B=(U,B)$.
+  
+  For a \textit{concept} (set of objects), $X \subseteq U$, we say that $X$ is \textit{B-exact} if and 
+  only if
+  	
+  \begin{equation}
+  	X=\cup_{i=1}^{k} [x_i]_B
+  \end{equation} 
+  
+  for some $x_1, x_2,...,x_k \in U$ i.e. where $X$ is the union of some \textit{B-indiscernibility} classes.
+  
+  For example, in table~\ref{tab_IS} the three possible subset of conditional attributes are 
+  $\lbrace c_1 \rbrace$, $\lbrace c_2 \rbrace$ and $\lbrace c_1, c_2 \rbrace$. The indiscernibility relation 
+  for these sets defines three partitions of the universe:
+  
+  $$\begin{array}{lcc}
+  IND_{\lbrace c_1 \rbrace} &=& \lbrace \lbrace x_1, x_2, x_6 \rbrace, 
+  								\lbrace x_3, x_4 \rbrace, 
+  								\lbrace x_5, x_7 \rbrace \rbrace \\
+  IND_{\lbrace c_2 \rbrace} &=& \lbrace \lbrace x_1 \rbrace, 
+  								\lbrace x_2 \rbrace, 
+  								\lbrace x_3, x_4 \rbrace,
+  								\lbrace x_5, x_6, x_7 \rbrace \rbrace \\
+  IND_{\lbrace c_1, c_2 \rbrace} &=& \lbrace \lbrace x_1 \rbrace, 
+  									\lbrace x_2 \rbrace, 
+  									\lbrace x_3, x_4 \rbrace,
+  									\lbrace x_5, x_7 \rbrace,
+  									\lbrace x_6 \rbrace \rbrace 
+  \end{array}$$
+
+\subsection{Concept Approximations}
+  RST capability of handling non-exact (rough) concepts arises from the approximation of a rough concept 
+  by means of two crisp concepts: the \textit{lower} and the \textit{upper approximations of} $X$. 
+  Denoted by $\underline{B}X$ and $\overline{B}X$, respectively as follows:
+  
+  \begin{equation}
+  	\begin{array}{lcc}
+  	\underline{B}X &=& \lbrace x \in U : [x]_B \subseteq X \rbrace\\
+  	\overline{B}X  &=& \lbrace x:[x]_B \cap X \neq \emptyset \rbrace
+  	\end{array}
+  \end{equation}
+  
+  We would say that objects in $\underline{B}X$ can be certainly classified as elements of $X$ on the 
+  basis of knowledge in $IS_B$, while objects in $\overline{B}X$ can only be possibly classified as 
+  elements of $X$ on the basis of knowledge in $IS_B$. In other words, $\underline{B}X$ is 
+  composed by those objects in $X$ having no indiscernible objects outside $X$. $\overline{B}X$ on the 
+  other hand, is composed by all objects in $X$ plus all objects outside $X$ having an indiscernible 
+  object in $X$.
+  
+  The set 
+  
+  \begin{equation}
+  	BN_B(X)=\overline{B}X-\underline{B}X
+  \end{equation}
+  
+  is called the \textit{B-boundary region of X} and it contains the objects which neither are certainly 
+  members of $X$ nor they are certainly member of $U-X$. The presence of a non-empty boundary region
+  indicates that the concept in question is rough (\textit{B-rough}).
+  
+  From the previous example we can see that e.g. concept $X=\lbrace x_1,x_2,x_3 \rbrace$ is rough for the 
+  three attributes sets while e.g. the concept $Y=\lbrace x_1,x_2 \rbrace$ is both $\lbrace c_1 \rbrace$-
+  and $\lbrace c_1, c_2 \rbrace$-exact. Notice that
+  
+  $$\begin{array}{lcc}
+  \underline{c_1}X &=& \emptyset\\
+  \overline{c_1}X  &=& \lbrace x_1,x_2,x_3,x_4,x_6 \rbrace\\
+  \underline{c_2}X &=& \lbrace x_1,x_2 \rbrace
+  \end{array}$$
+  
+\subsection{Positive Region}\label{subsect_Pos}
+  The decision attribute $d$ induces a partition of the universe $U$ into equivalence classes 
+  (\textit{decision classes}) of the relation $IND_d$. Each decision class $X_1,X_2,...,X_k$, where 
+  $k=|V_d|$, may be approximated by its lower and upper approximations over a set $B \subseteq A$ of 
+  attributes. Since we will be trying to associate a decision class to an object, based on the 
+  knowledge in attributes belonging to $B$, we are interested in those $B-classes$ $[x]_B$ which 
+  satisfy the condition $[x]_B \subseteq X_i$ for some $X_i$. This idea leads to the notion of the 
+  \textit{positive region of the decision}.
+  
+  \begin{equation}
+  	POS_B(d) = \lbrace x \in U: \exists i \in \lbrace 1,2,...,k \rbrace : [x]_B \subseteq X_i \rbrace
+  \end{equation}
+  
+  The set $POS_B(d)$ is called the \textit{B-positive region of d}.
+  
+  Taking for example the IS in table~\ref{tab_IS}, we can see that
+  
+  $$\begin{array}{lcc}
+  POS_{\lbrace c_1 \rbrace}(d)&=&U\\
+  POS_{\lbrace c_2 \rbrace}(d)&=& \lbrace x_1,x_2,x_3,x_4 \rbrace\\
+  POS_{\lbrace c_1, c_2 \rbrace}(d)&=&U
+  \end{array}$$
+ 
+\subsection{Reducts and Core}
+  Given an information system $IS=(U,A)$ with condition attributes set $C$ and decision attributes set
+  $D$ such that $A=C \cup D$ and $C \cap D =\emptyset$. A subset $B \subseteq C$ is a \textit{reduct} 
+  of $IS$ relative to $D$ if
+  \begin{enumerate}
+  	\item $POS_B(D)=POS_C(D)$. \label{cond_1}
+  	\item $B$ is a minimal subset (with respect to inclusion) satisfying condition~\ref{cond_1}.
+  \end{enumerate}
+  
+  The intersection of all the reducts in an IS is called the \textit{core}, the elements of which cannot be
+  eliminated without introducing more contradictions to the representation of the dataset.
+  
+\subsection{Discernibility Matrix and Discernibility Function}
+  The discernibility knowledge of the information system is commonly recorded in a symmetric $|U| \times |U|$
+  matrix called the \textit{discernibility matrix}, and each element $m_{ij}$ in the discernibility matrix 
+  $M_{IS}$ is defined as 
+  
+  \begin{equation}
+  	m_{ij}=\left\lbrace\begin{array}{cl}
+  			\lbrace c \in C: c(x_i) \neq c(x_j) \rbrace & \mathrm{for~~}D(x_i) \neq D(x_j)\\
+  			\emptyset 								   & \mathrm{otherwise} 
+  	\end{array}\right.
+  \end{equation}
+  
+  Table~\ref{tab_DM} shows the discernibility matrix for the IS in table~\ref{tab_IS} as a lower triangular 
+  matrix.
+  
+   \begin{table}[htb]
+		\caption{Discernibility Matrix Example.} \label{tab_DM}
+		\centering
+ 	\begin{tabular}{c|ccccccc}
+ 		$x \in U$ & 1 & 2 &  3 & 4 & 5 &  6 & 7\\
+ 		\hline
+		1 &&&&&&&\\
+		2 &&&&&&&\\
+		3 & $c_1,c_2$ & $c_1,c_2$ &&&&&\\
+		4 & $c_1,c_2$ & $c_1,c_2$ &&&&&\\
+		5 & $c_1,c_2$ & $c_1,c_2$ &&&&&\\
+		6 &&& $c_1,c_2$ & $c_1,c_2$ &&&\\
+		7 & $c_1,c_2$ & $c_1,c_2$ &&&& $c_1$ &\\
+ 	\end{tabular}             
+ \end{table}
+  
+  Once the discernibility matrix $M_{IS}$ is found, we can define the \textit{discernibility function} $f_{IS}$.
+  This is a boolean function of $n$ boolean variables $c_1^*, c_2^*,...,c_n^*$, representing the presence of
+  the corresponding attribute (True) or its absence (False) in $M_{IS}$.
+  
+  \begin{equation}
+  	f_{IS}(c_1^*, c_2^*,...,c_n^*)=\wedge \lbrace \vee c_{ij}^* : 1 \leq j \leq i \leq |U|, 
+  									c_{ij} \neq \emptyset \rbrace
+  \end{equation}
+
+  where $c_{ij}^*=\lbrace c^* : c \in c_{ij} \rbrace$. Only the lower triangular matrix from $M_{IS}$ is
+  taken into consideration since $M_{IS}$ is symmetric. An equivalence between the prime implicants of
+  $f_{IS}$ and all the reducts of $IS$ has been found~\cite{Pawlak07}.
+  
+  The discernibility function for the discernibility matrix in table~\ref{tab_DM} is, without repetitions  
+  $f_{IS}(c_1^*,c_2^*)=(c_1^* \vee c_2^*) \wedge c_1^*$
+  
+  From this we can easily see that the only reduct (also the core) for this IS is $c_1$.
+  
+\subsection{Attributes Dependency and Significance}
+  One important aspect of data analysis is the study of dependencies between attributes describing the 
+  objects. Intuitively, a subset of attributes $D$ depends totally on a set of attributes $B$, denoted 
+  $B \Rightarrow D$ if all attribute values from $D$ are uniquely determine by values of attributes
+  in $B$. Formally in RST we say that for $B,D \subset A$, $D$ depends on $B$ in a degree 
+  $k(0 \leq k \leq 1)$, denoted $B \Rightarrow _{k}D$ if
+  
+  \begin{equation}
+  	k=\gamma _B (D)=\frac{|POS_B(D)|}{|U|}
+  \end{equation}
+    
+  This is called the \textit{Positive Dependency Degree}, and it is the ratio of the number of objects belonging
+  to the positive region to the number of all objects in universe $U$. If $k=1$, $D$ depends totally on $B$, if
+  $0 < k < 1$, $D$ depends partially (in a degree $k$) on $B$ and if $k=0$, $D$ does not depends on $B$.
+  
+  Taking for example the positive regions from subsection~\ref{subsect_Pos}, we can see that
+  
+  $$\begin{array}{lcccc}  
+  \gamma _{\lbrace c_1 \rbrace} (d)&=&\frac{|U|}{|U|}&=&1\\
+  \gamma _{\lbrace c_2 \rbrace}(d)&=& \frac{|\lbrace x_1,x_2,x_3,x_4\rbrace|}{|U|}&=&\frac{4}{7} \\
+  \gamma _{\lbrace c_1, c_2 \rbrace}(d)&=&\frac{|U|}{|U|}&=&1
+  \end{array}$$
+  
+  We can express the \textit{significance} of feature $c \in B$ upon $D$ as
+  
+  \begin{equation}
+  	SIG(c,B,D)=\gamma _B (D)-\gamma _{B-\lbrace c \rbrace} (D)
+  \end{equation}
+  
+  From  the previous example:
+  
+  $$\begin{array}{lcccccc}
+  SIG(c_1,\lbrace c_1, c_2 \rbrace,d)&=&\gamma _{\lbrace c_1, c_2 \rbrace}(d)
+  										-\gamma _{\lbrace c_2 \rbrace}(d)
+  										&=&1-\frac{4}{7}&=&\frac{3}{7}\\
+  SIG(c_2,\lbrace c_1, c_2 \rbrace,d)&=&\gamma _{\lbrace c_1, c_2 \rbrace}(d)
+  										-\gamma _{\lbrace c_1 \rbrace}(d)
+  										&=&1-1&=&0
+  \end{array}$$
+  
+  From this it follows that attribute $c_1$ is indispensable, but attribute $c_2$ can be dispense when 
+  considering the dependency between the decision attribute $d$ on condition attributes $c_1$ and $c_2$.
+  
+  Finally, we would like to say that an alternative definition of reduct from dependency exist. We say 
+  that a subset $B \in C$ is a reduct of $C$ if it is a minimal set (with respect to inclusion) satisfying 
+  the condition $\gamma _B(D)=\gamma _C(D)$.
+
+\section{The Research Questions}\label{ResearchQuestions} 
+  Throughout our preliminary work, we noticed that there is no faster algorithm for finding all reducts in 
+  all datasets. Different algorithms use different strategies for traversing and pruning the complete search 
+  space. These strategies are better suited for some datasets and are time consuming for others. This leads 
+  us to our first scientific question:
+  
+\begin{quote}
+  \emph{Is there a relation between the external properties of the discernibility matrix and the time 
+  		complexity of traversing strategies for finding minimal cardinality reducts of an information
+  		system?}
+\end{quote}
+  		
+  In this context, external properties are those characteristics that we can extract from the discernibility
+  matrix by traversing their cells just one time. Lets take for instance, the minimum and maximum number of
+  attributes in a cell, the core or the mean number of attributes per cell. Internal properties require, on 
+  the other hand, more complex operations. Internal properties are, for instance, the number of reducts, the
+  cardinality of the shortest and largest reducts, etc.
+  
+  From this research question we formulate the following hypothesis:
+  
+\begin{quote}  
+  \emph{There is a relation between the external properties of the discernibility matrix and the time 
+  		complexity of traversing strategies for finding minimal cardinality reducts of an information
+  		system}
+\end{quote}
+  		
+  Several attempts for the decomposition of the original problem of the complete reducts set computation have 
+  been made~\cite{Strakowski08,Jiao10,Kopczynski14}. The main disadvantage of the problem decomposition or
+  parallelization is the strong dependency between the speed--up of the method used and the particularities of 
+  the dataset~\cite{Strakowski08}. This leads us to our second scientific question:
+  
+\begin{quote}
+  \emph{Is there a relation between the external properties of the discernibility matrix and the 
+  		speed--up of the decomposition method used for finding minimal cardinality reducts of an information
+  		system in a parallel environment?}
+\end{quote}
+
+  From this research question we formulate the following hypothesis:
+    
+\begin{quote}
+  \emph{There is a relation between the external properties of the discernibility matrix and the 
+  		speed--up of the decomposition method used for finding minimal cardinality reducts of an information
+  		system in a parallel environment}
+\end{quote}
+
+  Based on these two scientific questions we can formulate the main hypothesis for our research proposal:
+  
+\begin{quote}
+  \emph{Using some external properties of the discernibility matrix, we can design a parallel algorithm 
+  		for computing minimal cardinality reducts of an information system; which is comparable to the 
+  		state of the art alternatives in all datasets, and faster in most of them}
+\end{quote}  
+
+\section{The Research Goals}\label{Goals} 
+  The main goal in our research is the \emph{development of  a parallel algorithm for computing minimal
+  cardinality reducts of an information system; which is comparable to the state of the art alternatives 
+  in all datasets, and faster in most of them}. This algorithm will use some external properties of the
+  discernibility matrix to conveniently select the traversing strategy for the search space and the 
+  decomposition method for paralellization.
+  
+  Our specific goals are:
+  \begin{enumerate}
+  \item Find a relation between some external properties of the discernibility matrix and the fastest 
+  		traversing strategy for finding shortest reducts.
+  		
+  		Main tasks for this goal are:
+  		\begin{itemize}
+  		\item Generate a set of random datasets, systematically covering the space of possible combinations in 
+  			  the values of the external properties of discernibility matrices.
+  		\item Implement the main traversing strategies reported for the computation of minimal length reducts.
+  		\item Generate an information system with the external properties of each discernibility matrix, using 
+  			  the fastest strategy as decision attribute.
+  		\item Extract the relevant subset of external properties for determining a priori the appropriate 
+  			  traversing strategy for a given dataset; and the rules governing this relation.
+  		\item Design a new algorithm for computing minimal cardinality reducts using the classifier found in
+  			  the previous task.
+  		\item Evaluate the proposed algorithm over the synthetic datasets and over real datasets.
+  		\end{itemize}
+  	
+  \item Find a relation between some external properties of the discernibility matrix and the fastest 
+  		decomposition method for finding shortest reducts.
+  		
+  		Main tasks for this goal are:
+  		\begin{itemize}
+  		\item Implement the main decomposition methods reported for the computation of minimal length reducts
+  			  in a parallel fashion.
+  		\item Generate an information system with the external properties of each discernibility matrix, using 
+  			  the fastest decomposition method as decision attribute.
+  		\item Extract the relevant subset of external properties for determining a priori the appropriate 
+  			  decomposition method for a given dataset; and the rules governing this relation.
+  		\item Design a new parallel algorithm for computing minimal cardinality reducts using the classifier 
+  			  found in the previous task.
+  		\item Evaluate the proposed algorithm over the synthetic datasets and over real datasets.
+  		\end{itemize}
+  
+  \item Develop a parallel algorithm for computing minimal cardinality reducts of an information system, based 
+  		on the two previously designed algorithms.
+  		
+  		Main tasks for this goal are:
+  		\begin{itemize}
+  		\item Design a new parallel algorithm for computing minimal cardinality reducts using some external
+  		      properties of the discernibility matrix.
+  		\item Implement the proposed algorithm using the optimal acceleration platform.
+  		\item Evaluate the proposed algorithm over the synthetic datasets and over real datasets.
+  		\end{itemize}
+  \end{enumerate}
+
+\section{Related Work}\label{relatedWork}
+  In this section, we will be first discussing heuristic algorithms for reducts computation. Some of these 
+  algorithm are capable of finding several reducts and others are intended to obtain a single \textit{minimal} 
+  reduct. Then, two kind of algorithm for computing the complete set of reducts will be exposed: those 
+  from RST and those from TT. Researches in TT have been focused in algorithm for finding all typical testors.
+  Finally, we will make a survey of parallel accelerations reported in literature.  
+  
+\subsection{Heuristics Approaches}
+  The algorithm presented in~\cite{Chouchoulas01} (\textsc{quickreduct}) starts with an empty set of 
+  attributes and adds, one each iteration, the attribute having the highest significance. This greedy algorithm 
+  uses the maximal dependency criterion for finding one optimal reduct.  
+  A similar approach is the Johnson Reducer~\cite{Johnson74}, first introduced in RST in \cite{Ohrn00}.
+  This simple greedy algorithm begins with an empty set of attributes evaluating each conditional attribute in the
+  discernibility function according to a heuristic measure. In the simplest case, those attributes with highest 
+  appearance frequency within the logical context termed clauses, are considered to be more relevant. Works 
+  in~\cite{Nguyen97} and~\cite{Wang01} use alternative heuristic functions guiding the search down better paths. 
+  Variations of this algorithm~\cite{Wang01} and~\cite{Yang08} use the discernibility matrix instead of the
+  discernibility function.
+  Algorithm presented in \cite{Zhong01} starts from the core (since it must be contained in every reduct) and
+  follows a similar procedure adding selected attributes. This optimization may be impractical for large datasets
+  \cite{Jensen14} since the core must be computed a priori.
+  
+  The work presented in~\cite{Jiao10} improves the efficiency of computing reducts by means of subdivision. The 
+  original dataset is broken down into a master-table and several sub-tables that are simpler, more manageable 
+  and more solvable. Results are then joined together in order to solve the original dataset. Different variants
+  for decomposition of reducts computation problem are discussed and proposed in~\cite{Strakowski08}.
+  
+  Special attention deserve the approaches using genetic algorithms to discover sub-optimal reducts. Although 
+  these algorithms does not guarantee finding optimal reducts, many reducts may be found in a determined time.
+  A good point in this approach is the use of the fitness function to guide the search down to a set of 
+  reducts with the desired properties. The work reported in~\cite{Wroblewski95} encodes candidates as bit 
+  strings with a positional representation of attributes presence in the candidate set. The fitness function
+  depends on the number of attributes in the subset, penalizing strings with a large number of bits set. The 
+  second optimization parameter is the number of classifiable objects by the given candidate. The reduct should 
+  discern between as many objects as possible.
+  
+  Other evolutionary approaches to reducts computation include Ant Colony Optimization~\cite{Jensen03}
+  and~\cite{Chen10}; and Particle Swarm Optimization~\cite{Wang07}.
+    
+\subsection{Algorithm for Complete Reducts Set computation}
+  A method for the generation of all reducts in an Information System is proposed in \cite{Starzyk99,Starzyk00}.
+  Although its computational cost is high, this method provides all the reducts by means of manipulations of 
+  the clauses in the discernibility function. In addition to standard simplifications laws, the concept of 
+  strong compressibility is introduced and applied along with an expansion algorithm.
+  
+  Although originally intended for computing a single minimal reduct, algorithm proposed in~\cite{Jensen14} may be
+  modified in order to obtain all reducts in an Information System. The method introduced in this work reduces
+  the problem of finding a reduct from the discernibility function to the SAT problem~\cite{Davis62}. The boolean
+  function generated this way is always satisfy since the complete set of attributes is a trivial solution.
+ 
+  The first work developed in the reduction of the search space for typical testors~\cite{Ruiz85}, follows 
+  the natural order of attributes codified as a binary number. Unnecessary candidates (attributes subset)
+  evaluation are avoided taking into account properties of typical testors and results from previous 
+  evaluations. Subsequent algorithm~\cite{Santiesteban03},~\cite{Sanchez07} and~\cite{Lias09} propose
+  more sophisticated evaluation orders. In our experience, non of this algorithm is the fastest for all dataset.
+  
+\subsection{Parallel Accelerations}
+
+  A parallel acceleration of the algorithm presented in~\cite{Yang08} for reduct generation from binary
+  discernibility matrix was developed in~\cite{Tiwari11,Tiwari12}. This FPGA implementation computes a 
+  single reduct. A real application of object identification system by an intelligent robot is presented.
+  In~\cite{Tiwari13} a quick algorithm, similar to those presented in~\cite{Chouchoulas01}, is proposed
+  and implemented in a hardware fashion. A recent work from this authors~\cite{Tiwari14}, shows a thorough
+  survey of FPGA applications in rough sets reducts computation.
+
+  From the Typical Testors theory, several attempts have been made to overcome the problem 
+  complexity by means of FPGA implementations of algorithms. In a first work~\cite{Cumplido06}, an 
+  FPGA-based brute force approach for computing testors was proposed. This first approach did 
+  not take advantage of dataset characteristics to reduce the number of candidates to be tested; 
+  thus all $2^n$ combinations of $n$ features have to be tested. Then, in \cite{Rojas07} a hardware 
+  architecture of the BT algorithm for computing typical testors was implemented. 
+  This algorithm uses a candidate pruning process for avoiding many unnecessary candidate evaluation, 
+  reducing the number of verifications of the typical testor condition. These two previous works computed 
+  a set of testors on the FPGA device whilst typical condition was evaluated afterwards by the 
+  software component in the hosting PC. Thus, in~\cite{Rojas12} a hardware-software platform for 
+  computing typical testors that implemented the BT algorithm, as in \cite{Rojas07}, was proposed; but it also 
+  included a new module that eliminates most of the non typical testors before transferring them to 
+  a host software application for final filtering. 
+
+  In~\cite{Wroblewski98}, a parallel variant of the algorithm proposed in~\cite{Wroblewski95} is presented.
+  Developments in genetic algorithms are exploited to provide a speedup for the problem of finding reducts.
+  This line of thinking brought us an unexplored acceleration idea from~\cite{Jensen14}. We can combine 
+  available architectures for SAT solving on FPGA~\cite{Safar07,Kanazawa11} with the transformation
+  presented in~\cite{Jensen14} to obtain a new hardware platform for computing all reducts of an information 
+  system.
+  
+  In~\cite{Grzes13,Kopczynski14}, an FPGA application for a single reduct computation is presented. Although
+  authors claim that a huge acceleration is achieved, some drawbacks have to be mentioned. Experiments presented 
+  in~\cite{Kopczynski14} to validate their results is performed over a small dataset which in our experience 
+  does not implies its applicability to larger cases where such acceleration are needed. On the other hand, 
+  runtime estimations for FPGA component executions are made by means of a oscilloscope without taking into 
+  account communication overhead, which cannot be neglected in the presented dataset.
+
+%\subsection{Non Classical Reducts}
+  
+
+%-------------------------------------------------------------------------------
+% Bibliography
+%-------------------------------------------------------------------------------
+\begin{thebibliography}{}
+
+\bibitem{Bache13}
+	Bache K., Lichman M.:  
+	UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. 
+	Irvine, CA: University of California, School of Information and Computer Science. (2013).
+	
+\bibitem{Chen10}
+	Chen Y., Duoqian M., Ruizhi W.:
+	A rough set approach to feature selection based on ant colony optimization.
+	Pattern Recognition Letters. 31(3) (2010) 226--233.
+
+\bibitem{Chouchoulas01}
+	Chouchoulas A., Shen Q.:
+	Rough set-aided keyword reduction for text categorization.
+	Applied Artificial Intelligence. 15(9) (2001) 843--873.
+	
+\bibitem{Cumplido06} 
+	Cumplido R., Carrasco A., Feregrino C.:
+	On the Design and Implementation of a High Performance Configurable Architecture for Testor Identification.
+	Lectures Notes on Computer Science. 4225 (2006) 665--673.
+	
+\bibitem{Davis62} 
+	Davis M., Logemann G., Loveland D.:
+	A machine program for theorem proving.
+	Communication of the ACM. 5 (1962) 394--397.
+
+\bibitem {Grzes13}	
+	Grzes T., Kopczynski M., Stepaniuk J.:
+	FPGA in Rough Set Based Core and Reduct Computation. 
+	Rough Sets and Knowledge Technology.	(2013) 263--270.
+
+\bibitem {Hsieh05}
+	Hsieh, H. F., Shannon S. E.:
+	Three approaches to qualitative content analysis.
+	Qualitative health research. 15(9) (2005) 1277--1288.
+	
+\bibitem {Jensen03}
+	Jensen R., Shen Q.:
+	Finding rough set reducts with ant colony optimization.
+	Proceedings of the 2003 UK workshop on computational intelligence. 1(2) (2003).
+
+\bibitem {Jensen04}
+	Jensen R., Shen Q.:
+	Semantics-preserving dimensionality reduction: rough and fuzzy-rough based approaches.
+	IEEE Transactions on Knowledge and Data Engineering. 16(12) (2004) 1457--1471.
+	
+\bibitem {Jensen14}
+	Jensen R., Andrew T., Shen Q.:
+	Finding rough and fuzzy-rough set reducts with SAT.
+	Information Sciences. 255 (2014) 100--120.
+	
+\bibitem {Jiao10}	
+	Jiao N., Miao D., Zhou J.:
+ 	Two novel feature selection methods based on decomposition and composition.
+ 	Expert Systems with Applications, 37(12) (2010) 741--7426.
+ 	
+\bibitem {Johnson74}	
+	Johnson D. S.:
+	Approximation algorithms for combinatorial problems. 
+	Journal of Computer and System Sciences. 9 (1974) 256--278.
+
+\bibitem {Kanazawa11}	
+	Kanazawa K., Maruyama T.
+	An FPGA solver for SAT-encoded formal verification problems. 
+	Proceedings - 21st International Conference on Field Programmable Logic and Applications. (2011) 38--43.
+
+\bibitem {Kopczynski14}	
+	Kopczynski M., Grzes T., Stepaniuk J.:
+	FPGA in Rough-Granular Computing : Reduct Generation.
+	ACM International Joint Conferences on Web Intelligence and Intelligent Agent Technologies. (2014) 364--370. 
+
+\bibitem {Lazo15}
+	Lazo, M. S., Martínez J. F., Carrasco J. A., Sanchez G.:
+	On the relation between rough set reducts and typical testors.
+	Information Sciences. 294 (2015) 152--163.
+
+\bibitem {Lias09}	
+	 Lias A., Pons A.:
+	 BR: A new method for computing all typical testors.
+	 Progress in Pattern Recognition, Image Analysis, Computer Vision, and Applications. 
+	 Springer Berlin Heidelberg. (2009) 433--440.	
+	 
+\bibitem {Lin04}	
+	 Lin T. Y., Yin P.:
+	 Heuristically fast finding of the shortest reducts, rough sets and current trends in computing.
+	 Lecture Notes in Computer Science. (2004) 465--470.
+	
+\bibitem{Martinez01}
+	Mart\'inez J. F., Guzm\'an A.:
+	The Logical Combinatorial Approach to Pattern Recognition an Overview through Selected Works. 
+	Pattern Recognition. 34 (2001) 741--751.
+
+\bibitem{Nguyen97}	
+	Nguyen H. S., Skowron A.:
+	Boolean reasoning for feature extraction problems.
+	Foundations of Intelligent Systems. Springer Berlin Heidelberg, 1997. 117--126.	
+	
+\bibitem{Ohrn00}
+	$\emptyset$hrn A.:
+	Discernibility and rough sets in medicine: tools and applications. (2000).	
+	 
+\bibitem {Parthalain08}
+	Parthaláin, N. M., Jensen, R., Shen Q.:
+	Finding Fuzzy-Rough Reducts with Fuzzy Entropy.
+	IEEE International Conference on Fuzzy Systems. (2008) 1282--1288.
+	
+\bibitem {Pawlak81}
+	Pawlak, Z.: 
+	Classification of Objects by Means of Attributes.
+	Reports, Institute of Computer Science, Polish Academy of Sciences, Warsaw, Poland. 429 (1981).
+
+\bibitem {Pawlak81-2}
+	Pawlak, Z.:
+	Rough Relations.
+	Reports, Institute of Computer Science, Polish Academy of Sciences, Warsaw, Poland. 429 (1981).
+
+\bibitem {Pawlak82}
+	Pawlak, Z.: 
+	Rough sets.
+	International Journal of Computer and Information Sciences. 11 (1982) 341--356.
+
+\bibitem {Pawlak91}
+	Pawlak, Z.: 
+	Rough Sets: Theoretical Aspects of Reasoning about Data.
+	System Theory, Knowledge Engineering and Problem Solving. 
+	Kluwer Academic Publishers, Dordrecht. 9 (1991).
+	
+\bibitem {Pawlak07}
+	Pawlak, Z. Skowron A.: 
+	Rough Sets and Boolean Reasoning.
+	Information Sciences. 177(1) (2007) 41--73.
+	
+\bibitem {Polkowski00}	
+	Polkowski L., Tsumoto S., Lin T. Y.: 
+	Rough Set Methods and Applications. 
+	New Developments in Knowledge Discovery in Information Systems.
+	Physica–Verlag, Heidelberg. (2000).
+
+\bibitem{Rojas07}
+	Rojas A., Cumplido R., Carrasco J. A., Feregrino C., Mart\'inez J. f.:
+	FPGA Based Architecture for Computing Testors. 
+	Lectures Notes on Computer Science. 4881 (2007) 188--197.
+
+\bibitem{Rojas12}	
+	Rojas A., Cumplido R., Carrasco J. A., Feregrino C., Mart\'inez J. f.:
+	Hardware-software platform for computing irreducible testors. 
+	Expert Systems with Applications. 39 (2012) 2203--2210.
+
+\bibitem{Ruiz85}
+	Ruiz J., Aguila L., Bravo A.:
+	BT and TB algorithms for computing all irreducible testors. 
+	Revista Ciencias Matem\'aticas. 2 (1985) 11--18.
+	
+\bibitem{Ruiz08}
+	Ruiz, J.:
+ 	Pattern recognition with mixed and incomplete data. 
+ 	Pattern Recognition and Image Analysis. 18(4) (2008) 563--576.
+ 	
+\bibitem{Safar07}
+	Safar M., El-Kharashi M. W., Salem A.:
+	FPGA-based SAT solver. 
+	Canadian Conference on Electrical and Computer Engineering. (2007) 1901--1904. 
+	
+\bibitem{Sanchez07}
+ 	Sanchez G., Lazo M.:
+ 	CT-EXT: an algorithm for computing typical testor set.
+ 	Progress in Pattern Recognition, Image Analysis and Applications. 
+ 	Springer Berlin Heidelberg. (2007) 506--514.
+ 
+\bibitem{Santiesteban03}
+	Santiesteban Y., Pons A.:
+	LEX: a new algorithm for the calculus of typical testors.
+	Mathematics Sciences Journal. 21(1) (2003) 85--95.
+	
+\bibitem {Skowron92}
+	Skowron, A., Rauszer, C.:
+	The discernibility matrices and functions in information systems. 
+	Handbook of Applications and Advances of the Rough Sets Theory. (1992) 331--362.
+
+\bibitem {Starzyk99}
+	Starzyk J., Nelson D. E., Sturtz K.:
+	Reduct generation in information systems
+	Bulletin of international rough set society. 3(1/2) (1999) 19--22.
+
+\bibitem {Starzyk00}	
+	Starzyk J., Dale E. N., Sturtz K.:
+	A mathematical foundation for improved reduct generation in information systems.
+	Knowledge and Information Systems. 2(2) (2000) 131--146.
+
+\bibitem {Strakowski08}	
+	Strakowski T.,  Rybi\'nski H.:
+	A new approach to distributed algorithms for reduct calculation.
+	Transactions on Rough Sets IX. Springer Berlin Heidelberg. (2008) 365--378.
+
+\bibitem {Tiwari11}	
+	Tiwari K., Kothari A.:
+	Architecture and Implementation of Attribute Reduction Algorithm Using Binary Discernibility Matrix.
+	International Conference on Computational Intelligence and Communication Networks. (2011) 212--216.
+
+\bibitem {Tiwari12}	
+	Tiwari K., Kothari A., Keskar A.  
+	Reduct generation from binary discernibility matrix: an hardware approach. 
+	International Journal of Future Computer. 1(3) (2012) 270--272.
+
+\bibitem {Tiwari13}	
+	Tiwari K., Kothari A., Shah, R.:
+	FPGA Implementation of a Reduct Generation Algorithm based on Rough Set Theory. 
+	International Journal of Advanced Electrical and Electronics Engineering. 2(6) (2013) 55--61.
+
+\bibitem {Tiwari14}	
+	Tiwari K., Kothari A.:
+	Design and implementation of Rough Set Algorithms on FPGA: A Survey.
+	International Journal of Advanced Research in Artificial Intelligence. 3(9) (2014) 14--23.
+		
+\bibitem {Wang01}
+	Wang J., Wang J.:
+	Reduction algorithms based on discernibility matrix: the ordered attributes method.
+	Journal of computer science and technology 16(6) (2001) 489--504.
+
+\bibitem {Wang07}
+	Wang X., Yang J., Teng X., Xia W., Jensen R.:
+	Feature selection based on rough sets and particle swarm optimization.
+	Pattern Recognition Letters. 28(4) (2007) 459--471.
+	
+\bibitem {Wroblewski95}
+	Wr\'oblewski, J.: 
+	Finding minimal reducts using genetic algorithms.
+	Proceedings of the second annual join conference on infromation science. (1995) 186--189.
+
+\bibitem {Wroblewski98}	
+	Wr\'oblewski, J.: 
+	A parallel algorithm for knowledge discovery system.
+	PARELEC. (1998) 228--30.
+
+\bibitem {Yang08}		
+	Yang P., Jisheng L., Yongxuan H.:
+	An attribute reduction algorithm by rough set based on binary discernibility matrix.
+	Fifth International Conference on Fuzzy Systems and Knowledge Discovery. 2 (2008) 276--280.
+	
+\bibitem {Zhong01}	
+	Zhong N., Dong J., Ohsuga S.:
+	Using rough sets with heuristics for feature selection.
+	Journal of Intelligent Information Systems. 16(3) (2001) 199--214.
+
+
+			
+%\bibitem {Asa98}
+%   Asada, M., Stone, P., Kitano, H., Werger, B., Kuniyoshi, Y., Drogoul, A., Duhaut, D., Veloso, M.:
+%   The RoboCup Physical Agent Challenge: Phase-I.
+%   Applied Artificial Intelligence. 12 (1998) 251--263.
+%
+%\bibitem {Bro86}
+%   Brooks, R. A.:
+%   A Robust Layered Control System for a Mobile Robot.
+%   IEEE Journal of Robotics and Automation. RA-2 (1986) 14--23.
+%
+%\bibitem {Qui93}
+%   Quinlan, J. R.:
+%   C4.5: Programs for Machine Learning.
+%   Morgan Kaufmann, San Mateo, C.A. (1993).
+
+\end{thebibliography}
+
+
+\end{document}
+
+====================== END FILE: latex8.tex ======================
