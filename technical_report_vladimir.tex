@@ -530,9 +530,9 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   \end{description}
   \paragraph{Experiment Design} 
 	  \begin{description}
-	  	\item[Experimental unit:] 10000 synthetically generated discernibility matrices with 30 attributes and
+	  	\item[Experimental Unit:] 10000 synthetically generated discernibility matrices with 30 attributes and
 	  							  100 rows.
-	  	\item[Traversing strategies:] The concepts of Acceptance, Gap, Compatibility~\cite{Lias13} and the 
+	  	\item[Traversing Strategies:] The concepts of Acceptance, Gap, Compatibility~\cite{Lias13} and the 
 	  								  Jhonson's rule~\cite{Ohrn00} are explored individually and combined with 
 	  								  each other. We would like to note that the concept of Acceptance is basic
 	  								  and will be present in every combination although not mentioned.
@@ -562,9 +562,8 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   	   \item \textbf{Strategy:} The traversing strategy used for computing the minimal cardinality reducts.
   	   		\begin{description}
   	   			\item[Type:] Categorical
-  	   			\item[Levels:] Acceptance, Compatibility, Acceptance+Johnson, Compatibility+Johnson, 
-  	   						   Acceptance+Gap, Compatibility+Gap, Acceptance+Gap+Johnson, 
-  	   						   Compatibility+Gap+Johnson
+  	   			\item[Levels:] Acceptance, Compatibility, Johnson, Compatibility+Johnson, Gap, Compatibility+Gap,
+  	   						   Gap+Johnson, Compatibility+Gap+Johnson
   	   		\end{description}
     \end{itemize}	
     \paragraph{Controlled variables}  
@@ -596,9 +595,8 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   	   								    reducts.
   	   		\begin{description}
   	   			\item[Type:] Categorical
-  	   			\item[Levels:] Acceptance, Compatibility, Acceptance+Johnson, Compatibility+Johnson, 
-  	   						   Acceptance+Gap, Compatibility+Gap, Acceptance+Gap+Johnson, 
-  	   						   Compatibility+Gap+Johnson
+  	   			\item[Levels:] Acceptance, Compatibility, Johnson, Compatibility+Johnson, Gap, Compatibility+Gap,
+  	   						   Gap+Johnson, Compatibility+Gap+Johnson
   	   		\end{description}
     \end{itemize}
   
@@ -719,6 +717,59 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
     in the first experiment. Thus, the bias sources, the proposed analysis and the validation efforts are the 
     same as in the first experiment.
 
+\subsection{Third Experiment}
+  \begin{description}
+  \item[Scientific hypothesis] Using some external properties of the discernibility matrix, we can design a
+  							   parallel algorithm for computing minimal cardinality reducts of an information
+  							   system; which is comparable to the state of the art alternatives in all datasets,
+  							   and faster in most of them.
+  \item[Null hypothesis] There is no statistically significant improvement in using our proposed
+  						 algorithm instead of the state of the art alternatives.
+  \end{description}
+  \paragraph{Experiment Design} 
+	  \begin{description}
+	  	\item[Experimental unit:] 30 synthetically randomly generated discernibility matrices with 30 attributes
+	  							  and 1000 rows and 30 randomly selected real large datasets from \cite{Bache13}.
+	  	\item[Treatments:] The best performing alternatives from the two previous experiments and our external 
+	  					   properties aware proposed algorithm.
+	  	\item[Statistical Test:] One sided t--test. Notice that we want to evaluate the significance of the
+	  							 runtime reduction achieved by our proposed algorithm.
+	  \end{description}
+  \paragraph{Independent variable}  
+  	\begin{itemize}
+  		\item \textbf{Algorithm:} The algorithm for computing the minimal cardinality reducts in large datasets.
+  	   		\begin{description}
+  	   			\item[Type:] Categorical
+  	   			\item[Levels:] The best performing alternatives from the two previous experiments and our external 
+	  					   	   properties aware proposed algorithm.
+  	   		\end{description}
+    \end{itemize}
+    \paragraph{Controlled variable}  
+  	\begin{itemize}
+  	   \item \textbf{Matrix Dimensions:} Dimensions of the synthetically generated discernibility matrices.
+  	   		\begin{description}
+  	   			\item[Type:] (Integer,Integer)
+  	   			\item[Value:] (30,1000)
+  	   		\end{description}
+    \end{itemize}
+    \paragraph{Dependent variable}  
+  	\begin{itemize}
+  	   \item \textbf{Runtime:} The algorithm execution runtime.
+  	   		\begin{description}
+  	   			\item[Type:] Real
+  	   			\item[Unit:] seconds
+  	   		\end{description}
+    \end{itemize}
+    \begin{description}
+    \item[Bias Sources] Our main source of bias is the runtime variability due to the dynamic behaviour of
+    					   	operating systems. We will be doing five execution for each treatment and using 
+    					   	the minimum as the runtime estimator. This process will ensure us a 99\% confidence
+    					   	interval~\cite{Haveraaen01} in the runtime estimation.			   	
+    	\item[Proposed Analysis] We are going to make a one sided t--test comparing our proposed algorithm against
+    							every alternative.
+    	\item[Validation Efforts] Same as in the first experiment.
+  \end{description}
+  
 \section{Related Work}\label{relatedWork}
   In this section, we will be first discussing heuristic algorithms for reducts computation. Some of these 
   algorithm are capable of finding several reducts and others are intended to obtain a single \textit{minimal} 
