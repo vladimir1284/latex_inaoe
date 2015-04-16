@@ -124,9 +124,9 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   in an information system. This is an NP-Hard problem which makes every attempt for reducing its execution
   time, a challenging task. Our proposal must be competitive with the state of the art algorithm in all 
   cases and will be faster in most datasets. The main arena for comparison will be a large set of synthetic,
-  randomly generated datasets and real datasets from~\cite{Bache13}. We will be dealing only with classical
-  reducts definition. The practical applications (or relevance) of shortest reducts in supervised classification
-  is beyond our goals.
+  randomly generated datasets and benchmarking datasets from~\cite{Bache13}. We will be dealing only with
+  classical reducts definition. The practical applications (or relevance) of shortest reducts in supervised
+  classification is beyond our goals.
   
   The results of this research will impact the supervised classification methods specially in large datasets.
   Nowadays, data is automatically collected, thus generating huge databases in almost every field. The 
@@ -415,7 +415,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   us to our first scientific question:
   
 \begin{quote}
-  \emph{Is there a relationship between the external properties of the discernibility matrix and the time 
+  \emph{Is there a correlational relationship between the external properties of the discernibility matrix and the time 
   		complexity of traversing strategies for finding minimal cardinality reducts of an information
   		system?}
 \end{quote}
@@ -429,7 +429,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   From this research question we formulate the following hypothesis:
   
 \begin{quote}  
-  \emph{There is a relationship between the external properties of the discernibility matrix and the time 
+  \emph{There is a correlational relationship between the external properties of the discernibility matrix and the time 
   		complexity of traversing strategies for finding minimal cardinality reducts of an information
   		system}
 \end{quote}
@@ -440,7 +440,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   the dataset~\cite{Strakowski08}. This leads us to our second scientific question:
   
 \begin{quote}
-  \emph{Is there a relationship between the external properties of the discernibility matrix and the 
+  \emph{Is there a correlational relationship between the external properties of the discernibility matrix and the 
   		speed--up of the decomposition method used for finding minimal cardinality reducts of an information
   		system in a parallel environment?}
 \end{quote}
@@ -448,7 +448,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   From this research question we formulate the following hypothesis:
     
 \begin{quote}
-  \emph{There is a relationship between the external properties of the discernibility matrix and the 
+  \emph{There is a correlational relationship between the external properties of the discernibility matrix and the 
   		speed--up of the decomposition method used for finding minimal cardinality reducts of an information
   		system in a parallel environment}
 \end{quote}
@@ -470,7 +470,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   
   Our specific goals are:
   \begin{enumerate}
-  \item Find a relationship between some external properties of the discernibility matrix and the fastest 
+  \item Find a correlational relationship between some external properties of the discernibility matrix and the fastest 
   		traversing strategy for finding shortest reducts.
   		
   		Main tasks for this goal are:
@@ -487,7 +487,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   		\item Evaluate the proposed algorithm over the synthetic datasets and over real datasets.
   		\end{itemize}
   	
-  \item Find a relationship between some external properties of the discernibility matrix and the fastest 
+  \item Find a correlational relationship between some external properties of the discernibility matrix and the fastest 
   		decomposition method for finding shortest reducts.
   		
   		Main tasks for this goal are:
@@ -500,7 +500,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   			  decomposition method for a given dataset; and the rules governing this relation.
   		\item Design a new parallel algorithm for computing minimal cardinality reducts using the classifier 
   			  found in the previous task.
-  		\item Evaluate the proposed algorithm over the synthetic datasets and over real datasets.
+  		\item Evaluate the proposed algorithm over the synthetic datasets and over benchmarking datasets.
   		\end{itemize}
   
   \item Develop a parallel algorithm for computing minimal cardinality reducts of an information system, based 
@@ -511,7 +511,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   		\item Design a new parallel algorithm for computing minimal cardinality reducts using some external
   		      properties of the discernibility matrix.
   		\item Implement the proposed algorithm using the optimal acceleration platform.
-  		\item Evaluate the proposed algorithm over the synthetic datasets and over real datasets.
+  		\item Evaluate the proposed algorithm over the synthetic datasets and over benchmarking datasets.
   		\end{itemize}
   \end{enumerate}
 
@@ -520,7 +520,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   
 \subsection{First Experiment}
   \begin{description}
-  \item[Scientific hypothesis] There is a relationship between the external properties of the discernibility 
+  \item[Scientific hypothesis] There is a correlational relationship between the external properties of the discernibility 
   							   matrix and the time complexity of traversing strategies for finding minimal
   							   cardinality reducts of an information	system.
   \item[Experiment hypothesis] There can be extracted some rules by means of Rough Sets Theory for explaining
@@ -566,7 +566,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   	   						   Gap+Johnson, Compatibility+Gap+Johnson
   	   		\end{description}
     \end{itemize}	
-    \paragraph{Controlled variables}  
+    \paragraph{Cofactors}  
   	\begin{itemize}
   	   \item \textbf{StdRow:} The standard deviation of the density of ones in a row for the matrix.
   	   		\begin{description}
@@ -587,6 +587,14 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   	   		\begin{description}
   	   			\item[Type:] Real
   	   			\item[Range:] 0 -- 0.5
+  	   		\end{description}
+    \end{itemize}
+    \paragraph{Controlled variable}  
+  	\begin{itemize}
+  	   \item \textbf{Matrix Dimensions:} Dimensions of the synthetically generated discernibility matrices.
+  	   		\begin{description}
+  	   			\item[Type:] (Integer,Integer)
+  	   			\item[Value:] (30,100)
   	   		\end{description}
     \end{itemize}
     \paragraph{Dependent variable}  
@@ -632,7 +640,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
 
 \subsection{Second Experiment}
   \begin{description}
-  \item[Scientific hypothesis] There is a relationship between the external properties of the discernibility
+  \item[Scientific hypothesis] There is a correlational relationship between the external properties of the discernibility
   							   matrix and the speed--up of the decomposition method used for finding minimal
   							   cardinality reducts of an information	system in a parallel environment.
   \item[Experiment hypothesis] There can be extracted some rules by means of Rough Sets Theory for explaining
@@ -679,7 +687,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   	   			\item[Levels:] ISD, DMD, AVD
   	   		\end{description}
     \end{itemize}	
-    \paragraph{Controlled variables}  
+    \paragraph{Cofactors}  
   	\begin{itemize}
   	   \item \textbf{StdRow:} The standard deviation of the density of ones in a row for the matrix.
   	   		\begin{description}
@@ -702,6 +710,14 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   	   			\item[Range:] 0 -- 0.5
   	   		\end{description}
     \end{itemize}
+    \paragraph{Controlled variable}  
+  	\begin{itemize}
+  	   \item \textbf{Matrix Dimensions:} Dimensions of the synthetically generated discernibility matrices.
+  	   		\begin{description}
+  	   			\item[Type:] (Integer,Integer)
+  	   			\item[Value:] (30,1000)
+  	   		\end{description}
+    \end{itemize}
     \paragraph{Dependent variable}  
   	\begin{itemize}
   	   \item \textbf{Best Decomposition Method:} The best decomposition method used for computing the minimal
@@ -717,7 +733,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
     in the first experiment. Thus, the bias sources, the proposed analysis and the validation efforts are the 
     same as in the first experiment.
 
-\subsection{Third Experiment}
+\subsection{Third Experiment}\label{exprimet3}
   \begin{description}
   \item[Scientific hypothesis] Using some external properties of the discernibility matrix, we can design a
   							   parallel algorithm for computing minimal cardinality reducts of an information
@@ -729,7 +745,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   \paragraph{Experiment Design} 
 	  \begin{description}
 	  	\item[Experimental unit:] 30 synthetically randomly generated discernibility matrices with 30 attributes
-	  							  and 1000 rows and 30 randomly selected real large datasets from \cite{Bache13}.
+	  							  and 1000 rows.
 	  	\item[Treatments:] The best performing alternatives from the two previous experiments and our external 
 	  					   properties aware proposed algorithm.
 	  	\item[Statistical Test:] One sided t--test. Notice that we want to evaluate the significance of the
@@ -767,9 +783,23 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
     					   	interval~\cite{Haveraaen01} in the runtime estimation.			   	
     	\item[Proposed Analysis] We are going to make a one sided t--test comparing our proposed algorithm against
     							every alternative.
-    	\item[Validation Efforts] Same as in the first experiment.
+    	\item[Validation Efforts] Same as in the first experiment but we also look for statistical conclusion
+    							 validity since we will have a confidence interval of our conclusion.
   \end{description}
-  
+ 
+ \subsection{Fourth Experiment}
+  This experiment is similar to experiment~\ref{exprimet3} but we will be evaluating our algorithm over 
+  randomly selected large benchmarking datasets from \cite{Bache13}. All the experiment elements are the
+  same as in experiment~\ref{exprimet3} except for those stated bellow.
+  \paragraph{Experiment Design} 
+	  \begin{description}
+	  	\item[Experimental unit:] 30 randomly selected large benchmarking datasets from \cite{Bache13}.
+	  	\item[Bias Sources] This time, the matrices dimensions is another source of bias since we cannot 
+	  						control them. The only resource we can use to control this bias source is the
+	  						randomization of treatments application order.
+	  \end{description}
+	  	
+	  	
 \section{Related Work}\label{relatedWork}
   In this section, we will be first discussing heuristic algorithms for reducts computation. Some of these 
   algorithm are capable of finding several reducts and others are intended to obtain a single \textit{minimal} 
