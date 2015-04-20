@@ -4,6 +4,7 @@
 \usepackage{times}              % la letra
 \usepackage{graphicx}           % para manejar imagenes
 \usepackage{subfigure}          % para manejar subfiguras
+\usepackage{tabularx}		   % para ajustar el ancho de las columnas
 %-------------------------------------------------------------------------
 % Se definen los margenes para el documento
 \topmargin=0.5in \oddsidemargin=0in \evensidemargin=0in
@@ -135,10 +136,13 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
     
   Throughout our research we will conduct a comparative study between the most relevant algorithms for reduct 
   computation. Although main focus will be on algorithm obtaining minimal cardinality reducts, experiences 
-  form heuristics approaches will be considered. The rest of this document is structure as follows. In section
-  \ref{basicConcepts}, some basic concepts of rough set theory are introduced. Our research questions are 
-  presented in section~\ref{ResearchQuestions}; and our research goals in section~\ref{Goals}. Finally, 
-  related work is discussed on section \ref{relatedWork}.
+  form heuristics approaches will be considered. The rest of this document is structured as follows. In 
+  section~\ref{basicConcepts}, some basic concepts of rough set theory are introduced. A thorough revision of 
+  the state of the art in classic reducts computation is presented in section \ref{relatedWork}. Our research
+  questions are exposed in section~\ref{ResearchQuestions}; and our research goals in section~\ref{Goals}.
+  In section~\ref{DOE} we present the design of experiments to be conducted throughout our research and;
+  finally, the publication plan is exposed in section~\ref{PubPlan}.
+  
 
 \section{Basic Concepts}\label{basicConcepts}
   RST philosophy is based on the assumption that every object in the universe of discourse is described by 
@@ -408,6 +412,164 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   that a subset $B \in C$ is a reduct of $C$ if it is a minimal set (with respect to inclusion) satisfying 
   the condition $\gamma _B(D)=\gamma _C(D)$.
 
+\section{Related Work}\label{relatedWork}
+  In this section, we will be first discussing heuristic algorithms for reducts computation. Some of these 
+  algorithm are capable of finding several reducts and others are intended to obtain a single \textit{minimal} 
+  reduct. Then, two kind of algorithm for computing the complete set of reducts will be exposed: those 
+  from RST and those from TT. Researches in TT have been focused in algorithm for finding all typical testors.
+  Finally, we will make a survey of parallel accelerations reported in literature.  
+  
+  Figure~\ref{fig_Tax} shows a taxonomy of the reported algorithms for reduct computation. This classification
+  corresponds to the sequence that we will be following throughout our survey of the state of the art. 
+  Table~\ref{tab_Alg} makes a correspondence between the codename used in figure~\ref{fig_Tax} and the 
+  publication reporting the algorithm. Some parallel approaches are implementations of existing sequential 
+  algorithm; for those cases, we use a color association in figure~\ref{fig_Tax}.
+
+  \begin{figure}[htb] 
+    \centering
+    \includegraphics[width=\textwidth]{Reduct_Computation_Algorithms.png}
+	\caption{Taxonomy of reducts computation algorithms.}
+	\label{fig_Tax}
+ \end{figure}
+ 
+ \newcolumntype{L}[1]{>{\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+ \begin{table}[t]
+	\caption{Reducts computation algorithms.} \label{tab_Alg}
+	\centering
+ 	\begin{tabular}{l||L{13cm}}
+ 		\multicolumn{1}{c||}{Codename} &  \multicolumn{1}{c}{Publication} \\
+ 		\hline \hline
+		\textsc{quickreduct} 	&  Rough set-aided keyword reduction for text 
+								   categorization~\cite{Chouchoulas01} \\
+		YangLiHuang 				&  An Attribute Reduction Algorithm by Rough Set Based on Binary Discernibility
+				 				   Matrix~\cite{Yang08}\\
+		EBR						&  A rough set--aided system for sorting WWW bookmarks~\cite{Jensen01}\\
+		RSFSACO					&  A rough set approach to feature selection based on ant colony 
+								   optimization~\cite{Chen10}\\
+		AntRSAR					&  Finding rough set reducts with ant colony optimization~\cite{Jensen03}\\
+		GenRSAR					&  Finding rough set reducts with ant colony optimization~\cite{Jensen03}\\
+		BjorvandKomorowski		&  Practical applications of genetic algorithms for efficient reduct 
+								   computation~\cite{Bjorvand97}\\
+		\hline		   
+		BTHW						&  FPGA Based Architecture for Computing Testors~\cite{Rojas07}\\
+		BruteForce				&  On the Design and Implementation of a High Performance Configurable
+								   Architecture for Testor Identification~\cite{Cumplido06}\\
+		TiwariKothariShah		&  FPGA Implementation of a Reduct Generation Algorithm based on Rough 
+								   Set Theory~\cite{Tiwari13}\\
+		TiwariKothari			&  Architecture and Implementation of Attribute Reduction Algorithm Using 
+								   Binary Discernibility Matrix~\cite{Tiwari11}\\
+		DM-Reduct				&  FPGA in Rough--Granular Computing: Reduct Generation~\cite{Kopczynski14}\\
+		DT-Reduct				&  FPGA in Rough--Granular Computing: Reduct Generation~\cite{Kopczynski14}\\
+		SRGonCRS					&  Highly Scalable Rough Set Reducts Generation~\cite{WangP07}\\
+		FSDC-RS					&  Two novel feature selection methods based on decomposition and 
+								   composition~\cite{Jiao10}\\
+		FSDC-RS					&  Two novel feature selection methods based on decomposition and 
+								   composition~\cite{Jiao10}\\
+		\hline
+		TB \& BT					&  BT and TB algorithms for computing all irreducible testors~\cite{Ruiz85}\\
+		CT--EXT					&  CT--EXT: an algorithm for computing typical testor set~\cite{Sanchez07}\\
+		LEX						&  LEX: a new algorithm for the calculus of typical
+								   testors~\cite{Santiesteban03}\\
+		BR						&  BR: A new method for computing all typical testors~\cite{Lias09}\\
+		YYC						&  YYC: A Fast Performance Incremental Algorithm for Finding Typical
+								   Testors~\cite{Alba14}\\
+		RSAR	--SAT				&  Finding rough and fuzzy--rough set reducts with SAT~\cite{Jensen14}\\
+		Expansion Algorithm		&  Reduct generation in information systems~\cite{Starzyk99}\\
+		GonCRS					&  Highly Scalable Rough Set Reducts Generation~\cite{WangP07}\\	
+ 	\end{tabular}             
+ \end{table}
+ 
+\subsection{Heuristics Approaches}
+  The algorithm presented in~\cite{Chouchoulas01} (\textsc{quickreduct}) starts with an empty set of 
+  attributes and adds, one each iteration, the attribute having the highest significance. This greedy algorithm 
+  uses the maximal dependency criterion for finding one optimal reduct.  
+  A similar approach is the Johnson Reducer~\cite{Johnson74}, first introduced in RST in \cite{Ohrn00}.
+  This simple greedy algorithm begins with an empty set of attributes evaluating each conditional attribute in the
+  discernibility function according to a heuristic measure. In the simplest case, those attributes with highest 
+  appearance frequency within the logical context termed clauses, are considered to be more relevant. Works 
+  in~\cite{Nguyen97} and~\cite{Wang01} use alternative heuristic functions guiding the search down better paths. 
+  Variations of this algorithm~\cite{Wang01} and~\cite{Yang08} use the discernibility matrix instead of the
+  discernibility function.
+  Algorithm presented in \cite{Zhong01} starts from the core (since it must be contained in every reduct) and
+  follows a similar procedure adding selected attributes. This optimization may be impractical for large datasets
+  \cite{Jensen14} since the core must be computed a priori.
+  
+  The work presented in~\cite{Jiao10} improves the efficiency of computing reducts by means of subdivision. The 
+  original dataset is broken down into a master-table and several sub-tables that are simpler, more manageable 
+  and more solvable. Results are then joined together in order to solve the original dataset. Different variants
+  for decomposition of reducts computation problem are discussed and proposed in~\cite{Strakowski08}.
+  
+  Special attention deserve the approaches using genetic algorithms to discover sub-optimal reducts. Although 
+  these algorithms does not guarantee finding optimal reducts, many reducts may be found in a determined time.
+  A good point in this approach is the use of the fitness function to guide the search down to a set of 
+  reducts with the desired properties. The work reported in~\cite{Wroblewski95} encodes candidates as bit 
+  strings with a positional representation of attributes presence in the candidate set. The fitness function
+  depends on the number of attributes in the subset, penalizing strings with a large number of bits set. The 
+  second optimization parameter is the number of classifiable objects by the given candidate. The reduct should 
+  discern between as many objects as possible.
+  
+  Other evolutionary approaches to reducts computation include Ant Colony Optimization~\cite{Jensen03}
+  and~\cite{Chen10}; and Particle Swarm Optimization~\cite{Wang07}.
+    
+\subsection{Algorithm for Complete Reducts Set computation}
+  A method for the generation of all reducts in an Information System is proposed in \cite{Starzyk99,Starzyk00}.
+  Although its computational cost is high, this method provides all the reducts by means of manipulations of 
+  the clauses in the discernibility function. In addition to standard simplifications laws, the concept of 
+  strong compressibility is introduced and applied along with an expansion algorithm.
+  
+  Although originally intended for computing a single minimal reduct, algorithm proposed in~\cite{Jensen14} may be
+  modified in order to obtain all reducts in an Information System. The method introduced in this work reduces
+  the problem of finding a reduct from the discernibility function to the SAT problem~\cite{Davis62}. The boolean
+  function generated this way is always satisfy since the complete set of attributes is a trivial solution.
+  
+  A special mention deserves the work presented in~\cite{WangP07}. This approach avoids the computation of the
+  discernibility matrix, which is a expensive computational task, and works directly over the information system. 
+ 
+  The first work developed in the reduction of the search space for typical testors~\cite{Ruiz85}, follows 
+  the natural order of attributes codified as a binary number. Unnecessary candidates (attributes subset)
+  evaluation are avoided taking into account properties of typical testors and results from previous 
+  evaluations. Subsequent algorithm~\cite{Santiesteban03},~\cite{Sanchez07} and~\cite{Lias09} propose
+  more sophisticated evaluation orders. Recently, a new internal typical testor--finding algorithm was
+  proposed~\cite{Alba14}. In our experience, non of this algorithm is the fastest for all dataset.
+  
+\subsection{Parallel Accelerations}
+
+  A parallel acceleration of the algorithm presented in~\cite{Yang08} for reduct generation from binary
+  discernibility matrix was developed in~\cite{Tiwari11,Tiwari12}. This FPGA implementation computes a 
+  single reduct. A real application of object identification system by an intelligent robot is presented.
+  In~\cite{Tiwari13} a quick algorithm, similar to those presented in~\cite{Chouchoulas01}, is proposed
+  and implemented in a hardware fashion. A recent work from this authors~\cite{Tiwari14}, shows a thorough
+  survey of FPGA applications in rough sets reducts computation.
+
+  From the Typical Testors theory, several attempts have been made to overcome the problem 
+  complexity by means of FPGA implementations of algorithms. In a first work~\cite{Cumplido06}, an 
+  FPGA-based brute force approach for computing testors was proposed. This first approach did 
+  not take advantage of dataset characteristics to reduce the number of candidates to be tested; 
+  thus all $2^n$ combinations of $n$ features have to be tested. Then, in \cite{Rojas07} a hardware 
+  architecture of the BT algorithm for computing typical testors was implemented. 
+  This algorithm uses a candidate pruning process for avoiding many unnecessary candidate evaluation, 
+  reducing the number of verifications of the typical testor condition. These two previous works computed 
+  a set of testors on the FPGA device whilst typical condition was evaluated afterwards by the 
+  software component in the hosting PC. Thus, in~\cite{Rojas12} a hardware-software platform for 
+  computing typical testors that implemented the BT algorithm, as in \cite{Rojas07}, was proposed; but it also 
+  included a new module that eliminates most of the non typical testors before transferring them to 
+  a host software application for final filtering. 
+	
+	%TODO estos trabajos de Wroblewski hay q revisarlos bien pq parece falso lo de los GA paralelos
+  In~\cite{Wroblewski98}, a parallel variant of the algorithm proposed in~\cite{Wroblewski95} is presented.
+  Developments in genetic algorithms are exploited to provide a speedup for the problem of finding reducts.
+  This line of thinking brought us an unexplored acceleration idea from~\cite{Jensen14}. We can combine 
+  available architectures for SAT solving on FPGA~\cite{Safar07,Kanazawa11} with the transformation
+  presented in~\cite{Jensen14} to obtain a new hardware platform for computing all reducts of an information 
+  system.
+  
+  In~\cite{Grzes13,Kopczynski14}, an FPGA application for a single reduct computation is presented. Although
+  authors claim that a huge acceleration is achieved, some drawbacks have to be mentioned. Experiments presented 
+  in~\cite{Kopczynski14} to validate their results is performed over a small dataset which in our experience 
+  does not implies its applicability to larger cases where such acceleration are needed. On the other hand, 
+  runtime estimations for FPGA component executions are made by means of a oscilloscope without taking into 
+  account communication overhead, which cannot be neglected in the presented dataset.
+
 \section{The Research Questions}\label{ResearchQuestions} 
   Throughout our preliminary work, we noticed that there is no faster algorithm for finding all reducts in 
   all datasets. Different algorithms use different strategies for traversing and pruning the complete search 
@@ -484,7 +646,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   			  traversing strategy for a given dataset; and the rules governing this relation.
   		\item Design a new algorithm for computing minimal cardinality reducts using the classifier found in
   			  the previous task.
-  		\item Evaluate the proposed algorithm over the synthetic datasets and over real datasets.
+  		\item Evaluate the proposed algorithm over the synthetic datasets and over benchmarking datasets.
   		\end{itemize}
   	
   \item Find a correlational relationship between some external properties of the discernibility matrix and the fastest 
@@ -516,9 +678,10 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   \end{enumerate}
 
 \section{Design of Experiments}\label{DOE}
-  Throughout our research, we will be conducting three experiments, one experiment for each specific goal.
+  Throughout our research, we will be conducting four experiments: one experiment for each of the two first
+  specific goals and two experiments for the third one.
   
-\subsection{First Experiment}
+\subsection{First Experiment}\label{exprimet1}
   \begin{description}
   \item[Scientific hypothesis] There is a correlational relationship between the external properties of the discernibility 
   							   matrix and the time complexity of traversing strategies for finding minimal
@@ -629,16 +792,19 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   							 cardinality reducts of an information system. A new information system will be
   							 generated using the independent and controlled variables as condition attributes and
   							 the fastest strategy(ies) for each matrix as decision attribute. 
-  							 Notice that controlled variables do not constitute a bias source since their value
+  							 Notice that cofactors do not constitute a bias source since their value
   							 is used for the rules extraction precess.
-    	\item[Validation Efforts] We are going to evaluate our result over 30 datasets obtained from real 
-    							  processes~\cite{Bache13}. The kind of validity we look for is conclusion validity. 
+    	\item[Validation Efforts] We are going to evaluate our result over 30 benchmarking datasets~\cite{Bache13}.
+    							 The kind of validity we look for is conclusion validity. 
+    							 For each treatment application, 30 random synthetic matrices will be generated with
+    							 approximately the same external properties. This process ensures us internal validity
+    							 in the fastest strategy identification.
   \end{description}
 
 
 
 
-\subsection{Second Experiment}
+\subsection{Second Experiment}\label{exprimet2}
   \begin{description}
   \item[Scientific hypothesis] There is a correlational relationship between the external properties of the discernibility
   							   matrix and the speed--up of the decomposition method used for finding minimal
@@ -787,10 +953,10 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
     							 validity since we will have a confidence interval of our conclusion.
   \end{description}
  
- \subsection{Fourth Experiment}
-  This experiment is similar to experiment~\ref{exprimet3} but we will be evaluating our algorithm over 
+ \subsection{Fourth Experiment}\label{exprimet4}
+  This experiment is similar to experiment in~\ref{exprimet3} but we will be evaluating our algorithm over 
   randomly selected large benchmarking datasets from \cite{Bache13}. All the experiment elements are the
-  same as in experiment~\ref{exprimet3} except for those stated bellow.
+  same as in experiment in~\ref{exprimet3} except for those stated bellow.
   \paragraph{Experiment Design} 
 	  \begin{description}
 	  	\item[Experimental unit:] 30 randomly selected large benchmarking datasets from \cite{Bache13}.
@@ -799,113 +965,68 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
 	  						randomization of treatments application order.
 	  \end{description}
 	  	
-	  	
-\section{Related Work}\label{relatedWork}
-  In this section, we will be first discussing heuristic algorithms for reducts computation. Some of these 
-  algorithm are capable of finding several reducts and others are intended to obtain a single \textit{minimal} 
-  reduct. Then, two kind of algorithm for computing the complete set of reducts will be exposed: those 
-  from RST and those from TT. Researches in TT have been focused in algorithm for finding all typical testors.
-  Finally, we will make a survey of parallel accelerations reported in literature.  
+\section{Publication Plan}\label{PubPlan}
+  In this section we present our publication plan. Results from this research are to be submitted indistinctly 
+  to the following journals or congresses, according to the advisor’s recommendations.
   
-\subsection{Heuristics Approaches}
-  The algorithm presented in~\cite{Chouchoulas01} (\textsc{quickreduct}) starts with an empty set of 
-  attributes and adds, one each iteration, the attribute having the highest significance. This greedy algorithm 
-  uses the maximal dependency criterion for finding one optimal reduct.  
-  A similar approach is the Johnson Reducer~\cite{Johnson74}, first introduced in RST in \cite{Ohrn00}.
-  This simple greedy algorithm begins with an empty set of attributes evaluating each conditional attribute in the
-  discernibility function according to a heuristic measure. In the simplest case, those attributes with highest 
-  appearance frequency within the logical context termed clauses, are considered to be more relevant. Works 
-  in~\cite{Nguyen97} and~\cite{Wang01} use alternative heuristic functions guiding the search down better paths. 
-  Variations of this algorithm~\cite{Wang01} and~\cite{Yang08} use the discernibility matrix instead of the
-  discernibility function.
-  Algorithm presented in \cite{Zhong01} starts from the core (since it must be contained in every reduct) and
-  follows a similar procedure adding selected attributes. This optimization may be impractical for large datasets
-  \cite{Jensen14} since the core must be computed a priori.
-  
-  The work presented in~\cite{Jiao10} improves the efficiency of computing reducts by means of subdivision. The 
-  original dataset is broken down into a master-table and several sub-tables that are simpler, more manageable 
-  and more solvable. Results are then joined together in order to solve the original dataset. Different variants
-  for decomposition of reducts computation problem are discussed and proposed in~\cite{Strakowski08}.
-  
-  Special attention deserve the approaches using genetic algorithms to discover sub-optimal reducts. Although 
-  these algorithms does not guarantee finding optimal reducts, many reducts may be found in a determined time.
-  A good point in this approach is the use of the fitness function to guide the search down to a set of 
-  reducts with the desired properties. The work reported in~\cite{Wroblewski95} encodes candidates as bit 
-  strings with a positional representation of attributes presence in the candidate set. The fitness function
-  depends on the number of attributes in the subset, penalizing strings with a large number of bits set. The 
-  second optimization parameter is the number of classifiable objects by the given candidate. The reduct should 
-  discern between as many objects as possible.
-  
-  Other evolutionary approaches to reducts computation include Ant Colony Optimization~\cite{Jensen03}
-  and~\cite{Chen10}; and Particle Swarm Optimization~\cite{Wang07}.
-    
-\subsection{Algorithm for Complete Reducts Set computation}
-  A method for the generation of all reducts in an Information System is proposed in \cite{Starzyk99,Starzyk00}.
-  Although its computational cost is high, this method provides all the reducts by means of manipulations of 
-  the clauses in the discernibility function. In addition to standard simplifications laws, the concept of 
-  strong compressibility is introduced and applied along with an expansion algorithm.
-  
-  Although originally intended for computing a single minimal reduct, algorithm proposed in~\cite{Jensen14} may be
-  modified in order to obtain all reducts in an Information System. The method introduced in this work reduces
-  the problem of finding a reduct from the discernibility function to the SAT problem~\cite{Davis62}. The boolean
-  function generated this way is always satisfy since the complete set of attributes is a trivial solution.
+  Main journals:
+  \begin{itemize}
+ 	\item Information Sciences\footnote{http://www.journals.elsevier.com/information-sciences/}. IF: 3.893
+ 	\item Expert Systems with 
+ 		  Applications\footnote{http://www.journals.elsevier.com/expert-systems-with-applications/}. IF: 1.965
+ 	\item IEEE Transactions on Knowledge and Data
+ 		  Engineering\footnote{http://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=69}. IF: 1.815
+ 	\item International Journal of Advanced Computer Science and
+ 		  Applications\footnote{http://thesai.org/Publications/IJACSA}. IF: 1.32
+  \end{itemize}
  
-  The first work developed in the reduction of the search space for typical testors~\cite{Ruiz85}, follows 
-  the natural order of attributes codified as a binary number. Unnecessary candidates (attributes subset)
-  evaluation are avoided taking into account properties of typical testors and results from previous 
-  evaluations. Subsequent algorithm~\cite{Santiesteban03},~\cite{Sanchez07} and~\cite{Lias09} propose
-  more sophisticated evaluation orders. In our experience, non of this algorithm is the fastest for all dataset.
+  Main congresses:
+  \begin{itemize}
+ 	\item Rough Sets and Current Trends in Computing
+ 	\item Rough Sets and Intelligent Systems Paradigms
+ 	\item CIARP: Iberoamerican Congress on Pattern Recognition
+ 	\item Mexican Conference on Pattern Recognition
+  \end{itemize}
   
-\subsection{Parallel Accelerations}
-
-  A parallel acceleration of the algorithm presented in~\cite{Yang08} for reduct generation from binary
-  discernibility matrix was developed in~\cite{Tiwari11,Tiwari12}. This FPGA implementation computes a 
-  single reduct. A real application of object identification system by an intelligent robot is presented.
-  In~\cite{Tiwari13} a quick algorithm, similar to those presented in~\cite{Chouchoulas01}, is proposed
-  and implemented in a hardware fashion. A recent work from this authors~\cite{Tiwari14}, shows a thorough
-  survey of FPGA applications in rough sets reducts computation.
-
-  From the Typical Testors theory, several attempts have been made to overcome the problem 
-  complexity by means of FPGA implementations of algorithms. In a first work~\cite{Cumplido06}, an 
-  FPGA-based brute force approach for computing testors was proposed. This first approach did 
-  not take advantage of dataset characteristics to reduce the number of candidates to be tested; 
-  thus all $2^n$ combinations of $n$ features have to be tested. Then, in \cite{Rojas07} a hardware 
-  architecture of the BT algorithm for computing typical testors was implemented. 
-  This algorithm uses a candidate pruning process for avoiding many unnecessary candidate evaluation, 
-  reducing the number of verifications of the typical testor condition. These two previous works computed 
-  a set of testors on the FPGA device whilst typical condition was evaluated afterwards by the 
-  software component in the hosting PC. Thus, in~\cite{Rojas12} a hardware-software platform for 
-  computing typical testors that implemented the BT algorithm, as in \cite{Rojas07}, was proposed; but it also 
-  included a new module that eliminates most of the non typical testors before transferring them to 
-  a host software application for final filtering. 
-	
-	%TODO estos trabajos de Wroblewski hay q revisarlos bien pq parece falso lo de los GA paralelos
-  In~\cite{Wroblewski98}, a parallel variant of the algorithm proposed in~\cite{Wroblewski95} is presented.
-  Developments in genetic algorithms are exploited to provide a speedup for the problem of finding reducts.
-  This line of thinking brought us an unexplored acceleration idea from~\cite{Jensen14}. We can combine 
-  available architectures for SAT solving on FPGA~\cite{Safar07,Kanazawa11} with the transformation
-  presented in~\cite{Jensen14} to obtain a new hardware platform for computing all reducts of an information 
-  system.
+  In table~\ref{tab_PP} we present the estimated dates for our proposed publications. The first publication will
+  discuss the results of the first experiment. In our second publication we will make a review of the state of 
+  the art in rough sets reducts computation. Third and fourth publications will present the results from the last
+  three experiments as shown in table~\ref{tab_PP}.
   
-  In~\cite{Grzes13,Kopczynski14}, an FPGA application for a single reduct computation is presented. Although
-  authors claim that a huge acceleration is achieved, some drawbacks have to be mentioned. Experiments presented 
-  in~\cite{Kopczynski14} to validate their results is performed over a small dataset which in our experience 
-  does not implies its applicability to larger cases where such acceleration are needed. On the other hand, 
-  runtime estimations for FPGA component executions are made by means of a oscilloscope without taking into 
-  account communication overhead, which cannot be neglected in the presented dataset.
-
-%\subsection{Non Classical Reducts}
-  
+     \begin{table}[htb]
+		\caption{Publication plan.} \label{tab_PP}
+		\centering
+ 	\begin{tabular}{c||l|l}
+ 		\# & \multicolumn{1}{c|}{Date} & \multicolumn{1}{c}{Results}\\
+ 		\hline \hline
+		1 & July 2015 & First Experiment (\ref{exprimet1})\\
+		2 & December 2015 & State of the art survey \\
+		3 & July 2016 & Second Experiment (\ref{exprimet2})\\
+		4 & July 2017 & Third and fourth Experiments (\ref{exprimet3} \& \ref{exprimet4})\\
+ 	\end{tabular}             
+ 	\end{table}
 
 %-------------------------------------------------------------------------------
 % Bibliography
 %-------------------------------------------------------------------------------
+\newpage 
 \begin{thebibliography}{}
+
+\bibitem{Alba14}
+	Alba--Cabrera, E., Ibarra--Fiallo, J., Godoy--Calderon, S., Cervantes--Alonso, F.:
+ 	YYC: A Fast Performance Incremental Algorithm for Finding Typical Testors. 
+ 	In Progress in Pattern Recognition, Image Analysis, Computer Vision, and Applications.
+ 	(2014) 416--423.
 
 \bibitem{Bache13}
 	Bache K., Lichman M.:  
 	UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. 
 	Irvine, CA: University of California, School of Information and Computer Science. (2013).
+
+\bibitem{Bjorvand97}	
+	Bjorvand, A. T., Komorowski, J.:
+	Practical applications of genetic algorithms for efficient reduct computation. 
+	Wissenschaft \& Technik Verlag. (1997) 4 601--606.
 	
 \bibitem{Chen10}
 	Chen Y., Duoqian M., Ruizhi W.:
@@ -941,6 +1062,11 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
 	Hsieh, H. F., Shannon S. E.:
 	Three approaches to qualitative content analysis.
 	Qualitative health research. 15(9) (2005) 1277--1288.
+
+\bibitem {Jensen01}
+	Jensen R., Shen Q.:
+	A Rough Set-Aided System for Sorting WWW Bookmarks. 
+	In N. Zhong et al. (Eds.), Web Intelligence: Research and Development. (2001) 95--105.	
 	
 \bibitem {Jensen03}
 	Jensen R., Shen Q.:
@@ -954,7 +1080,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
 	
 \bibitem {Jensen14}
 	Jensen R., Andrew T., Shen Q.:
-	Finding rough and fuzzy-rough set reducts with SAT.
+	Finding rough and fuzzy--rough set reducts with SAT.
 	Information Sciences. 255 (2014) 100--120.
 	
 \bibitem {Jiao10}	
@@ -974,7 +1100,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
 
 \bibitem {Kopczynski14}	
 	Kopczynski M., Grzes T., Stepaniuk J.:
-	FPGA in Rough-Granular Computing : Reduct Generation.
+	FPGA in Rough--Granular Computing : Reduct Generation.
 	ACM International Joint Conferences on Web Intelligence and Intelligent Agent Technologies. (2014) 364--370. 
 
 \bibitem {Lazo15}
@@ -1077,7 +1203,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
 	
 \bibitem{Sanchez07}
  	Sanchez G., Lazo M.:
- 	CT-EXT: an algorithm for computing typical testor set.
+ 	CT--EXT: an algorithm for computing typical testor set.
  	Progress in Pattern Recognition, Image Analysis and Applications. 
  	Springer Berlin Heidelberg. (2007) 506--514.
  
@@ -1093,7 +1219,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
 
 \bibitem {Starzyk99}
 	Starzyk J., Nelson D. E., Sturtz K.:
-	Reduct generation in information systems
+	Reduct generation in information systems.
 	Bulletin of international rough set society. 3(1/2) (1999) 19--22.
 
 \bibitem {Starzyk00}	
@@ -1130,6 +1256,11 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
 	Wang J., Wang J.:
 	Reduction algorithms based on discernibility matrix: the ordered attributes method.
 	Journal of computer science and technology 16(6) (2001) 489--504.
+	
+\bibitem {WangP07}	
+	Wang, P. C.:
+	Highly Scalable Rough Set Reducts Generation. 
+	Journal of Information Science and Engineering. (2007) 4(23), 1281--1298.
 
 \bibitem {Wang07}
 	Wang X., Yang J., Teng X., Xia W., Jensen R.:
@@ -1142,7 +1273,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
 	Proceedings of the second annual join conference on infromation science. (1995) 186--189.
 
 \bibitem {Wroblewski98}	
-	Wr\'oblewski, J.: ha
+	Wr\'oblewski, J.:
 	A parallel algorithm for knowledge discovery system.
 	PARELEC. (1998) 228--30.
 
