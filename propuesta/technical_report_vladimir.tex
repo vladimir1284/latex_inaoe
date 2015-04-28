@@ -48,7 +48,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
 % your earth-shattering contribution
 
 \section{Introduction}
-  Rough set theory (RST), proposed by Professor Z. Pawlak in 1982 (\cite{Pawlak81},\cite{Pawlak81-2},
+  Rough set theory (RST), proposed by Z. Pawlak in 1982 (\cite{Pawlak81},\cite{Pawlak81-2},
   \cite{Pawlak82},\cite{Pawlak91}), is a relatively new mathematical theory 
   to deal with imperfect knowledge, in particular with vague concepts. Information systems in RST 
   are tables of objects described by some attributes (columns). 
@@ -482,13 +482,13 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   Other evolutionary approaches to reduct computation include Ant Colony Optimization~\cite{Jensen03}
   and~\cite{Chen10}; and Particle Swarm Optimization~\cite{Wang07}.
     
-\subsection{Algorithm for Complete Reducts Set computation}
+\subsection{Algorithms for Reducts and Testors Computation}
   A method for the generation of all reducts in an Information System is proposed in \cite{Starzyk99,Starzyk00}.
   Although its computational cost is high, this method provides all the reducts by means of manipulations of 
   the clauses in the discernibility function. In addition to standard simplifications laws, the concept of 
   strong compressibility is introduced and applied along with an expansion algorithm.
   
-  Although originally intended for computing a single minimal reduct, algorithm proposed in~\cite{Jensen14} may be
+  Although originally intended for computing a single minimal reduct, the algorithm proposed in~\cite{Jensen14} may be
   modified in order to obtain all reducts in an Information System. The method introduced in this work reduces
   the problem of finding a reduct from the discernibility function to the SAT problem~\cite{Davis62}. The boolean
   function generated this way is always satisfy since the complete set of attributes is a trivial solution.
@@ -550,7 +550,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   us to our first scientific question:
   
 \begin{quote}
-  \emph{Is there a correlational relationship between the external properties of the discernibility matrix and the time 
+  \emph{Is there a relationship between the external properties of the discernibility matrix and the time 
   		complexity of traversing strategies for finding minimal cardinality reducts of an information
   		system?}
 \end{quote}
@@ -564,7 +564,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   From this research question we formulate the following hypothesis:
   
 \begin{quote}  
-  \emph{There is a correlational relationship between the external properties of the discernibility matrix and the time 
+  \emph{There is a relationship between the external properties of the discernibility matrix and the time 
   		complexity of traversing strategies for finding minimal cardinality reducts of an information
   		system}
 \end{quote}
@@ -575,7 +575,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   the dataset~\cite{Strakowski08}. This leads us to our second scientific question:
   
 \begin{quote}
-  \emph{Is there a correlational relationship between the external properties of the discernibility matrix and the 
+  \emph{Is there a relationship between the external properties of the discernibility matrix and the 
   		speed--up of the decomposition method used for finding minimal cardinality reducts of an information
   		system in a parallel environment?}
 \end{quote}
@@ -583,7 +583,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   From this research question we formulate the following hypothesis:
     
 \begin{quote}
-  \emph{There is a correlational relationship between the external properties of the discernibility matrix and the 
+  \emph{There is a relationship between the external properties of the discernibility matrix and the 
   		speed--up of the decomposition method used for finding minimal cardinality reducts of an information
   		system in a parallel environment}
 \end{quote}
@@ -597,15 +597,15 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
 \end{quote}  
 
 \section{The Research Goals}\label{Goals} 
-  The main goal in our research is the \emph{development of  a parallel algorithm for computing minimal
-  cardinality reducts of an information system; which is comparable to the state of the art alternatives 
-  in all datasets, and faster in most of them}. This algorithm will use some external properties of the
-  discernibility matrix to conveniently select the traversing strategy for the search space and the 
-  decomposition method for paralellization.
+  The main goal in our research is the \emph{development of  a new algorithm for computing reducts of an 
+  information system; which is comparable to the state of the art alternatives 
+  in most datasets, and faster in some of them}. This algorithm will use some external properties of the
+  discernibility matrix to conveniently select the traversing strategy for the search space and a 
+  decomposition method suitable for paralellization.
   
   Our specific goals are:
   \begin{enumerate}
-  \item Find a correlational relationship between some external properties of the discernibility matrix and the fastest 
+  \item Find a relationship between some external properties of the discernibility matrix and the fastest 
   		traversing strategy for finding shortest reducts.
   		
   		Main tasks for this goal are:
@@ -622,7 +622,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   		\item Evaluate the proposed algorithm over the synthetic datasets and over benchmarking datasets.
   		\end{itemize}
   	
-  \item Find a correlational relationship between some external properties of the discernibility matrix and the fastest 
+  \item Find a relationship between some external properties of the discernibility matrix and the fastest 
   		decomposition method for finding shortest reducts.
   		
   		Main tasks for this goal are:
@@ -638,7 +638,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   		\item Evaluate the proposed algorithm over the synthetic datasets and over benchmarking datasets.
   		\end{itemize}
   
-  \item Develop a parallel algorithm for computing minimal cardinality reducts of an information system, based 
+  \item Develop a new algorithm for computing minimal cardinality reducts of an information system, based 
   		on the two previously designed algorithms.
   		
   		Main tasks for this goal are:
@@ -649,295 +649,8 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   		\item Evaluate the proposed algorithm over the synthetic datasets and over benchmarking datasets.
   		\end{itemize}
   \end{enumerate}
-%
-%\section{Design of Experiments}\label{DOE}
-%  Throughout our research, we will be conducting four experiments: one experiment for each of the two first
-%  specific goals and two experiments for the third one.
-%  
-%\subsection{First Experiment}\label{exprimet1}
-%  \begin{description}
-%  \item[Scientific hypothesis] There is a correlational relationship between the external properties of the discernibility 
-%  							   matrix and the time complexity of traversing strategies for finding minimal
-%  							   cardinality reducts of an information	system.
-%  \item[Experiment hypothesis] There can be extracted some rules by means of Rough Sets Theory for explaining
-%  							   the relationship between the external properties of discernibility matrices
-%  							   with 30 attributes and 100 rows and the fastest traversing strategies for finding
-%  							   their minimal cardinality reducts.  
-%  \end{description}
-%  \paragraph{Experiment Design} 
-%	  \begin{description}
-%	  	\item[Experimental Unit:] 10000 synthetically generated discernibility matrices with 30 attributes and
-%	  							  100 rows.
-%	  	\item[Traversing Strategies:] The concepts of Acceptance, Gap, Compatibility~\cite{Lias13} and the 
-%	  								  Jhonson's rule~\cite{Ohrn00} are explored individually and combined with 
-%	  								  each other. We would like to note that the concept of Acceptance is basic
-%	  								  and will be present in every combination although not mentioned.
-%	  	\item[Experimental Design:] Factorial design.
-%	  \end{description}
-%  \paragraph{Independent variables}  
-%  	\begin{itemize}
-%  	   \item \textbf{Ones Density:} The number of ones in the discernibility matrix divided by its number of
-%  	   								 cells.
-%  	   		\begin{description}
-%  	   			\item[Type:] Real
-%  	   			\item[Range:] 0 -- 1
-%  	   			\item[Levels:] steps = 0.067
-%  	   		\end{description}
-%  	   \item \textbf{MinRow:} The minimum number of ones in a row.
-%  	   		\begin{description}
-%  	   			\item[Type:] Integer
-%  	   			\item[Range:] 1 -- 29
-%  	   			\item[Levels:] steps = 1
-%  	   		\end{description}
-%  	   \item \textbf{MaxRow:} The maximum number of ones in a row.
-%  	   		\begin{description}
-%  	   			\item[Type:] Integer
-%  	   			\item[Range:] 1 -- 29
-%  	   			\item[Levels:] steps = 1
-%  	   		\end{description}
-%  	   \item \textbf{Strategy:} The traversing strategy used for computing the minimal cardinality reducts.
-%  	   		\begin{description}
-%  	   			\item[Type:] Categorical
-%  	   			\item[Levels:] Acceptance, Compatibility, Johnson, Compatibility+Johnson, Gap, Compatibility+Gap,
-%  	   						   Gap+Johnson, Compatibility+Gap+Johnson
-%  	   		\end{description}
-%    \end{itemize}	
-%    \paragraph{Cofactors}  
-%  	\begin{itemize}
-%  	   \item \textbf{StdRow:} The standard deviation of the density of ones in a row for the matrix.
-%  	   		\begin{description}
-%  	   			\item[Type:] Real
-%  	   			\item[Range:] 0 -- 0.5
-%  	   		\end{description}
-%  	   \item \textbf{MinCol:} The minimum number of ones in a column.
-%  	   		\begin{description}
-%  	   			\item[Type:] Integer
-%  	   			\item[Range:] 1 -- 100
-%  	   		\end{description}
-%  	   \item \textbf{MaxCol:} The maximum number of ones in a column.
-%  	   		\begin{description}
-%  	   			\item[Type:] Integer
-%  	   			\item[Range:] 1 -- 100
-%  	   		\end{description}
-%  	   \item \textbf{StdCol:} The standard deviation of the density of ones in a column for the matrix.
-%  	   		\begin{description}
-%  	   			\item[Type:] Real
-%  	   			\item[Range:] 0 -- 0.5
-%  	   		\end{description}
-%    \end{itemize}
-%    \paragraph{Controlled variable}  
-%  	\begin{itemize}
-%  	   \item \textbf{Matrix Dimensions:} Dimensions of the synthetically generated discernibility matrices.
-%  	   		\begin{description}
-%  	   			\item[Type:] (Integer,Integer)
-%  	   			\item[Value:] (30,100)
-%  	   		\end{description}
-%    \end{itemize}
-%    \paragraph{Dependent variable}  
-%  	\begin{itemize}
-%  	   \item \textbf{Fastest Strategy:} The fastest traversing strategy used for computing the minimal cardinality
-%  	   								    reducts.
-%  	   		\begin{description}
-%  	   			\item[Type:] Categorical
-%  	   			\item[Levels:] Acceptance, Compatibility, Johnson, Compatibility+Johnson, Gap, Compatibility+Gap,
-%  	   						   Gap+Johnson, Compatibility+Gap+Johnson
-%  	   		\end{description}
-%    \end{itemize}
-%  
-%  \begin{description}
-%    \item[Bias Sources] Our main source of bias is the runtime variability due to the dynamic behaviour of
-%    					   	operating systems. We will be doing three execution for each treatment and using 
-%    					   	the minimum as the runtime estimator. In order to obtain the fastest strategy, we 
-%    					   	will use the strategy with the lowest runtime as the base to compare with the rest of 
-%    					   	them. A 10\% of this lowest runtime value is used as the minimum difference indicating
-%    					   	statistical significance. This process will ensure us a 95\% confidence
-%    					   	interval~\cite{Haveraaen01}.
-%    					   	For practical purposes, a runtime difference lower than a 10\% is, in our opinion, 
-%    					   	meaningless. This procedure will lead to 248 combinations in which we do not have a
-%    					   	fastest strategy. Nevertheless, these combinations provide useful information as well.
-%    					   	
-%    					   	Another source of bias may be the differences in the implementation of these strategies.
-%    					   	To prevent this, we will write all the code for this experiment under the same conditions
-%    					   	(e.g. programming language, code style, platform, libraries, etc.).  					   	
-%    	\item[Proposed Analysis] We are going to use the Rough Sets Theory in order to extract meaningful rules 
-%    							 representing the relationship between the external properties of the discernibility 
-%  							 matrix and the time complexity of traversing strategies for finding minimal
-%  							 cardinality reducts of an information system. A new information system will be
-%  							 generated using the independent and controlled variables as condition attributes and
-%  							 the fastest strategy(ies) for each matrix as decision attribute. 
-%  							 Notice that cofactors do not constitute a bias source since their value
-%  							 is used for the rules extraction precess.
-%    	\item[Validation Efforts] We are going to evaluate our result over 30 benchmarking datasets~\cite{Bache13}.
-%    							 The kind of validity we look for is conclusion validity. 
-%    							 For each treatment application, 30 random synthetic matrices will be generated with
-%    							 approximately the same external properties. This process ensures us internal validity
-%    							 in the fastest strategy identification.
-%  \end{description}
-%
-%
-%
-%
-%\subsection{Second Experiment}\label{exprimet2}
-%  \begin{description}
-%  \item[Scientific hypothesis] There is a correlational relationship between the external properties of the discernibility
-%  							   matrix and the speed--up of the decomposition method used for finding minimal
-%  							   cardinality reducts of an information	system in a parallel environment.
-%  \item[Experiment hypothesis] There can be extracted some rules by means of Rough Sets Theory for explaining
-%  							   the relationship between the external properties of discernibility matrices
-%  							   with 30 attributes and 1000 rows and the best decomposition method used for finding
-%  							   minimal cardinality reducts of an information	system in a parallel environment.
-%  \end{description}
-%  \paragraph{Experiment Design} 
-%	  \begin{description}
-%	  	\item[Experimental unit:] 1000 synthetically generated discernibility matrices with 30 attributes and
-%	  							  1000 rows.
-%	  	\item[Decomposition Methods:] Horizontal decomposition over the information system (ISD), horizontal
-%	  								 decomposition over the discernibility matrix (DMD) and vertical decomposition 
-%	  								 over the attributes (AVD)~\cite{Strakowski08}. By horizontal decomposition 
-%	  								 we imply a partition of rows and by vertical decomposition, a partition of
-%	  								 attributes (columns).
-%	  	\item[Experimental Design:] Factorial design.
-%	  \end{description}
-%  \paragraph{Independent variables}  
-%  	\begin{itemize}
-%  	   \item \textbf{Ones Density:} The number of ones in the discernibility matrix divided by its number of
-%  	   								 cells.
-%  	   		\begin{description}
-%  	   			\item[Type:] Real
-%  	   			\item[Range:] 0 -- 1
-%  	   			\item[Levels:] steps = 0.067
-%  	   		\end{description}
-%  	   \item \textbf{MinRow:} The minimum number of ones in a row.
-%  	   		\begin{description}
-%  	   			\item[Type:] Integer
-%  	   			\item[Range:] 1 -- 29
-%  	   			\item[Levels:] steps = 1
-%  	   		\end{description}
-%  	   \item \textbf{MaxRow:} The maximum number of ones in a row.
-%  	   		\begin{description}
-%  	   			\item[Type:] Integer
-%  	   			\item[Range:] 1 -- 29
-%  	   			\item[Levels:] steps = 1
-%  	   		\end{description}
-%  	   \item \textbf{Decomposition Method:} The decomposition method used for computing the minimal cardinality
-%  	   										reducts in large datasets.
-%  	   		\begin{description}
-%  	   			\item[Type:] Categorical
-%  	   			\item[Levels:] ISD, DMD, AVD
-%  	   		\end{description}
-%    \end{itemize}	
-%    \paragraph{Cofactors}  
-%  	\begin{itemize}
-%  	   \item \textbf{StdRow:} The standard deviation of the density of ones in a row for the matrix.
-%  	   		\begin{description}
-%  	   			\item[Type:] Real
-%  	   			\item[Range:] 0 -- 0.5
-%  	   		\end{description}
-%  	   \item \textbf{MinCol:} The minimum number of ones in a column.
-%  	   		\begin{description}
-%  	   			\item[Type:] Integer
-%  	   			\item[Range:] 1 -- 1000
-%  	   		\end{description}
-%  	   \item \textbf{MaxCol:} The maximum number of ones in a column.
-%  	   		\begin{description}
-%  	   			\item[Type:] Integer
-%  	   			\item[Range:] 1 -- 1000
-%  	   		\end{description}
-%  	   \item \textbf{StdCol:} The standard deviation of the density of ones in a column for the matrix.
-%  	   		\begin{description}
-%  	   			\item[Type:] Real
-%  	   			\item[Range:] 0 -- 0.5
-%  	   		\end{description}
-%    \end{itemize}
-%    \paragraph{Controlled variable}  
-%  	\begin{itemize}
-%  	   \item \textbf{Matrix Dimensions:} Dimensions of the synthetically generated discernibility matrices.
-%  	   		\begin{description}
-%  	   			\item[Type:] (Integer,Integer)
-%  	   			\item[Value:] (30,1000)
-%  	   		\end{description}
-%    \end{itemize}
-%    \paragraph{Dependent variable}  
-%  	\begin{itemize}
-%  	   \item \textbf{Best Decomposition Method:} The best decomposition method used for computing the minimal
-%  	   											cardinality	reducts in large datasets.
-%  	   		\begin{description}
-%  	   			\item[Type:] Categorical
-%  	   			\item[Levels:] ISD, DMD, AVD
-%  	   		\end{description}
-%    \end{itemize}
-%    
-%    Notice that when we talk about the best decomposition method, we refer to the method achieving the largest
-%    speed--up over the sequential algorithm. This way, we are going to be measuring the runtime as we proposed 
-%    in the first experiment. Thus, the bias sources, the proposed analysis and the validation efforts are the 
-%    same as in the first experiment.
-%
-%\subsection{Third Experiment}\label{exprimet3}
-%  \begin{description}
-%  \item[Scientific hypothesis] Using some external properties of the discernibility matrix, we can design a
-%  							   parallel algorithm for computing minimal cardinality reducts of an information
-%  							   system; which is comparable to the state of the art alternatives in all datasets,
-%  							   and faster in most of them.
-%  \item[Null hypothesis] There is no statistically significant improvement in using our proposed
-%  						 algorithm instead of the state of the art alternatives.
-%  \end{description}
-%  \paragraph{Experiment Design} 
-%	  \begin{description}
-%	  	\item[Experimental unit:] 30 synthetically randomly generated discernibility matrices with 30 attributes
-%	  							  and 1000 rows.
-%	  	\item[Treatments:] The best performing alternatives from the two previous experiments and our external 
-%	  					   properties aware proposed algorithm.
-%	  	\item[Statistical Test:] One sided t--test. Notice that we want to evaluate the significance of the
-%	  							 runtime reduction achieved by our proposed algorithm.
-%	  \end{description}
-%  \paragraph{Independent variable}  
-%  	\begin{itemize}
-%  		\item \textbf{Algorithm:} The algorithm for computing the minimal cardinality reducts in large datasets.
-%  	   		\begin{description}
-%  	   			\item[Type:] Categorical
-%  	   			\item[Levels:] The best performing alternatives from the two previous experiments and our external 
-%	  					   	   properties aware proposed algorithm.
-%  	   		\end{description}
-%    \end{itemize}
-%    \paragraph{Controlled variable}  
-%  	\begin{itemize}
-%  	   \item \textbf{Matrix Dimensions:} Dimensions of the synthetically generated discernibility matrices.
-%  	   		\begin{description}
-%  	   			\item[Type:] (Integer,Integer)
-%  	   			\item[Value:] (30,1000)
-%  	   		\end{description}
-%    \end{itemize}
-%    \paragraph{Dependent variable}  
-%  	\begin{itemize}
-%  	   \item \textbf{Runtime:} The algorithm execution runtime.
-%  	   		\begin{description}
-%  	   			\item[Type:] Real
-%  	   			\item[Unit:] seconds
-%  	   		\end{description}
-%    \end{itemize}
-%    \begin{description}
-%    \item[Bias Sources] Our main source of bias is the runtime variability due to the dynamic behaviour of
-%    					   	operating systems. We will be doing five execution for each treatment and using 
-%    					   	the minimum as the runtime estimator. This process will ensure us a 99\% confidence
-%    					   	interval~\cite{Haveraaen01} in the runtime estimation.			   	
-%    	\item[Proposed Analysis] We are going to make a one sided t--test comparing our proposed algorithm against
-%    							every alternative.
-%    	\item[Validation Efforts] Same as in the first experiment but we also look for statistical conclusion
-%    							 validity since we will have a confidence interval of our conclusion.
-%  \end{description}
-% 
-% \subsection{Fourth Experiment}\label{exprimet4}
-%  This experiment is similar to experiment in~\ref{exprimet3} but we will be evaluating our algorithm over 
-%  randomly selected large benchmarking datasets from \cite{Bache13}. All the experiment elements are the
-%  same as in experiment in~\ref{exprimet3} except for those stated bellow.
-%  \paragraph{Experiment Design} 
-%	  \begin{description}
-%	  	\item[Experimental unit:] 30 randomly selected large benchmarking datasets from \cite{Bache13}.
-%	  	\item[Bias Sources] This time, the matrices dimensions is another source of bias since we cannot 
-%	  						control them. The only resource we can use to control this bias source is the
-%	  						randomization of treatments application order.
-%	  \end{description}
-%	  	
+
+	  	
 \section{Publication Plan}\label{PubPlan}
   In this section we present our publication plan. Results from this research are to be submitted indistinctly 
   to the following journals or congresses, according to the advisor’s recommendations.
