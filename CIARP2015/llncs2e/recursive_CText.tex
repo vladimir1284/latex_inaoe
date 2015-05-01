@@ -99,7 +99,10 @@
 	the last feature in the dataset, avoid the evaluation of any subset of this candidate.
 	
 	Sanchez-D\'iaz and Lazo-Cort\'es~(Sanchez2007) proposed the CT\_EXT algorithm for computing all
-	typical testors.
+	typical testors. Following a traversing order similar to that in LEX, this algorithm search for
+	testors without verifying the typical condition. This way, a larger number of candidates are 
+	evaluated, in comparison to LEX; but the cost of each evaluation is lower. Results from experiments
+	show that CT\_EXT is faster than the previous existing algorithm for most datasets.
 	
 %
 \section{Basic Concepts}
@@ -127,15 +130,15 @@
 	Memorias del II Taller Iberoamericano de Reconocimiento de Patrones , La
 	Habana. 141--148 (1997)
 
-\bibitem[2007]{Sanchez2007}
-	Sanchez-D\'iaz, G., Lazo-Cort\'es, M.:
-	CT-EXT: an algorithm for computing typical testor set. 
-	In Progress in Pattern Recognition, Image Analysis and Applications. Springer. 506--514 (2007)
-
 \bibitem[2001]{Martinez2001}
 	Mart\'inez-Trinidad, J.F., Guzm\'an-Arenas, A.: 
 	The Logical Combinatorial Approach to Pattern Recognition an Overview through Selected Works. 
 	Pattern Recognition. 34, 741--751 (2001)
+
+\bibitem[2007]{Sanchez2007}
+	Sanchez-D\'iaz, G., Lazo-Cort\'es, M.:
+	CT-EXT: an algorithm for computing typical testor set. 
+	In Progress in Pattern Recognition, Image Analysis and Applications. Springer. 506--514 (2007)
 
 \bibitem[2003]{Santiesteban2003}	
 	Santiesteban, Y., Pons-Porrata, A.:
