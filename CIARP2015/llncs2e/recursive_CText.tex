@@ -1,0 +1,182 @@
+% This is LLNCS.DEM the demonstration file of
+% the LaTeX macro package from Springer-Verlag
+% for Lecture Notes in Computer Science,
+% version 2.4 for LaTeX2e as of 16. April 2010
+%
+\documentclass[citeauthoryear]{llncs}
+%
+%\usepackage{makeidx}  % allows for indexgeneration
+%
+\begin{document}
+\mainmatter              % start of the contributions
+%
+\title{A Recursive Implementation of the CT\_EXT Algorithm 
+	   for the Typical Testor Property Identification}
+%
+\titlerunning{Recursive CT_EXT}  % abbreviated title (for running head)
+%                                     also used for the TOC unless
+%                                     \toctitle is used
+			 
+\author{Vlad\'{i}mir Rodr\'{i}guez\inst{1,2} \and Jos\'{e}~F. Mart\'{i}nez\inst{1}
+		 \and Jes\'{u}s~A. Carrasco\inst{1} \and Manuel~S.~Lazo\inst{1}}
+%
+\authorrunning{Vlad\'{i}mir Rodr\'{i}guez et al.} % abbreviated author list (for running head)
+%
+%%%% list of authors for the TOC (use if author list has to be modified)
+%\tocauthor{Ivar Ekeland, Roger Temam, Jeffrey Dean, David Grove,
+%Craig Chambers, Kim B. Bruce, and Elisa Bertino}
+%
+\institute{Instituto Nacional de Astrof\'{i}sica, \'{O}ptica y Electr\'{o}nica,\\
+		   Luis Enrique Erro \# 1, Tonantzintla, Puebla, M\'{e}xico,\\
+		   Coordinaci\'{o}n de Ciencias Computacionales,\\
+\email{vladimir.rodriguez@ccc.inaoep.mx}
+\and Universidad de Camag\"{u}ey,\\
+	 Circunvalaci\'{o}n Nte. km 5$\frac{1}{2}$, Camag\"{u}ey, Cuba}
+
+
+\maketitle              % typeset the title of the contribution
+
+\begin{abstract}
+	The Testors Theory is an important approach to feature selection 
+	in supervised classification. Typical testors are irreducible subsets 
+	of features preserving the discernibility between objects in the 
+	original dataset. A new dataset using only those features in a 
+	typical testor is a reduced representation of the original one,
+	which improves the efficiency of machine learning tools without 
+	degrading their performance. Finding the complete set of typical 
+	testors for 	a dataset requires a high computational effort. Here, 
+	we propose a recursive implementation of the CT\_EXT algorithm 
+	(one of the fastest reported in the literature) which avoids some 
+	unnecessary verifications, reducing that way its runtime execution. 
+	An experimental comparison between our proposal and other state of 
+	the art algorithms, over publicly available datasets, is presented.
+\keywords{Testors Theory, features selection, CT\_EXT algorithm}
+\end{abstract}
+%
+\section{Introduction}
+%
+	Feature selection is an important task in supervised classification. An 
+	information system is a dataset (table) containing objects (rows) which are
+	characterized by the value of some features (columns). A reduced 
+	representation of an information system, with the same discernibility
+	between objects than that of the original dataset, reduces the computational
+	cost of the classification process. In the Logical Combinatorial Pattern 
+	Recognition (Ruiz-Shulcloper et al.~\cite{Shulcloper1995}), Testors Theory 
+	emerges as a solution to feature selection (Ruiz-Shulcloper~\cite{Shulcloper2008};
+	Mart\'inez-Trinidad and	Guzm\'an-Arenas~\cite{Martinez2001}). A testor is subset of 
+	features which allows us to discern between objects in different classes by 
+	using only values of its features. A typical testor is defined as a testor which 
+	is minimal with respect to inclusion. The main limitation to the application of
+	the Testors Theory is that finding all the reducts from a dataset has been proven
+	as an NP-hard problem (Skowron et al.~\cite{Skowron1992}).
+	
+	One of the first algorithm designed to overcome the exponential complexity (regarding
+	the number of features) of the problem of finding all the typical testors, was 
+	proposed by Ruiz-Shulcloper et al.~(\cite{Shulcloper1985}). This algorithm, called BT
+	codified a subset of features as a binary word with as many bits as features in the 
+	dataset. With a 0 representing the absence of the corresponding feature in the current
+	subset, and a 1 representing its inclusion. This way, candidates subsets running from
+	(0,...,0,1) to (1,...,1,0), in the natural order of binary numbers, are evaluated for 
+	the testor condition. Notice that the empty subset (0,...,0) and the complete set of
+	features (1,...,1) (obviously a testor) are not included. The pruning process in the
+	search space is based on the minimal condition of typical testors and a convenient sorting
+	of the basic matrix (see definition~\cite{def:BM}) associated to the dataset. Finally, 
+	testors found by BT algorithm must by compared with each other in order to remove
+	any superset (not a typical testor by definition).
+	
+	In (Ruiz-Shulcloper et al.~\cite{Shulcloper1995b}) a new algorithm (REC) is presented.
+	The main drawback of REC was that it operated directly over the dataset (instead of the
+	basic matrix), handling a huge amount of superfluous information. Ayaquica~\cite{Ayaquica1997}
+	presented the algorithm CER directed to solve this problem by using a different traversing
+	order. 
+	
+	Then, Santiesteban and Pons-Porrata~(\cite{Santiesteban2003}) proposed a revolutionary algorithm
+	called LEX. Main ideas behind LEX are a new traversing order of candidates (which resembles the
+	lexicographical order in which string characters are compared) and the concept of gap. In LEX
+	the typical condition is verified first and only for those potentially typical testors, the testor 
+	condition is checked. This way, the out-coming testors from this algorithm are always typical.
+	The concept of gap allows us; once obtained a typical testor (or a not testor) candidate, including 
+	the last feature in the dataset, avoid the evaluation of any subset of this candidate.
+	
+	Sanchez-D\'iaz and Lazo-Cort\'es~(Sanchez2007) proposed the CT\_EXT algorithm for computing all
+	typical testors.
+	
+%
+\section{Basic Concepts}
+%
+\subsection{Example}
+%
+\section{The Recursive Implementation of the CT\_EXT Algorithm}
+%
+\subsection{Example}
+%
+\section{Experiments}
+%
+%
+\section{Conclusions}
+%
+% ---- Bibliography ----
+%
+\begin{thebibliography}{}
+%
+
+
+\bibitem[1997]{Ayaquica1997}
+	Ayaquica, I. O.:
+	Un nuevo algoritmo de escala exterior para el c\'alculo de testores t\'ipicos.
+	Memorias del II Taller Iberoamericano de Reconocimiento de Patrones , La
+	Habana. 141--148 (1997)
+
+\bibitem[2007]{Sanchez2007}
+	Sanchez-D\'iaz, G., Lazo-Cort\'es, M.:
+	CT-EXT: an algorithm for computing typical testor set. 
+	In Progress in Pattern Recognition, Image Analysis and Applications. Springer. 506--514 (2007)
+
+\bibitem[2001]{Martinez2001}
+	Mart\'inez-Trinidad, J.F., Guzm\'an-Arenas, A.: 
+	The Logical Combinatorial Approach to Pattern Recognition an Overview through Selected Works. 
+	Pattern Recognition. 34, 741--751 (2001)
+
+\bibitem[2003]{Santiesteban2003}	
+	Santiesteban, Y., Pons-Porrata, A.:
+	LEX: a new algorithm for the calculus of typical testors. 
+	Mathematics Sciences Journal, 21(1), 85--95 (2003)
+
+\bibitem[1995a]{Shulcloper1995}
+	Ruiz-Shulcloper, J., Alba-Cabrera, E., Lazo-Cort\'es, M.:
+	Introducci\'{o}n al Reconocimiento de Patrones (Enfoque L\'{o}gico--Combinatorio). 
+	Serie Verde No. 51. CINVESTAV-IPN, México, (1995)
+
+\bibitem[1995b]{Shulcloper1995b}
+	Ruiz-Shulcloper, J., Alba-Cabrera, E., Lazo-Cort\'es, M.:
+	Introducci\'{o}n a la teor\'ia de Testotes T\'ipicos. 
+	Serie Verde No. 50. CINVESTAV-IPN, México, (1995)
+	
+\bibitem[1985]{Shulcloper1985}	
+	Ruiz-Shulcloper, J., Aguila, L., Bravo, A.:
+	BT and TB algorithms for computing all irreducible testors. 
+	Revista Ciencias Matem\'{a}ticas, 2, 11--18 (1985)
+
+\bibitem[2008]{Shulcloper2008}
+	Ruiz-Shulcloper, J.:
+	Pattern recognition with mixed and incomplete data. 
+	Pattern Recognition and Image Analysis. 18(4), 563--576 (2008)
+
+\bibitem[1992]{Skowron1992}
+	Skowron, A., Rauszer, C.:
+	The discernibility matrices and functions in information systems. 
+	Handbook of Applications and Advances of the Rough Sets Theory. 331--362  (1992)
+	
+	
+\end{thebibliography}
+
+%\clearpage
+%\addtocmark[2]{Author Index} % additional numbered TOC entry
+%\renewcommand{\indexname}{Author Index}
+%\printindex
+%\clearpage
+%\addtocmark[2]{Subject Index} % additional numbered TOC entry
+%\markboth{Subject Index}{Subject Index}
+%\renewcommand{\indexname}{Subject Index}
+%\input{subjidx.ind}
+\end{document}
