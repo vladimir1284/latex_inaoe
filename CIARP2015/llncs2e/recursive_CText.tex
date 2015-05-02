@@ -78,7 +78,7 @@
 	subset while a 1 represents its inclusion. This way, candidates subsets are evaluated
 	in the natural order of binary numbers. The pruning process in the
 	search space is based on the minimal condition of TT and a convenient sorting
-	of the basic matrix (see definition~\cite{def:BM}) associated to the dataset. Finally, 
+	of the basic matrix (see definition~\ref{def:BM}) associated to the dataset. Finally, 
 	testors found by BT algorithm must by compared with each other in order to remove
 	any superset (not a TT by definition).
 	In (Ruiz-Shulcloper et al.~\cite{Shulcloper1995b}) a new algorithm (REC) is presented.
@@ -117,6 +117,49 @@
 %
 \section{Basic Concepts}
 %
+	Let $DS$ be a dataset with $k$ objects described by $n$ condition attributes (features) and groped in
+	in $r$ classes by a decision attribute. Every attribute in the set of condition attributes 
+	$R=\lbrace x_1,...,x_n \rbrace$, hereinafter referred to as attributes, may be of any type and must
+	have a defined comparison criterion (usually the simple equality). Let $DM$ be the binary discernibility
+	matrix obtained from comparing every pair of objects in $DS$ belonging to different classes. Every 
+	comparison of a pair of objects adds a row to $DM$ with (0=indiscernible,1=discernible) in the corresponding 
+	attribute position (column). $DM$ has $m$ rows and $n$ columns. Comparisons generating a row with only 
+	0's, hereinafter referred to as empty row, imply that two objects from different classes are indistinguishable 
+	by their attributes values. These rows are called inconsistencies of $DS$ and are not included in $DM$.
+	
+	\begin{definition}\label{def:testor}
+		Let $T \subseteq R$ be a subset of attributes form DS. We say that T is a testor if in the sub-matrix
+		of DM formed by the columns corresponding to attributes in T, there is not any empty row.
+	\end{definition}
+	
+	An empty row in this sub-matrix of $DM$ imply that a reduced dataset obtained from $DS$, using only those 
+	attributes in $T$, has more inconsistencies than $DS$. 
+	
+	Usually the number of rows in $DM$ ($m$) is large. Lazo-Cort\'es et al.~(\cite{Lazo2001}) proposed a reduction
+	of $DM$ without loosing relevant information. They proved that this reduced matrix, called basic matrix, and
+	$DM$; has the same set of testors. 
+	
+	\begin{definition} \label{def:BM}
+		Let $S_{j} \subseteq R$ be a subset of attributes associated to the row j of DM, such that $x_i \in S_{j}$
+		iff the row j has a 1 in the column i. And let $SS=\lbrace S_1, S_2,...,S_m  \rbrace$ be the set of possible
+		subsets $S_{j}$ in DM. The Basic Matrix BM of DS is formed by all the rows in DM (without repetitions) for 
+		which its associated $S_{j}$ has not any proper subset in SS.
+	\end{definition}
+	
+	We can then, substitute $DM$ by $BM$ in definition~\ref{def:testor} without 
+	any loose of generality.
+	
+	\begin{definition}\label{def:TT}
+		A subset of attributes $T \subseteq R$ is a typical testor iff:
+		\begin{enumerate}
+		\item T is a testor.
+		\item $\forall x_i \in T, T \setminus x_i$ is not a testor. 
+		\end{enumerate}
+	\end{definition}	
+	
+\subsection{Concepts for CT\_EXT}
+	
+
 \subsection{Example}
 %
 \section{The Recursive Implementation of the CT\_EXT Algorithm}
@@ -139,6 +182,11 @@
 	Un nuevo algoritmo de escala exterior para el c\'alculo de testores t\'ipicos.
 	Memorias del II Taller Iberoamericano de Reconocimiento de Patrones , La
 	Habana. 141--148 (1997)
+
+\bibitem[2001]{Lazo2001}	
+	Lazo-Cort\'es, M., Ruiz-shulcloper, J., Alba-Cabrera, E.:
+	An Overview of the Evolution of the Concept of Testor. 
+	Pattern Recognition. 34, 753--762 (2001)
 
 \bibitem[2009]{Lias2009}
 	Lias-Rodr\'iguez, A., Pons-Porrata, A.:
