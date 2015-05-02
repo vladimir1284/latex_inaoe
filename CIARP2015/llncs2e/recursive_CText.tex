@@ -133,7 +133,7 @@
 	\end{definition}
 	
 	An empty row in this sub-matrix of $DM$ imply that a reduced dataset obtained from $DS$, using only those 
-	attributes in $T$, has more inconsistencies than $DS$. 
+	attributes in $T$, has more inconsistencies than $DS$. 	
 	
 	Usually the number of rows in $DM$ ($m$) is large. Lazo-Cort\'es et al.~(\cite{Lazo2001}) proposed a reduction
 	of $DM$ without loosing relevant information. They proved that this reduced matrix, called basic matrix, and
@@ -150,18 +150,47 @@
 	any loose of generality.
 	
 	\begin{definition}\label{def:TT}
-		A subset of attributes $T \subseteq R$ is a typical testor iff:
-		\begin{enumerate}
-		\item T is a testor.
-		\item $\forall x_i \in T, T \setminus x_i$ is not a testor. 
-		\end{enumerate}
+		A subset of attributes $T \subseteq R$ is a typical testor iff T is a testor and
+		$\forall x_i \in T, T \setminus x_i$ is not a testor. 
+	\end{definition}	
+%	
+\subsection{Concepts for CT\_EXT}
+%
+	%An important concept in the CT\_EXT algorithm is the contribution.
+		
+	\begin{definition}\label{def:contrib}
+		Given $T \subseteq R$ and $x_i \in R$ such that $x_i \notin T$. We say that $x_i$ contributes to T iff 
+		the sub-matrix of BM formed with only those attributes in T has more empty rows than that formed with attributes
+		in $T \cup \lbrace x_i \rbrace$.
 	\end{definition}	
 	
-\subsection{Concepts for CT\_EXT}
+	The core of the CT\_EXT algorithm is supported by propositions~\ref{prop1} and~\ref{prop2}; which are stated in
+	(Sanchez-D\'iaz et al.~\cite{Sanchez2010}, Theorems 1 and 2) respectively.
 	
+	\begin{proposition}\label{prop1} 
+		Given $T \subseteq R$ and  $x_i \in R$ such that $x_i \notin T$. If $x_i$ does not contribute to T, then 
+		$T\cup\{x_i\}$ cannot be a subset of any typical testor.
+	\end{proposition}
 
+	\begin{proposition}\label{prop2} 
+		Given $T \subseteq R$ and $Z \subseteq R$ such that $Z \cap T = \emptyset$. If T is a testor, then $T \cup Z$ is a 
+		testor too, but it is not a typical testor.
+	\end{proposition}
+	
+	For a fast implementation of the CT\_EXT algorithm, columns in $BM$ are coded as binary words with as many bits as 
+	rows has $BM$. The cumulative mask for an attribute $x_i$ is denoted as $cm_{x_i}$ and is the binary word representing
+	the ith column in $BM$. The cumulative mask for a subset of attributes $T=\lbrace x_{i1},x_{i2},...,x_{ik} \rbrace$ is defined
+	as $cm_T = cm_{x_{i1}} \vee cm_{x_{i2}} \vee ... \vee cm_{x_{ik}}$ where $\vee$ stands for the binary OR operator. It is
+	not hard to see that the number of 0's in $cm_T$ equals the number of empty rows in $BM$. According to 
+	definition~\ref{def:contrib}, $x_i$ contributes to $T$ iff $cm_{T\cup x_i}$ has more 1's than $cm_T$. The incremental nature
+	of fast-CT\_EXT is given by the associative property of the OR operation, such that $cm_{T\cup x_i}=cm_T\vee cm_{x_i}$.
+	Notice from this last formulation, that $x_i$ contributes to $T$ iff $cm_{T\cup x_i}\neq cm_T$ since $cm_{T\cup x_i}$
+	cannot have less 1's than $cm_T$. Finally, substituting $DM$ by $BM$ in definition~\ref{def:testor}, it is easy to see
+	that $T \subseteq R$ is a testor iff $cm_T=(1,...,1)$ (has a 1 in every bit).
+%	
 \subsection{Example}
 %
+
 \section{The Recursive Implementation of the CT\_EXT Algorithm}
 %
 \subsection{Example}
