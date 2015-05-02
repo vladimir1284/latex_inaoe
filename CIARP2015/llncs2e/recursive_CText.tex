@@ -11,7 +11,7 @@
 \mainmatter              % start of the contributions
 %
 \title{A Recursive Implementation of the CT\_EXT Algorithm 
-	   for the Typical Testor Property Identification}
+	   for the Testor Property Identification}
 %
 \titlerunning{Recursive CT_EXT}  % abbreviated title (for running head)
 %                                     also used for the TOC unless
@@ -65,45 +65,55 @@
 	emerges as a solution to feature selection (Ruiz-Shulcloper~\cite{Shulcloper2008};
 	Mart\'inez-Trinidad and	Guzm\'an-Arenas~\cite{Martinez2001}). A testor is subset of 
 	features which allows us to discern between objects in different classes by 
-	using only values of its features. A typical testor is defined as a testor which 
+	using only values of its features. A Typical Testor (TT) is defined as a testor which 
 	is minimal with respect to inclusion. The main limitation to the application of
-	the Testors Theory is that finding all the reducts from a dataset has been proven
+	the Testors Theory is that finding all the TT from a dataset has been proven
 	as an NP-hard problem (Skowron et al.~\cite{Skowron1992}).
 	
 	One of the first algorithm designed to overcome the exponential complexity (regarding
-	the number of features) of the problem of finding all the typical testors, was 
-	proposed by Ruiz-Shulcloper et al.~(\cite{Shulcloper1985}). This algorithm, called BT
+	the number of features) of the problem of finding all the TT, was 
+	proposed by Ruiz-Shulcloper et al.~(\cite{Shulcloper1985}). This algorithm, called BT,
 	codified a subset of features as a binary word with as many bits as features in the 
-	dataset. With a 0 representing the absence of the corresponding feature in the current
-	subset, and a 1 representing its inclusion. This way, candidates subsets running from
-	(0,...,0,1) to (1,...,1,0), in the natural order of binary numbers, are evaluated for 
-	the testor condition. Notice that the empty subset (0,...,0) and the complete set of
-	features (1,...,1) (obviously a testor) are not included. The pruning process in the
-	search space is based on the minimal condition of typical testors and a convenient sorting
+	dataset. A 0 represents the absence of the corresponding feature in the current
+	subset while a 1 represents its inclusion. This way, candidates subsets are evaluated
+	in the natural order of binary numbers. The pruning process in the
+	search space is based on the minimal condition of TT and a convenient sorting
 	of the basic matrix (see definition~\cite{def:BM}) associated to the dataset. Finally, 
 	testors found by BT algorithm must by compared with each other in order to remove
-	any superset (not a typical testor by definition).
-	
+	any superset (not a TT by definition).
 	In (Ruiz-Shulcloper et al.~\cite{Shulcloper1995b}) a new algorithm (REC) is presented.
 	The main drawback of REC was that it operated directly over the dataset (instead of the
-	basic matrix), handling a huge amount of superfluous information. Ayaquica~\cite{Ayaquica1997}
+	basic matrix), handling a huge amount of superfluous information. Ayaquica~(\cite{Ayaquica1997})
 	presented the algorithm CER directed to solve this problem by using a different traversing
 	order. 
 	
 	Then, Santiesteban and Pons-Porrata~(\cite{Santiesteban2003}) proposed a revolutionary algorithm
 	called LEX. Main ideas behind LEX are a new traversing order of candidates (which resembles the
 	lexicographical order in which string characters are compared) and the concept of gap. In LEX
-	the typical condition is verified first and only for those potentially typical testors, the testor 
+	the typical condition is verified first and only for those potentially TT, the testor 
 	condition is checked. This way, the out-coming testors from this algorithm are always typical.
-	The concept of gap allows us; once obtained a typical testor (or a not testor) candidate, including 
+	The concept of gap allows us; once obtained a TT (or a not testor) candidate, including 
 	the last feature in the dataset, avoid the evaluation of any subset of this candidate.
 	
-	Sanchez-D\'iaz and Lazo-Cort\'es~(Sanchez2007) proposed the CT\_EXT algorithm for computing all
-	typical testors. Following a traversing order similar to that in LEX, this algorithm search for
+	Sanchez-D\'iaz and Lazo-Cort\'es~(\cite{Sanchez2007}) proposed the CT\_EXT algorithm for computing all
+	TT. Following a traversing order similar to that in LEX, this algorithm search for
 	testors without verifying the typical condition. This way, a larger number of candidates are 
 	evaluated, in comparison to LEX; but the cost of each evaluation is lower. Results from experiments
-	show that CT\_EXT is faster than the previous existing algorithm for most datasets.
+	show that CT\_EXT is faster than the previous existing algorithm for most datasets. Then, Lias-Rodr\'iguez
+	and Pons-Porrata~(\cite{Lias2009}) presented the BR algorithm, a Recursive algorithm based on 
+	Binary operations. BR is very similar to LEX in its bones but its recursive nature encloses a great
+	gain. Given a candidate subset, the remaining features are tested a priori and those being rejected are
+	excluded from subsequent evaluations. Sanchez-D\'iaz et al.~(\cite{Sanchez2010}) presented a cumulative
+	procedure for the CT\_EXT algorithm. This fast-CT\_EXT implementation reduces drastically the runtime
+	for most datasets at no extra cost. In (Lias-Rodr\'iguez and Sanchez-D\'iaz~\cite{Lias2013}) the
+	gap elimination and column reduction are added to BR. This fast-BR algorithm is, no doubt the one 
+	evaluating the minimum number of candidates in the state of the art. The main drawback of fast-BR and 
+	BR is, as in LEX, the high cost of evaluating the typical condition for every candidate. 
 	
+	We present in this paper recursive implementation of the fast-CT\_EXT algorithm. We show that, as 
+	in BR, the a priori verification of features reduces the number of evaluated candidates. The main
+	advantage of our proposed algorithm over BR is that CT\_EXT does not evaluate the typical condition,
+	which leads to a runtime reduction in most cases.	
 %
 \section{Basic Concepts}
 %
@@ -130,6 +140,18 @@
 	Memorias del II Taller Iberoamericano de Reconocimiento de Patrones , La
 	Habana. 141--148 (1997)
 
+\bibitem[2009]{Lias2009}
+	Lias-Rodr\'iguez, A., Pons-Porrata, A.:
+	BR: A new method for computing all typical testors. 
+	Lecture Notes in Computer Science (including Subseries Lecture Notes 
+	in Artificial Intelligence and Lecture Notes in Bioinformatics).
+	5856 LNCS, 433--440 (2009)
+
+\bibitem[2013]{Lias2013}	
+	Lias-Rodr\'iguez, A., Sanchez-D\'iaz, G.:
+ 	An Algorithm for Computing Typical Testors Based on Elimination of Gaps and Reduction of Columns.
+ 	International Journal of Pattern Recognition and Artificial Intelligence. 27(08), 1350022 (2013)
+
 \bibitem[2001]{Martinez2001}
 	Mart\'inez-Trinidad, J.F., Guzm\'an-Arenas, A.: 
 	The Logical Combinatorial Approach to Pattern Recognition an Overview through Selected Works. 
@@ -139,6 +161,12 @@
 	Sanchez-D\'iaz, G., Lazo-Cort\'es, M.:
 	CT-EXT: an algorithm for computing typical testor set. 
 	In Progress in Pattern Recognition, Image Analysis and Applications. Springer. 506--514 (2007)
+
+\bibitem[2010]{Sanchez2010}
+	Sanchez-D\'iaz, G., Piza-Davila, I., Lazo-Cort\'es, M., Mora-Gonz\'alez, M., Salinas-Luna, J.:
+	A fast implementation of the CT-EXT algorithm for the testor property identification. 
+	Lecture Notes in Computer Science (including Subseries Lecture Notes in Artificial Intelligence and 
+	Lecture	Notes in Bioinformatics), 6438 LNAI(PART 2), 92--103 (2010)
 
 \bibitem[2003]{Santiesteban2003}	
 	Santiesteban, Y., Pons-Porrata, A.:
