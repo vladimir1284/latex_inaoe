@@ -7,6 +7,9 @@
 %
 %\usepackage{makeidx}  % allows for indexgeneration
 %
+\usepackage{algorithm,algorithmic}
+\usepackage{multicol}
+
 \begin{document}
 \mainmatter              % start of the contributions
 %
@@ -141,13 +144,43 @@
 	
 	\begin{definition} \label{def:BM}
 		Let $S_{j} \subseteq R$ be a subset of attributes associated to the row j of DM, such that $x_i \in S_{j}$
-		iff the row j has a 1 in the column i. And let $SS=\lbrace S_1, S_2,...,S_m  \rbrace$ be the set of possible
-		subsets $S_{j}$ in DM. The Basic Matrix BM of DS is formed by all the rows in DM (without repetitions) for 
-		which its associated $S_{j}$ has not any proper subset in SS.
+		iff the row j has a 1 in the column i. And let $SS=\lbrace S_1, S_2,...,S_m  \rbrace$ be the set of
+		possible subsets $S_{j}$ in DM. The Basic Matrix BM of DS is formed by all the rows in DM (without
+		repetitions) for which its associated $S_{j}$ has not any proper subset in SS.
 	\end{definition}
 	
+	\begin{table}[!htb]
+    \begin{minipage}{.5\linewidth}
+      \caption{Discernibility Matrix}
+      \centering
+        \begin{tabular}{ccccc}\label{tab:DM}
+            $x_0$ & $x_1$ & $x_2$ & $x_3$ & $x_4$\\
+        		\hline
+        		1&1&0&0&0\\
+        		0&1&0&0&1\\
+        		1&0&0&1&0\\
+        		0&0&1&0&0\\
+        		0&1&1&0&0\\
+        \end{tabular}
+    \end{minipage}%
+    \begin{minipage}{.5\linewidth}
+      \centering
+        \caption{Basic Matrix}
+        \begin{tabular}{ccccc}\label{tab:BM}
+            $x_0$ & $x_1$ & $x_2$ & $x_3$ & $x_4$\\
+        		\hline
+        		1&1&0&0&0\\
+        		0&1&0&0&1\\
+        		1&0&0&1&0\\
+        		0&0&1&0&0\\
+        		\\
+        \end{tabular}
+    	\end{minipage} 
+	\end{table}
+	
 	We can then, substitute $DM$ by $BM$ in definition~\ref{def:testor} without 
-	any loose of generality.
+	any loose of generality. An example $DM$ is shown in table~\ref{tab:DM} and
+	its corresponding $BM$ can be seen in table~\ref{tab:BM}.
 	
 	\begin{definition}\label{def:TT}
 		A subset of attributes $T \subseteq R$ is a typical testor iff T is a testor and
@@ -173,26 +206,71 @@
 	\end{proposition}
 
 	\begin{proposition}\label{prop2} 
-		Given $T \subseteq R$ and $Z \subseteq R$ such that $Z \cap T = \emptyset$. If T is a testor, then $T \cup Z$ is a 
-		testor too, but it is not a typical testor.
+		Given $T \subseteq R$ and $Z \subseteq R$ such that $Z \cap T = \emptyset$. If T is a testor, then $T \cup
+		Z$ is a 	testor too, but it is not a typical testor.
 	\end{proposition}
 	
-	For a fast implementation of the CT\_EXT algorithm, columns in $BM$ are coded as binary words with as many bits as 
-	rows has $BM$. The cumulative mask for an attribute $x_i$ is denoted as $cm_{x_i}$ and is the binary word representing
-	the ith column in $BM$. The cumulative mask for a subset of attributes $T=\lbrace x_{i1},x_{i2},...,x_{ik} \rbrace$ is defined
-	as $cm_T = cm_{x_{i1}} \vee cm_{x_{i2}} \vee ... \vee cm_{x_{ik}}$ where $\vee$ stands for the binary OR operator. It is
-	not hard to see that the number of 0's in $cm_T$ equals the number of empty rows in $BM$. According to 
-	definition~\ref{def:contrib}, $x_i$ contributes to $T$ iff $cm_{T\cup x_i}$ has more 1's than $cm_T$. The incremental nature
-	of fast-CT\_EXT is given by the associative property of the OR operation, such that $cm_{T\cup x_i}=cm_T\vee cm_{x_i}$.
-	Notice from this last formulation, that $x_i$ contributes to $T$ iff $cm_{T\cup x_i}\neq cm_T$ since $cm_{T\cup x_i}$
-	cannot have less 1's than $cm_T$. Finally, substituting $DM$ by $BM$ in definition~\ref{def:testor}, it is easy to see
-	that $T \subseteq R$ is a testor iff $cm_T=(1,...,1)$ (has a 1 in every bit).
-%	
-\subsection{Example}
-%
+	For a fast implementation of the CT\_EXT algorithm, columns in $BM$ are coded as binary words with as many 
+	bits as 	rows has $BM$. The cumulative mask for an attribute $x_i$ is denoted as $cm_{x_i}$ and is the binary
+	word representing the ith column in $BM$. The cumulative mask for a subset of attributes $T=\lbrace
+	x_{i1},x_{i2},...,x_{ik} \rbrace$ is defined	as $cm_T = cm_{x_{i1}} \vee cm_{x_{i2}} \vee ... \vee cm_{x_{ik}}$
+	where $\vee$ stands for the binary OR operator. It is not hard to see that the number of 0's in $cm_T$ equals
+	the number of empty rows in $BM$. According to definition~\ref{def:contrib}, $x_i$ contributes to $T$ iff
+	$cm_{T\cup x_i}$ has more 1's than $cm_T$. The incremental nature of fast-CT\_EXT is given by the associative
+	property of the OR operation, such that $cm_{T\cup x_i}=cm_T\vee cm_{x_i}$. Notice from this last formulation,
+	that $x_i$ contributes to $T$ iff $cm_{T\cup x_i}\neq cm_T$ since $cm_{T\cup x_i}$ cannot have less 1's than
+	$cm_T$. Finally, substituting $DM$ by $BM$ in definition~\ref{def:testor}, it is easy to see that $T \subseteq
+	R$ is a testor iff $cm_T=(1,...,1)$ (has a 1 in every bit).
 
-\section{The Recursive Implementation of the CT\_EXT Algorithm}
+
+\section{The Recursive Implementation of CT\_EXT}
 %
+	A problem with this recursive implementation is that we must store cumulative masks while the recursive
+	functions walks down to the base case. A worst case requires $\frac{n(n-1)m}{2}$ bits which for a $BM$
+	with $n=1000$ attributes and $m=100000$ rows rises to 5.8GB. 
+	
+	
+	\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+	\renewcommand{\algorithmicensure}{\textbf{Output:}}
+	%\begin{multicols}{2}
+	\begin{algorithm}
+	\caption{Recursively calculate testors in $DM$}
+	\label{alg1}
+	\begin{multicols}{2}
+	\begin{algorithmic}
+	  \REQUIRE Sorted $BM$
+	  \ENSURE $TS$ - the complete set of testors
+	  \STATE $i \Leftarrow 0$, $TS \Leftarrow \emptyset$
+	  \WHILE {$BM(0,i) \neq 0$}
+	  	\IF {$cm_{x_i} = (1,...,1)$}
+	  		\STATE $TS \Leftarrow TS\cup \lbrace x_i \rbrace$
+	  	\ELSE
+	  		\STATE eval($\lbrace x_i \rbrace$, $cm_{x_i}$, $\lbrace x_{i+1},..., x_m\rbrace$)
+	  	\ENDIF
+	  	\STATE $i \Leftarrow i+1$
+	  \ENDWHILE
+	  \STATE \STATE \STATE \STATE \STATE 
+	  \STATE eval($B$,$cm_B$,$C$)
+	  \FORALL{$x \in C$} 
+	  	\STATE $cm_{B\cup x}=cm_B \vee cm_x$
+	  	\IF {$cm_{B\cup x}\neq cm_B$}
+	  		\IF {$cm_{B\cup \lbrace x\rbrace}=(1,...,1)$}
+	  			\STATE $C \Leftarrow C\setminus x$	 
+	  			\STATE $TS \Leftarrow TS\cup\lbrace B\cup \lbrace x\rbrace \rbrace$
+	  		\ENDIF
+	  	\ELSE
+	  		\STATE $C \Leftarrow C\setminus x$
+	  	\ENDIF
+	  \ENDFOR
+	  \FORALL{$x \in C$} 
+	  	\STATE $C \Leftarrow C\setminus x$
+	  	\STATE eval($B\cup \lbrace x\rbrace$,$cm_{B\cup x}$,$C$)
+	  \ENDFOR
+	\end{algorithmic}
+	\end{multicols}
+	\end{algorithm}
+	
+		
 \subsection{Example}
 %
 \section{Experiments}
