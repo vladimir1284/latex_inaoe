@@ -159,8 +159,8 @@
         		1&1&0&0&0\\
         		0&1&0&0&1\\
         		1&0&0&1&0\\
-        		0&0&1&0&0\\
-        		0&1&1&0&0\\
+        		0&0&1&0&1\\
+        		0&1&1&0&1\\
         \end{tabular}
     \end{minipage}%
     \begin{minipage}{.5\linewidth}
@@ -172,7 +172,7 @@
         		1&1&0&0&0\\
         		0&1&0&0&1\\
         		1&0&0&1&0\\
-        		0&0&1&0&0\\
+        		0&0&1&0&1\\
         		\\
         \end{tabular}
     	\end{minipage} 
@@ -226,9 +226,12 @@
 \section{The Recursive Implementation of CT\_EXT}
 %
 	A problem with this recursive implementation is that we must store cumulative masks while the recursive
-	functions walks down to the base case. A worst case requires $\frac{n(n-1)m}{2}$ bits which for a $BM$
-	with $n=1000$ attributes and $m=100000$ rows rises to 5.8GB. 
+	functions walks down to the base case. A worst case requires $\frac{n(n-1)m}{2}$ bits which, for a $BM$
+	with $n=1000$ attributes and $m=100000$ rows, rises to 5.8GB. 
 	
+	The evaluated candidates by the CT\_EXT algorithm and our proposed implementation, on the basic matrix from
+	table~\ref{tab:BM} are shown in table~\ref{tab:run}. Notice that while CT\_EXT evaluates 17 candidates,
+	in our recursive implementation, only 13 candidates are evaluated.
 	
 	\renewcommand{\algorithmicrequire}{\textbf{Input:}}
 	\renewcommand{\algorithmicensure}{\textbf{Output:}}
@@ -270,8 +273,21 @@
 	\end{multicols}
 	\end{algorithm}
 	
-		
-\subsection{Example}
+	\begin{table}[!htb]\label{tab:run}
+		\setlength{\tabcolsep}{.4em}
+		\caption{Example execution}
+      	\centering
+    		\begin{tabular}{|lllll|lllll|}
+    		\hline
+    		\multicolumn{5}{|c|}{CT\_EXT} & \multicolumn{5}{c|}{Recursive CT\_EXT}\\
+    		\hline
+    		$x_0$		& $x_0x_1x_4$ & $x_0x_3$	& $x_1x_2x_3$ & $x_1x_4$	& $x_0$	   & $x_0x_4$&$x_1x_3$& $x_1x_3x_4$&\\
+    		$x_0x_1$		& $x_0x_2$	  & $x_0x_4$	& $x_1x_2x_4$ &			& $x_0x_1$ & $x_0x_1x_2$ & $x_1x_4$	&&\\
+    		$x_0x_1x_2$	& $x_0x_2x_3	$ & $x_1$	& $x_1x_3$	  &			& $x_0x_2$ & $x_1$		 & $x_1x_2x_3$&&\\
+    		$x_0x_1x_3$	& $x_0x_2x_4$ & $x_1x_2$	& $x_1x_3x_4$ &			& $x_0x_3$ & $x_1x_2$	 & $x_1x_2x_4$&&\\
+    		\hline
+		\end{tabular}
+	\end{table}
 %
 \section{Experiments}
 %
