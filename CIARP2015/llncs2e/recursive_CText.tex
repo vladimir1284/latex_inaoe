@@ -225,13 +225,42 @@
 
 \section{The Recursive Implementation of CT\_EXT}
 %
-	A problem with this recursive implementation is that we must store cumulative masks while the recursive
-	functions walks down to the base case. A worst case requires $\frac{n(n-1)m}{2}$ bits which, for a $BM$
-	with $n=1000$ attributes and $m=100000$ rows, rises to 5.8GB. 
+	The first step in the CT\_EXT algorithm is the sorting of the BM in order to reduce the search space. One of 
+	the rows of $BM$ having the minimum number of 1's is moved up to the first row. Then, columns are rearranged 
+	so that those columns having a 1 in the first row, stay in the leftmost side of the $BM$.  A pseudocode for
+	the recursive implementation of CT\_EXT is shown in algorithm~\ref{alg1}. 
+%	A problem with this recursive implementation is that we must store cumulative masks while the recursive
+%	functions walks down to the base case. A worst case requires $\frac{n(n-1)m}{2}$ bits which, for a $BM$
+%	with $n=1000$ attributes and $m=100000$ rows, rises to 5.8GB. 
+
+	The algorithm execution starts with the first element (column) in the sorted $BM$ and repeats until an 
+	attribute with a 0 in the first row is reached (line~\ref{line:firstrow}). Notice that for the rest of the
+	candidates the first row will always be an empty row. If this single attribute is a testor (line~\ref{line:singleT})
+	then it is saved in the testors set $TS$; else, the recursive evaluator is called with the current attribute
+	as the base set $B$ and the remaining attributes to its right as the tail set $C$ (line~\ref{line:eval}).
+	In the recursive function, every attribute in the tail is tested for contribution to the base set 
+	(line~\ref{line:contrib}). The attributes are removed from the tail set for furthers evaluations, given
+	that they are testors (line~\ref{line:remT}) or do not contribute to $B$ (line~\ref{line:remNoContrib}).
+	This a priori evaluation and rejection of non-contributing and testor-forming attributes constitutes the key
+	gain of our proposed implementation, and is supported by proposition~\ref{prop3}.
+	Finally, the remaining attributes in the tail set, are concatenated with $B$ and used as base set for
+	subsequent recursive evaluations with the remaining $C$ as tail (line~\ref{line:recursive}).
+
+	\begin{proposition}\label{prop3} 
+		Given $T \subseteq R$, $Z \subseteq R$ and  $x_i \in R$ such that $x_i \notin Z$ and $T \subseteq Z$. If 
+		$x_i$ does not contribute to T or form a testor with T, then 	$Z\cup\{x_i\}$ cannot be a subset of any 
+		typical testor.
+	\end{proposition}	
 	
-	The evaluated candidates by the CT\_EXT algorithm and our proposed implementation, on the basic matrix from
-	table~\ref{tab:BM} are shown in table~\ref{tab:run}. Notice that while CT\_EXT evaluates 17 candidates,
-	in our recursive implementation, only 13 candidates are evaluated.
+	\begin{proof}
+		As $T \subseteq Z$, $cm_T$ cannot have more 1's than $cm_Z$ by the definition of the cumulative mask.
+		If $x_i$ does not contribute to $T$ then, $cm_{T \cup \lbrace x_i \rbrace}$ does not have more 1's than
+		$cm_T$; and, by transitivity, $cm_{Z \cup \lbrace x_i \rbrace}$ cannot have more 1's than $cm_Z$. 
+		Notice that  $\lbrace T \cup \lbrace x_i \rbrace\rbrace \subseteq \lbrace Z \cup \lbrace x_i \rbrace\rbrace$.
+		If $T \cup \lbrace x_i \rbrace$ is a testor, $\lbrace Z \cup \lbrace x_i \rbrace\rbrace$ by 
+		definition~\ref{def:TT} 	cannot be a typical testor, given that it is a superset of a testor.
+	\qed
+	\end{proof}
 	
 	\renewcommand{\algorithmicrequire}{\textbf{Input:}}
 	\renewcommand{\algorithmicensure}{\textbf{Output:}}
@@ -240,51 +269,60 @@
 	\caption{Recursively calculate testors in $DM$}
 	\label{alg1}
 	\begin{multicols}{2}
-	\begin{algorithmic}
+	\begin{algorithmic}[1]
 	  \REQUIRE Sorted $BM$
 	  \ENSURE $TS$ - the complete set of testors
 	  \STATE $i \Leftarrow 0$, $TS \Leftarrow \emptyset$
-	  \WHILE {$BM(0,i) \neq 0$}
-	  	\IF {$cm_{x_i} = (1,...,1)$}
+	  \WHILE {$BM(0,i) \neq 0$}\label{line:firstrow}
+	  	\IF {$cm_{x_i} = (1,...,1)$}\label{line:singleT}
 	  		\STATE $TS \Leftarrow TS\cup \lbrace x_i \rbrace$
 	  	\ELSE
-	  		\STATE eval($\lbrace x_i \rbrace$, $cm_{x_i}$, $\lbrace x_{i+1},..., x_m\rbrace$)
+	  		\STATE eval($\lbrace x_i \rbrace$, $cm_{x_i}$, $\lbrace x_{i+1},..., x_m\rbrace$)\label{line:eval}
 	  	\ENDIF
 	  	\STATE $i \Leftarrow i+1$
 	  \ENDWHILE
-	  \STATE \STATE \STATE \STATE \STATE 
+	  \item[] \item[] \item[] \item[] \item[]
 	  \STATE eval($B$,$cm_B$,$C$)
 	  \FORALL{$x \in C$} 
 	  	\STATE $cm_{B\cup x}=cm_B \vee cm_x$
-	  	\IF {$cm_{B\cup x}\neq cm_B$}
+	  	\IF {$cm_{B\cup x}\neq cm_B$}\label{line:contrib}
 	  		\IF {$cm_{B\cup \lbrace x\rbrace}=(1,...,1)$}
-	  			\STATE $C \Leftarrow C\setminus x$	 
+	  			\STATE $C \Leftarrow C\setminus x$\label{line:remT} 
 	  			\STATE $TS \Leftarrow TS\cup\lbrace B\cup \lbrace x\rbrace \rbrace$
 	  		\ENDIF
 	  	\ELSE
-	  		\STATE $C \Leftarrow C\setminus x$
+	  		\STATE $C \Leftarrow C\setminus x$\label{line:remNoContrib} 
 	  	\ENDIF
 	  \ENDFOR
 	  \FORALL{$x \in C$} 
 	  	\STATE $C \Leftarrow C\setminus x$
-	  	\STATE eval($B\cup \lbrace x\rbrace$,$cm_{B\cup x}$,$C$)
+	  	\STATE eval($B\cup \lbrace x\rbrace$,$cm_{B\cup \lbrace x\rbrace}$,$C$)\label{line:recursive} 
 	  \ENDFOR
 	\end{algorithmic}
 	\end{multicols}
 	\end{algorithm}
 	
-	\begin{table}[!htb]\label{tab:run}
-		\setlength{\tabcolsep}{.4em}
+	
+	The evaluated candidates by the CT\_EXT algorithm and our proposed implementation, on the basic matrix from
+	table~\ref{tab:BM} are shown in table~\ref{tab:run}. Notice that while CT\_EXT evaluates 17 candidates,
+	in our recursive implementation, only 13 candidates are evaluated.
+	
+	\begin{table}[!htb]\label{tab:run}\scriptsize
+		\setlength{\tabcolsep}{.05em}
 		\caption{Example execution}
       	\centering
     		\begin{tabular}{|lllll|lllll|}
     		\hline
     		\multicolumn{5}{|c|}{CT\_EXT} & \multicolumn{5}{c|}{Recursive CT\_EXT}\\
     		\hline
-    		$x_0$		& $x_0x_1x_4$ & $x_0x_3$	& $x_1x_2x_3$ & $x_1x_4$	& $x_0$	   & $x_0x_4$&$x_1x_3$& $x_1x_3x_4$&\\
-    		$x_0x_1$		& $x_0x_2$	  & $x_0x_4$	& $x_1x_2x_4$ &			& $x_0x_1$ & $x_0x_1x_2$ & $x_1x_4$	&&\\
-    		$x_0x_1x_2$	& $x_0x_2x_3	$ & $x_1$	& $x_1x_3$	  &			& $x_0x_2$ & $x_1$		 & $x_1x_2x_3$&&\\
-    		$x_0x_1x_3$	& $x_0x_2x_4$ & $x_1x_2$	& $x_1x_3x_4$ &			& $x_0x_3$ & $x_1x_2$	 & $x_1x_2x_4$&&\\
+    		\{$ x_0$\} 	 		& \{$x_0,x_1,x_4$\}	& \{$x_0,x_3$\}		& \{$x_1,x_2,x_3$\}	& \{$x_1,x_4$\}	
+    		& \{$x_0$\}			& \{$x_0,x_4$\} 		& \{$x_1,x_3$\} 		& \{$x_1,x_3,x_4$\}	&\\
+    		\{$x_0,x_1$\} 		& \{$x_0,x_2$\}  	& \{$x_0,x_4$\}		& \{$x_1,x_2,x_4$\}	& 
+    		& \{$x_0,x_1$\}		& \{$x_0,x_1,x_2$\} 	& \{$x_1,x_4$\}		&&\\
+    		\{$x_0,x_1,x_2$\}	& \{$x_0,x_2,x_3$\}	& \{$x_1$\}			& \{$x_1,x_3$\}	  	&			
+    		& \{$x_0,x_2$\} 		& \{$x_1$\}		 	& \{$x_1,x_2,x_3$\}	&&\\
+    		\{$x_0,x_1,x_3$\} 	& \{$x_0,x_2,x_4$\}	& \{$x_1,x_2$\} 		& \{$x_1,x_3,x_4$\}	&			
+    		& \{$x_0,x_3$\} 		& \{$x_1,x_2$\}	 	& \{$x_1,x_2,x_4$\}	&&\\
     		\hline
 		\end{tabular}
 	\end{table}
