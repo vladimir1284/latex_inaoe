@@ -243,7 +243,7 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   indicates that the concept in question is rough (\textit{B-rough}).
   
   From the previous example we can see that e.g. concept $X=\lbrace x_1,x_2,x_3 \rbrace$ is rough for the 
-  three attributes sets while e.g. the concept $Y=\lbrace x_1,x_2 \rbrace$ is both $\lbrace c_1 \rbrace$-
+  three attributes sets while e.g. the concept $Y=\lbrace x_1,x_2 \rbrace$ is both $\lbrace c_2 \rbrace$-
   and $\lbrace c_1, c_2 \rbrace$-exact. Notice that
   
   $$\begin{array}{lcc}
@@ -497,13 +497,52 @@ Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
   
   A special mention deserves the work presented in~\cite{WangP07}. This approach avoids the computation of the
   discernibility matrix, which is a expensive computational task, and works directly over the information system. 
- 
-  The first work developed in the reduction of the search space for typical testors~\cite{Ruiz85}, follows 
-  the natural order of attributes codified as a binary number. Unnecessary candidates (attributes subset)
-  evaluation are avoided taking into account properties of typical testors and results from previous 
-  evaluations. Subsequent algorithm~\cite{Santiesteban03},~\cite{Sanchez07} and~\cite{Lias09} propose
-  more sophisticated evaluation orders. Recently, a new internal typical testor--finding algorithm was
-  proposed~\cite{Alba14}. In our experience, non of this algorithm is the fastest for all dataset.
+  
+  One of the first algorithm designed to overcome the exponential complexity (regarding
+  the number of features) of the problem of finding all the TT, was 
+  proposed by Ruiz-Shulcloper et al.~(\cite{Ruiz85}). This algorithm, called BT,
+  codified a subset of features as a binary word with as many bits as features in the 
+  dataset. A 0 represents the absence of the corresponding feature in the current
+  subset while a 1 represents its inclusion. This way, candidates subsets are evaluated
+  in the natural order of binary numbers. The pruning process in the
+  search space is based on the minimal condition of TT and a convenient sorting
+  of the basic matrix (see definition~\ref{def:BM}) associated to the dataset. Finally, 
+  testors found by BT algorithm must by compared with each other in order to remove
+  any superset (not a TT by definition).
+  In (Ruiz-Shulcloper et al.~\cite{Shulcloper95b}) a new algorithm (REC) is presented.
+  The main drawback of REC was that it operated directly over the dataset (instead of the
+  basic matrix), handling a huge amount of superfluous information. Ayaquica~(\cite{Ayaquica97})
+  presented the algorithm CER directed to solve this problem by using a different traversing
+  order. 
+	
+  Then, Santiesteban and Pons-Porrata~(\cite{Santiesteban03}) proposed a revolutionary algorithm
+  called LEX. Main ideas behind LEX are a new traversing order of candidates (which resembles the
+  lexicographical order in which string characters are compared) and the concept of gap. In LEX
+  the typical condition is verified first and only for those potentially TT, the testor 
+  condition is checked. This way, the out-coming testors from this algorithm are always typical.
+  The concept of gap allows us; once obtained a TT (or a not testor) candidate, including 
+  the last feature in the dataset, avoid the evaluation of any subset of this candidate.
+	
+  Sanchez-D\'iaz and Lazo-Cort\'es~(\cite{Sanchez07}) proposed the CT\_EXT algorithm for computing all
+  TT. Following a traversing order similar to that in LEX, this algorithm search for
+  testors without verifying the typical condition. This way, a larger number of candidates are 
+  evaluated, in comparison to LEX; but the cost of each evaluation is lower. Results from experiments
+  show that CT\_EXT is faster than the previous existing algorithm for most datasets. Then, Lias-Rodr\'iguez
+  and Pons-Porrata~(\cite{Lias09}) presented the BR algorithm, a Recursive algorithm based on 
+  Binary operations. BR is very similar to LEX in its bones but its recursive nature encloses a great
+  gain. Given a candidate subset, the remaining features are tested a priori and those being rejected are
+  excluded from subsequent evaluations. Sanchez-D\'iaz et al.~(\cite{Sanchez10}) presented a cumulative
+  procedure for the CT\_EXT algorithm. This fast-CT\_EXT implementation reduces drastically the runtime
+  for most datasets at no extra cost. In (Lias-Rodr\'iguez and Sanchez-D\'iaz~\cite{Lias13}) the
+  gap elimination and column reduction are added to BR. This fast-BR algorithm is, no doubt the one 
+  evaluating the minimum number of candidates in the state of the art. The main drawback of fast-BR and 
+  BR is, as in LEX, the high cost of evaluating the typical condition for every candidate. 
+%  The first work developed in the reduction of the search space for typical testors~\cite{Ruiz85}, follows 
+%  the natural order of attributes codified as a binary number. Unnecessary candidates (attributes subset)
+%  evaluation are avoided taking into account properties of typical testors and results from previous 
+%  evaluations. Subsequent algorithm~\cite{Santiesteban03},~\cite{Sanchez07} and~\cite{Lias09} propose
+%  more sophisticated evaluation orders. Recently, a new internal typical testor--finding algorithm was
+%  proposed~\cite{Alba14}. In our experience, non of this algorithm is the fastest for all dataset.
   
 \subsection{Parallel Accelerations}
 
