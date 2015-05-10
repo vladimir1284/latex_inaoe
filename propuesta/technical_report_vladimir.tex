@@ -129,6 +129,7 @@
   
 
 \section{Basic Concepts}\label{basicConcepts}
+%TODO hablar de la matriz basica
   RST philosophy is based on the assumption that every object in the universe of discourse is described by 
   some information associated to it. This information constitutes the basis through which classification of 
   objects can be achieved. RST motto is "Let the data speak for themselves". Moreover, RST is a formal 
@@ -496,40 +497,24 @@
   and~\citep{Chen10}; and Particle Swarm Optimization~\citep{Wang07}.
     
 \subsection{Algorithms for Reducts and Testors Computation}
-  A method for the generation of all reducts in an Information System is proposed in \citep{Starzyk99,Starzyk00}.
-  Although its computational cost is high, this method provides all the reducts by means of manipulations of 
-  the clauses in the discernibility function. In addition to standard simplifications laws, the concept of 
-  strong compressibility is introduced and applied along with an expansion algorithm.
-  
-  Although originally intended for computing a single minimal reduct, the algorithm proposed in~\citep{Jensen14} may be
-  modified in order to obtain all reducts in an Information System. The method introduced in this work reduces
-  the problem of finding a reduct from the discernibility function to the SAT problem~\citep{Davis62}. The boolean
-  function generated this way is always satisfy since the complete set of attributes is a trivial solution.
-  In~\citep{Lin04}, a heuristic is followed to find a short reduct. This first reduct is used to limit the search
-  space to attributes combinations with lower cardinality.
-  
-  A special mention deserves the work presented in~\citep{WangP07}. This approach avoids the computation of the
-  discernibility matrix, which is a expensive computational task, and works directly over the information system. 
-
-  
   One of the first algorithm designed to overcome the exponential complexity (regarding
   the number of features) of the problem of finding all the TT, was 
-  proposed by Ruiz-Shulcloper et al.~(\cite{Ruiz85}). This algorithm, called BT,
+  proposed by \cite{Ruiz85}. This algorithm, called BT,
   codified a subset of features as a binary word with as many bits as features in the 
   dataset. A 0 represents the absence of the corresponding feature in the current
   subset while a 1 represents its inclusion. This way, candidates subsets are evaluated
   in the natural order of binary numbers. The pruning process in the
   search space is based on the minimal condition of TT and a convenient sorting
-  of the basic matrix (see definition~\ref{def:BM}) associated to the dataset. Finally, 
+  of the basic matrix associated to the dataset. Finally, 
   testors found by BT algorithm must by compared with each other in order to remove
   any superset (not a TT by definition).
-  In (Ruiz-Shulcloper et al.~\cite{Shulcloper95b}) a new algorithm (REC) is presented.
+  In \citep{Shulcloper95b} a new algorithm (REC) is presented.
   The main drawback of REC was that it operated directly over the dataset (instead of the
-  basic matrix), handling a huge amount of superfluous information. Ayaquica~(\cite{Ayaquica97})
+  basic matrix), handling a huge amount of superfluous information. \cite{Ayaquica97}
   presented the algorithm CER directed to solve this problem by using a different traversing
   order. 
 	
-  Then, Santiesteban and Pons-Porrata~(\cite{Santiesteban03}) proposed a revolutionary algorithm
+  Then, \cite{Santiesteban03} proposed a revolutionary algorithm
   called LEX. Main ideas behind LEX are a new traversing order of candidates (which resembles the
   lexicographical order in which string characters are compared) and the concept of gap. In LEX
   the typical condition is verified first and only for those potentially TT, the testor 
@@ -537,17 +522,17 @@
   The concept of gap allows us; once obtained a TT (or a not testor) candidate, including 
   the last feature in the dataset, avoid the evaluation of any subset of this candidate.
 	
-  Sanchez-D\'iaz and Lazo-Cort\'es~(\cite{Sanchez07}) proposed the CT\_EXT algorithm for computing all
+  \cite{Sanchez07} proposed the CT\_EXT algorithm for computing all
   TT. Following a traversing order similar to that in LEX, this algorithm search for
   testors without verifying the typical condition. This way, a larger number of candidates are 
   evaluated, in comparison to LEX; but the cost of each evaluation is lower. Results from experiments
-  show that CT\_EXT is faster than the previous existing algorithm for most datasets. Then, Lias-Rodr\'iguez
-  and Pons-Porrata~(\cite{Lias09}) presented the BR algorithm, a Recursive algorithm based on 
+  show that CT\_EXT is faster than the previous existing algorithm for most datasets. Then, \cite{Lias09}
+  presented the BR algorithm, a Recursive algorithm based on 
   Binary operations. BR is very similar to LEX in its bones but its recursive nature encloses a great
   gain. Given a candidate subset, the remaining features are tested a priori and those being rejected are
-  excluded from subsequent evaluations. Sanchez-D\'iaz et al.~(\cite{Sanchez10}) presented a cumulative
+  excluded from subsequent evaluations. \cite{Sanchez10} presented a cumulative
   procedure for the CT\_EXT algorithm. This fast-CT\_EXT implementation reduces drastically the runtime
-  for most datasets at no extra cost. In (Lias-Rodr\'iguez and Sanchez-D\'iaz~\cite{Lias13}) the
+  for most datasets at no extra cost. In \citep{Lias13} the
   gap elimination and column reduction are added to BR. This fast-BR algorithm is, no doubt the one 
   evaluating the minimum number of candidates in the state of the art. The main drawback of fast-BR and 
   BR is, as in LEX, the high cost of evaluating the typical condition for every candidate. 
@@ -557,6 +542,48 @@
 %  evaluations. Subsequent algorithm~\cite{Santiesteban03},~\cite{Sanchez07} and~\cite{Lias09} propose
 %  more sophisticated evaluation orders. Recently, a new internal typical testor--finding algorithm was
 %  proposed~\cite{Alba14}. In our experience, non of this algorithm is the fastest for all dataset.
+
+  A method for the computation of all reducts in an Information System is proposed in \citep{Starzyk99,Starzyk00}.
+  This is a divide and conquer approach. On each step, the absorption laws are applied over the incoming
+  discernibility matrix to obtain a basic matrix. Then, the strong equivalent attributes are compressed
+  (which is a local reduction of columns). The most discerning attributed is selected (in the same way as 
+  Johnson's reducer does) and the problem y divided into two sub-problems: 
+  \begin{itemize}
+  \item This selected attribute belongs to the reducts and the recursive function is called with a new basic 
+  matrix, having only those rows where the selected attribute does not appear.
+  \item This selected attribute does not belong to the reducts and the recursive function is called with a new 
+  discernibility matrix, removing the column corresponding to the selected attribute.
+  \end{itemize}
+  The base case is reached when each attribute in the incoming discernibility matrix appears in a single
+  clause. Finally a set of super-reducts is obtained and supersets must be removed in order to obtain 
+  the complete reducts set.
+  Noticed that this algorithm is oriented to the binary discernibility function, and 
+  terms such as discernibility and basic matrix, rows and columns are not used in the paper. The
+  algorithm is presented in an iterative fashion and its recursive nature is not explicitly stated.
+  
+  \cite{WangP07} proposed a new algorithm for computing all the reducts (RGonCRS). Reported two years before
+  \citep{Lias09}, this algorithm is incredibly similar to BR. Notice that this is a rough sets approach to the
+  problem and the nomenclature is totally different to that of BR. Essentially, every proposition supporting the
+  pruning process in \citep{WangP07} have an equivalent proposition in \citep{Lias09}. Main differences with BR
+  are:
+  \begin{itemize}
+  \item Works directly over the dataset instead of the basic matrix.
+  \item Starts searching the core and if exist looks for reducts as supersets of the core.
+  \item A recursive implementation is proposed instead of the iterative solution of BR.
+  \item Contributing attributes are sorted, as in the Johson reducer, during the algorithm execution.
+  \item A second algorithm (SRGonCRS) is proposed for the dataset subdivision and incrementally 
+  		finding reducts.
+  \end{itemize}
+  
+  
+  In~\citep{Lin04}, a heuristic is followed to find a short reduct. This first reduct is used to limit the search
+  space to attributes combinations with lower cardinality.
+  
+  Although originally intended for computing a single minimal reduct, the algorithm proposed in~\citep{Jensen14}
+  may be modified in order to obtain all reducts in an Information System. The method introduced in this work
+  reduces the problem of finding a reduct from the discernibility function to the SAT problem~\citep{Davis62}. 
+  The boolean function generated this way is always satisfy since the complete set of attributes is a trivial
+  solution.
   
 \subsection{Parallel Accelerations}
 
