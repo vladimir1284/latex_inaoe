@@ -2,7 +2,9 @@
 %\documentclass[11pt,authoryear]{elsarticle}
 \documentclass[authoryear,11pt]{elsarticle}
 
-
+\setlength{\parskip}{1em}			% espaciar parrafos
+\usepackage{hyperref}				% enlaces en el pdf
+\hypersetup{backref,colorlinks=true}	% colores en vez de cajas en los enlaces
 \usepackage{times}              		% la letra
 \usepackage{graphicx}           		% para manejar imagenes
 \usepackage{subfigure}          		% para manejar subfiguras
@@ -461,14 +463,14 @@
   and more solvable. Results are then joined together in order to solve the original dataset. Different variants
   for decomposition of reduct computation problem are discussed and proposed in~\citep{Strakowski08}.
   
-  Special attention deserve the approaches using genetic algorithms to discover sub-optimal reducts. Although 
-  these algorithms does not guarantee finding optimal reducts, many reducts may be found in a determined time.
-  A good point in this approach is the use of the fitness function to guide the search down to a set of 
+  Special attention deserve the approaches using genetic algorithms to discover locally shortest reducts. Although 
+  these algorithms do not guarantee finding globally shortest reducts, many reducts may be found in a determined
+  time. A good point in this approach is the use of the fitness function to guide the search down to a set of 
   reducts with the desired properties. The work reported in~\citep{Wroblewski95} encodes candidates as bit 
   strings with a positional representation of attributes presence in the candidate set. The fitness function
   depends on the number of attributes in the subset, penalizing strings with a large number of bits set. The 
-  second optimization parameter is the number of classifiable objects by the given candidate. The reduct should 
-  discern between as many objects as possible.
+  second optimization parameter is the number of objects classified by the given candidate. The reduct should 
+  discern as many objects as possible.
   
   Other evolutionary approaches to reduct computation include Ant Colony Optimization~\citep{Jensen03}
   and~\citep{Chen10}; and Particle Swarm Optimization~\citep{Wang07}.
@@ -563,7 +565,7 @@
   Although originally intended for computing a single minimal reduct, the algorithm proposed in~\citep{Jensen14}
   may be modified in order to obtain all reducts in an Information System. The method introduced in this work
   reduces the problem of finding a reduct from the discernibility function to the SAT problem~\citep{Davis62}. 
-  The boolean function generated this way is always satisfy since the complete set of attributes is a trivial
+  The boolean function generated in this way is always satisfied since the complete set of attributes is a trivial
   solution.
   
 \subsection{Parallel Accelerations}
@@ -572,7 +574,7 @@
   discernibility matrix was developed in~\citep{Tiwari11,Tiwari12}. This FPGA implementation computes a 
   single reduct. A real application of object identification system by an intelligent robot is presented.
   In~\citep{Tiwari13} a quick algorithm, similar to those presented in~\citep{Chouchoulas01}, is proposed
-  and implemented in a hardware fashion. A recent work from this authors~\citep{Tiwari14}, shows a thorough
+  and implemented in a hardware fashion. A recent work from these authors~\citep{Tiwari14}, shows a thorough
   survey of FPGA applications in rough sets reduct computation.
 
   From the Typical Testors theory, several attempts have been made to overcome the problem 
@@ -591,16 +593,17 @@
 	
 	%TODO estos trabajos de Wroblewski hay q revisarlos bien pq parece falso lo de los GA paralelos
   In~\citep{Wroblewski98}, a parallel variant of the algorithm proposed in~\citep{Wroblewski95} is presented.
-  Developments in genetic algorithms are exploited to provide a speedup for the problem of finding reducts.
-  This line of thinking brought us an unexplored acceleration idea from~\citep{Jensen14}. We can combine 
-  available architectures for SAT solving on FPGA~\citep{Safar07,Kanazawa11} with the transformation
-  presented in~\citep{Jensen14} to obtain a new hardware platform for computing all reducts of an information 
-  system.
+  Developments in parallel implementations of genetic algorithms are exploited to provide a speedup for the 
+  problem of finding reducts.
+%  This line of thinking brought us an unexplored acceleration idea from~\citep{Jensen14}. We can combine 
+%  available architectures for SAT solving on FPGA~\citep{Safar07,Kanazawa11} with the transformation
+%  presented in~\citep{Jensen14} to obtain a new hardware platform for computing all reducts of an information 
+%  system.
   
   In~\citep{Grzes13,Kopczynski14}, an FPGA application for a single reduct computation is presented. Although
-  authors claim that a huge acceleration is achieved, some drawbacks have to be mentioned. Experiments presented 
-  in~\citep{Kopczynski14} to validate their results is performed over a small dataset which in our experience 
-  does not implies its applicability to larger cases where such acceleration are needed. On the other hand, 
+  authors claim that a huge acceleration is achieved, some weak points have to be mentioned. Experiments presented 
+  in~\citep{Kopczynski14} to validate their results are performed over a small dataset which in our experience 
+  does not implies its applicability to larger cases where such acceleration is needed. On the other hand, 
   runtime estimations for FPGA component executions are made by means of a oscilloscope without taking into 
   account communication overhead, which cannot be neglected in the presented dataset.
   
@@ -608,22 +611,22 @@
 
 \subsection{Justification and Motivation}\label{Justification}{
   RST can be used to reduce the number of attributes in a dataset without relevant information lost. 
-  Therefore, there has been much research in the area of finding reducts, particularly, reducts with 
-  minimal cardinality~\citep{Jensen14}. 
+  Therefore, there has been much research in the area of finding reducts, particularly, shortest 
+  reducts~\citep{Jensen14}. 
   
   Heuristic methods such as~\citep{Chouchoulas01,Jensen2004,Zhong01} are fast alternatives for finding 
   reducts but they do not guarantee minimal reductions. Stochastic approaches~\citep{Wroblewski95,Jensen03,
   Chen10,Wang07} still do not guarantee finding the smallest reducts, as we will see further. Techniques 
   for finding the complete reducts set~\citep{Ruiz85,Santiesteban03,Sanchez07,Lias09} can, of course, find 
-  minimal cardinality reducts but with a higher computational effort.
+  shrotest reducts but with a higher computational effort.
   
   The motivation of this work is the development of an algorithm for finding reducts with minimal length 
   in an information system. This is an NP-Hard problem which makes every attempt for reducing its execution
   time, a challenging task. Our proposal must be competitive with the state of the art algorithm in all 
   cases and will be faster in most datasets. The main arena for comparison will be a large set of synthetic,
   randomly generated datasets and benchmarking datasets from~\citep{Bache13}. We will be dealing only with
-  classical reducts definition. The practical applications (or relevance) of shortest reducts in supervised
-  classification is beyond our goals.
+  classical reducts definition. The practical applications (or relevance) of globally shortest reducts in
+  supervised classification is beyond our goals.
   
   The results of this research will impact the supervised classification methods specially in large datasets.
   Nowadays, data is automatically collected, thus generating huge databases in almost every field. The 
@@ -704,9 +707,9 @@
   in most datasets, and faster in some of them}. This algorithm will use some external properties of the
   discernibility matrix to conveniently select the traversing strategy for the search space and a 
   decomposition method suitable for paralellization. We will be exploring two variants of this problem,
-  the problem of computing all reducts and the problem of computing shortest reducts of an information system.
-  The problem of finding shortest reducts is also NP--hard~\citep{Lin04} but different pruning rules may
-  be used.
+  the problem of computing all reducts and the problem of computing globally shortest reducts of an 
+  information system. The problem of finding shortest reducts is also NP--hard~\citep{Lin04} but different 
+  pruning rules may be used.
   
   Our specific goals are:
   \begin{enumerate}
@@ -723,15 +726,15 @@
   		on the three previously found relationships.
   		
   \item Find a relationship between some external properties of the discernibility matrix and the fastest 
-  		traversing strategy for computing shortest reducts.
+  		traversing strategy for computing globally shortest reducts.
   		  	
   \item Find a relationship between some external properties of the discernibility matrix and the fastest 
-  		decomposition method for computing shortest reducts.
+  		decomposition method for computing globally shortest reducts.
   		
   \item Find a relationship between the traversed space and the expected cost of each traversing strategy
-  		for computing shortest reducts.
+  		for computing globally shortest reducts.
   
-  \item Develop a new algorithm for computing minimal cardinality reducts of an information system, based 
+  \item Develop a new algorithm for computing shrotest reducts of an information system, based 
   		on the three previously found relationships.
 
   \end{enumerate}
@@ -747,7 +750,7 @@
   			  the fastest strategy as decision attribute.
   		\item Extract the relevant subset of external properties for determining a priori the appropriate 
   			  traversing strategy for a given dataset; and the rules governing this relation.
-  		\item Design a new algorithm for computing minimal cardinality reducts using the classifier found in
+  		\item Design a new algorithm for computing shrotest reducts using the classifier found in
   			  the previous task.
   		\item Evaluate the proposed algorithm over synthetic and benchmarking datasets.
   	\end{itemize}
@@ -777,18 +780,18 @@
   		\item Evaluate the proposed algorithm over synthetic and benchmarking datasets.
   	\end{itemize}
   	
-  	\item Selecting a priori the fastest traversing strategy for finding shortest reducts.
+  	\item Selecting a priori the fastest traversing strategy for finding globally shortest reducts.
 	\begin{itemize}
   		\item Implement the main traversing strategies reported for the computation of minimal length reducts.
   		\item Generate an information system with the external properties of each discernibility matrix, using 
   			  the fastest strategy as decision attribute.
   		\item Extract the relevant subset of external properties for determining a priori the appropriate 
   			  traversing strategy for a given dataset; and the rules governing this relation.
-  		\item Design a new algorithm for computing minimal cardinality reducts using the classifier found in
+  		\item Design a new algorithm for computing shrotest reducts using the classifier found in
   			  the previous task.
   		\item Evaluate the proposed algorithm over synthetic and benchmarking datasets.
   	\end{itemize}
-  	\item Selecting a priori the fastest decomposition method for finding shortest reducts.
+  	\item Selecting a priori the fastest decomposition method for finding globally shortest reducts.
 	\begin{itemize}
   		\item Implement the main decomposition methods reported for the computation of minimal length reducts
   			  in a parallel fashion.
@@ -796,21 +799,21 @@
   			  the fastest decomposition method as decision attribute.
   		\item Extract the relevant subset of external properties for determining a priori the appropriate 
   			  decomposition method for a given dataset; and the rules governing this relation.
-  		\item Design a new algorithm for computing minimal cardinality reducts using the classifier 
+  		\item Design a new algorithm for computing shrotest reducts using the classifier 
   			  found in the previous task.
   		\item Evaluate the proposed algorithm over synthetic and benchmarking datasets.
   	\end{itemize}
   	\item Find a relationship between the traversed space and the expected cost of traversing strategies.
   	\begin{itemize}
-  		\item Implement the main traversing strategies reported for the computation of shortest reducts in a way
-  			  that we can collect statistics for every execution stage.
+  		\item Implement the main traversing strategies reported for the computation of globally shortest 
+  			  reducts in a way that we can collect statistics for every execution stage.
   		\item Make a statistical description  of strategies runtime cost over synthetic and benchmarking datasets,
   			  using the traversed space as a factor.
   		\item Find a correlation between the traversed space and the expected cost of traversing strategies.
   	\end{itemize}
-  	\item Develop a new algorithm for computing minimal cardinality reducts of an information system.
+  	\item Develop a new algorithm for computing shrotest reducts of an information system.
   	\begin{itemize}
-  		\item Design a new algorithm for computing minimal cardinality reducts using some external
+  		\item Design a new algorithm for computing shrotest reducts using some external
   		      properties of the discernibility matrix.
   		\item Evaluate the proposed algorithm over synthetic and benchmarking datasets.
   	\end{itemize}
