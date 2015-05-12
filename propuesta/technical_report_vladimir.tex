@@ -10,6 +10,8 @@
 \usepackage{subfigure}          		% para manejar subfiguras
 \usepackage{tabularx}		   		% para ajustar el ancho de las columnas
 \usepackage[margin=2.5cm]{geometry}	% Change margins
+\usepackage[table]{xcolor}			% Colores en el cronograma
+\usepackage{multirow}				% Cabecera del cronograma
 %-------------------------------------------------------------------------
 % Se definen los margenes para el documento
 %\evensidemargin=0in
@@ -606,45 +608,47 @@
   does not implies its applicability to larger cases where such acceleration is needed. On the other hand, 
   runtime estimations for FPGA component executions are made by means of a oscilloscope without taking into 
   account communication overhead, which cannot be neglected in the presented dataset.
-  
+
+\clearpage
 \section{Research Proposal}\label{ResearchProposal} 
 
-\subsection{Justification and Motivation}\label{Justification}{
+\subsection{Justification and Motivation}\label{Justification}
   RST can be used to reduce the number of attributes in a dataset without relevant information lost. 
   Therefore, there has been much research in the area of finding reducts, particularly, shortest 
   reducts~\citep{Jensen14}. 
   
-  Heuristic methods such as~\citep{Chouchoulas01,Jensen2004,Zhong01} are fast alternatives for finding 
+  Heuristic methods such as~\citep{Chouchoulas01,Jensen04,Zhong01} are fast alternatives for finding 
   reducts but they do not guarantee minimal reductions. Stochastic approaches~\citep{Wroblewski95,Jensen03,
-  Chen10,Wang07} still do not guarantee finding the smallest reducts, as we will see further. Techniques 
-  for finding the complete reducts set~\citep{Ruiz85,Santiesteban03,Sanchez07,Lias09} can, of course, find 
-  shrotest reducts but with a higher computational effort.
+  Chen10,Wang07} still do not guarantee finding the shortest reducts, as we have seen before. Techniques 
+  for finding the complete reducts set~\citep{Starzyk99,WangP07} can, of course, find 
+  shrotest reducts but with a high computational effort.
   
-  The motivation of this work is the development of an algorithm for finding reducts with minimal length 
-  in an information system. This is an NP-Hard problem which makes every attempt for reducing its execution
-  time, a challenging task. Our proposal must be competitive with the state of the art algorithm in all 
-  cases and will be faster in most datasets. The main arena for comparison will be a large set of synthetic,
-  randomly generated datasets and benchmarking datasets from~\citep{Bache13}. We will be dealing only with
-  classical reducts definition. The practical applications (or relevance) of globally shortest reducts in
-  supervised classification is beyond our goals.
+  The motivation of this work is the development of algorithms for computing all reducts and 
+  globally shortest reducts in information systems. These are NP-Hard problems which make every attempt 
+  for reducing execution time, a challenging task. Our proposal must be competitive with the state of 
+  the art algorithms in most cases and faster in some datasets. The main arena for comparison will be a 
+  large set of synthetic, randomly generated datasets and benchmarking datasets from~\citep{Bache13}. 
+  We will be dealing only with classical reducts definition. The practical applications (or relevance) of 
+  reducts in supervised classification is beyond our goals.
   
   The results of this research will impact the supervised classification methods specially in large datasets.
   Nowadays, data is automatically collected, thus generating huge databases in almost every field. The 
   current growth of the size of data and the number of existing databases, is the justification for our
-  research on efficient algorithms for dimensionality reduction without semantics lost.}  
+  research on efficient algorithms for dimensionality reduction without semantics lost.  
   
 \subsection{The Research Questions}\label{ResearchQuestions} 
-  Throughout our preliminary work, we noticed that there is no faster algorithm for finding reducts in 
-  all datasets. Different algorithms use different strategies for traversing and pruning the complete search 
-  space. These strategies are better suited for some datasets and are time consuming for others. This leads 
-  us to our first scientific question:
+  Throughout our state of the art review, we noticed that there is not a fastest algorithm for finding reducts 
+  for any dataset. Algorithms reported in the literature, use different strategies for traversing and pruning 
+  the whole search space. Consequently, some strategies are better suited for some datasets while they are time
+  consuming for other datasets.
+  This leads us to our first scientific question:
   
 \begin{quote}
-  \emph{Is there a relationship between the external properties of the discernibility matrix and the runtime 
-  		cost of traversing strategies for finding reducts of an information system?}
+  \emph{Is there a relationship between the external properties of the basic matrix and the runtime 
+  		of traversing strategies for finding reducts in information systems?}
 \end{quote}
   		
-  In this context, external properties are those characteristics that we can extract from the discernibility
+  In this context, external properties are those characteristics that we can extract from the basic
   matrix by traversing their cells just one time. Lets take for instance, the minimum and maximum number of
   attributes in a cell, the core or the mean number of attributes per cell. Internal properties require, on 
   the other hand, more complex operations. Internal properties are, for instance, the number of reducts, the
@@ -653,136 +657,154 @@
   From this research question we formulate the following hypothesis:
   
 \begin{quote}  
-  \emph{There is a relationship between the external properties of the discernibility matrix and the runtime 
-  		cost of traversing strategies for finding reducts of an information system}
+  \emph{There is a relationship between the external properties of the basic matrix and the runtime 
+  		of traversing strategies for finding reducts in information systems}
 \end{quote}
   		
-  Several attempts for the decomposition of the original problem of the complete reducts set computation have 
-  been made~\citep{Strakowski08,Jiao10,Kopczynski14}. The main disadvantage of the problem decomposition or
-  parallelization is the strong dependency between the speed--up of the method used and the particularities of 
-  the dataset~\citep{Strakowski08}. This leads us to our second scientific question:
+%  Several attempts for the decomposition of the original problem of the complete reducts set computation have 
+%  been made~\citep{Strakowski08,Jiao10,Kopczynski14}. The main disadvantage of the problem decomposition or
+%  parallelization is the strong dependency between the speed--up of the method used and the particularities of 
+%  the dataset~\citep{Strakowski08}. This leads us to our second scientific question:
+%  
+%\begin{quote}
+%  \emph{Is there a relationship between the external properties of the discernibility matrix and the 
+%  		speed--up of the decomposition method used for finding reducts of an information system 
+%  		in a parallel environment?}
+%\end{quote}
+%
+%  From this research question we formulate the following hypothesis:
+%    
+%\begin{quote}
+%  \emph{There is a relationship between the external properties of the discernibility matrix and the 
+%  		speed--up of the decomposition method used for finding reducts of an information
+%  		system in a parallel environment}
+%\end{quote}
+  
+  The more sophisticated a traversing strategy is, the less number of candidates attributes sets are 
+  evaluated to verify whether they are reducts or not. Unfortunately, a more sophisticated traversing 
+  strategy has usually a greater computational cost. This trade-off between the number of evaluated 
+  candidates and their evaluation runtime, leads us to our second scientific question:
   
 \begin{quote}
-  \emph{Is there a relationship between the external properties of the discernibility matrix and the 
-  		speed--up of the decomposition method used for finding reducts of an information system 
-  		in a parallel environment?}
-\end{quote}
-
-  From this research question we formulate the following hypothesis:
-    
-\begin{quote}
-  \emph{There is a relationship between the external properties of the discernibility matrix and the 
-  		speed--up of the decomposition method used for finding reducts of an information
-  		system in a parallel environment}
-\end{quote}
-  
-  The more sophisticated a scanning strategy is, the less number of candidates attributes sets are 
-  evaluated. Unfortunately, a more sophisticated scanning strategy has usually a greater runtime cost.
-  This trade--off between the number of evaluated candidates and the runtime cost of evaluation leads us 
-  to our third scientific question:
-  
-\begin{quote}
-  \emph{Can be obtained a runtime reduction in computing reducts of an information system by 
+  \emph{Can be obtained a runtime reduction at computing reducts in information systems by 
   		dynamically changing the traversing strategy?}
 \end{quote}
-  By dynamically changing we mean the change of the traversing strategy during the algorithm execution.
+  By dynamically changing we mean the change of the traversing strategy during the search.
   From this research question we formulate the following hypothesis:
     
 \begin{quote}
-  \emph{There can be obtained a statistically significant runtime reduction in computing reducts of an 
-  		information system by dynamically changing the traversing strategy}
+  \emph{There can be obtained a runtime reduction at computing reducts in 
+  		information systems by dynamically changing the traversing strategy}
 \end{quote}
 
-  Based on these three scientific questions we can formulate the main hypothesis for our research proposal:
+  Based on these two scientific questions we can formulate the main hypothesis for our research:
   
 \begin{quote}
-  \emph{Using some external properties of the discernibility matrix, and dynamically changing the traversing 
-  		strategy, we can design a new algorithm for computing reducts of an information system; which is
-  		comparable to the state of the art alternatives in most datasets, and faster in some of them}
+  \emph{Using some external properties of the basic matrix, and dynamically changing the traversing 
+  		strategy, we can design new algorithms for computing reducts in information systems; which are
+  		faster than the state of the art alternatives in most datasets}
 \end{quote}  
 
 \subsection{The Research Goals}\label{Goals} 
-  The main goal in our research is the \emph{development of  a new algorithm for computing reducts of an 
-  information system; which is comparable to the state of the art alternatives 
-  in most datasets, and faster in some of them}. This algorithm will use some external properties of the
-  discernibility matrix to conveniently select the traversing strategy for the search space and a 
-  decomposition method suitable for paralellization. We will be exploring two variants of this problem,
-  the problem of computing all reducts and the problem of computing globally shortest reducts of an 
-  information system. The problem of finding shortest reducts is also NP--hard~\citep{Lin04} but different 
-  pruning rules may be used.
+  The main goal in our research is the \emph{development of new algorithms for computing reducts in
+  information systems; which will be comparable to the state of the art algorithms 
+  in most datasets, and faster in some of them}. These algorithms will use some external properties of the
+  basic matrix to conveniently select the traversing strategy for the search space. We will be exploring two
+  variants of this problem, the problem of computing all reducts and the problem of computing globally 
+  shortest reducts in information systems. The problem of finding shortest reducts is also 
+  NP-hard~\citep{Lin04} but different pruning rules may be used.
   
   Our specific goals are:
   \begin{enumerate}
-  \item Find a relationship between some external properties of the discernibility matrix and the fastest 
+  \item Find a relationship between some external properties of the basic matrix and the fastest 
   		traversing strategy for computing all reducts.
   		  	
-  \item Find a relationship between some external properties of the discernibility matrix and the fastest 
-  		decomposition method for computing all reducts.
+%  \item Find a relationship between some external properties of the discernibility matrix and the fastest 
+%  		decomposition method for computing all reducts.
   		
   \item Find a relationship between the traversed space and the expected cost of each traversing strategy
   		for computing all reducts.
   
-  \item Develop a new algorithm for computing all reducts of an information system, based 
-  		on the three previously found relationships.
+  \item Develop a new algorithm for computing all reducts in information systems, based 
+  		on the two previously found relationships.
   		
-  \item Find a relationship between some external properties of the discernibility matrix and the fastest 
+  \item Find a relationship between some external properties of the basic matrix and the fastest 
   		traversing strategy for computing globally shortest reducts.
   		  	
-  \item Find a relationship between some external properties of the discernibility matrix and the fastest 
-  		decomposition method for computing globally shortest reducts.
+%  \item Find a relationship between some external properties of the discernibility matrix and the fastest 
+%  		decomposition method for computing globally shortest reducts.
   		
   \item Find a relationship between the traversed space and the expected cost of each traversing strategy
   		for computing globally shortest reducts.
   
-  \item Develop a new algorithm for computing shrotest reducts of an information system, based 
-  		on the three previously found relationships.
-
+  \item Develop a new algorithm for computing shortest reducts in information systems, based 
+  		on the two previously found relationships.
+  
+  \item Redesign and implement in a hardware fashion the proposed algorithms in order to evaluated the
+  		runtime reduction achieved by these accelerations.  		
   \end{enumerate}
+
+\subsection{Expected Contributions}\label{Contributions} 
+  Expected contributions from this research are:
+  \begin{itemize}
+  \item A survey on algorithms for reducts computations. The novelty of this contribution relay in two
+  		aspects. First, algorithm from Rough Sets Theory and Testor Theory will be exposed under a 
+  		unified framework. Second, propositions supporting algorithms reported in the literature will
+  		be explained using the same theoretical basis. 
+  \item A new algorithm for computing all reducts in information systems.
+  \item A new algorithm for computing shortest reducts in information systems.
+  \item A meta-characterization of algorithms efficiency in relation to the external properties of the
+  		basic matrix associated to a dataset.
+  \item Hardware architectures for computing both, all reducts and shortest reducts in information systems.
+  \end{itemize}
+
 
 \subsection{Methodology}\label{Methodology} 
 \begin{enumerate}
-	\item Selecting a priori the fastest traversing strategy for finding all reducts.
+	\item Determine the fastest traversing strategy for finding all reducts.
 	\begin{itemize}
   		\item Generate a set of random datasets, systematically covering the space of possible combinations in 
-  			  the values of the external properties of discernibility matrices.
-  		\item Implement the main traversing strategies reported for the computation of all reducts.
-  		\item Generate an information system with the external properties of each discernibility matrix, using 
+  			  the values of the external properties of basic matrices.
+  		\item Implement the main traversing strategies reported in the literature for the computation of all
+  			  reducts.
+  		\item Generate an information system with the external properties of each basic matrix, using 
   			  the fastest strategy as decision attribute.
   		\item Extract the relevant subset of external properties for determining a priori the appropriate 
   			  traversing strategy for a given dataset; and the rules governing this relation.
-  		\item Design a new algorithm for computing shrotest reducts using the classifier found in
+  		\item Design a new algorithm for computing all reducts using the classifier found in
   			  the previous task.
   		\item Evaluate the proposed algorithm over synthetic and benchmarking datasets.
   	\end{itemize}
-  	\item Selecting a priori the fastest decomposition method for finding all reducts.
-	\begin{itemize}
-  		\item Implement the main decomposition methods reported for the computation of all reducts
-  			  in a parallel fashion.
-  		\item Generate an information system with the external properties of each discernibility matrix, using 
-  			  the fastest decomposition method as decision attribute.
-  		\item Extract the relevant subset of external properties for determining a priori the appropriate 
-  			  decomposition method for a given dataset; and the rules governing this relation.
-  		\item Design a new algorithm for computing all reducts using the classifier found in the previous task.
-  		\item Evaluate the proposed algorithm over synthetic and benchmarking datasets.
-  	\end{itemize}
+%  	\item Selecting a priori the fastest decomposition method for finding all reducts.
+%	\begin{itemize}
+%  		\item Implement the main decomposition methods reported for the computation of all reducts
+%  			  in a parallel fashion.
+%  		\item Generate an information system with the external properties of each discernibility matrix, using 
+%  			  the fastest decomposition method as decision attribute.
+%  		\item Extract the relevant subset of external properties for determining a priori the appropriate 
+%  			  decomposition method for a given dataset; and the rules governing this relation.
+%  		\item Design a new algorithm for computing all reducts using the classifier found in the previous task.
+%  		\item Evaluate the proposed algorithm over synthetic and benchmarking datasets.
+%  	\end{itemize}
   	\item Find a relationship between the traversed space and the expected cost of traversing strategies.
   	\begin{itemize}
-  		\item Implement the main traversing strategies reported for the computation of all reducts in a way
-  			  that we can collect statistics for every execution stage.
+  		\item Implement the main traversing strategies reported in the literature for the computation of all
+  			  reducts in a way that we can collect statistics for every execution stage.
   		\item Make a statistical description  of strategies runtime cost over synthetic and benchmarking datasets,
   			  using the traversed space as a factor.
   		\item Find a correlation between the traversed space and the expected cost of traversing strategies.
   	\end{itemize}
-  	\item Develop a new algorithm for computing all reducts of an information system.
+  	\item Develop a new algorithm for computing all reducts in information systems.
   	\begin{itemize}
   		\item Design a new algorithm for computing all reducts using some external
   		      properties of the discernibility matrix.
   		\item Evaluate the proposed algorithm over synthetic and benchmarking datasets.
   	\end{itemize}
   	
-  	\item Selecting a priori the fastest traversing strategy for finding globally shortest reducts.
+  	\item Determine the fastest traversing strategy for finding globally shortest reducts.
 	\begin{itemize}
-  		\item Implement the main traversing strategies reported for the computation of minimal length reducts.
+  		\item Implement the main traversing strategies reported in the literature for the computation of 
+  			  minimal length reducts.
   		\item Generate an information system with the external properties of each discernibility matrix, using 
   			  the fastest strategy as decision attribute.
   		\item Extract the relevant subset of external properties for determining a priori the appropriate 
@@ -791,18 +813,18 @@
   			  the previous task.
   		\item Evaluate the proposed algorithm over synthetic and benchmarking datasets.
   	\end{itemize}
-  	\item Selecting a priori the fastest decomposition method for finding globally shortest reducts.
-	\begin{itemize}
-  		\item Implement the main decomposition methods reported for the computation of minimal length reducts
-  			  in a parallel fashion.
-  		\item Generate an information system with the external properties of each discernibility matrix, using 
-  			  the fastest decomposition method as decision attribute.
-  		\item Extract the relevant subset of external properties for determining a priori the appropriate 
-  			  decomposition method for a given dataset; and the rules governing this relation.
-  		\item Design a new algorithm for computing shrotest reducts using the classifier 
-  			  found in the previous task.
-  		\item Evaluate the proposed algorithm over synthetic and benchmarking datasets.
-  	\end{itemize}
+%  	\item Selecting a priori the fastest decomposition method for finding globally shortest reducts.
+%	\begin{itemize}
+%  		\item Implement the main decomposition methods reported for the computation of minimal length reducts
+%  			  in a parallel fashion.
+%  		\item Generate an information system with the external properties of each discernibility matrix, using 
+%  			  the fastest decomposition method as decision attribute.
+%  		\item Extract the relevant subset of external properties for determining a priori the appropriate 
+%  			  decomposition method for a given dataset; and the rules governing this relation.
+%  		\item Design a new algorithm for computing shrotest reducts using the classifier 
+%  			  found in the previous task.
+%  		\item Evaluate the proposed algorithm over synthetic and benchmarking datasets.
+%  	\end{itemize}
   	\item Find a relationship between the traversed space and the expected cost of traversing strategies.
   	\begin{itemize}
   		\item Implement the main traversing strategies reported for the computation of globally shortest 
@@ -811,13 +833,84 @@
   			  using the traversed space as a factor.
   		\item Find a correlation between the traversed space and the expected cost of traversing strategies.
   	\end{itemize}
-  	\item Develop a new algorithm for computing shrotest reducts of an information system.
+  	\item Develop a new algorithm for computing shortest reducts in information systems.
   	\begin{itemize}
-  		\item Design a new algorithm for computing shrotest reducts using some external
+  		\item Design a new algorithm for computing shortest reducts using some external
   		      properties of the discernibility matrix.
   		\item Evaluate the proposed algorithm over synthetic and benchmarking datasets.
   	\end{itemize}
+  	\item Implement in a hardware fashion the proposed algorithms.
+  	\begin{itemize}
+  		\item Redesign and implement in a hardware fashion the proposed algorithm for computing
+  			  all the reducts in information systems.
+  		\item Evaluate the implemented algorithm over synthetic and benchmarking datasets.
+  		\item Redesign and implement in a hardware fashion the proposed algorithm for computing
+  			  shortest reducts in information systems.
+  		\item Evaluate the implemented algorithm over synthetic and benchmarking datasets.
+  	\end{itemize}
 \end{enumerate}
+
+\clearpage 
+\subsection{Schedule}
+  Table~\ref{tab_Schedule} shows the main tasks that will be carried out throughout this research.
+ \begin{table}[h!]
+		\caption{Research schedule (quarterly\protect\footnotemark).} \label{tab_Schedule}
+		\centering
+ 	\begin{tabular}{|p{8cm}|c|c|c|c|c|c|c|c|c|c|c|c|}
+ 		\hline
+		\multicolumn{1}{|c|}{\multirow{3}{*}{Task}} & \multicolumn{12}{c|}{Quarters}\\
+ 		\cline{2-13}
+		 & 2014 & \multicolumn{3}{c|}{2015} & \multicolumn{3}{c|}{2016} & \multicolumn{3}{c|}{2017}
+		 & \multicolumn{2}{c|}{2018} \\
+ 		\cline{2-13}
+		 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 \\
+		\hline
+		Literature review &\cellcolor{blue}&\cellcolor{blue}&\cellcolor{blue}&
+		\cellcolor[gray]{0.9}&\cellcolor[gray]{0.9}&\cellcolor[gray]{0.9}&\cellcolor[gray]{0.9}&
+		\cellcolor[gray]{0.9}&\cellcolor[gray]{0.9}&\cellcolor[gray]{0.9}&\cellcolor[gray]{0.9}&
+		\cellcolor[gray]{0.9}\\
+		\hline
+		Writing the research proposal &\cellcolor{blue}&\cellcolor{blue}&\cellcolor{blue}&&&&&&&&&\\
+		\hline
+		Critical study on algorithms for computing all the reducts in information systems
+		&\cellcolor{blue}&\cellcolor{blue}&\cellcolor{blue}&&&&&&&&&\\
+		\hline
+		Implementation of algorithms for computing all the reducts in information systems
+		&&\cellcolor{blue}&\cellcolor{blue}&&&&&&&&&\\
+		\hline
+		Critical study on algorithms for computing shortest reducts in information systems
+		&&&&\cellcolor[gray]{0.9}&\cellcolor[gray]{0.9}&\cellcolor[gray]{0.9}&&&&&&\\
+		\hline
+		Implementation of algorithms for computing shortest reducts in information systems
+		&&&&&\cellcolor[gray]{0.9}&\cellcolor[gray]{0.9}&&&&&&\\
+		\hline
+		Critical study on hardware accelerations of algorithms for computing reducts in information systems
+		&&&&&&&\cellcolor[gray]{0.9}&\cellcolor[gray]{0.9}&\cellcolor[gray]{0.9}&&&\\
+		\hline
+		Redesign and hardware implementation of proposed algorithms for computing reducts in information systems
+		&&&&&&&&\cellcolor[gray]{0.9}&\cellcolor[gray]{0.9}&&&\\
+		\hline
+		Experimental set-up &\cellcolor{blue}&\cellcolor{blue}&&&\cellcolor[gray]{0.9}&&&
+		\cellcolor[gray]{0.9}&&&&\\
+		\hline
+		Experiments run &&&\cellcolor{blue}&&&\cellcolor[gray]{0.9}&&&\cellcolor[gray]{0.9}&&&\\
+		\hline
+		Writing papers &\cellcolor{blue}&&\cellcolor{blue}&&\cellcolor[gray]{0.9}&&\cellcolor[gray]{0.9}&&
+		\cellcolor[gray]{0.9}&&&\\
+		\hline
+		Writing dissertation &&&&\cellcolor[gray]{0.9}&\cellcolor[gray]{0.9}&\cellcolor[gray]{0.9}&
+		\cellcolor[gray]{0.9}&\cellcolor[gray]{0.9}&\cellcolor[gray]{0.9}&&&\\
+		\hline
+		Submit final draft of dissertation to supervisors &&&&&&&&&&\cellcolor[gray]{0.9}&&\\
+		\hline
+		Submit final version of dissertation to the committee &&&&&&&&&&&\cellcolor[gray]{0.9}&\\
+		\hline
+		
+ 	\end{tabular}             
+ \end{table}
+ 
+ \footnotetext{Quarters are: [January-April], [May-August] and [September-December]. Schedule starts in 
+ 			   September 2014, according to the admission of the student in the PhD. program.}
 	  	
 %\section{Publication Plan}\label{PubPlan}
 %  In this section we present our publication plan. Results from this research are to be submitted indistinctly 
