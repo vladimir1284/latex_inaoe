@@ -309,10 +309,12 @@ this algorithm can be seen in~\citep{R22}. The function SortBM$(BM)$ sorts the b
 Randomly select one of the rows of $BM$ with the fewest number of 1's. The selected row goes first and 
 all columns in which it has a 1 are moved to the left.  
 
-The function Evaluate$(BM,T)$ returns three values: $testor$, $irreducible$ and $zero\_rows$. $testor$ is TRUE if the set $T$ is a testor of $BM$ and FALSE otherwise. $irreducible$ is TRUE if the set $T$ is an irreducible testor and FALSE otherwise. $zero\_rows$ is the amount of zero rows of $T$. 
+The function Evaluate$(BM,T)$ returns three values: $testor$, $irreducible$ and $zero\_rows$. $testor$ is TRUE if the set $T$ is a testor of $BM$ and FALSE otherwise. $irreducible$ is TRUE if the set $T$ is an irreducible testor and FALSE otherwise. $zero\_rows$ is the amount of zero rows of $T$. The function LastOne($T$) returns the 
+position of the rightmost element in the set $T$.
 
 \begin{algorithm}
 	\begin{spacing}{1.0}
+	\begin{small}	
 	\caption{CT-EXT algorithm}\label{ctext_algo}
 	\begin{algorithmic}[1]	
 		%\Procedure{CT-EXT}{}
@@ -320,22 +322,20 @@ The function Evaluate$(BM,T)$ returns three values: $testor$, $irreducible$ and 
 		\State \textbf{Output: } $TT$ - set of irreducible testors.
 			
 			\State $TT \gets \{\}$
-			\State $T \gets \{\}$ \Comment{current feature subset}
 			\State $j \gets 0$ \Comment{first feature from $BM$ to be analyzed}
 			\State $BM \gets$ SortBM$(BM)$
 			
 			\While{$BM[0,j] \neq 0$}\label{row1condition}
-				\State $T \gets T \cup \{X_j\}$
+				\State $T \gets \{X_j\}$ \Comment{current feature subset}
 				\State $testor, irreducible, zero\_rows \gets$ Evaluate$(BM,T)$
 				\If{$testor=TRUE$}
 					\If{$irreducible=TRUE$} \Comment{$T$ is an irreducible testor}
 						\State $TT \gets TT \cup T$
 					\EndIf
 				\Else
-					\State $i \gets j$
+					\State $i \gets j+1$
 					\While{$i < n$}
-						\State $i \gets i+1$
-						\State $T \gets T \cup \{X_j\}$
+						\State $T \gets T \cup \{X_i\}$
 						\State $zero\_rows\_last \gets zero\_rows$
 						\State $testor, irreducible, zero\_rows \gets$ Evaluate$(BM,T)$
 						\If{$zero\_rows = zero\_rows\_last$} 
@@ -345,16 +345,33 @@ The function Evaluate$(BM,T)$ returns three values: $testor$, $irreducible$ and 
 								\If{$irreducible=TRUE$}
 									\State $TT \gets TT \cup T$
 								\EndIf
-								\State \textbf{break}
+								\State $T \gets T \setminus \{X_i\}$
+								\State $zero\_rows \gets zero\_rows\_last$
 							\EndIf
+						\EndIf
+						\If{$i = n-1$}
+							\State $k \gets$ LastOne($T$)
+							\If{$k = i$}
+								\State $T \gets T \setminus \{X_k\}$
+								\State $k \gets$ LastOne($T$)
+							\EndIf
+							\If{$k \neq j$}
+								\State $T \gets T \setminus \{X_k\}$
+								\State $testor, irreducible, zero\_rows \gets$ Evaluate$(BM,T)$
+								\State $i \gets k+1$
+							\Else
+								\State $i \gets i+1$
+							\EndIf
+						\Else
+							\State $i \gets i+1$
 						\EndIf
 					\EndWhile
 				\EndIf
 				\State $j \gets j+1$
-				\State $T \gets \{\}$
 			\EndWhile
 		%\EndProcedure
 	\end{algorithmic}
+	\end{small}
 	\end{spacing}
 \end{algorithm}
 
@@ -522,11 +539,9 @@ candidate, as shown in Fig.\,\ref{fig:row}. If at least one bit of the AND opera
 then the output \textit{Testor} of that particular \textit{row~i} sub-module
 will be TRUE. The same operation is performed over the previous candidate.
 If the output \textit{Testor} is different from
-the output \textit{Contributes} for any \textit{row~i} sub-module, 
-
-it means that...., 
-
-then the output \textit{Contributes} from the $BM$ module becomes TRUE.
+the output \textit{Contributes} for any \textit{row~i} sub-module,
+it means that the current candidate reduces the amount of zero rows regarding the previous candidate and
+then, the output \textit{Contributes} from the $BM$ module becomes TRUE.
 If the output $Testor$ of all  \textit{row~i} sub-modules is
 TRUE, then the output \textit{Testor} of the $BM$ module will be TRUE,
 which means that the candidate is a testor of $BM$.
