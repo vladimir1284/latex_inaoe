@@ -162,6 +162,14 @@ computational cost of the classification process by eliminating superfluous info
 it could even provide better classification accuracy. 
 Testor Theory can be used for feature selection as shown in~\citep{R27,R5}. A testor is defined as a subset of attributes that can discern objects from different classes. An irreducible testor is a subset of features such that every attribute is indispensable for satisfying the testor condition. Finding all irreducible testors has been proven as an NP-hard problem~\citep{R40}.
 
+Feature selection is also a key aspect in expert and intelligent systems. \cite{Mart07} use Testor Theory to propose a new
+case-based approach to help elaborate intelligents teaching-learning systems.  Irreducible testors are computed in~\citep{Med07}
+to select problem variables in the proposal of an intelligent tutoring system with the capacity to adapt the interaction 
+to its user's specific needs. Recently, \cite{Med07} use testors to  determining factors associated with transfusion related 
+acute lung injury. Another approach to feature selection, the Rough Sets Reducts, has been found to have a close relation
+with irreducible testors~\citep{Lazo15}. Expert systems can benefit also from Rough Sets methods, specially the feature selection
+by means of reducts, as shown by \cite{Yah00}.
+
 Recently, there is an increasing popularity of architectures based on Field Programmable Gate-Array (FPGA) 
 for solving complex computational problems. Several hardware-software platforms based on this technology have 
 been reported \citep{R29,R30}. 
@@ -184,16 +192,19 @@ Thus \cite{R21} proposed a hardware-software platform for computing irreducible 
 implemented the BT algorithm, as in \citep{R11}, but it also included a new module that eliminates most of 
 the non irreducible testors before transferring them to a host software application for final filtering. 
 One disadvantage of these approaches is the huge amount of data that must be transferred to the PC.  
-For this reason, in this paper, we develop an efficient hardware-software platform for computing irreducible
-testors for feature selection %\citep{R2,R3,R17,R18,R19} 
-using the CT-EXT algorithm proposed in~\citep{R22} which computes only typical testors, 
-reducing the amount of data that must be transferred to the PC. Additionally, CT-EXT has proven being, 
-in most cases, more efficient in finding irreducible testors than BT~\citep{R22, R23}.
+Consequently, in~\citep{Rod14} we proposed a modification to this platform in order to compute irreducible 
+testors in the hardware component, reducing the amount of data that must be transferred to the PC. 
 
-The intensive computational requirements due to the exponential
-complexity, regarding the number of attributes, of the CT-EXT algorithm,
-can be met by a combination of technological improvements and efficient hardware architectures based on 
-parallel computational models. 
+
+
+In this paper, we develop an efficient hardware-software platform for computing irreducible
+testors for feature selection using the CT-EXT algorithm proposed in~\citep{R22}. 
+CT-EXT has proven being, in most cases, more efficient in finding irreducible testors than BT~\citep{R22, R23}.
+
+%The intensive computational requirements due to the exponential
+%complexity, regarding the number of attributes, of the CT-EXT algorithm,
+%can be met by a combination of technological improvements and efficient hardware architectures based on 
+%parallel computational models. 
 
 The rest of this paper is structured as follows. Section~\ref{sect:2} introduces the basic concepts of 
 Testor Theory and the CT-EXT algorithm. Section~\ref{sect:3} introduces the proposed platform.  
@@ -972,8 +983,19 @@ as testing two or more candidates per iteration, are still unexplored and would 
 \bibitem[Kudryavtsev(2006)]{R9}Kudryavtsev, V. B. (2006). Test recognition theory. Discrete Applied Mathematics, 16, 319-350.
 \bibitem[Lazo-Cort\'es et al.(1995)]{R32}Lazo-Cort\'es, M., Ruiz-shulcloper, J. (1995). Determining the feature relevance for non-classically described objects and a new algorithm to compute typical fuzzy testors. Pattern Recognition Letters, 16(12), 1259-1265.
 \bibitem[Lazo-Cort\'es et al.(2001)]{R1}Lazo-Cort\'es, M., Ruiz-shulcloper, J., and Alba-cabrera, E. (2001). An Overview of the Evolution of the Concept of Testor. Pattern Recognition, 34, 753-762.
+
+\bibitem[Lazo-Cort\'es et al.(2015)]{Lazo15}Lazo-Cortés, M. S., Mart\'inez-Trinidad, J. F., Carrasco-Ochoa, J. A. and Sanchez-D\'iaz, G. (2015). On the relation between rough set reducts and typical testors. Information Sciences, 294, 152-163.
+
+\bibitem[Mart\'inez et al.(2007)]{Mart07}Mart\'inez, N., Le\'on, M. and Garc\'ia, Z. (2007). Features selection through FS-testors in case-based systems of teaching-learning. In MICAI 2007: Advances in Artificial Intelligence, 1206-1217.
+
 \bibitem[Mart\'inez-Trinidad et al.(2001)]{R5}Mart\'inez-Trinidad, J.F. and Guzm\'an-Arenas, A. (2001). The Logical Combinatorial Approach to Pattern Recognition an Overview through Selected Works. Pattern Recognition, 34, 741-751.
-\bibitem[Pocek et al.(2013)]{R30}Pocek, K., Tessier, R., and DeHon, A. (2013, April). Birth and adolescence of reconfigurable computing: A survey of the first 20 years of field-programmable custom computing machines. In Highlights of the First Twenty Years of the IEEE International Symposium on Field-Programmable Custom Computing Machines (pp. 3-19).
+
+\bibitem[Medina et al.(2007)]{Med07}Medina, D., Mart\'inez, N., Garc\'ia, Z., Ch\'avez, M. and Garc\'ia, M. (2007). Putting Artificial Intelligence Techniques into a Concept Map to Build Educational Tools. In Nature Inspired Problem-Solving Methods in Knowledge Engineering, 617-627.
+
+\bibitem[Pocek et al.(2013)]{R30}Pocek, K., Tessier, R. and DeHon, A. (2013). Birth and adolescence of reconfigurable computing: A survey of the first 20 years of field-programmable custom computing machines. In Highlights of the First Twenty Years of the IEEE International Symposium on Field-Programmable Custom Computing Machines (pp. 3-19).
+
+\bibitem[Rodr\'iguez et al.(2014)]{Rod14} Rodr\'iguez, V., Mart\'inez, J. F., Carrasco, J. A., Lazo, M. S., Cumplido, R. and Feregrino-Uribe, C. (2014). A hardware architecture for filtering irreducible testors. In ReConFigurable Computing and FPGAs (ReConFig), 2014 International Conference on, 1-4.
+
 \bibitem[Rojas et al.(2007)]{R11}Rojas, A., Cumplido, R., Carrasco-Ochoa, J. A., Feregrino, C. and Mart\'inez-Trinidad, J. f. (2007). FPGA Based Architecture for Computing Testors. Lectures Notes on Computer Science, 4881, 188-197.
 \bibitem[Rojas et al.(2012)]{R21}Rojas, A., Cumplido, R., Carrasco-Ochoa, J. A., Feregrino, C. and Mart\'inez-Trinidad, J. f. (2012). Hardware-software platform for computing irreducible testors. Expert Systems with Applications, 39, 2203 - 2210.
 \bibitem[Ruiz-Shulcloper et al.(1985)]{R31}Ruiz-Shulcloper, J., Aguila-Feros, L. and Bravo-Mart\'inez, A. (1985). BT and TB algorithms for computing all irreducible testors. Revista Ciencias Matem\'aticas, 2, 11-18.
@@ -983,6 +1005,10 @@ as testing two or more candidates per iteration, are still unexplored and would 
 \bibitem[S\'anchez-D\'iaz et al.(2010)]{R23}S\'anchez-D\'iaz, G., Piza-Davila, I, Lazo-Cort\'es, M, 
 Mora-Gonz\'alez, M and Salinas-Luna, J. (2010). A Fast Implementation of the CT-EXT Algorithm for the Testor Property Identification. Lecture Notes in Computer Science, 6438, 92-103.
 \bibitem[Skowron et al.(1992)]{R40}Skowron, A and Rauszer, C. (1992). The discernibility matrices and functions in information systems. Handbook of Applications and Advances of the Rough Sets Theory, 331-362.
+
+\bibitem[Torres et al.(2014)]{Torr14}Torres, M., Torres, A., Cuellar, F., Torres, M., Ponce de Le\'on, E. and Pinales, F. (2014). Evolutionary computation in the identification of risk factors. Case of TRALI. Expert Systems with Applications, 41(3), 831-840.
+
+\bibitem[Yahia et al.(2000)]{Yah00}Yahia, M. E., Mahmod, R., Sulaiman, N. and Ahmad, F. (2000). Rough neural expert systems. Expert Systems with Applications, 18(2), 87-99.
 
 \bibitem[Digilent(2013)]{R15}Atlys Board Reference Manual. Digilent, Inc.
 \bibitem[Digilent(2010)]{R25}Digilent Synchronous Parallel Interface (DSTM) Programmer's Reference Manual. Digilent, Inc.
