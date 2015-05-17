@@ -162,13 +162,14 @@ computational cost of the classification process by eliminating superfluous info
 it could even provide better classification accuracy. 
 Testor Theory can be used for feature selection as shown in~\citep{R27,R5}. A testor is defined as a subset of attributes that can discern objects from different classes. An irreducible testor is a subset of features such that every attribute is indispensable for satisfying the testor condition. Finding all irreducible testors has been proven as an NP-hard problem~\citep{R40}.
 
-Feature selection is also a key aspect in expert and intelligent systems. \cite{Mart07} use Testor Theory to propose a new
-case-based approach to help elaborate intelligents teaching-learning systems.  Irreducible testors are computed in~\citep{Med07}
-to select problem variables in the proposal of an intelligent tutoring system with the capacity to adapt the interaction 
-to its user's specific needs. Recently, \cite{Med07} use testors to  determining factors associated with transfusion related 
-acute lung injury. Another approach to feature selection, the Rough Sets Reducts, has been found to have a close relation
-with irreducible testors~\citep{Lazo15}. Expert systems can benefit also from Rough Sets methods, specially the feature selection
-by means of reducts, as shown by \cite{Yah00}.
+Feature selection is also a key aspect in expert and intelligent systems. \cite{Mart07} use Testor Theory to
+propose a new case-based approach to help elaborate intelligents teaching-learning systems.  Irreducible testors
+are computed in~\citep{Med07} to select problem variables in the proposal of an intelligent tutoring system with
+the capacity to adapt the interaction to its user's specific needs. Recently, \cite{Med07} use testors to 
+determining factors associated with transfusion related acute lung injury. Another approach to feature selection,
+the Rough Sets Reducts, has been found to have a close relation with irreducible testors~\citep{Lazo15}. Expert
+systems can benefit also from Rough Sets methods, specially the feature selection by means of reducts, as shown 
+by \cite{Yah00}.
 
 Recently, there is an increasing popularity of architectures based on Field Programmable Gate-Array (FPGA) 
 for solving complex computational problems. Several hardware-software platforms based on this technology have 
@@ -195,11 +196,25 @@ One disadvantage of these approaches is the huge amount of data that must be tra
 Consequently, in~\citep{Rod14} we proposed a modification to this platform in order to compute irreducible 
 testors in the hardware component, reducing the amount of data that must be transferred to the PC. 
 
-
+Several hardware accelerations has been recently reported for feature selection in Rough Sets Theory. Authors of
+\citep{Grze13,Kop14} present an FPGA based platform for computing a reduct. \cite{Tiwari13} presented various
+algorithms for attribute reduction using concepts of rough set theory and implemented the Quick Reduct
+algorithm in a hardware fashion. Then, \cite{Tiwari14} presented a thorough survey on hardware implementation 
+of rough set algorithms. Unfortunately, these hardware implementations aim to compute a single reduct. 
+\cite{Jensen14} address the lack of guarantees of finding a features subset with minimal cardinality, as the
+main drawback of these approaches. Furthermore, the problem of computing a single reduct has not exponential
+complexity. Hardware accelerations of these algorithms are intended to be applied on realtime applications
+where feature selections must be dynamically accomplished.
 
 In this paper, we develop an efficient hardware-software platform for computing irreducible
-testors for feature selection using the CT-EXT algorithm proposed in~\citep{R22}. 
-CT-EXT has proven being, in most cases, more efficient in finding irreducible testors than BT~\citep{R22, R23}.
+testors for feature selection using the CT-EXT algorithm proposed in~\citep{R22}. The contribution of this
+work is the design and implementation of a hardware architecture that traverses the search space in a 
+different order than that presented in \citep{R11, R21,Rod14}. This new strategy evaluates less candidate
+subsets than these previous architectures, which results in shorter runtime. In comparison to the 
+software versions of CT-EXT~\citep{R22, R23}, our proposal evaluates a candidate every clock cycle for
+a fastest execution. The runtime gain of our new hardware-software platform is demonstrated throughout
+experiments over synthetic datasets. 
+%CT-EXT has proven being, in most cases, more efficient in finding irreducible testors than BT~\citep{R22, R23}.
 
 %The intensive computational requirements due to the exponential
 %complexity, regarding the number of attributes, of the CT-EXT algorithm,
@@ -494,7 +509,7 @@ FPGA carries out all the calculations needed to generate the testors and sends t
 
 \begin{figure}[htb]
     \begin{center}
-        \includegraphics[width=13cm]{Arquitecture.eps}
+       % \includegraphics[width=13cm]{Arquitecture.eps}
     \end{center}
 \caption{Proposed hardware-software platform.}
 \label{figArq}
@@ -505,7 +520,7 @@ FPGA carries out all the calculations needed to generate the testors and sends t
 
 \begin{figure}[htb]
     \begin{center}
-        \includegraphics[width=13cm]{CT-ext_arq.eps}
+        %\includegraphics[width=13cm]{CT-ext_arq.eps}
     \end{center}
 \caption{CT-EXT Architecture.}
 \label{fig:3}
@@ -535,7 +550,7 @@ consequently the number of iterations needed by the algorithm.
 
 \begin{figure}[htb]
     \begin{center}
-        \includegraphics[height=6cm]{BM_module.eps}
+        %\includegraphics[height=6cm]{BM_module.eps}
     \end{center}
 \caption{$BM$ module.}
 \label{fig:4}
@@ -560,7 +575,7 @@ which means that the candidate is a testor of $BM$.
 
 \begin{figure}[htb]
     \begin{center}
-        \includegraphics[height=6cm]{BM_row.eps}
+        %\includegraphics[height=6cm]{BM_row.eps}
     \end{center}
 \caption{$BM$ row.}
 \label{fig:row}
@@ -623,7 +638,7 @@ Taking as example the ordered basic matrix of Table~\ref{table2}. In Table~\ref{
 
 \begin{figure}[t]
     \begin{center}
-        \includegraphics[height=6cm]{CandGen.eps}
+        %\includegraphics[height=6cm]{CandGen.eps}
     \end{center}
 \caption{Candidate Generator module.}
 \label{fig:5}
@@ -688,13 +703,13 @@ was added to the current candidate.
 \centering
 \begin{minipage}{.5\textwidth}
   \centering
-   \includegraphics[width=.7\linewidth , height=3cm]{Add1.eps}
+   %\includegraphics[width=.7\linewidth , height=3cm]{Add1.eps}
   \caption{Submodule A.}
   \label{fig:subA}
 \end{minipage}%
 \begin{minipage}{.5\textwidth}
   \centering
-   \includegraphics[width=\linewidth , height=3cm]{EA1.eps}
+   %\includegraphics[width=\linewidth , height=3cm]{EA1.eps}
   \caption{Submodule E1A.}
   \label{fig:subEA1}
 \end{minipage}
@@ -716,13 +731,13 @@ candidate will not satisfy the testor condition over the first row of $BM$
 \centering
 \begin{minipage}{.5\textwidth}
   \centering
-   \includegraphics[width=\linewidth , height=3cm]{Rem1.eps}
+   %\includegraphics[width=\linewidth , height=3cm]{Rem1.eps}
   \caption{Submodule $Rem\_1$.}
   \label{fig:subRem1}
 \end{minipage}%
 \begin{minipage}{.5\textwidth}
   \centering
-   \includegraphics[width=\linewidth , height=3cm]{EA2.eps}
+   %\includegraphics[width=\linewidth , height=3cm]{EA2.eps}
   \caption{Submodule E2A.}
   \label{fig:subEA2}
 \end{minipage}
@@ -767,7 +782,7 @@ is performed by the software component and then the results are written to the o
 
 \begin{figure}[t]
     \begin{center}
-        \includegraphics[height=2.8cm]{infile.eps}
+       % \includegraphics[height=2.8cm]{infile.eps}
     \end{center}
 \caption{Input file format.}
 \label{fig:8}
@@ -822,13 +837,13 @@ density of~1's.
 \centering
 \begin{minipage}{.5\textwidth}
   \centering
-   \includegraphics[width=\linewidth , height=5.5cm]{low_density.eps}
+   %\includegraphics[width=\linewidth , height=5.5cm]{low_density.eps}
   \caption{Total runtime for density 8\%.}
   \label{fig:result1}
 \end{minipage}%
 \begin{minipage}{.5\textwidth}
   \centering
-   \includegraphics[width=\linewidth , height=5.5cm]{med_density.eps}
+   %\includegraphics[width=\linewidth , height=5.5cm]{med_density.eps}
   \caption{Total runtime for density 33\%.}
   \label{fig:result2}
 \end{minipage}
@@ -836,7 +851,7 @@ density of~1's.
 
 \begin{figure}[htb]
     \begin{center}
-        \includegraphics[height=5.5cm]{med48_density.eps}
+       % \includegraphics[height=5.5cm]{med48_density.eps}
     \end{center}
 \caption{Total runtime for density 45\%.}
 \label{fig:result3}
@@ -978,8 +993,16 @@ as testing two or more candidates per iteration, are still unexplored and would 
 \bibitem[Djukova(2005)]{R8}Djukova, E. V. (2005). On the number of irreducible coverings of an integer Matrix. Computational Mathematics and Mathematical Physics, 45, 903-908.
 \bibitem[Dmitriev et al.(1966)]{R12} Dmitriev, A. N.,  Zhuravlev, Y. I. and Krendeliev, F. P. (1966). About Mathematical Principles of Objects and Phenomena Classification. Diskretni Analiz, 7, 3-17.
 \bibitem[G\'omez(2001)]{R16}G\'omez, M. (2001). Hardware-in-the-Loop Simulation. Embedded Systems Programming, 14, 38-49.
+
+\bibitem[Grze et al.(2013)]{Grze13}Grze, T., Kopczynski, M., Stepaniuk, J. (2013). FPGA in Rough Set Based Core and Reduct Computation. In Rough Sets and Knowledge Technology, 263-270.
+
 \bibitem[Guyon et al.(2003)]{R4}Guyon, I. and Elisseeff, A. (2003). An introduction to variable and feature selection. Journal of Machine Learning Research, 3, 1157-1182.
 \bibitem[Jain et al.(1997)]{R3}Jain, A. and Zongker, D. (1997). Feature Selection: Evaluation, Application, and Small Sample Performance. IEEE Transactions on Pattern Analysis and Machine Intelligence, 9, 153-158.
+
+\bibitem[Jensen and Shen (2014)]{Jensen14}Jensen, R., Tuson, A., Shen, Q. (2014). Finding rough and fuzzy-rough set reducts with SAT. Information Sciences, 255, 100-120.
+
+\bibitem[Kopczynski et al.(2014)]{Kop14}Kopczynski, M., Grze, T., Stepaniuk, J. (2014). FPGA in Rough-Granular Computing : Reduct Generation. In 2014 IEEE/WIC/ACM International Joint Conferences on Web Intelligence (WI) and Intelligent Agent Technologies (IAT), 364-370. 
+
 \bibitem[Kudryavtsev(2006)]{R9}Kudryavtsev, V. B. (2006). Test recognition theory. Discrete Applied Mathematics, 16, 319-350.
 \bibitem[Lazo-Cort\'es et al.(1995)]{R32}Lazo-Cort\'es, M., Ruiz-shulcloper, J. (1995). Determining the feature relevance for non-classically described objects and a new algorithm to compute typical fuzzy testors. Pattern Recognition Letters, 16(12), 1259-1265.
 \bibitem[Lazo-Cort\'es et al.(2001)]{R1}Lazo-Cort\'es, M., Ruiz-shulcloper, J., and Alba-cabrera, E. (2001). An Overview of the Evolution of the Concept of Testor. Pattern Recognition, 34, 753-762.
@@ -1005,6 +1028,10 @@ as testing two or more candidates per iteration, are still unexplored and would 
 \bibitem[S\'anchez-D\'iaz et al.(2010)]{R23}S\'anchez-D\'iaz, G., Piza-Davila, I, Lazo-Cort\'es, M, 
 Mora-Gonz\'alez, M and Salinas-Luna, J. (2010). A Fast Implementation of the CT-EXT Algorithm for the Testor Property Identification. Lecture Notes in Computer Science, 6438, 92-103.
 \bibitem[Skowron et al.(1992)]{R40}Skowron, A and Rauszer, C. (1992). The discernibility matrices and functions in information systems. Handbook of Applications and Advances of the Rough Sets Theory, 331-362.
+
+\bibitem[Tiwari et al.(2013)]{Tiwari13}Tiwari, K., Kothari, A., Shah, R. (2013). FPGA Implementation of a Reduct Generation Algorithm based on Rough Set Theory. International Journal of Advanced Electrical and Electronics Engineering (IJAEEE), 2(6), 55-61.
+
+\bibitem[Tiwari and Kothari (2013)]{Tiwari14} Tiwari, K., Kothari, A. (2014). Design and Implementation of Rough Set Algorithms on FPGA : A Survey, 3(9), 14-23.
 
 \bibitem[Torres et al.(2014)]{Torr14}Torres, M., Torres, A., Cuellar, F., Torres, M., Ponce de Le\'on, E. and Pinales, F. (2014). Evolutionary computation in the identification of risk factors. Case of TRALI. Expert Systems with Applications, 41(3), 831-840.
 
