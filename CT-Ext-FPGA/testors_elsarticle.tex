@@ -134,8 +134,19 @@
 \address{Sta. Ma. Tonanzintla, Puebla, 72840, Mexico}
 
 \begin{abstract}
-Feature selection is an important task in pattern recognition. Given a dataset described by a set of attributes, a minimum subset of attributes that preserves the ability to discern between objects from different classes is needed. The computation of this minimum subset is a problem whose space complexity grows
-exponentially regarding the number of attributes. Testor Theory is a convenient way to solve this problem. A testor is defined as a subset of attributes that can discern between objects of different classes; and an irreducible testor is a minimal subset with this property. Although there are efficient algorithms for computing irreducible testors, hardware implementations of these algorithms can improve their performance; taking advantage of the inherent parallelism in the evaluation of testor candidates. In this paper, a new fast hardware software platform for computing irreducible testors is presented. Results from a prototype implementation showing the advantages of the proposed platform, are presented and discussed.
+Feature selection is an important task in pattern recognition and decision-making systems. Given a dataset
+described by a set of features, minimal subsets of features that preserve the ability to discern between
+objects from different classes are needed. The computation of these minimal subsets is a problem whose space 
+complexity grows exponentially regarding the number of attributes. 
+Several hardware architectures has been developed in order to reduce the execution time of existing algorithms,
+making accessible larger datasets than those that software applications can solve.
+%Testor Theory is a convenient way to solve this problem. A testor is defined as a subset of attributes that can discern between objects of different classes; and an irreducible testor is a minimal subset with this property. 
+%Although there are efficient algorithms for computing irreducible testors, hardware implementations of these algorithms can improve their performance; taking advantage of the inherent parallelism in the evaluation of testor candidates. 
+In this paper, a new fast hardware software platform for computing minimal subsets of features is presented.
+This new approach, uses a pruning strategy that reduces the search space more than any other existing alternative,
+in most cases.
+Results from a prototype implementation, showing the runtime reduction achieved by the proposed platform, are
+presented and discussed.
 
 \end{abstract}
 
@@ -162,17 +173,17 @@ computational cost of the classification process by eliminating superfluous info
 it could even provide better classification accuracy. 
 Testor Theory can be used for feature selection as shown in~\citep{R27,R5}. A testor is defined as a subset of attributes that can discern objects from different classes. An irreducible testor is a subset of features such that every attribute is indispensable for satisfying the testor condition. Finding all irreducible testors has been proven as an NP-hard problem~\citep{R40}.
 
-Feature selection is also a key aspect in expert and intelligent systems. \cite{Mart07} use Testor Theory to
+Feature selection is also a key aspect in expert and intelligent systems. \cite{Mart07} used Testor Theory to
 propose a new case-based approach to help elaborate intelligents teaching-learning systems.  Irreducible testors
 are computed in~\citep{Med07} to select problem variables in the proposal of an intelligent tutoring system with
-the capacity to adapt the interaction to its user's specific needs. Recently, \cite{Med07} use testors to 
+the capacity to adapt the interaction to its user's specific needs. Recently, \cite{Torr14} used testors to 
 determining factors associated with transfusion related acute lung injury. Another approach to feature selection,
 the Rough Sets Reducts, has been found to have a close relation with irreducible testors~\citep{Lazo15}. Expert
 systems can benefit also from Rough Sets methods, specially the feature selection by means of reducts, as shown 
 by \cite{Yah00}.
 
 Recently, there is an increasing popularity of architectures based on Field Programmable Gate-Array (FPGA) 
-for solving complex computational problems. Several hardware-software platforms based on this technology have 
+for solving complex computational problems. Several hardware software platforms based on this technology have 
 been reported \citep{R29,R30}. 
 In these platforms, the software component handles those tasks less suited for hardware implementation, 
 and it is also responsible of configuring the FPGA, as well as handling communication with the hardware component. 
@@ -189,30 +200,30 @@ This algorithm uses a candidate pruning process for avoiding many unnecessary ca
 reducing the number of verifications of the irreducible testor condition. 
 These two previous works computed a set of testors on the FPGA device whilst irreducible condition 
 was evaluated afterwards by the software component in the hosting PC. 
-Thus \cite{R21} proposed a hardware-software platform for computing irreducible testors that 
+Thus \cite{R21} proposed a hardware software platform for computing irreducible testors that 
 implemented the BT algorithm, as in \citep{R11}, but it also included a new module that eliminates most of 
 the non irreducible testors before transferring them to a host software application for final filtering. 
 One disadvantage of these approaches is the huge amount of data that must be transferred to the PC.  
 Consequently, in~\citep{Rod14} we proposed a modification to this platform in order to compute irreducible 
-testors in the hardware component, reducing the amount of data that must be transferred to the PC. 
+testors in the hardware component. 
 
 Several hardware accelerations has been recently reported for feature selection in Rough Sets Theory. Authors of
-\citep{Grze13,Kop14} present an FPGA based platform for computing a reduct. \cite{Tiwari13} presented various
-algorithms for attribute reduction using concepts of rough set theory and implemented the Quick Reduct
+\citep{Grze13,Kop14} presented an FPGA based platform for computing a reduct. \cite{Tiwari13} presented various
+algorithms for attribute reduction using concepts of Rough Sets Theory and implemented the Quick Reduct
 algorithm in a hardware fashion. Then, \cite{Tiwari14} presented a thorough survey on hardware implementation 
 of rough set algorithms. Unfortunately, these hardware implementations aim to compute a single reduct. 
-\cite{Jensen14} address the lack of guarantees of finding a features subset with minimal cardinality, as the
+\cite{Jensen14} addressed the lack of guarantees of finding a features subset with minimal cardinality, as the
 main drawback of these approaches. Furthermore, the problem of computing a single reduct has not exponential
 complexity. Hardware accelerations of these algorithms are intended to be applied on realtime applications
-where feature selections must be dynamically accomplished.
+where feature selection must be dynamically accomplished.
 
-In this paper, we develop an efficient hardware-software platform for computing irreducible
-testors for feature selection using the CT-EXT algorithm proposed in~\citep{R22}. The contribution of this
+In this paper, we present an efficient hardware software platform for computing irreducible
+testors using the CT-EXT algorithm proposed in~\citep{R22}. The contribution of this
 work is the design and implementation of a hardware architecture that traverses the search space in a 
 different order than that presented in \citep{R11, R21,Rod14}. This new strategy evaluates less candidate
-subsets than these previous architectures, which results in shorter runtime. In comparison to the 
+subsets than previous architectures, which results in shorter runtime. In comparison to the 
 software versions of CT-EXT~\citep{R22, R23}, our proposal evaluates a candidate every clock cycle for
-a fastest execution. The runtime gain of our new hardware-software platform is demonstrated throughout
+a fastest execution. The runtime gain of our new hardware software platform is demonstrated throughout
 experiments over synthetic datasets. 
 %CT-EXT has proven being, in most cases, more efficient in finding irreducible testors than BT~\citep{R22, R23}.
 
@@ -222,7 +233,7 @@ experiments over synthetic datasets.
 %parallel computational models. 
 
 The rest of this paper is structured as follows. Section~\ref{sect:2} introduces the basic concepts of 
-Testor Theory and the CT-EXT algorithm. Section~\ref{sect:3} introduces the proposed platform.  
+Testor Theory and the CT-EXT algorithm. Section~\ref{sect:3} introduces the proposed architecture.  
 Evaluation of the proposed platform and a discussion of the experimental results are 
 presented in section~\ref{sect:6}. Finally, section~\ref{sect:8} shows our conclusions and some directions 
 for future work.
@@ -498,9 +509,18 @@ A common stage to all algorithms for computing irreducible testors is
 the verification of each candidate combination over the basic matrix. 
 This is an intrinsic parallel operation that a hardware implementation 
 could take advantage of.
-Our platform consists in the implementation of a
-hardware architecture for computing all irreducible testors based on
-the CT-EXT algorithm. 
+The time complexity of evaluating a candidate for the testor conditions is
+$O(nm)$ and for the irreducible condition is $O(n^2m)$; where $n$ is the number of 
+attributes and $m$ is the number of rows in the basic matrix. In the hardware
+component, these conditions are simultaneously evaluated in a single clock cycle.
+The novelty in this work relays on the Candidate Generator module. This new module
+implements the lexicographic total order~\citep{R22} as in the CT-EXT algorithm.
+This traversing order allows our proposal to evaluate less candidates than 
+those evaluated by the existing hardware architectures; reducing, this way, the 
+execution time.
+%Our platform consists in the implementation of a
+%hardware architecture for computing all irreducible testors based on
+%the CT-EXT algorithm. 
 
 The proposed platform is shown in Fig.\,\ref{figArq}. The platform comprises a host PC and 
 an Atlys board populated with a FPGA Spartan-6 device \citep{R15}; which are connected through a USB cable. A custom developed software application,
@@ -509,9 +529,9 @@ FPGA carries out all the calculations needed to generate the testors and sends t
 
 \begin{figure}[htb]
     \begin{center}
-       % \includegraphics[width=13cm]{Arquitecture.eps}
+       \includegraphics[width=13cm]{Arquitecture.eps}
     \end{center}
-\caption{Proposed hardware-software platform.}
+\caption{Proposed hardware software platform.}
 \label{figArq}
 \end{figure}
 
@@ -520,7 +540,7 @@ FPGA carries out all the calculations needed to generate the testors and sends t
 
 \begin{figure}[htb]
     \begin{center}
-        %\includegraphics[width=13cm]{CT-ext_arq.eps}
+        \includegraphics[width=13cm]{CT-ext_arq.eps}
     \end{center}
 \caption{CT-EXT Architecture.}
 \label{fig:3}
@@ -550,7 +570,7 @@ consequently the number of iterations needed by the algorithm.
 
 \begin{figure}[htb]
     \begin{center}
-        %\includegraphics[height=6cm]{BM_module.eps}
+        \includegraphics[height=6cm]{BM_module.eps}
     \end{center}
 \caption{$BM$ module.}
 \label{fig:4}
@@ -575,7 +595,7 @@ which means that the candidate is a testor of $BM$.
 
 \begin{figure}[htb]
     \begin{center}
-        %\includegraphics[height=6cm]{BM_row.eps}
+        \includegraphics[height=6cm]{BM_row.eps}
     \end{center}
 \caption{$BM$ row.}
 \label{fig:row}
@@ -638,7 +658,7 @@ Taking as example the ordered basic matrix of Table~\ref{table2}. In Table~\ref{
 
 \begin{figure}[t]
     \begin{center}
-        %\includegraphics[height=6cm]{CandGen.eps}
+        \includegraphics[height=6cm]{CandGen.eps}
     \end{center}
 \caption{Candidate Generator module.}
 \label{fig:5}
@@ -703,13 +723,13 @@ was added to the current candidate.
 \centering
 \begin{minipage}{.5\textwidth}
   \centering
-   %\includegraphics[width=.7\linewidth , height=3cm]{Add1.eps}
+   \includegraphics[width=.7\linewidth , height=3cm]{Add1.eps}
   \caption{Submodule A.}
   \label{fig:subA}
 \end{minipage}%
 \begin{minipage}{.5\textwidth}
   \centering
-   %\includegraphics[width=\linewidth , height=3cm]{EA1.eps}
+   \includegraphics[width=\linewidth , height=3cm]{EA1.eps}
   \caption{Submodule E1A.}
   \label{fig:subEA1}
 \end{minipage}
@@ -731,13 +751,13 @@ candidate will not satisfy the testor condition over the first row of $BM$
 \centering
 \begin{minipage}{.5\textwidth}
   \centering
-   %\includegraphics[width=\linewidth , height=3cm]{Rem1.eps}
+   \includegraphics[width=\linewidth , height=3cm]{Rem1.eps}
   \caption{Submodule $Rem\_1$.}
   \label{fig:subRem1}
 \end{minipage}%
 \begin{minipage}{.5\textwidth}
   \centering
-   %\includegraphics[width=\linewidth , height=3cm]{EA2.eps}
+   \includegraphics[width=\linewidth , height=3cm]{EA2.eps}
   \caption{Submodule E2A.}
   \label{fig:subEA2}
 \end{minipage}
@@ -782,7 +802,7 @@ is performed by the software component and then the results are written to the o
 
 \begin{figure}[t]
     \begin{center}
-       % \includegraphics[height=2.8cm]{infile.eps}
+       \includegraphics[height=2.8cm]{infile.eps}
     \end{center}
 \caption{Input file format.}
 \label{fig:8}
@@ -793,12 +813,16 @@ is performed by the software component and then the results are written to the o
 
 
 In order to show the performance of the proposed platform, it was compared against a software 
-implementation of the CT-EXT algorithm and the BT hardware platform previously reported in \citep{R21}. 
-For experimentation purposes, the BT hardware platform was modified for finding irreducible testors 
-on the FPGA similarly to the CT-EXT implementation. This modification avoids the final filtering stage 
-proposed by \cite{R21}.
+implementation of the CT-EXT algorithm~\citep{R22} and the BT hardware platform previously 
+reported in~\citep{Rod14}\footnote{The source code of the three implementations and the basic matrix
+generator, as well as the matrices used for the experiments, can be downloaded from 
+\textbf{http://ccc.inaoep.mx/}.} .
+ 
+%For experimentation purposes, the BT hardware platform was modified for finding irreducible testors 
+%on the FPGA similarly to the CT-EXT implementation. This modification avoids the final filtering stage 
+%proposed by \cite{R21}.
 
-Either CT-EXT or BT (modified) hardware implementations are capable of evaluating a candidate per clock 
+Either CT-EXT or BT hardware implementations are capable of evaluating a candidate per clock 
 cycle. If both architectures are running at the same frequency, as it will be the case in our experiments, 
 there are two reasons for differences in running time. The first one is the time taken for reorganization 
 of basic matrix, which is a more complex process in BT, altough it can be neglected as shown in \citep{R21}. 
@@ -831,19 +855,19 @@ three kinds of basic matrices were randomly generated. Each type containing diff
 
 Higher density matrices were discarded because they do not constitute a computationally expensive problem, 
 as stated by \cite{R21}. Here after, we will be referring to these three sets of matrices by its 
-density of~1's.
+approximate density of~1's.
 
 \begin{figure}[htb]
 \centering
 \begin{minipage}{.5\textwidth}
   \centering
-   %\includegraphics[width=\linewidth , height=5.5cm]{low_density.eps}
+   \includegraphics[width=\linewidth , height=5.5cm]{low_density.eps}
   \caption{Total runtime for density 8\%.}
   \label{fig:result1}
 \end{minipage}%
 \begin{minipage}{.5\textwidth}
   \centering
-   %\includegraphics[width=\linewidth , height=5.5cm]{med_density.eps}
+   \includegraphics[width=\linewidth , height=5.5cm]{med_density.eps}
   \caption{Total runtime for density 33\%.}
   \label{fig:result2}
 \end{minipage}
@@ -851,18 +875,24 @@ density of~1's.
 
 \begin{figure}[htb]
     \begin{center}
-       % \includegraphics[height=5.5cm]{med48_density.eps}
+       \includegraphics[height=5.5cm]{med48_density.eps}
     \end{center}
 \caption{Total runtime for density 45\%.}
 \label{fig:result3}
 \end{figure}
 
-For our experiments, basic matrices of different sizes were randomly generated for the three types. For the
-hardware platforms, we measure the runtimes including the time for the following stages: $BM$ input parsing 
+For our experiments, 28 basic matrices of different sizes were randomly generated. 
+A random number generator is used to generate rows up to 30 attributes long. The generated number is 
+filtered for the minimum and maximum number of 1's allowed. This way the desires density is
+controlled. If accepted, the row is verified as typical against the saved rows. Typical rows 
+are saved until the desired number is reached. In order to obtain matrices with a larger
+number of attributes, columns from different matrices are jointed. Finally the resulting 
+density of 1's is calculated.
+
+For the hardware platforms, we measure the runtimes including the time for the following stages: $BM$ input parsing 
 and VHDL code generation, synthesis process, and irreducible testor computation (with the hardware 
 component running at 50MHz). The number of rows for each type of matrices is conditioned by the dimensions of 
 the biggest matrix that may be synthesized at the desired running frequency.
-
 All experiments are performed using an Intel(R) Core(TM) i5-2400 CPU @ 3.10GHz for software executions and 
 an Atlys board, powered by a Spartan-6 LX45 FPGA device, for the hardware components.
 Figs.\,\ref{fig:result1}, \,\ref{fig:result2}, and \,\ref{fig:result3} show graphs of the runtime (in hours) 
@@ -873,8 +903,8 @@ Figs.\,\ref{fig:result1}, \,\ref{fig:result2}, and \,\ref{fig:result3}.
 Slowest executions of the CT-EXT software implementation (CTS) are not shown in order to keep clarity in 
 the figures. 
 The hardware platform for BT (BTH) was not able to met the constrain of 50MHz clock frequency for some 
-matrices. In fact, for medium  density, BT platform could not be synthesized even for the smaller matrix. 
-This is the case for all missing BTH executions in Figs.\,\ref{fig:result1}, \,\ref{fig:result2}, and \,\ref{fig:result3}.
+matrices. In fact, for medium  density, BT platform could not be synthesized even for the smallest matrix. 
+This is the case for all missing BTH executions in Figs.\,\ref{fig:result1},~\,\ref{fig:result2}, and~\,\ref{fig:result3}.
 
 \cite{R21} stated that the time for computing irreducible testors does not only depend on the size and 
 density of the $BM$, but also on the distribution of 0's and 1's inside the matrix. This assertion can 
@@ -883,7 +913,7 @@ be also confirmed from matrices with 68 and 70 attributes respectively, in Fig.\
 Table~\ref{table:8} shows the runtime for each stage of the data flow, for 
 400x40, 400x42 and 400x44 very-low density matrices. This table shows that the synthesis time 
 becomes less significative regarding the total time when the problem size increases. 
->From this table, it can also be seen that the main difference between the BT and CT-EXT hardware 
+From this table, it can also be seen that the main difference between the BT and CT-EXT hardware 
 implementations is the runtime of the irreducible testor computation process. The main reason for 
 this difference is the number of candidates evaluated by each algorithm. This is an explanation 
 about why the BT hardware implementation is slower than the software version of CT-EXT for the 
@@ -964,23 +994,31 @@ Fig.\,\ref{fig:result3}.
 
 \section{Conclusions}
 \label{sect:8}
-
-The good performance of our hardware implementation is feasible due to the
-high level of parallelism implicit in candidates evaluation of the CT-EXT algorithm which can be
-efficiently implemented on an FPGA. 
-The proposed platform improves the previously reported architecture \citep{R21} by finding 
-\textit{irreducible} testors in a single clock cycle. This new feature solves problems arising 
-from transmission of irrelevant data to the hosting PC; improving the total runtime. The proposed architecture offers an alternative to the hardware implementation of BT which is faster in most 
-of the cases. 
+In this work we present the design and implementation of a new hardware software platform for
+computing all the irreducible testors in a dataset.  As opposed to the existing hardware 
+architectures for feature selection using rough sets methods, our proposal computes all the
+minimal subsets of features that preserve the classification accuracy of the original dataset.
+The good performance of our hardware implementation, compared to the software approach, is 
+feasible due to the high level of parallelism implicit in candidates evaluation of the CT-EXT 
+algorithm; which can be efficiently implemented on an FPGA. 
+%The proposed platform improves the previously reported architecture \citep{R21} by finding 
+%\textit{irreducible} testors in a single clock cycle. This new feature solves problems arising 
+%from transmission of irrelevant data to the hosting PC; improving the total runtime. 
+This proposed architecture offers an alternative to the hardware implementation of BT which is 
+faster in most of the cases, by evaluating less candidate subsets. 
 
 Experiments also showed that the proposed platform uses fewer hardware resources and is able to run at a higher 
 frequency than the BT hardware implementation, which allows processing larger matrices, since the maximum size of 
-the problem that can be solved in a hardware architecture is conditioned by its resource utilization. The search for new algorithms that could be efficiently implemented in an FPGA constitutes future work. Improvements, such 
-as testing two or more candidates per iteration, are still unexplored and would be evaluated in further studies.
+the problem that can be solved in a hardware architecture is conditioned by its resource utilization. 
+This work enables the application of Testor Theory methods in larger classification and decision-making
+problems than it was possible.
+
+The search for new algorithms that could be efficiently implemented in an FPGA constitutes future work. Improvements, such as testing two or more candidates per iteration, are still unexplored and would be 
+evaluated in further studies.
 
 
 
-\section*{References}
+%\section*{References}
 \bibliographystyle{elsarticle-harv}
 
 
