@@ -12,6 +12,9 @@
 \usepackage[margin=2.5cm]{geometry}	% Change margins
 \usepackage[table]{xcolor}			% Colores en el cronograma
 \usepackage{multirow}				% Cabecera del cronograma
+\usepackage{watermark}
+\usepackage{datetime}
+%\newdateformat{mydate}{\monthname[\THEMONTH] \THEYEAR} 
 %-------------------------------------------------------------------------
 % Se definen los margenes para el documento
 %\evensidemargin=0in
@@ -21,9 +24,9 @@
 
 
 \begin{document}
-\begin{frontmatter}
+	\input{./frontPage.tex}
 	
-	\title{Development of efficient algorithms for reduct computation}
+	\title{Development of fast algorithms for reduct computation}
 	
 	\author{Vlad\'imir Rodr\'iguez Diez}
 	\author{Jos\'e Francisco Mart\'inez Trinidad}
@@ -32,31 +35,30 @@
 	Astrophysics, Optics and Electronics\\
 	Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
 	72840, M\'{e}xico} 
-	%\email{\{vladimir.rodriguez,fmartine\}@inaoep.mx}
+%	\email{\{vladimir.rodriguez,fmartine\}@inaoep.mx}
 	
-	%\maketitle
 	
-	%\thispagestyle{empty}
+%	\thispagestyle{empty}
 	
 	\begin{abstract}
-	    Rough Set Theory reducts are minimal subsets of attributes preserving the semantics of an 
-	    information system. The reduct computation problem has exponential complexity regarding the number of 
-	    attributes in a dataset. The development of new efficient algorithms, which adapt to the external
-	    properties of the dataset, must improve the performance of existing ones. 
-	    Throughout our research, most efficient reported algorithm for reduct computation will be 
-	    implemented in an homogeneous environment for benchmarking. Experiences and difficulties 
-	    encountered in these experiments will constitute the basis for the development of our resulting algorithms. 
-	    We will develop algorithms in two directions, the computation of all reducts and the computation of
-	    globally shortest reducts.
-	    We expect this new approach would reduce the runtime, and hence make the reduct computation viable for 
-	    larger datasets than it is today.
+		Information systems in Rough Set Theory (RST) are tables of objects described by some attributes. 
+		This type of tables are widely used in different pattern recognition problems particularly in 
+		supervised classification. RST reducts are minimal subsets of attributes preserving 
+		the classification accuracy of an information system. Reducts computation has an exponential complexity 
+		regarding the number of attributes in the information system. In the literature have been reported 
+		several algorithms for reduct computation but their high computational cost makes infeasible their
+		use in large problems. For this reason, in this research we will develop new fast algorithms 
+		in two directions, the computation of all reducts and the computation of globally shortest reducts.
+	    The proposed algorithms will be faster than state of the art algorithms, and hence make the reduct 
+	    computation viable for larger information systems than it is today. Here we present some preliminary 
+	    results which show that it is possible developing faster algorithms for computing reducts.
 	\end{abstract}
 	
 	\begin{keyword}
 		Rough Sets\sep Dimensionality Reduction\sep Reduct Computation.
 	\end{keyword}
-	
-\end{frontmatter}
+
+	\maketitle
 
 \pagebreak 
 \tableofcontents
@@ -68,44 +70,44 @@
 \section{Introduction}
   Rough set theory (RST), proposed by Z. Pawlak in 1982 \citep{Pawlak81,Pawlak81-2,Pawlak82,Pawlak91}, 
   is a relatively new mathematical theory 
-  to deal with imperfect knowledge, in particular with vague concepts. Information systems in RST 
-  are tables of objects described by some attributes (columns). 
-  When data is collected or recorded, every single aspect of the object under study is considered 
+  to deal with imperfect knowledge, in particular with vague concepts. Into RST, information systems
+  are tables of objects described by a set of attributes (columns). 
+  When data is collected or recorded, every single aspect (attribute) of the object under study is considered 
   to have a complete representation and to ensure that no potentially useful information is lost.
   As a result, information systems are usually characterized by a large number of attributes,
   degrading the performance of machine learning tools~\citep{Parthalain08}.
   One of the main concepts in RST is the notion of reduct, which is a minimal subset of attributes 
   preserving the required classification capabilities~\citep{Pawlak91}. A new information system using 
-  only those features in a reduct, is a reduced representation of the original data with the same 
-  classification quality. 
-  However, the main restriction in practical use of RST is that computing all reducts has been proven 
-  as an NP-hard problem~\citep{Skowron92}.
-  It is therefore of high importance the development of efficient algorithms for reduct computation.
+  only those features in a reduct, is a reduced representation of the original data that allows obtaining  
+  the same classification quality than the original information system. 
+  However, the main restriction in practical applications of RST is that computing all the reducts of an information 
+  system has an exponential complexity~\citep{Skowron92}. Therefore an active research line is the development 
+  of fast algorithms for reduct computation.
   
-  Several attempts to speedup computing of reducts are reported. Many of the presented algorithms are 
-  based on some heuristics. Main drawback of this approach is that these algorithm do not necessarily 
-  return the complete set of attributes and may obtain super-reducts (non minimal subsets). Another 
-  way to speedup computation of reducts is the parallelization~\citep{Strakowski08}. There are also 
+  Several attempts to speed up the reduct computation have been reported. Many of these algorithms are 
+  based on some heuristics. The main drawback of this approach is that these algorithms do not necessarily 
+  return the complete set of reducts in the information system, and may obtain super-reducts (non minimal subsets). 
+  Another way to speed up reduct computation is parallelization~\citep{Strakowski08}. There are also 
   interesting alternatives such as the use of a parallel version of genetic algorithms \citep{Wroblewski98}
-  and the transformation of reduct computation to the well known problem SAT~\citep{Jensen14}.
+  and the transformation of the reduct computation problem to the well known SAT problem~\citep{Jensen14}.
   
-  Testor Theory was created by Yablonskii and Chegis in the middle of fifties 
-  of the last century as a tool for analysis of problems connected with control and 
-  diagnosis of faults in circuits. Testor Theory can be used for feature selection as shown in~\citep{Ruiz08}
-  and~\citep{Martinez01}. The relation between the rough set reducts and the typical testors (TT) from the
-  logical combinatorial approach to pattern recognition is exposed in~\citep{Lazo15}. Algorithm for
-  typical testors computation:~\citep{Ruiz85},~\citep{Santiesteban03},~\citep{Sanchez07} and~\citep{Lias09},
-  may be applied to reduct computation because of the similarity between these two concepts. One strength 
-  of our research is that we will be testing, for the first time, these two families of algorithm in the 
-  same arena.
+  Recently the RST reducts have been related to the typical testors (TT) from the logical combinatorial approach to 
+  pattern recognition~\citep{Lazo15}. Testor Theory was created by Yablonskii and Chegis in the middle of fifties 
+  of the last century as a tool for analysis of problems connected with control and diagnosis of faults in circuits. 
+  Testor Theory can be used for feature selection as shown in~\citep{Ruiz08} and~\citep{Martinez01}. Algorithms for
+  typical testors computation like, for instance~\citep{Ruiz85},~\citep{Santiesteban03},~\citep{Sanchez07} 
+  and~\citep{Lias09}, can be applied to reduct computation due to the similarity between these two concepts. 
+  Fast implementations of these algorithms; based on cumulative binary operations~\citep{Sanchez10}, genetic 
+  algorithms~\citep{Sanchez99} and hardware architectures~\citep{Rojas12}; have been developed to reduce the computation 
+  time. One strength of our research is that we will be testing, for the first time, these two families of algorithms 
+  in the same arena.
      
   Throughout our research we will conduct a comparative study between the most relevant algorithms for reduct 
-  computation. Although main focus will be on algorithm obtaining all the reducts and globally shortest reducts,
+  computation. Although main our focus will be on algorithms obtaining all the reducts and globally shortest reducts,
   experiences form heuristics approaches will be considered as well. We will be exploring the relationship 
-  between algorithms performance and external properties of datasets. Another direction in our research is
-  the evaluation of dynamically changing the algorithm strategy throughout the execution. Finally best
-  performing algorithms will be redesign and implemented in a hardware fashion in order to improve their
-  efficiency.  
+  between algorithms' performance and the characteristics of the information system. Based on this relationship,
+  we will propose new fast algorithms for reduct computation. Finally the proposed algorithms 
+  will be redesigned and implemented in a hardware fashion in order to improve, even more, their efficiency.  
 
 \section{Basic Concepts}\label{basicConcepts}
 %TODO hablar de la matriz basica
