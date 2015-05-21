@@ -134,19 +134,31 @@
 \address{Sta. Ma. Tonanzintla, Puebla, 72840, Mexico}
 
 \begin{abstract}
-Feature selection is an important task in pattern recognition and decision-making systems. Given a dataset
-described by a set of features, minimal subsets of features that preserve the ability to discern between
-objects from different classes are needed. The computation of these minimal subsets is a problem whose space 
-complexity grows exponentially regarding the number of attributes. 
-Several hardware architectures has been developed in order to reduce the execution time of existing algorithms,
-making accessible larger datasets than those that software applications can solve.
-%Testor Theory is a convenient way to solve this problem. A testor is defined as a subset of attributes that can discern between objects of different classes; and an irreducible testor is a minimal subset with this property. 
-%Although there are efficient algorithms for computing irreducible testors, hardware implementations of these algorithms can improve their performance; taking advantage of the inherent parallelism in the evaluation of testor candidates. 
-In this paper, a new fast hardware software platform for computing minimal subsets of features is presented.
-This new approach, uses a pruning strategy that reduces the search space more than any other existing alternative,
-in most cases.
-Results from a prototype implementation, showing the runtime reduction achieved by the proposed platform, are
-presented and discussed.
+Among the systems involved with data and knowledge that give answers, solutions, or diagnoses, based on 
+available information; those based on feature selection are very important since they allow to solve 
+important tasks into pattern recognition and decision making areas. Feature selection consists in 
+finding a minimum subset of attributes that preserves the ability to discern between objects from 
+different classes. Testor Theory is a convenient way to solve this problem since a testor is defined as
+a subset of attributes that can discern between objects of different classes; and an irreducible testor
+is a minimal subset with this property. However, the computation of these minimal subsets is a problem 
+whose space complexity grows exponentially regarding the number of attributes. Therefore, in the 
+literature several hardware implementations of algorithms for computing testors, which take advantage of
+the inherent parallelism in the evaluation of testor candidates, have been proposed. In this paper, a 
+new fast hardware software platform for computing irreducible testors is introduced. Our proposal 
+follows a pruning strategy that reduces the search space more than any other alternative reported in 
+the literature, in most cases. The experimental results show the runtime reduction achieved by the 
+proposed platform in contrast to other state-of-the-art hardware and software implementations.
+%Feature selection is an important task in pattern recognition and decision-making systems. Given a dataset
+%described by a set of features, minimal subsets of features that preserve the ability to discern between
+%objects from different classes are needed. The computation of these minimal subsets is a problem whose space 
+%complexity grows exponentially regarding the number of attributes. 
+%Several hardware architectures has been developed in order to reduce the execution time of existing algorithms,
+%making accessible larger datasets than those that software applications can solve.
+%In this paper, a new fast hardware software platform for computing minimal subsets of features is presented.
+%This new approach, uses a pruning strategy that reduces the search space more than any other existing alternative,
+%in most cases.
+%Results from a prototype implementation, showing the runtime reduction achieved by the proposed platform, are
+%presented and discussed.
 
 \end{abstract}
 
@@ -171,16 +183,19 @@ Feature selection for supervised classification consists in identifying those at
 provide relevant information for the classification process. This procedure does not only reduce the 
 computational cost of the classification process by eliminating superfluous information, but in some cases 
 it could even provide better classification accuracy. 
-Testor Theory can be used for feature selection as shown in~\citep{R27,R5}. A testor is defined as a subset of attributes that can discern objects from different classes. An irreducible testor is a subset of features such that every attribute is indispensable for satisfying the testor condition. Finding all irreducible testors has been proven as an NP-hard problem~\citep{R40}.
+Testor Theory can be used for feature selection as shown in~\citep{R27,R5}. A testor is defined as a subset 
+of attributes that can discern objects from different classes. An irreducible testor is a subset of features 
+such that every attribute is indispensable for satisfying the testor condition. Finding all irreducible 
+testors has been proven as an NP-hard problem~\citep{R40}.
 
 Feature selection is also a key aspect in expert and intelligent systems. \cite{Mart07} used Testor Theory to
-propose a new case-based approach to help elaborate intelligents teaching-learning systems.  Irreducible testors
-are computed in~\citep{Med07} to select problem variables in the proposal of an intelligent tutoring system with
-the capacity to adapt the interaction to its user's specific needs. Recently, \cite{Torr14} used testors to 
-determining factors associated with transfusion related acute lung injury. Another approach to feature selection,
-the Rough Sets Reducts, has been found to have a close relation with irreducible testors~\citep{Lazo15}. Expert
-systems can benefit also from Rough Sets methods, specially the feature selection by means of reducts, as shown 
-by \cite{Yah00}.
+propose a new case-based approach for developing intelligent teaching-learning systems.  Irreducible testors
+are computed in~\citep{Med07} to select problem attributes for an intelligent tutoring system 
+which has the capacity of adapting its interaction to the user's specific needs. Recently, \cite{Torr14} used 
+testors for determining risk factors associated with transfusion related to acute lung injuries. Another approach to 
+feature selection based on Rough Set Reducts has been found to have a close relationship with irreducible 
+testors~\citep{Lazo15}. Therefore, expert systems can be benefited from Rough Sets methods, specially for 
+feature selection by means of reducts, as shown by \cite{Yah00}.
 
 Recently, there is an increasing popularity of architectures based on Field Programmable Gate-Array (FPGA) 
 for solving complex computational problems. Several hardware software platforms based on this technology have 
@@ -207,23 +222,24 @@ One disadvantage of these approaches is the huge amount of data that must be tra
 Consequently, in~\citep{Rod14} we proposed a modification to this platform in order to compute irreducible 
 testors in the hardware component. 
 
-Several hardware accelerations has been recently reported for feature selection in Rough Sets Theory. Authors of
+Several hardware accelerations have been recently reported for feature selection in Rough Set Theory. Authors of
 \citep{Grze13,Kop14} presented an FPGA based platform for computing a reduct. \cite{Tiwari13} presented various
-algorithms for attribute reduction using concepts of Rough Sets Theory and implemented the Quick Reduct
+algorithms for attribute reduction using concepts of Rough Set Theory and implemented the Quick Reduct
 algorithm in a hardware fashion. Then, \cite{Tiwari14} presented a thorough survey on hardware implementation 
 of rough set algorithms. Unfortunately, these hardware implementations aim to compute a single reduct. 
-\cite{Jensen14} addressed the lack of guarantees of finding a features subset with minimal cardinality, as the
-main drawback of these approaches. Furthermore, the problem of computing a single reduct has not exponential
-complexity. Hardware accelerations of these algorithms are intended to be applied on realtime applications
-where feature selection must be dynamically accomplished.
+\cite{Jensen14} addressed the lack of guarantees for finding an attributes subset with minimal cardinality, 
+which is the main drawback of these approaches. 
+%Furthermore, the problem of computing a single reduct has not exponential
+%complexity. Hardware accelerations of these algorithms are intended to be applied on realtime applications
+%where feature selection must be dynamically accomplished.
 
 In this paper, we present an efficient hardware software platform for computing irreducible
-testors using the CT-EXT algorithm proposed in~\citep{R22}. The contribution of this
+testors using the CT-EXT algorithm proposed in~\citep{R22}. The main contribution of this
 work is the design and implementation of a hardware architecture that traverses the search space in a 
 different order than that presented in \citep{R11, R21,Rod14}. This new strategy evaluates less candidate
 subsets than previous architectures, which results in shorter runtime. In comparison to the 
-software versions of CT-EXT~\citep{R22, R23}, our proposal evaluates a candidate every clock cycle for
-a fastest execution. The runtime gain of our new hardware software platform is demonstrated throughout
+software versions of CT-EXT~\citep{R22, R23}, our proposal evaluates a candidate every clock cycle, which
+leads to a faster execution. The runtime gain of our new hardware software platform is demonstrated throughout
 experiments over synthetic datasets. 
 %CT-EXT has proven being, in most cases, more efficient in finding irreducible testors than BT~\citep{R22, R23}.
 
@@ -232,289 +248,488 @@ experiments over synthetic datasets.
 %can be met by a combination of technological improvements and efficient hardware architectures based on 
 %parallel computational models. 
 
-The rest of this paper is structured as follows. Section~\ref{sect:2} introduces the basic concepts of 
-Testor Theory and the CT-EXT algorithm. Section~\ref{sect:3} introduces the proposed architecture.  
+The rest of this paper is structured as follows. Section~\ref{sect:2} introduces the CT-EXT algorithm. 
+Section~\ref{sect:3} describes the proposed architecture.  
 Evaluation of the proposed platform and a discussion of the experimental results are 
 presented in section~\ref{sect:6}. Finally, section~\ref{sect:8} shows our conclusions and some directions 
 for future work.
 
-\section{Basic concepts}
-\label{sect:2}
+%\section{Basic concepts}
+%\label{sect:2}
+%
+%In pattern recognition, feature selection is a very important task for supervised classification. In the logical
+% combinatorial approach to pattern recognition \citep{R5}, a useful
+%way to deal with this problem is through Testor Theory. The concept of testor for pattern recognition was
+%introduced by \cite{R12}. They defined a testor as a subset of features that allows
+%differentiating objects from different classes. Testors are quite useful, especially when object descriptions
+%contain both numeric and non-numeric features, and maybe they are incomplete (mixed incomplete data)
+%\citep{R5}. This concept has been developed in different contexts \citep{R1}. From an 
+%algorithmic point of view, Testor Theory has shown a continuous development from its origins to the present 
+%\citep{R31,R13,R23}.
+%
+%Let $TM$ be a training matrix with $k$ objects described through $n$
+%features of any type $\{x_{1},\ldots,x_{n}\}$ and grouped in $r$
+%classes. Let $DM$ be a Boolean dissimilarity matrix (0 = similar, 1 =
+%dissimilar), obtained from feature by feature comparisons of every
+%pair of objects from $TM$ belonging to different classes. $DM$ has
+%$m$ rows and $n$ columns, where usually $m>>k$.
+%
+%Let $T$ be a subset of attributes. Testors and irreducible testors are formally defined as follows:
+%
+%\begin{definition} \label{def1}
+%$T$ is a testor if and only if when all
+%features (columns) are eliminated from $DM$, except those from $T$, there is
+%not any row of $DM$ with only 0's. $T$ is an irreducible testor if none of its proper subsets is a testor.
+%\end{definition}
+%
+%In defintion \ref{def1}, if there is not any row of $DM$ with only
+%0's it means that there is not a pair of objects from different
+%classes that are similar on all the features of $T$, that is, a
+%testor $T$ allows differentiating objects from different
+%classes. From definition~\ref{def1}, if $T$ is a testor then, any superset of $T$ is a testor too.
+%
+%The number of rows in $DM$ could be too large, therefore a strategy to reduce this matrix, without losing
+%relevant information for computing irreducible testors, is eliminating redundant rows \citep{R1}.
+%
+%%% DEFINICION 
+%\begin{definition}
+%Let $f=[f_1, f_2, \dots , f_n]$ and $f'=[f'_1, {f'}_2, \dots , {f'}_n]$ be two rows of $DM$, $f$ 
+%is a sub-row of $f^{'}$ if for each column $j=1,2,\dots ,n$;  $f_{j} \le f'_{j}$ and for at least one index, the 
+%inequality is strict.
+%\end{definition}
+%
+%%% DEFINICION 
+%\begin{definition}
+%A row $f$ of $DM$ is a basic row if no row of the matrix $DM$ is a sub-row of $f$. 
+%\end{definition}
+%
+%%% DEFINICION 
+%\begin{definition}
+%The basic matrix of $DM$, denoted as $BM$, is the sub-matrix of $DM$ formed only by the basic rows (without 
+%repetitions).
+%
+%\end{definition}
+%
+%Let $TT(DM)$ and $TT(BM)$ be the sets of all irreducible testors of $DM$ and $BM$ respectively, it is 
+%relatively easy to prove that $TT(DM)=TT(BM)$, see \citep{R32}; i.e., we can conclude that usually $DM$ 
+%contains redundant information. In addition, the construction of $BM$ from $DM$ is a very fast process, 
+%then we work over $BM$.
+%
+%The CT-EXT algorithm has the following theoretical bases.
+%\begin{definition} \label{def21} Let $f_i$ be a row of BM, $f_i$ is a zero row of $S \subseteq R$, and we denote it as ${f_i}^0 (S)$, if $\forall x_p \in S$, $f_i [p] = BM [i, p] = 0$. We denote as $\Sigma_S f^0$  the amount of zero rows of S.
+%\end{definition}
+%\begin{definition} \label{def22} In terms of BM, a testor $T \subseteq R$ is a feature set such that there
+%are no zero rows of T in BM. 
+%\end{definition}
+%\begin{definition} \label{def23} Let $f_i$ be a row of BM, $f_i$ is a typical row of $S \subseteq R$ regarding $x_q$, being $x_q \in S$, and we denote it by ${f_i}^1 (S,q)$ if $f_i [q] = BM [i, q] = 1$, and $\forall x_p \in S$, $x_p \neq x_q$ , $f_i [p] = BM [i, p] =~0$.
+%\end{definition}
+%
+%\begin{definition} \label{def24} In terms of BM, $T \subseteq R$ is an irreducible testor if T is a testor and
+%$\forall x_j \in T, \exists {f_i}^1 (T, j)$.
+%\end{definition}
+%
+%This means that for each feature in an irreducible testor, there exists a row in 
+%the sub matrix of $BM$ associated to $T$, having a 1 in the position corresponding
+%to that feature, and 0 in all remaining positions (if any column of $T$ is eliminated, 
+%at least one zero row will appear, and the testor property would not be fulfilled). 
+%
+%\begin{definition} \label{def25} Given $T \subseteq R$ and $x_j \in R$ such that $x_j \notin T$. 
+%%We denote as $\sum_T f^0$ the amount of zero rows of T. 
+%We say that $x_j$ contributes to T if, and only if, $\sum_{T\cup\{x_j\}} f^0 < \sum_T f^0$.
+%\end{definition}
+%This definition indicates that a feature contributes to a feature subset $T$
+%if for at least one zero row in $BM$, considering only $T$, the new feature has a 1 in 
+%this row. So, adding this feature to $T$, there are less
+%zero rows than the amount of zero rows for $T$.
+%
+%It is easy to see that $\sum_T f^0 \geq \sum_{T\cup\{x_j\}} f^0$. If we
+%increase the feature subset, either the zero rows are maintained, and in this
+%case the column added does not contribute to the combination, or the number of zero rows decreases.
+%
+%Propositions~\ref{prop1} and~\ref{prop2} are important conclusions for CT-EXT which were introduced and 
+%proved in \citep{R22}.
+%
+%\begin{proposition}\label{prop1} Given $T \subseteq R$ and  $x_j \in R$ such that $x_j \notin T$. If $x_j$ does not contribute to T, then $T\cup\{x_j\}$ cannot be a subset of any irreducible testor.
+%\end{proposition}
+%
+%\begin{proposition}\label{prop2} Given $T \subseteq R$ and $Z \subseteq R$ such that $Z \cup T \neq T$. If T is a testor, 
+%then $T \cup Z$ is a testor too, but it is not an irreducible testor.
+%\end{proposition}
+%
+%\subsection{CT-EXT algorithm}
+%Algorithm~\ref{ctext_algo} exposes the pseudo code for CT-EXT, a detailed explanation for 
+%this algorithm can be seen in~\citep{R22}. The function SortBM$(BM)$ sorts the basic matrix as follows.
+%Randomly select one of the rows of $BM$ with the fewest number of 1's. The selected row goes first and 
+%all columns in which it has a 1 are moved to the left.  
+%
+%The function Evaluate$(BM,T)$ returns three values: $testor$, $irreducible$ and $zero\_rows$. $testor$ is TRUE if the set $T$ is a testor of $BM$ and FALSE otherwise. $irreducible$ is TRUE if the set $T$ is an irreducible testor and FALSE otherwise. $zero\_rows$ is the amount of zero rows of $T$. The function LastOne($T$) returns the 
+%position of the rightmost element in the set $T$.
+%
+%\begin{algorithm}
+%	\begin{spacing}{1.0}
+%	\begin{small}	
+%	\caption{CT-EXT algorithm}\label{ctext_algo}
+%	\begin{algorithmic}[1]	
+%		%\Procedure{CT-EXT}{}
+%		\State \textbf{Input: } $BM$ - basic matrix with $m$ rows and $n$ columns.
+%		\State \textbf{Output: } $TT$ - set of irreducible testors.
+%			
+%			\State $TT \gets \{\}$
+%			\State $j \gets 0$ \Comment{first feature from $BM$ to be analyzed}
+%			\State $BM \gets$ SortBM$(BM)$
+%			
+%			\While{$BM[0,j] \neq 0$}\label{row1condition}
+%				\State $T \gets \{X_j\}$ \Comment{current feature subset}
+%				\State $testor, irreducible, zero\_rows \gets$ Evaluate$(BM,T)$
+%				\If{$testor=TRUE$}
+%					\If{$irreducible=TRUE$} \Comment{$T$ is an irreducible testor}
+%						\State $TT \gets TT \cup T$
+%					\EndIf
+%				\Else
+%					\State $i \gets j+1$
+%					\While{$i < n$}
+%						\State $T \gets T \cup \{X_i\}$
+%						\State $zero\_rows\_last \gets zero\_rows$
+%						\State $testor, irreducible, zero\_rows \gets$ Evaluate$(BM,T)$
+%						\If{$zero\_rows = zero\_rows\_last$} 
+%							\State $T \gets T \setminus \{X_i\}$ \Comment{attribute $X_i$ does not contributes}
+%						\Else
+%							\If{$testor=TRUE$}
+%								\If{$irreducible=TRUE$}
+%									\State $TT \gets TT \cup T$
+%								\EndIf
+%								\State $T \gets T \setminus \{X_i\}$
+%								\State $zero\_rows \gets zero\_rows\_last$
+%							\EndIf
+%						\EndIf
+%						\If{$i = n-1$}
+%							\State $k \gets$ LastOne($T$)
+%							\If{$k = i$}
+%								\State $T \gets T \setminus \{X_k\}$
+%								\State $k \gets$ LastOne($T$)
+%							\EndIf
+%							\If{$k \neq j$}
+%								\State $T \gets T \setminus \{X_k\}$
+%								\State $testor, irreducible, zero\_rows \gets$ Evaluate$(BM,T)$
+%								\State $i \gets k+1$
+%							\Else
+%								\State $i \gets i+1$
+%							\EndIf
+%						\Else
+%							\State $i \gets i+1$
+%						\EndIf
+%					\EndWhile
+%				\EndIf
+%				\State $j \gets j+1$
+%			\EndWhile
+%		%\EndProcedure
+%	\end{algorithmic}
+%	\end{small}
+%	\end{spacing}
+%\end{algorithm}
+%
+%Example. Let us consider the basic matrix of Table~\ref{table1}, with $m=3$ rows and $n=5$ attributes. After the  ordering step we obtain the matrix shown in Table~\ref{table2}. Table~\ref{tab_example} illustrates the 
+%application of the CT-EXT algorithm over this basic matrix.
+%
+%\begin{table}[!htb]
+%    \begin{minipage}{.5\linewidth}
+%      \caption{Basic Matrix for the example.}\label{table1}
+%      \centering
+%        \begin{tabular}{ ccccc }
+% 			\hline                       
+%  			$x_0$ & $x_1$ & $x_2$ & $x_3$ & $x_4$ \\
+%  			\hline
+%  			1 & 0 & 0 & 1 & 1 \\
+%  			0 & 1 & 1 & 0 & 1 \\
+%  			1 & 1 & 0 & 0 & 1 \\
+%  			\hline  
+%		\end{tabular}
+%    \end{minipage}%
+%    \begin{minipage}{.5\linewidth}
+%      \centering
+%        \caption{Ordered Basic Matrix obtained from the matrix of Table~\ref{table1}.}\label{table2}
+%        \begin{tabular}{ ccccc }
+% 			\hline                       
+%  			$x_0$ & $x_3$ & $x_4$ & $x_1$ & $x_2$ \\
+%  			\hline
+%  			1 & 1 & 1 & 0 & 0 \\
+%  			0 & 0 & 1 & 1 & 1 \\
+%  			1 & 0 & 1 & 1 & 0 \\
+%  			\hline  
+%		\end{tabular}
+%    \end{minipage} 
+%\end{table}
+%
+%\newcommand{\lcell}[2][2in]{$\vcenter{\hsize#1\baselineskip11pt\vspace*{2.5pt}\raggedright#2\strut}$}
+%
+%      %\centering
+%        \begin{longtable}{cccccl}
+%		\caption[CT-EXT example.]{CT-EXT algorithm example.} \label{tab_example} \\
+% 			\hline                       
+%  			\multicolumn{1}{>{\centering\arraybackslash}m{.12in}}{$T$} & 
+%  			\multicolumn{1}{>{\centering\arraybackslash}m{.5in}}{\scriptsize{Evaluate $(BM,T)$}} &
+%  			\multicolumn{1}{>{\centering\arraybackslash}m{.15in}}{$x_j$} & 
+%  			\multicolumn{1}{>{\centering\arraybackslash}m{.6in}}{\scriptsize{$T\cup\{x_j\}$}} &
+%  			\multicolumn{1}{>{\centering\arraybackslash}m{.8in}}{\scriptsize{Evaluate $(BM,T\cup\{x_j\})$}} & 
+%  			\multicolumn{1}{>{\centering\arraybackslash}m{1in}}{Comments}\\
+%  			\hline
+%  			$\{~\}$ & F, F, $\infty$ & $x_0$ & $\{x_0\}$ & F, F, 1 & 
+%  			\scriptsize{\lcell{$\{x_0\}$ is not a testor. Add a new attribute.}}\\
+%  			$\{x_0\}$ & F, F, 1 & $x_3$ & $\{x_0,x_3\}$ & F, F, 1 &
+%  			\scriptsize{\lcell{$x_3$ does not contribute. Eliminate $x_3$. Add a new attribute.}}\\
+%  			$\{x_0\}$ & F, F, 1 & $x_4$ & $\{x_0,x_4\}$ & T, F, 0 &
+%  			\scriptsize{\lcell{$x_4$ contributes, $\{x_0,x_4\}$ is testor but is not irreducible.
+%  			 	Eliminate $x_4$. Add a new attribute.}}\\
+%  			$\{x_0\}$ & F, F, 1 & $x_1$ & $\{x_0,x_1\}$ & T, T, 0 &
+%  			\scriptsize{\lcell{$x_1$ contributes, $\{x_0,x_1\}$ is an irreducible testor.
+%  				It is saved ($TT = \{\{x_0,x_1\}\}$).
+%  			 	Eliminate $x_1$. Add a new attribute.}}\\
+%  			$\{x_0\}$ & F, F, 1 & $x_2$ & $\{x_0,x_2\}$ & T, T, 0 &
+%  			\scriptsize{\lcell{$x_2$ contributes, $\{x_0,x_2\}$ is an irreducible testor.
+%  				It is saved ($TT = \{\{x_0,x_1\},\{x_0,x_2\}\}$).
+%  			 	Eliminate $x_2$. Add a new attribute.}}\\
+%  			$\{x_0\}$ & \multicolumn{5}{>{\centering\arraybackslash}m{5in}}{All attributes tested. 
+%  			Eliminate $x_0$ and add a new one.}\\
+%  			\hline 
+%  			$\{~\}$ & F, F, $\infty$ & $x_3$ & $\{x_3\}$ & F, F, 2 & 
+%  			\scriptsize{\lcell{$\{x_3\}$ is not a testor. Add a new attribute.}}\\
+%  			$\{x_3\}$ & F, F, 2 & $x_4$ & $\{x_3,x_4\}$ & T, F, 0 &
+%  			\scriptsize{\lcell{$x_4$ contributes, $\{x_3,x_4\}$ is testor but is not irreducible.
+%  			 	Eliminate $x_4$. Add a new attribute.}}\\
+%  			$\{x_3\}$ & F, F, 2 & $x_1$ & $\{x_3,x_1\}$ & T, T, 0 &
+%  			\scriptsize{\lcell{$x_1$ contributes, $\{x_3,x_1\}$ is an irreducible testor.
+%  				It is saved ($TT = \{\{x_0,x_1\},\{x_0,x_2\},\{x_3,x_1\}\}$).
+%  			 	Eliminate $x_1$. Add a new attribute.}}\\
+%  			$\{x_3\}$ & F, F, 2 & $x_2$ & $\{x_3,x_2\}$ & F, F, 1 & 
+%  			\scriptsize{\lcell{$x_2$ contributes but $\{x_3,x_2\}$ is not a testor. Add a new attribute.}}\\
+%  			$\{x_3\}$ & \multicolumn{5}{>{\centering\arraybackslash}m{5in}}{All attributes tested. 
+%  			Eliminate $x_3$ and add a new one.}\\
+%  			\hline 
+%  			$\{~\}$ & F, F, $\infty$ & $x_4$ & $\{x_4\}$ & T, T, 0 & 
+%  			\scriptsize{\lcell{$\{x_4\}$ is an irreducible testor.
+%  				It is saved ($TT = \{\{x_0,x_1\},\{x_0,x_2\},\{x_3,x_1\},\{x_4\}\}$).
+%  			 	Eliminate $x_4$. Add a new attribute.}}\\
+%  			\hline  
+%  			$\{~\}$ & F, F, $\infty$ &  $\{x_1\}$ & \multicolumn{3}{>{\centering\arraybackslash}m{4in}}{
+%  			$x_1$ has a 0 in first row of $BM$, Algorithm finishes.}\\
+%  			\hline  
+%		\end{longtable}
 
-In pattern recognition, feature selection is a very important task for supervised classification. In the logical
- combinatorial approach to pattern recognition \citep{R5}, a useful
-way to deal with this problem is through Testor Theory. The concept of testor for pattern recognition was
-introduced by \cite{R12}. They defined a testor as a subset of features that allows
-differentiating objects from different classes. Testors are quite useful, especially when object descriptions
-contain both numeric and non-numeric features, and maybe they are incomplete (mixed incomplete data)
-\citep{R5}. This concept has been developed in different contexts \citep{R1}. From an 
-algorithmic point of view, Testor Theory has shown a continuous development from its origins to the present 
-\citep{R31,R13,R23}.
+\section{CT-EXT algorithm}
+\label{sect:2}
+The algorithm CT-EXT is one of the fastest algorithms for computing irreducible testors reported in the 
+state of the art~\citep{R22,R23,Piza13}.In order to describe this algorithm we introduce some definitions 
+and notations.
+
 
 Let $TM$ be a training matrix with $k$ objects described through $n$
-features of any type $\{x_{1},\ldots,x_{n}\}$ and grouped in $r$
-classes. Let $DM$ be a Boolean dissimilarity matrix (0 = similar, 1 =
-dissimilar), obtained from feature by feature comparisons of every
+attributes of any type $R=\{x_{1},\ldots,x_{n}\}$ and grouped in $r$
+classes. Let $DM$ be the binary pairwise comparison matrix, called dissimilarity matrix 
+(0=similar, 1=dissimilar), obtained by means of attribute by attribute comparisons of every
 pair of objects from $TM$ belonging to different classes. $DM$ has
 $m$ rows and $n$ columns, where usually $m>>k$.
 
-Let $T$ be a subset of attributes. Testors and irreducible testors are formally defined as follows:
+As it is known, $DM$ commonly contains redundant rows, so algorithms
+for computing irreducible testors frequently work on the sub-matrix called basic matrix ($BM$);
+which is obtained from $DM$ by eliminating redundant rows. For obtaining
+$BM$ from $DM$, absorption laws are applied.
 
-\begin{definition} \label{def1}
-$T$ is a testor if and only if when all
-features (columns) are eliminated from $DM$, except those from $T$, there is
-not any row of $DM$ with only 0's. $T$ is an irreducible testor if none of its proper subsets is a testor.
-\end{definition}
+Let $T$ be a subset of attributes, $T$ is a testor of $BM$ if the attributes in $T$ do not form a zero row 
+in $BM$. It means that every row in $BM$ has at least a 1 in those columns corresponding to attributes 
+belonging to $T$. We say that a testor $T$ is an irreducible testor if all the proper subsets of $T$ are not testors.
 
-In defintion \ref{def1}, if there is not any row of $DM$ with only
-0's it means that there is not a pair of objects from different
-classes that are similar on all the features of $T$, that is, a
-testor $T$ allows differentiating objects from different
-classes. From definition~\ref{def1}, if $T$ is a testor then, any superset of $T$ is a testor too.
+We can interpret an irreducible testor as a subset of attributes being jointly sufficient and individually necessary
+to differentiate every pair of objects belonging to different classes.
 
-The number of rows in $DM$ could be too large, therefore a strategy to reduce this matrix, without losing
-relevant information for computing irreducible testors, is eliminating redundant rows \citep{R1}.
+%Being $T$ an irreducible testor, from the above we have that if we eliminate any attribute from $T$, at least one zero row appears in the resulting submatrix of $BM$.
+%So, we introduce the concept of typical row. Let $f_i$ be a row of $BM$, $f_i$ is a typical row of $S \subseteq R$ regarding $x_q$, being $x_q \in S$, if $f_i [q] = BM [i, q] = 1$, and $f_i [p] = BM [i, p] =~0$ in every other remaining column of $BM$ corresponding to an attribute in S.
 
-%% DEFINICION 
-\begin{definition}
-Let $f=[f_1, f_2, \dots , f_n]$ and $f'=[f'_1, {f'}_2, \dots , {f'}_n]$ be two rows of $DM$, $f$ 
-is a sub-row of $f^{'}$ if for each column $j=1,2,\dots ,n$;  $f_{j} \le f'_{j}$ and for at least one index, the 
-inequality is strict.
-\end{definition}
+During the search, CT-EXT follows the idea that an attribute contributes to a subset $T$ (candidate to 
+be an irreducible testor) if after adding this attribute to $T$, the attributes in $T$ form less zero rows in $BM$ than 
+the amount of zero rows before adding the attribute. This idea is used for pruning the searching space.
 
-%% DEFINICION 
-\begin{definition}
-A row $f$ of $DM$ is a basic row if no row of the matrix $DM$ is a sub-row of $f$. 
-\end{definition}
+The following proposition, introduced and proved in~\citep{R22}, constitutes the basis for the CT-EXT algorithm.
 
-%% DEFINICION 
-\begin{definition}
-The basic matrix of $DM$, denoted as $BM$, is the sub-matrix of $DM$ formed only by the basic rows (without 
-repetitions).
-
-\end{definition}
-
-Let $TT(DM)$ and $TT(BM)$ be the sets of all irreducible testors of $DM$ and $BM$ respectively, it is 
-relatively easy to prove that $TT(DM)=TT(BM)$, see \citep{R32}; i.e., we can conclude that usually $DM$ 
-contains redundant information. In addition, the construction of $BM$ from $DM$ is a very fast process, 
-then we work over $BM$.
-
-The CT-EXT algorithm has the following theoretical bases.
-\begin{definition} \label{def21} Let $f_i$ be a row of BM, $f_i$ is a zero row of $S \subseteq R$, and we denote it as ${f_i}^0 (S)$, if $\forall x_p \in S$, $f_i [p] = BM [i, p] = 0$. We denote as $\Sigma_S f^0$  the amount of zero rows of S.
-\end{definition}
-\begin{definition} \label{def22} In terms of BM, a testor $T \subseteq R$ is a feature set such that there
-are no zero rows of T in BM. 
-\end{definition}
-\begin{definition} \label{def23} Let $f_i$ be a row of BM, $f_i$ is a typical row of $S \subseteq R$ regarding $x_q$, being $x_q \in S$, and we denote it by ${f_i}^1 (S,q)$ if $f_i [q] = BM [i, q] = 1$, and $\forall x_p \in S$, $x_p \neq x_q$ , $f_i [p] = BM [i, p] =~0$.
-\end{definition}
-
-\begin{definition} \label{def24} In terms of BM, $T \subseteq R$ is an irreducible testor if T is a testor and
-$\forall x_j \in T, \exists {f_i}^1 (T, j)$.
-\end{definition}
-
-This means that for each feature in an irreducible testor, there exists a row in 
-the sub matrix of $BM$ associated to $T$, having a 1 in the position corresponding
-to that feature, and 0 in all remaining positions (if any column of $T$ is eliminated, 
-at least one zero row will appear, and the testor property would not be fulfilled). 
-
-\begin{definition} \label{def25} Given $T \subseteq R$ and $x_j \in R$ such that $x_j \notin T$. 
-%We denote as $\sum_T f^0$ the amount of zero rows of T. 
-We say that $x_j$ contributes to T if, and only if, $\sum_{T\cup\{x_j\}} f^0 < \sum_T f^0$.
-\end{definition}
-This definition indicates that a feature contributes to a feature subset $T$
-if for at least one zero row in $BM$, considering only $T$, the new feature has a 1 in 
-this row. So, adding this feature to $T$, there are less
-zero rows than the amount of zero rows for $T$.
-
-It is easy to see that $\sum_T f^0 \geq \sum_{T\cup\{x_j\}} f^0$. If we
-increase the feature subset, either the zero rows are maintained, and in this
-case the column added does not contribute to the combination, or the number of zero rows decreases.
-
-Propositions~\ref{prop1} and~\ref{prop2} are important conclusions for CT-EXT which were introduced and 
-proved in \citep{R22}.
-
-\begin{proposition}\label{prop1} Given $T \subseteq R$ and  $x_j \in R$ such that $x_j \notin T$. If $x_j$ does not contribute to T, then $T\cup\{x_j\}$ cannot be a subset of any irreducible testor.
+\begin{proposition}\label{prop1} Given $T \subseteq R$ and $x_j \in R$ such that $x_j \notin T$. If $x_j$ does not contribute to $T$, then $T\cup\{x_j\}$ cannot be a subset of any irreducible testor.
 \end{proposition}
 
-\begin{proposition}\label{prop2} Given $T \subseteq R$ and $Z \subseteq R$ such that $Z \cup T \neq T$. If T is a testor, 
-then $T \cup Z$ is a testor too, but it is not an irreducible testor.
-\end{proposition}
+%\begin{proposition}\label{prop2} Given $T \subseteq R$ and $Z \subseteq R$ such that $Z \cup T \neq T$. If $T$ is a testor,
+%then $T \cup Z$ is a testor too, but it is not an irreducible testor.
+%\end{proposition}
 
-\subsection{CT-EXT algorithm}
-Algorithm~\ref{ctext_algo} exposes the pseudo code for CT-EXT, a detailed explanation for 
+
+Algorithm~\ref{ctext_algo} shows the pseudo code of CT-EXT, a detailed explanation of
 this algorithm can be seen in~\citep{R22}. The function SortBM$(BM)$ sorts the basic matrix as follows.
-Randomly select one of the rows of $BM$ with the fewest number of 1's. The selected row goes first and 
-all columns in which it has a 1 are moved to the left.  
+Randomly select one of the rows of $BM$ with the fewest number of 1's. The selected row goes first and
+all columns in which it has a 1 are moved to the left.
 
-The function Evaluate$(BM,T)$ returns three values: $testor$, $irreducible$ and $zero\_rows$. $testor$ is TRUE if the set $T$ is a testor of $BM$ and FALSE otherwise. $irreducible$ is TRUE if the set $T$ is an irreducible testor and FALSE otherwise. $zero\_rows$ is the amount of zero rows of $T$. The function LastOne($T$) returns the 
+The function Evaluate$(BM,T)$ returns three values: $testor$, $irreducible$ and $zero\_rows$. $testor$ is TRUE if the set $T$ is a testor of $BM$ and FALSE otherwise. $irreducible$ is TRUE if the set $T$ is an irreducible testor and FALSE otherwise. $zero\_rows$ is the amount of zero rows of $T$. The function LastOne($T$) returns the
 position of the rightmost element in the set $T$.
 
 \begin{algorithm}
-	\begin{spacing}{1.0}
-	\begin{small}	
-	\caption{CT-EXT algorithm}\label{ctext_algo}
-	\begin{algorithmic}[1]	
-		%\Procedure{CT-EXT}{}
-		\State \textbf{Input: } $BM$ - basic matrix with $m$ rows and $n$ columns.
-		\State \textbf{Output: } $TT$ - set of irreducible testors.
-			
-			\State $TT \gets \{\}$
-			\State $j \gets 0$ \Comment{first feature from $BM$ to be analyzed}
-			\State $BM \gets$ SortBM$(BM)$
-			
-			\While{$BM[0,j] \neq 0$}\label{row1condition}
-				\State $T \gets \{X_j\}$ \Comment{current feature subset}
-				\State $testor, irreducible, zero\_rows \gets$ Evaluate$(BM,T)$
-				\If{$testor=TRUE$}
-					\If{$irreducible=TRUE$} \Comment{$T$ is an irreducible testor}
-						\State $TT \gets TT \cup T$
-					\EndIf
-				\Else
-					\State $i \gets j+1$
-					\While{$i < n$}
-						\State $T \gets T \cup \{X_i\}$
-						\State $zero\_rows\_last \gets zero\_rows$
-						\State $testor, irreducible, zero\_rows \gets$ Evaluate$(BM,T)$
-						\If{$zero\_rows = zero\_rows\_last$} 
-							\State $T \gets T \setminus \{X_i\}$ \Comment{attribute $X_i$ does not contributes}
-						\Else
-							\If{$testor=TRUE$}
-								\If{$irreducible=TRUE$}
-									\State $TT \gets TT \cup T$
-								\EndIf
-								\State $T \gets T \setminus \{X_i\}$
-								\State $zero\_rows \gets zero\_rows\_last$
-							\EndIf
-						\EndIf
-						\If{$i = n-1$}
-							\State $k \gets$ LastOne($T$)
-							\If{$k = i$}
-								\State $T \gets T \setminus \{X_k\}$
-								\State $k \gets$ LastOne($T$)
-							\EndIf
-							\If{$k \neq j$}
-								\State $T \gets T \setminus \{X_k\}$
-								\State $testor, irreducible, zero\_rows \gets$ Evaluate$(BM,T)$
-								\State $i \gets k+1$
-							\Else
-								\State $i \gets i+1$
-							\EndIf
-						\Else
-							\State $i \gets i+1$
-						\EndIf
-					\EndWhile
-				\EndIf
-				\State $j \gets j+1$
-			\EndWhile
-		%\EndProcedure
-	\end{algorithmic}
-	\end{small}
-	\end{spacing}
+\begin{spacing}{1.0}
+\begin{small}
+\caption{CT-EXT algorithm}\label{ctext_algo}
+\begin{algorithmic}[1]
+%\Procedure{CT-EXT}{}
+\State \textbf{Input: } $BM$ - basic matrix with $m$ rows and $n$ columns.
+\State \textbf{Output: } $TT$ - set of irreducible testors.
+\State $TT \gets \{\}$
+\State $j \gets 0$ \Comment{first attribute from $BM$ to be analyzed}
+\State $BM \gets$ SortBM$(BM)$
+\While{$BM[0,j] \neq 0$}\label{row1condition}
+\State $T \gets \{X_j\}$ \Comment{current attribute subset}
+\State $testor, irreducible, zero\_rows \gets$ Evaluate$(BM,T)$
+\If{$testor=TRUE$}
+\If{$irreducible=TRUE$} \Comment{$T$ is an irreducible testor}
+\State $TT \gets TT \cup T$
+\EndIf
+\Else
+\State $i \gets j+1$
+\While{$i < n$}
+\State $T \gets T \cup \{X_i\}$
+\State $zero\_rows\_last \gets zero\_rows$
+\State $testor, irreducible, zero\_rows \gets$ Evaluate$(BM,T)$
+\If{$zero\_rows = zero\_rows\_last$}
+\State $T \gets T \setminus \{X_i\}$ \Comment{attribute $X_i$ does not contribute}
+\Else
+\If{$testor=TRUE$}
+\If{$irreducible=TRUE$}
+\State $TT \gets TT \cup T$
+\EndIf
+\State $T \gets T \setminus \{X_i\}$
+\State $zero\_rows \gets zero\_rows\_last$
+\EndIf
+\EndIf
+\If{$i = n-1$}
+\State $k \gets$ LastOne($T$)
+\If{$k = i$}
+\State $T \gets T \setminus \{X_k\}$
+\State $k \gets$ LastOne($T$)
+\EndIf
+\If{$k \neq j$}
+\State $T \gets T \setminus \{X_k\}$
+\State $testor, irreducible, zero\_rows \gets$ Evaluate$(BM,T)$
+\State $i \gets k+1$
+\Else
+\State $i \gets i+1$
+\EndIf
+\Else
+\State $i \gets i+1$
+\EndIf
+\EndWhile
+\EndIf
+\State $j \gets j+1$
+\EndWhile
+%\EndProcedure
+\end{algorithmic}
+\end{small}
+\end{spacing}
 \end{algorithm}
 
-Example. Let us consider the basic matrix of Table~\ref{table1}, with $m=3$ rows and $n=5$ attributes. After the  ordering step we obtain the matrix shown in Table~\ref{table2}. Table~\ref{tab_example} illustrates the 
-application of the CT-EXT algorithm over this basic matrix.
+Let us consider the basic matrix of Table~\ref{table1}, with $m=3$ rows and $n=5$ attributes. After the ordering step we obtain the matrix shown in Table~\ref{table2}. Table~\ref{tab_example} illustrates the
+application of the CT-EXT algorithm over this ordered basic matrix.
 
 \begin{table}[!htb]
-    \begin{minipage}{.5\linewidth}
-      \caption{Basic Matrix for the example.}\label{table1}
-      \centering
-        \begin{tabular}{ ccccc }
- 			\hline                       
-  			$x_0$ & $x_1$ & $x_2$ & $x_3$ & $x_4$ \\
-  			\hline
-  			1 & 0 & 0 & 1 & 1 \\
-  			0 & 1 & 1 & 0 & 1 \\
-  			1 & 1 & 0 & 0 & 1 \\
-  			\hline  
-		\end{tabular}
-    \end{minipage}%
-    \begin{minipage}{.5\linewidth}
-      \centering
-        \caption{Ordered Basic Matrix obtained from the matrix of Table~\ref{table1}.}\label{table2}
-        \begin{tabular}{ ccccc }
- 			\hline                       
-  			$x_0$ & $x_3$ & $x_4$ & $x_1$ & $x_2$ \\
-  			\hline
-  			1 & 1 & 1 & 0 & 0 \\
-  			0 & 0 & 1 & 1 & 1 \\
-  			1 & 0 & 1 & 1 & 0 \\
-  			\hline  
-		\end{tabular}
-    \end{minipage} 
+\begin{minipage}{.5\linewidth}
+\caption{Basic Matrix for the example.}\label{table1}
+\centering
+\begin{tabular}{ ccccc }
+\hline
+$x_0$ & $x_1$ & $x_2$ & $x_3$ & $x_4$ \\
+\hline
+1 & 0 & 0 & 1 & 1 \\
+0 & 1 & 1 & 0 & 1 \\
+1 & 1 & 0 & 0 & 1 \\
+\hline
+\end{tabular}
+\end{minipage}%
+\begin{minipage}{.5\linewidth}
+\centering
+\caption{Ordered Basic Matrix obtained from the matrix of Table~\ref{table1}.}\label{table2}
+\begin{tabular}{ ccccc }
+\hline
+$x_0$ & $x_3$ & $x_4$ & $x_1$ & $x_2$ \\
+\hline
+1 & 1 & 1 & 0 & 0 \\
+0 & 0 & 1 & 1 & 1 \\
+1 & 0 & 1 & 1 & 0 \\
+\hline
+\end{tabular}
+\end{minipage}
 \end{table}
 
 \newcommand{\lcell}[2][2in]{$\vcenter{\hsize#1\baselineskip11pt\vspace*{2.5pt}\raggedright#2\strut}$}
 
-      %\centering
-        \begin{longtable}{cccccl}
-		\caption[CT-EXT example.]{CT-EXT algorithm example.} \label{tab_example} \\
- 			\hline                       
-  			\multicolumn{1}{>{\centering\arraybackslash}m{.12in}}{$T$} & 
-  			\multicolumn{1}{>{\centering\arraybackslash}m{.5in}}{\scriptsize{Evaluate $(BM,T)$}} &
-  			\multicolumn{1}{>{\centering\arraybackslash}m{.15in}}{$x_j$} & 
-  			\multicolumn{1}{>{\centering\arraybackslash}m{.6in}}{\scriptsize{$T\cup\{x_j\}$}} &
-  			\multicolumn{1}{>{\centering\arraybackslash}m{.8in}}{\scriptsize{Evaluate $(BM,T\cup\{x_j\})$}} & 
-  			\multicolumn{1}{>{\centering\arraybackslash}m{1in}}{Comments}\\
-  			\hline
-  			$\{~\}$ & F, F, $\infty$ & $x_0$ & $\{x_0\}$ & F, F, 1 & 
-  			\scriptsize{\lcell{$\{x_0\}$ is not a testor. Add a new attribute.}}\\
-  			$\{x_0\}$ & F, F, 1 & $x_3$ & $\{x_0,x_3\}$ & F, F, 1 &
-  			\scriptsize{\lcell{$x_3$ does not contribute. Eliminate $x_3$. Add a new attribute.}}\\
-  			$\{x_0\}$ & F, F, 1 & $x_4$ & $\{x_0,x_4\}$ & T, F, 0 &
-  			\scriptsize{\lcell{$x_4$ contributes, $\{x_0,x_4\}$ is testor but is not irreducible.
-  			 	Eliminate $x_4$. Add a new attribute.}}\\
-  			$\{x_0\}$ & F, F, 1 & $x_1$ & $\{x_0,x_1\}$ & T, T, 0 &
-  			\scriptsize{\lcell{$x_1$ contributes, $\{x_0,x_1\}$ is an irreducible testor.
-  				It is saved ($TT = \{\{x_0,x_1\}\}$).
-  			 	Eliminate $x_1$. Add a new attribute.}}\\
-  			$\{x_0\}$ & F, F, 1 & $x_2$ & $\{x_0,x_2\}$ & T, T, 0 &
-  			\scriptsize{\lcell{$x_2$ contributes, $\{x_0,x_2\}$ is an irreducible testor.
-  				It is saved ($TT = \{\{x_0,x_1\},\{x_0,x_2\}\}$).
-  			 	Eliminate $x_2$. Add a new attribute.}}\\
-  			$\{x_0\}$ & \multicolumn{5}{>{\centering\arraybackslash}m{5in}}{All attributes tested. 
-  			Eliminate $x_0$ and add a new one.}\\
-  			\hline 
-  			$\{~\}$ & F, F, $\infty$ & $x_3$ & $\{x_3\}$ & F, F, 2 & 
-  			\scriptsize{\lcell{$\{x_3\}$ is not a testor. Add a new attribute.}}\\
-  			$\{x_3\}$ & F, F, 2 & $x_4$ & $\{x_3,x_4\}$ & T, F, 0 &
-  			\scriptsize{\lcell{$x_4$ contributes, $\{x_3,x_4\}$ is testor but is not irreducible.
-  			 	Eliminate $x_4$. Add a new attribute.}}\\
-  			$\{x_3\}$ & F, F, 2 & $x_1$ & $\{x_3,x_1\}$ & T, T, 0 &
-  			\scriptsize{\lcell{$x_1$ contributes, $\{x_3,x_1\}$ is an irreducible testor.
-  				It is saved ($TT = \{\{x_0,x_1\},\{x_0,x_2\},\{x_3,x_1\}\}$).
-  			 	Eliminate $x_1$. Add a new attribute.}}\\
-  			$\{x_3\}$ & F, F, 2 & $x_2$ & $\{x_3,x_2\}$ & F, F, 1 & 
-  			\scriptsize{\lcell{$x_2$ contributes but $\{x_3,x_2\}$ is not a testor. Add a new attribute.}}\\
-  			$\{x_3\}$ & \multicolumn{5}{>{\centering\arraybackslash}m{5in}}{All attributes tested. 
-  			Eliminate $x_3$ and add a new one.}\\
-  			\hline 
-  			$\{~\}$ & F, F, $\infty$ & $x_4$ & $\{x_4\}$ & T, T, 0 & 
-  			\scriptsize{\lcell{$\{x_4\}$ is an irreducible testor.
-  				It is saved ($TT = \{\{x_0,x_1\},\{x_0,x_2\},\{x_3,x_1\},\{x_4\}\}$).
-  			 	Eliminate $x_4$. Add a new attribute.}}\\
-  			\hline  
-  			$\{~\}$ & F, F, $\infty$ &  $\{x_1\}$ & \multicolumn{3}{>{\centering\arraybackslash}m{4in}}{
-  			$x_1$ has a 0 in first row of $BM$, Algorithm finishes.}\\
-  			\hline  
-		\end{longtable}
+%\centering
+\begin{longtable}{cccccl}
+\caption[CT-EXT example.]{CT-EXT algorithm example.} \label{tab_example} \\
+\hline
+\multicolumn{1}{>{\centering\arraybackslash}m{.12in}}{$T$} &
+\multicolumn{1}{>{\centering\arraybackslash}m{.5in}}{\scriptsize{Evaluate $(BM,T)$}} &
+\multicolumn{1}{>{\centering\arraybackslash}m{.15in}}{$x_j$} &
+\multicolumn{1}{>{\centering\arraybackslash}m{.6in}}{\scriptsize{$T\cup\{x_j\}$}} &
+\multicolumn{1}{>{\centering\arraybackslash}m{.8in}}{\scriptsize{Evaluate $(BM,T\cup\{x_j\})$}} &
+\multicolumn{1}{>{\centering\arraybackslash}m{1in}}{Comments}\\
+\hline
+$\{~\}$ & F, F, $\infty$ & $x_0$ & $\{x_0\}$ & F, F, 1 &
+\scriptsize{\lcell{$\{x_0\}$ is not a testor. Add a new attribute.}}\\
+$\{x_0\}$ & F, F, 1 & $x_3$ & $\{x_0,x_3\}$ & F, F, 1 &
+\scriptsize{\lcell{$x_3$ does not contribute. Eliminate $x_3$. Add a new attribute.}}\\
+$\{x_0\}$ & F, F, 1 & $x_4$ & $\{x_0,x_4\}$ & T, F, 0 &
+\scriptsize{\lcell{$x_4$ contributes, $\{x_0,x_4\}$ is testor but is not irreducible.
+Eliminate $x_4$. Add a new attribute.}}\\
+$\{x_0\}$ & F, F, 1 & $x_1$ & $\{x_0,x_1\}$ & T, T, 0 &
+\scriptsize{\lcell{$x_1$ contributes, $\{x_0,x_1\}$ is an irreducible testor.
+It is saved ($TT = \{\{x_0,x_1\}\}$).
+Eliminate $x_1$. Add a new attribute.}}\\
+$\{x_0\}$ & F, F, 1 & $x_2$ & $\{x_0,x_2\}$ & T, T, 0 &
+\scriptsize{\lcell{$x_2$ contributes, $\{x_0,x_2\}$ is an irreducible testor.
+It is saved ($TT = \{\{x_0,x_1\},\{x_0,x_2\}\}$).
+Eliminate $x_2$. Add a new attribute.}}\\
+$\{x_0\}$ & \multicolumn{5}{>{\centering\arraybackslash}m{5in}}{All attributes tested.
+Eliminate $x_0$ and add a new one.}\\
+\hline
+$\{~\}$ & F, F, $\infty$ & $x_3$ & $\{x_3\}$ & F, F, 2 &
+\scriptsize{\lcell{$\{x_3\}$ is not a testor. Add a new attribute.}}\\
+$\{x_3\}$ & F, F, 2 & $x_4$ & $\{x_3,x_4\}$ & T, F, 0 &
+\scriptsize{\lcell{$x_4$ contributes, $\{x_3,x_4\}$ is testor but is not irreducible.
+Eliminate $x_4$. Add a new attribute.}}\\
+$\{x_3\}$ & F, F, 2 & $x_1$ & $\{x_3,x_1\}$ & T, T, 0 &
+\scriptsize{\lcell{$x_1$ contributes, $\{x_3,x_1\}$ is an irreducible testor.
+It is saved ($TT = \{\{x_0,x_1\},\{x_0,x_2\},\{x_3,x_1\}\}$).
+Eliminate $x_1$. Add a new attribute.}}\\
+$\{x_3\}$ & F, F, 2 & $x_2$ & $\{x_3,x_2\}$ & F, F, 1 &
+\scriptsize{\lcell{$x_2$ contributes but $\{x_3,x_2\}$ is not a testor. Add a new attribute.}}\\
+$\{x_3\}$ & \multicolumn{5}{>{\centering\arraybackslash}m{5in}}{All attributes tested.
+Eliminate $x_3$ and add a new one.}\\
+\hline
+$\{~\}$ & F, F, $\infty$ & $x_4$ & $\{x_4\}$ & T, T, 0 &
+\scriptsize{\lcell{$\{x_4\}$ is an irreducible testor.
+It is saved ($TT = \{\{x_0,x_1\},\{x_0,x_2\},\{x_3,x_1\},\{x_4\}\}$).
+Eliminate $x_4$. Add a new attribute.}}\\
+\hline
+$\{~\}$ & F, F, $\infty$ & $\{x_1\}$ & \multicolumn{3}{>{\centering\arraybackslash}m{4in}}{
+$x_1$ has a 0 in first row of $BM$, Algorithm finishes.}\\
+\hline
+\end{longtable}
 
 \section{Proposed platform}
 \label{sect:3}
 
-Since algorithms for computing all irreducible testors have
-exponential complexity regarding the number of attributes, 
-software based implementations may take an unacceptable amount of time. 
+Since the problem of computing all irreducible testors have
+exponential complexity regarding the number of attributes; our proposed
+platform, as well as any other existing algorithm, has exponential complexity. 
 A common stage to all algorithms for computing irreducible testors is 
 the verification of each candidate combination over the basic matrix. 
 This is an intrinsic parallel operation that a hardware implementation 
 could take advantage of.
-The time complexity of evaluating a candidate for the testor conditions is
+The time complexity of evaluating a candidate for the testor condition is
 $O(nm)$ and for the irreducible condition is $O(n^2m)$; where $n$ is the number of 
-attributes and $m$ is the number of rows in the basic matrix. In the hardware
+attributes and $m$ is the number of rows in the basic matrix. In the proposed hardware
 component, these conditions are simultaneously evaluated in a single clock cycle.
-The novelty in this work relays on the Candidate Generator module. This new module
-implements the lexicographic total order~\citep{R22} as in the CT-EXT algorithm.
+Moreover, the main novelty in this work relays on the Candidate Generator module. This new module
+implements the lexicographical total order~\citep{R22} as in the CT-EXT algorithm.
 This traversing order allows our proposal to evaluate less candidates than 
 those evaluated by the existing hardware architectures; reducing, this way, the 
 execution time.
@@ -555,7 +770,7 @@ software-only implementations, this is a big disadvantage, specially for large
 matrices with many rows. The proposed hardware architecture exploits the parallelism 
 inherent in the CT-EXT algorithm
 and evaluates whether a candidate is an irreducible testor, or not, in a single
-clock cycle. The hardware implementation of CT-EXT is composed of two modules, the BM module and the Candidate Generator module, as shown in
+clock cycle. The hardware implementation of CT-EXT is composed of two modules, the $BM$ module and the Candidate Generator module, as shown in
 Fig.\,\ref{fig:3}. 
 
 The $BM$ module stores the input matrix and
@@ -606,8 +821,7 @@ receives as input the result of the AND operation between the current candidate 
 The output from the \textit{N~to~N~Decoder} repeats the input when there is only one bit set
 to 1, and returns zero otherwise. For those rows with only one bit having a 1 after ANDed with the candidate,
 the attribute in the position of that bit is indispensable if the candidate is a testor.
-According to definition~\ref{def24}, every attribute in a testor must be indispensable to be an
-irreducible testor. %This idea is stated in definition~1 of \citep{R13}.
+According to definition of irreducible testor, every attribute must be indispensable. %This idea is stated in definition~1 of \citep{R13}.
 
 \setlength{\tabcolsep}{3pt}
 \begin{table}[!htb]
@@ -881,10 +1095,13 @@ approximate density of~1's.
 \label{fig:result3}
 \end{figure}
 
+%TODO subir a 30 matrices
+%TODO explicar el procesos de generar MB sin tanto detalle
+%TODO definir lo q es una fila básica
 For our experiments, 28 basic matrices of different sizes were randomly generated. 
 A random number generator is used to generate rows up to 30 attributes long. The generated number is 
 filtered for the minimum and maximum number of 1's allowed. This way the desires density is
-controlled. If accepted, the row is verified as typical against the saved rows. Typical rows 
+controlled. If accepted, the row is verified as basic against the saved rows. Basic rows 
 are saved until the desired number is reached. In order to obtain matrices with a larger
 number of attributes, columns from different matrices are jointed. Finally the resulting 
 density of 1's is calculated.
@@ -1045,13 +1262,15 @@ evaluated in further studies.
 \bibitem[Lazo-Cort\'es et al.(1995)]{R32}Lazo-Cort\'es, M., Ruiz-shulcloper, J. (1995). Determining the feature relevance for non-classically described objects and a new algorithm to compute typical fuzzy testors. Pattern Recognition Letters, 16(12), 1259-1265.
 \bibitem[Lazo-Cort\'es et al.(2001)]{R1}Lazo-Cort\'es, M., Ruiz-shulcloper, J., and Alba-cabrera, E. (2001). An Overview of the Evolution of the Concept of Testor. Pattern Recognition, 34, 753-762.
 
-\bibitem[Lazo-Cort\'es et al.(2015)]{Lazo15}Lazo-Cortés, M. S., Mart\'inez-Trinidad, J. F., Carrasco-Ochoa, J. A. and Sanchez-D\'iaz, G. (2015). On the relation between rough set reducts and typical testors. Information Sciences, 294, 152-163.
+\bibitem[Lazo-Cort\'es et al.(2015)]{Lazo15}Lazo-Cortés, M. S., Mart\'inez-Trinidad, J. F., Carrasco-Ochoa, J. A. and S\'anchez-D\'iaz, G. (2015). On the relation between rough set reducts and typical testors. Information Sciences, 294, 152-163.
 
 \bibitem[Mart\'inez et al.(2007)]{Mart07}Mart\'inez, N., Le\'on, M. and Garc\'ia, Z. (2007). Features selection through FS-testors in case-based systems of teaching-learning. In MICAI 2007: Advances in Artificial Intelligence, 1206-1217.
 
 \bibitem[Mart\'inez-Trinidad et al.(2001)]{R5}Mart\'inez-Trinidad, J.F. and Guzm\'an-Arenas, A. (2001). The Logical Combinatorial Approach to Pattern Recognition an Overview through Selected Works. Pattern Recognition, 34, 741-751.
 
 \bibitem[Medina et al.(2007)]{Med07}Medina, D., Mart\'inez, N., Garc\'ia, Z., Ch\'avez, M. and Garc\'ia, M. (2007). Putting Artificial Intelligence Techniques into a Concept Map to Build Educational Tools. In Nature Inspired Problem-Solving Methods in Knowledge Engineering, 617-627.
+
+\bibitem[Piza-Davila et al.(2015)]{Piza13}Piza-Davila, I., S\'anchez-D\'iaz, G., Aguirre-Salado, C. a., Lazo-Cortes, M. S. (2015). A parallel hill-climbing algorithm to generate a subset of irreducible testors. Applied Intelligence, 42(4), 622-641.
 
 \bibitem[Pocek et al.(2013)]{R30}Pocek, K., Tessier, R. and DeHon, A. (2013). Birth and adolescence of reconfigurable computing: A survey of the first 20 years of field-programmable custom computing machines. In Highlights of the First Twenty Years of the IEEE International Symposium on Field-Programmable Custom Computing Machines (pp. 3-19).
 
