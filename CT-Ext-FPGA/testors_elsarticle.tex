@@ -717,7 +717,7 @@ $x_1$ has a 0 in first row of $BM$, Algorithm finishes.}\\
 \section{Proposed platform}
 \label{sect:3}
 
-Since the problem of computing all irreducible testors have
+Since the problem of computing all irreducible testors has
 exponential complexity regarding the number of attributes; our proposed
 platform, as well as any other existing algorithm, has exponential complexity. 
 A common stage to all algorithms for computing irreducible testors is 
@@ -731,8 +731,8 @@ component, these conditions are simultaneously evaluated in a single clock cycle
 Moreover, the main novelty in this work relays on the Candidate Generator module. This new module
 implements the lexicographical total order~\citep{R22} as in the CT-EXT algorithm.
 This traversing order allows our proposal to evaluate less candidates than 
-those evaluated by the existing hardware architectures; reducing, this way, the 
-execution time.
+those evaluated by those hardware architectures reported in the literature; reducing, 
+in this way, the execution time.
 %Our platform consists in the implementation of a
 %hardware architecture for computing all irreducible testors based on
 %the CT-EXT algorithm. 
@@ -1030,7 +1030,7 @@ In order to show the performance of the proposed platform, it was compared again
 implementation of the CT-EXT algorithm~\citep{R22} and the BT hardware platform previously 
 reported in~\citep{Rod14}\footnote{The source code of the three implementations and the basic matrix
 generator, as well as the matrices used for the experiments, can be downloaded from 
-\textbf{http://ccc.inaoep.mx/}.} .
+\textbf{http://ccc.inaoep.mx/}.}; which is the most recent hardware implementation for computing irreducible testors reported in the literature.
  
 %For experimentation purposes, the BT hardware platform was modified for finding irreducible testors 
 %on the FPGA similarly to the CT-EXT implementation. This modification avoids the final filtering stage 
@@ -1095,15 +1095,13 @@ approximate density of~1's.
 \label{fig:result3}
 \end{figure}
 
-%TODO subir a 30 matrices
-%TODO explicar el procesos de generar MB sin tanto detalle
+
 %TODO definir lo q es una fila básica
-For our experiments, 28 basic matrices of different sizes were randomly generated. 
-A random number generator is used to generate rows up to 30 attributes long. The generated number is 
-filtered for the minimum and maximum number of 1's allowed. This way the desires density is
+For our experiments, 30 basic matrices of different sizes were randomly generated. 
+A random number generator is used to generate rows, which are
+filtered for the minimum and maximum number of 1's allowed. This way the desired density is
 controlled. If accepted, the row is verified as basic against the saved rows. Basic rows 
-are saved until the desired number is reached. In order to obtain matrices with a larger
-number of attributes, columns from different matrices are jointed. Finally the resulting 
+are saved until the desired number is reached. Finally the resulting 
 density of 1's is calculated.
 
 For the hardware platforms, we measure the runtimes including the time for the following stages: $BM$ input parsing 
@@ -1112,7 +1110,7 @@ component running at 50MHz). The number of rows for each type of matrices is con
 the biggest matrix that may be synthesized at the desired running frequency.
 All experiments are performed using an Intel(R) Core(TM) i5-2400 CPU @ 3.10GHz for software executions and 
 an Atlys board, powered by a Spartan-6 LX45 FPGA device, for the hardware components.
-Figs.\,\ref{fig:result1}, \,\ref{fig:result2}, and \,\ref{fig:result3} show graphs of the runtime (in hours) 
+Figs.\,\ref{fig:result1}, \,\ref{fig:result2}, and \,\ref{fig:result3} show graphics of the runtime (in hours) 
 for the three types of basic matrices. 
 
 The proposed CT-EXT hardware platform (CTH) results were taken as reference for axis limits in 
@@ -1211,27 +1209,30 @@ Fig.\,\ref{fig:result3}.
 
 \section{Conclusions}
 \label{sect:8}
-In this work we present the design and implementation of a new hardware software platform for
-computing all the irreducible testors in a dataset.  As opposed to the existing hardware 
-architectures for feature selection using rough sets methods, our proposal computes all the
+%TODO incluir la limitación del tamaño del problema
+In this work, we present the design and implementation of a new hardware software platform for
+computing all irreducible testors in a dataset.  As opposed to existing hardware 
+architectures for feature selection, our proposal computes all the
 minimal subsets of features that preserve the classification accuracy of the original dataset.
 The good performance of our hardware implementation, compared to the software approach, is 
-feasible due to the high level of parallelism implicit in candidates evaluation of the CT-EXT 
-algorithm; which can be efficiently implemented on an FPGA. 
+feasible due to the high level of parallelism implicit in the candidate evaluation process of 
+the CT-EXT algorithm; which can be efficiently implemented on an FPGA. 
 %The proposed platform improves the previously reported architecture \citep{R21} by finding 
 %\textit{irreducible} testors in a single clock cycle. This new feature solves problems arising 
 %from transmission of irrelevant data to the hosting PC; improving the total runtime. 
-This proposed architecture offers an alternative to the hardware implementation of BT which is 
-faster in most of the cases, by evaluating less candidate subsets. 
+This proposed architecture offers an alternative to previous hardware implementations; being 
+faster in most of the cases, by evaluating less candidates to be irreducible testors. 
 
-Experiments also showed that the proposed platform uses fewer hardware resources and is able to run at a higher 
-frequency than the BT hardware implementation, which allows processing larger matrices, since the maximum size of 
-the problem that can be solved in a hardware architecture is conditioned by its resource utilization. 
-This work enables the application of Testor Theory methods in larger classification and decision-making
-problems than it was possible.
+Experiments also showed that the proposed platform uses fewer hardware resources and is able to 
+run at a higher frequency than previous hardware implementations. This characteristic allows 
+processing larger matrices, since the maximum size of the problem that can be solved in a hardware 
+architecture is conditioned by its resource utilization. 
+Our approach enables the application of Testor Theory methods in larger classification and 
+decision-making problems than it was possible before.
 
-The search for new algorithms that could be efficiently implemented in an FPGA constitutes future work. Improvements, such as testing two or more candidates per iteration, are still unexplored and would be 
-evaluated in further studies.
+The search for new algorithms that could be efficiently implemented on an FPGA constitutes the main
+direction for future work. Improvements, such as testing two or more candidates at the same time, are 
+still unexplored and would be evaluated in further studies.
 
 
 
@@ -1270,7 +1271,7 @@ evaluated in further studies.
 
 \bibitem[Medina et al.(2007)]{Med07}Medina, D., Mart\'inez, N., Garc\'ia, Z., Ch\'avez, M. and Garc\'ia, M. (2007). Putting Artificial Intelligence Techniques into a Concept Map to Build Educational Tools. In Nature Inspired Problem-Solving Methods in Knowledge Engineering, 617-627.
 
-\bibitem[Piza-Davila et al.(2015)]{Piza13}Piza-Davila, I., S\'anchez-D\'iaz, G., Aguirre-Salado, C. a., Lazo-Cortes, M. S. (2015). A parallel hill-climbing algorithm to generate a subset of irreducible testors. Applied Intelligence, 42(4), 622-641.
+\bibitem[Piza-Davila et al.(2015)]{Piza13}Piza-Davila, I., S\'anchez-D\'iaz, G., Aguirre-Salado, C., Lazo-Cortes, M. S. (2015). A parallel hill-climbing algorithm to generate a subset of irreducible testors. Applied Intelligence, 42(4), 622-641.
 
 \bibitem[Pocek et al.(2013)]{R30}Pocek, K., Tessier, R. and DeHon, A. (2013). Birth and adolescence of reconfigurable computing: A survey of the first 20 years of field-programmable custom computing machines. In Highlights of the First Twenty Years of the IEEE International Symposium on Field-Programmable Custom Computing Machines (pp. 3-19).
 
