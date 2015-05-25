@@ -184,7 +184,7 @@ provide relevant information for the classification process. This procedure does
 computational cost of the classification process by eliminating superfluous information, but in some cases 
 it could even provide better classification accuracy. 
 Testor Theory can be used for feature selection as shown in~\citep{R27,R5}. A testor is defined as a subset 
-of attributes that can discern objects from different classes. An irreducible testor is a subset of features 
+of attributes that can discern objects from different classes. An irreducible testor is a subset of attributes 
 such that every attribute is indispensable for satisfying the testor condition. Finding all irreducible 
 testors has been proven as an NP-hard problem~\citep{R40}.
 
@@ -209,7 +209,7 @@ irreducible testors \citep{R5,R8,R9}, there are
 no hardware implementations reported aside from \citep{R10,R11,R21}.
 In the first work, an FPGA-based brute force approach for computing testors was proposed
 \citep{R10}. This first approach did not take advantage of dataset characteristics to reduce the number 
-of candidates to be tested; thus all $2^n$ combinations of $n$ features have to be tested. 
+of candidates to be tested; thus all $2^n$ combinations of $n$ attributes have to be tested. 
 Then, in \citep{R11} a hardware architecture of the BT algorithm for computing irreducible testors was implemented. 
 This algorithm uses a candidate pruning process for avoiding many unnecessary candidate evaluation, 
 reducing the number of verifications of the irreducible testor condition. 
@@ -517,7 +517,7 @@ for future work.
 
 \section{CT-EXT algorithm}
 \label{sect:2}
-The algorithm CT-EXT is one of the fastest algorithms for computing irreducible testors reported in the 
+CT-EXT is one of the fastest algorithms for computing irreducible testors reported in the 
 state of the art~\citep{R22,R23,Piza13}.In order to describe this algorithm we introduce some definitions 
 and notations.
 
@@ -532,7 +532,7 @@ $m$ rows and $n$ columns, where usually $m>>k$.
 As it is known, $DM$ commonly contains redundant rows, so algorithms
 for computing irreducible testors frequently work on the sub-matrix called basic matrix ($BM$);
 which is obtained from $DM$ by eliminating redundant rows. For obtaining
-$BM$ from $DM$, absorption laws are applied.
+$BM$ from $DM$, absorption laws are applied. Rows in $BM$ are called basic rows.
 
 Let $T$ be a subset of attributes, $T$ is a testor of $BM$ if the attributes in $T$ do not form a zero row 
 in $BM$. It means that every row in $BM$ has at least a 1 in those columns corresponding to attributes 
@@ -761,7 +761,7 @@ FPGA carries out all the calculations needed to generate the testors and sends t
 \label{fig:3}
 \end{figure}
 
-In the hardware architecture, a feature subset is handled as an $n$-tuple, using a positional 
+In the hardware architecture, an attributes subset is handled as an $n$-tuple, using a positional 
 representation for all the $n$ attributes of a basic matrix $BM$. Given a subset $T$, its $n$-tuple representation 
 has a 1 in the corresponding position $j$ for each $x_j \in T$ and 0 otherwise.
 The process of deciding whether an $n$-tuple is a testor of $BM$ involves
@@ -1096,7 +1096,6 @@ approximate density of~1's.
 \end{figure}
 
 
-%TODO definir lo q es una fila básica
 For our experiments, 30 basic matrices of different sizes were randomly generated. 
 A random number generator is used to generate rows, which are
 filtered for the minimum and maximum number of 1's allowed. This way the desired density is
@@ -1118,8 +1117,18 @@ Figs.\,\ref{fig:result1}, \,\ref{fig:result2}, and \,\ref{fig:result3}.
 Slowest executions of the CT-EXT software implementation (CTS) are not shown in order to keep clarity in 
 the figures. 
 The hardware platform for BT (BTH) was not able to met the constrain of 50MHz clock frequency for some 
-matrices. In fact, for medium  density, BT platform could not be synthesized even for the smallest matrix. 
-This is the case for all missing BTH executions in Figs.\,\ref{fig:result1},~\,\ref{fig:result2}, and~\,\ref{fig:result3}.
+matrices. 
+%In fact, for medium  density, BT platform could not be synthesized even for the smallest matrix. 
+This is the case for all missing BTH executions in Figs.\,\ref{fig:result1},~\,\ref{fig:result2}, and~\,\ref{fig:result3}. We were able to run the three platforms for 5 matrices of different types. 
+Fig.~\ref{fig:means} sows the average execution time of each platform for these 5 cases.
+
+\begin{figure}[htb]
+    \begin{center}
+       \includegraphics[height=5.5cm]{means.eps}
+    \end{center}
+\caption{Average execution time of CTH, CTS and BTH for various type of matrices.}
+\label{fig:means}
+\end{figure}
 
 \cite{R21} stated that the time for computing irreducible testors does not only depend on the size and 
 density of the $BM$, but also on the distribution of 0's and 1's inside the matrix. This assertion can 
@@ -1213,7 +1222,7 @@ Fig.\,\ref{fig:result3}.
 In this work, we present the design and implementation of a new hardware software platform for
 computing all irreducible testors in a dataset.  As opposed to existing hardware 
 architectures for feature selection, our proposal computes all the
-minimal subsets of features that preserve the classification accuracy of the original dataset.
+minimal subsets of attributes that preserve the classification accuracy of the original dataset.
 The good performance of our hardware implementation, compared to the software approach, is 
 feasible due to the high level of parallelism implicit in the candidate evaluation process of 
 the CT-EXT algorithm; which can be efficiently implemented on an FPGA. 
@@ -1226,9 +1235,13 @@ faster in most of the cases, by evaluating less candidates to be irreducible tes
 Experiments also showed that the proposed platform uses fewer hardware resources and is able to 
 run at a higher frequency than previous hardware implementations. This characteristic allows 
 processing larger matrices, since the maximum size of the problem that can be solved in a hardware 
-architecture is conditioned by its resource utilization. 
+architecture is conditioned by its resource utilization (this is, indeed, the main limitation of
+our proposal). 
 Our approach enables the application of Testor Theory methods in larger classification and 
-decision-making problems than it was possible before.
+decision-making problems than it was possible before. 
+%The main limitation of the proposed platform 
+%is that the maximum size of the problem to be solved is restricted by the resources available in 
+%the FPGA device.
 
 The search for new algorithms that could be efficiently implemented on an FPGA constitutes the main
 direction for future work. Improvements, such as testing two or more candidates at the same time, are 
