@@ -14,14 +14,29 @@
 \usepackage{multirow}				% Cabecera del cronograma
 \usepackage{watermark}				% Para la portada
 \usepackage{datetime}				% Fecha de creado
+\usepackage{pst-tree}				% Para la taxonomía
+\usepackage{stackengine}				% Para listar los articulos en el nodo de la taxonomía
 %\newdateformat{mydate}{\monthname[\THEMONTH] \THEYEAR} 
 %-------------------------------------------------------------------------
-% Se definen los margenes para el documento
-%\evensidemargin=0in
-%\topmargin=0.5in \oddsidemargin=0in \evensidemargin=0in
-%\textwidth=6.5in \textheight=8.5in
+% Configuring Taxonomy
 %-------------------------------------------------------------------------
+\setstackEOL{\\}
+\def\psedge{\ncangles[angleA=-90,angleB=90]}
+\psset{levelsep=20mm,treesep=1cm,nodesep=3pt, arrows=->}
+\def\PSBL#1{\small\pspicture(7,0.8)\psTextFrame[shadow,
+  fillstyle=solid,linecolor=blue,framearc=0.3](0,0)(7,0.8){%
+    \shortstack{#1}}\endpspicture}
+\def\PSBS#1{\pspicture(3,.7)\psTextFrame[shadow,
+  fillstyle=solid,linecolor=blue,framearc=0.3](0,0)(3,0.8){%
+    \shortstack{#1}}\endpspicture}
 
+%-------------------------------------------------------------------------
+% Referencias a una palabra
+%-------------------------------------------------------------------------
+\newcommand{\setword}[2]{%
+  \phantomsection
+  #1\def\@currentlabel{\unexpanded{#1}}\label{#2}%
+}
 
 \begin{document}
 	\input{./frontPage.tex}
@@ -44,14 +59,15 @@
 		Information systems in Rough Set Theory (RST) are tables of objects described by some attributes. 
 		This type of tables are widely used in different pattern recognition problems particularly in 
 		supervised classification. RST reducts are minimal subsets of attributes preserving 
-		the classification accuracy of an information system. Reducts computation has an exponential complexity 
-		regarding the number of attributes in the information system. In the literature have been reported 
-		several algorithms for reduct computation but their high computational cost makes infeasible their
-		use in large problems. For this reason, in this research we will develop new fast algorithms 
-		in two directions, the computation of all the reducts and the computation of globally shortest reducts.
-	    The proposed algorithms will be faster than state of the art algorithms, and hence make the reduct 
-	    computation viable for larger information systems than it is today. Here we present some preliminary 
-	    results which show that it is possible developing faster algorithms for computing reducts.
+		the discernibility capacity of the whole set of attributes. Reducts computation has an exponential
+		complexity regarding the number of attributes in the information system. In the literature several
+		algorithms for reduct computation have been reported, but their high computational cost makes 
+		infeasible their use in large problems. For this reason, in this research we will develop new fast
+		algorithms in two directions, the computation of all the reducts and the computation of globally 
+		shortest reducts. The proposed algorithms will be faster than state of the art algorithms, and hence 
+		make the reduct computation viable for larger information systems than it is today. As part of this 
+		PhD research proposal, we present some preliminary results, which show that it is possible developing
+		faster algorithms for computing reducts.
 	\end{abstract}
 	
 	\begin{keyword}
@@ -93,24 +109,24 @@
   
   Recently the RST reducts have been related to the typical testors (TT) from the logical combinatorial approach to 
   pattern recognition~\citep{Lazo15}. Testor Theory was created by Yablonskii and Chegis in the middle of fifties 
-  of the last century as a tool for analysis of problems connected with control and diagnosis of faults in circuits. 
+  of the last century as a tool for analysis of problems connected with control and diagnosis of faults in
+  circuits. 
   Testor Theory can be used for feature selection as shown in~\citep{Ruiz08} and~\citep{Martinez01}. Algorithms for
   typical testors computation like, for instance~\citep{Ruiz85},~\citep{Santiesteban03},~\citep{Sanchez07} 
   and~\citep{Lias09}, can be applied to reduct computation due to the similarity between these two concepts. 
   Fast implementations of these algorithms; based on cumulative binary operations~\citep{Sanchez10}, genetic 
-  algorithms~\citep{Sanchez99} and hardware architectures~\citep{Rojas12}; have been developed to reduce the computation 
-  time. One strength of our research is that we will be testing, for the first time, these two families of algorithms 
-  in the same arena.
+  algorithms~\citep{Sanchez99} and hardware architectures~\citep{Rojas12}; have been developed to reduce the
+  computation time. One strength of our research is that we will be testing, for the first time, these two 
+  families of algorithms in the same arena.
      
   Throughout our research we will conduct a comparative study between the most relevant algorithms for reduct 
-  computation. Although main our focus will be on algorithms obtaining all the reducts and globally shortest reducts,
-  experiences form heuristics approaches will be considered as well. We will be exploring the relationship 
+  computation. Although our main focus will be on algorithms for computing all the reducts and globally shortest
+  reducts, experiences form heuristics approaches will be considered as well. We will be exploring the relationship 
   between algorithms' performance and the characteristics of the information system. Based on this relationship,
-  we will propose new fast algorithms for reduct computation. Finally the proposed algorithms 
+  we will propose fast algorithms for reduct computation. Finally the proposed algorithms 
   will be redesigned and implemented in a hardware fashion in order to improve, even more, their efficiency.  
 
 \section{Basic Concepts}\label{basicConcepts}
-%TODO hablar de la matriz basica
   RST is based on the assumption that every object in the universe of discourse is described, through a 
   set of attributes, by some information associated to it. This information constitutes the basis for the
   classification of new unseen objects. RST motto is \textit{Let the data speak for themselves}.
@@ -142,16 +158,16 @@
  \begin{table}[htb]
 		\caption{An Information System.} \label{tab_IS}
 		\centering
- 	\begin{tabular}{c||c|c||c}
- 			  & $c_1$ & $c_2$ &  $d$ \\
+ 	\begin{tabular}{c||c|c|c||c}
+ 			  & $c_1$ & $c_2$ &  $c_3$ & $d$ \\
  		\hline \hline
-		$x_1$ &   1   &    3  &   0   \\
-		$x_2$ &   1   &    0  &   0   \\
-		$x_3$ &   3   &    1  &   1   \\
-		$x_4$ &   3   &    1  &   1   \\
-		$x_5$ &   4   &    2  &   1   \\
-		$x_6$ &   1   &    2  &   0   \\
-		$x_7$ &   4   &    2  &   1   \\
+		$x_1$ &   1   &    3  &  0  &   0   \\
+		$x_2$ &   1   &    0  &  0  &   0   \\
+		$x_3$ &   3   &    1  &  1  &   1   \\
+		$x_4$ &   3   &    3  &  2  &   1   \\
+		$x_5$ &   4   &    2  &  3  &   1   \\
+		$x_6$ &   4   &    3  &  1  &   0   \\
+		$x_7$ &   4   &    2  &  5  &   1   \\
  	\end{tabular}             
  \end{table}
  
@@ -163,7 +179,7 @@
   to decide to which class the object belongs. In supervised classification, condition attributes are the 
   only information available for classifying new objects; while, decision attributes are only 
   available for objects in the training set. IS with distinguished decision and condition attributes are 
-  called decision tables. In table~\ref{tab_IS}, $c_1$ and $c_2$ are condition attributes.
+  called decision tables. In table~\ref{tab_IS}, $c_1$, $c_2$ and $c_3$ are condition attributes.
  
 %\subsection{Indiscernibility Relations}
 %  For an object $x \in U$, the information about $x$ with respect to a set $B \subseteq A$ may be defined as
@@ -198,16 +214,17 @@
 %  for these sets defines three partitions of the universe:
 %  
 %  $$\begin{array}{lcc}
-%  IND_{\lbrace c_1 \rbrace} &=& \lbrace \lbrace x_1, x_2, x_6 \rbrace, 
+%  IND_{\lbrace c_1 \rbrace} &=& \lbrace \lbrace x_1, x_2 \rbrace, 
 %  								\lbrace x_3, x_4 \rbrace, 
-%  								\lbrace x_5, x_7 \rbrace \rbrace \\
-%  IND_{\lbrace c_2 \rbrace} &=& \lbrace \lbrace x_1 \rbrace, 
-%  								\lbrace x_2 \rbrace, 
-%  								\lbrace x_3, x_4 \rbrace,
 %  								\lbrace x_5, x_6, x_7 \rbrace \rbrace \\
+%  IND_{\lbrace c_2 \rbrace} &=& \lbrace \lbrace x_1, x_4, x_6 \rbrace, 
+%  								\lbrace x_2 \rbrace, 
+%  								\lbrace x_3 \rbrace,
+%  								\lbrace x_5, x_7 \rbrace \rbrace \\
 %  IND_{\lbrace c_1, c_2 \rbrace} &=& \lbrace \lbrace x_1 \rbrace, 
 %  									\lbrace x_2 \rbrace, 
-%  									\lbrace x_3, x_4 \rbrace,
+%  									\lbrace x_3 \rbrace,
+%  									\lbrace x_4 \rbrace,
 %  									\lbrace x_5, x_7 \rbrace,
 %  									\lbrace x_6 \rbrace \rbrace 
 %  \end{array}$$
@@ -264,9 +281,9 @@
   Taking for example the IS in table~\ref{tab_IS}, we can see that
   
   $$\begin{array}{lcc}
-  POS_{\lbrace c_1 \rbrace}(d)&=&U\\
-  POS_{\lbrace c_2 \rbrace}(d)&=& \lbrace x_1,x_2,x_3,x_4 \rbrace\\
-  POS_{\lbrace c_1, c_2 \rbrace}(d)&=&U
+  POS_{\lbrace c_1 \rbrace}(d)     &=& \lbrace x_1,x_2,x_3,x_4 \rbrace\\
+  POS_{\lbrace c_2 \rbrace}(d)     &=& \lbrace x_2,x_3,x_5,x_7 \rbrace\\
+  POS_{\lbrace c_1, c_2 \rbrace}(d)&=& U
   \end{array}$$
  
 \subsection{Reducts and Core}
@@ -306,19 +323,19 @@
  		\hline
 		1 &&&&&&&\\
 		2 &&&&&&&\\
-		3 & $c_1,c_2$ & $c_1,c_2$ &&&&&\\
-		4 & $c_1,c_2$ & $c_1,c_2$ &&&&&\\
-		5 & $c_1,c_2$ & $c_1,c_2$ &&&&&\\
-		6 &&& $c_1,c_2$ & $c_1,c_2$ &&&\\
-		7 & $c_1,c_2$ & $c_1,c_2$ &&&& $c_1$ &\\
+		3 & $c_1,c_2,c_3$ & $c_1,c_2,c_3$ &&&&&\\
+		4 & $c_1,c_3$ & $c_1,c_2,c_3$ &&&&&\\
+		5 & $c_1,c_2,c_3$ & $c_1,c_2,c_3$ &&&&&\\
+		6 &&& $c_1,c_2$ & $c_1,c_3$ & $c_2,c_3$ &&\\
+		7 & $c_1,c_2,c_3$ & $c_1,c_2,c_3$ &&&& $c_2,c_3$ &\\
  	\end{tabular}             
  \end{table}
   
   Once the discernibility matrix $M_{IS}$ is found, we can define the \textit{discernibility function} $f_{IS}$.
-  This is a boolean function of $n$ boolean variables $c_1^*, c_2^*,...,c_n^*$, representing the presence of
-  the corresponding attribute (True) or its absence (False) in $M_{IS}$. Here the disjunction ($\vee$) and 
-  conjunction ($\wedge$) boolean operators have their common meaning.
-  
+  This is a Boolean function of $n$ Boolean variables $c_1^*, c_2^*,...,c_n^*$, representing the presence of
+  the corresponding attribute (True) or its absence (False) in $M_{IS}$. Here, the disjunction ($\vee$) and 
+  conjunction ($\wedge$) operators have their common meaning.
+  %TODO definir la operacion sobre un conjunto
   \begin{equation}
   	f_{IS}(c_1^*, c_2^*,...,c_n^*)=\wedge \lbrace \vee c_{ij}^* : 1 \leq j \leq i \leq |U|, 
   									m_{ij} \neq \emptyset \rbrace
@@ -330,7 +347,8 @@
   
   The discernibility function for the discernibility matrix in table~\ref{tab_DM}, after simplifying by 
   deleting, is  
-  $$f_{IS}(c_1^*,c_2^*)=(c_1^* \vee c_2^*) \wedge c_1^*$$
+  $$f_{IS}(c_1^*,c_2^*,c_3^*)=(c_1^* \vee c_2^* \vee c_3^*) \wedge (c_1^* \vee c_2^*) 
+   \wedge (c_1^* \vee c_3^*) \wedge (c_2^* \vee c_3^*) $$
   
   From this example we can easily see that the only reduct (also the core) for this IS is $c_1$.
   
@@ -380,27 +398,61 @@
 %  Finally, we would like to say that an alternative definition of reduct from dependency exist. We say 
 %  that a subset $B \in C$ is a reduct of $C$ if it is a minimal set (with respect to inclusion) satisfying 
 %  the condition $\gamma _B(D)=\gamma _C(D)$.
+
+\subsection{Binary Discernibility Matrix}
+  The \textit{Binary Discernibility Matrix} is a binary table representing discernibility between pairs of 
+  objects. This is another representation of the information in $M_{IS}$. In the binary discernibility
+  matrix, columns are single condition attributes and rows are objects pairs belonging to different classes.
+  The discernibility element $m(i, j, c)$ between two objects $x_i$ and $x_j$ by using a single condition 
+  attribute $c \in C$ is given in a binary representation, such that:
+  
+  \begin{equation}
+  	m(i, j, c)=\left\lbrace\begin{array}{cl}
+  			1 & \mathrm{for~~}c(x_i) \neq c(x_j),D(x_i) \neq D(x_j)\\
+  			0 								   & \mathrm{otherwise} 
+  	\end{array}\right.
+  \end{equation} 
+  
+  Table~\ref{tab_BDM} shows the binary discernibility matrix for the information system of table~\ref{tab_IS}.  
+  
+  \begin{table}[htb]
+		\caption{Binary Discernibility Matrix Example.} \label{tab_BDM}
+		\centering
+ 	\begin{tabular}{cccc}
+ 		& $c_1$ & $c_2$ & $c_3$\\
+ 		\hline
+		$x_1,x_3$ & 1 & 1 & 1 \\
+		$x_1,x_4$ & 1 & 0 & 1 \\
+		$x_1,x_5$ & 1 & 1 & 1 \\
+		$x_1,x_7$ & 1 & 1 & 1 \\
+		$x_2,x_3$ & 1 & 1 & 1 \\
+		$x_2,x_4$ & 1 & 1 & 1 \\
+		$x_2,x_5$ & 1 & 1 & 1 \\
+		$x_2,x_7$ & 1 & 1 & 1 \\
+		$x_3,x_6$ & 1 & 1 & 0 \\
+		$x_4,x_6$ & 1 & 0 & 1 \\
+		$x_5,x_6$ & 0 & 1 & 1 \\
+		$x_6,x_7$ & 0 & 1 & 1 
+ 	\end{tabular}             
+  \end{table}
+  
 \subsection{Simplified Discernibility Matrix}
   The \textit{Simplified Discernibility Matrix} is a reduced version of the discernibility matrix after
   eliminating supersets and repeated cells in $M_{IS}$. This new discernibility matrix has the same reducts
   as the original one~\citep{Yao09}. An equivalent concept exists in the Testor Theory, called 
   \textit{Basic Matrix}. The basic matrix was proven to have the same TT as the original information
-  system~\citep{Lazo01}. Table~\ref{tab_SDM} shows the simplified discernibility matrix for the discernibility
-  matrix from table~\ref{tab_DM}.
+  system~\citep{Lazo01}. Table~\ref{tab_SDM} shows the basic matrix for the
+  discernibility matrix from table~\ref{tab_BDM}.
   
      \begin{table}[htb]
-		\caption{Simplified Discernibility Matrix Example.} \label{tab_SDM}
+		\caption{Basic Matrix Example.} \label{tab_SDM}
 		\centering
- 	\begin{tabular}{c|ccccccc}
- 		$x \in U$ & 1 & 2 &  3 & 4 & 5 &  6 & 7\\
+ 	\begin{tabular}{ccc}
+ 		$c_1$ & $c_2$ & $c_3$\\
  		\hline
-		1 &&&&&&&\\
-		2 &&&&&&&\\
-		3 &&&&&&&\\
-		4 &&&&&&&\\
-		5 &&&&&&&\\
-		6 &&&&&&&\\
-		7 &&&&&& $c_1$ &\\
+		1 & 0 & 1 \\
+		1 & 1 & 0 \\
+		0 & 1 & 1
  	\end{tabular}             
  \end{table}
 
@@ -411,21 +463,89 @@
   from RST and those from TT. Researches in TT have been focused on algorithms for finding all the typical 
   testors. Finally, we will make a review of parallel accelerations reported in the literature.  
   
-  In figure~\ref{fig_Tax} we propose a taxonomy of the reported algorithms for reduct computation. 
+  In figure~\ref{fig_Tax1} we propose a taxonomy of the reported algorithms for computing a single reduct,
+  and in figure~\ref{fig_Tax2}, a taxonomy of the reported algorithms for computing all the reducts. 
   This classification corresponds to the sequence that we will be following throughout our review of the 
-  state of the art. 
-%  Table~\ref{tab_Alg} makes a correspondence between the codename used in figure~\ref{fig_Tax} and the 
-%  publication reporting the algorithm. 
-  Some parallel approaches are implementations of existing sequential 
-  algorithms. For those cases, we use a color association in figure~\ref{fig_Tax} such  that two related
-  algorithms are written in the same color (different to black).
-
+  state of the art.
+   
   \begin{figure}[htb] 
-    \centering
-    \includegraphics[width=\textwidth]{Reduct_Computation_Algorithms.png}
-	\caption{Taxonomy of reduct computation algorithms.}
-	\label{fig_Tax}
- \end{figure}
+  \center
+    \pstree[treesep=2cm]{\Tr{\PSBL{Algorithms for Computing a single Reduct}}}{
+       \pstree[treesep=3cm]{\Tr{\PSBS{Psudo--minimal}}}{
+       		\pstree[levelsep=7em,treesep=.5cm]{\Tr{\PSBS{Heuristic}}}{
+       			\pstree[levelsep=3.5em]{\Tr{\PSBS{FPGA}}}{
+       				\small \Shortstack[l]{
+       					\citep{Tiwari11}\\
+       					\citep{Tiwari13}
+       				}
+       			}
+       			\pstree[levelsep=4em]{\Tr{\PSBS{Sequential}}}{
+       				\small \Shortstack[c]{
+       					\hyperref[quickreduct]{\textsc{quickreduct}}\\
+       					EBR\\
+       					\citep{Yang08}
+       				}
+       			}
+       			\pstree[levelsep=3em]{\Tr{\PSBS{Subdivision}}}{
+       				\small \Shortstack[l]{
+       					FSDC-RS\\
+       					FSDC-RS		
+       				}
+       			}
+       		}
+       		\pstree[levelsep=5em]{\Tr{\PSBS{Evolutionary}}}{
+       			\small \Shortstack[c]{
+       				RSFSACO\\
+       				AntRSAR\\
+       				GenRSAR\\
+       				~~\citep{Bjorvand97}
+       			}
+       		}
+       		}
+       \pstree[levelsep=3.5em]{\Tr{\PSBS{Minimal}}}{
+       		\small \Shortstack[c]{
+       			\citep{Lin04}\\
+       			RSAR-SAT	
+       		}
+       }
+  }
+  \caption{Taxonomy of algorithms for computing a single reduct.}
+  \label{fig_Tax1}
+  \end{figure}
+  	
+  \begin{figure}[htb] 
+    	\center
+    \pstree{\Tr{\PSBL{Algorithms for Computing all the Reducts}}}{%
+    \pstree{\Tr{\PSBS{Rough Sets}}}{%
+    		\pstree[levelsep=2em]{\Tr{\PSBS{Subdivision}}}{
+    			\small \Shortstack[l]{
+    				\hyperref[SRGonCRS]{SRGonCRS}		  
+       		}
+    		}
+       	\pstree[levelsep=4.5em]{\Tr{\PSBS{Sequential}}}{
+       		\small \Shortstack[l]{
+       			\citep{Starzyk99}\\
+       			\hyperref[RGonCRS]{RGonCRS}\\
+       			RSAR-SAT						  
+       		}
+       	}
+  }
+  	\pstree{\Tr{\PSBS{Testor Theory}}}{%
+  		\pstree[levelsep=3.5em]{\Tr{\PSBS{FPGA}}}{
+  			\small \Shortstack[c]{\citep{Cumplido06}\\
+  					 			  BT~\citep{Rojas07}}
+  		}
+       	\pstree[levelsep=5.5em]{\Tr{\PSBS{Sequential}}}{
+      			\small \Shortstack[l]{\hyperref[BT]{BT \& TB}\\
+      								  \hyperref[LEX]{LEX} \\
+      								  \hyperref[CTEXT]{CT\_EXT} \\
+      								  \hyperref[BR]{BR} \\
+      								  \hyperref[YYC]{YYC} }
+      	}
+  }}
+  \caption{Taxonomy of algorithms for computing all the reducts.}
+  \label{fig_Tax2}
+  \end{figure}
  
 % \newcolumntype{L}[1]{>{\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 % \begin{table}[t]
@@ -475,8 +595,9 @@
 % \end{table}
  
 \subsection{Algorithm Finding a Single Reduct}
-  The algorithm presented in~\citep{Chouchoulas01} (\textsc{quickreduct}) starts with an empty set of 
-  attributes and adds, one at a time, the attribute having the highest significance. 
+%TODO cambiar lo de la significancia
+  The algorithm presented in~\citep{Chouchoulas01} \setword{\textsc{quickreduct}}{quickreduct} starts with 
+  an empty set of attributes and adds, one at a time, the attribute having the highest significance. 
   This greedy algorithm evaluates the significance of an attribute by the number of objects added to 
   the positive region after its inclusion.  
   A similar approach is the Johnson Reducer~\citep{Johnson74}, first introduced in RST in \citep{Ohrn00}.
@@ -526,7 +647,7 @@
 \subsection{Algorithms for all Reducts and all Typical Testors Computation}
   One of the first algorithm designed to overcome the exponential complexity (regarding
   the number of features) of the problem of finding all the TT, was 
-  proposed by \cite{Ruiz85}. This algorithm, called BT,
+  proposed by \cite{Ruiz85}. This algorithm, called \setword{BT}{BT},
   codified a subset of features as a binary word with as many bits as features in the 
   dataset. A 0 represents the absence of the corresponding feature in the current
   subset while a 1 represents its inclusion. This way, candidates subsets are evaluated
@@ -541,19 +662,19 @@
   order. 
 	
   Then, \cite{Santiesteban03} proposed a new algorithm
-  called LEX. Main ideas behind LEX are a new traversing order of candidates (which resembles the
+  called \setword{LEX}{LEX}. Main ideas behind LEX are a new traversing order of candidates (which resembles the
   lexicographical order in which string characters are compared) and the concept of gap. In LEX
   the typical condition is verified first and only for those potentially TT, the testor 
   condition is checked. %This way, the out-coming testors from this algorithm are always typical.
   The concept of gap allows us, once obtained a TT (or a not testor) candidate including 
   the last feature in the dataset, to avoid the evaluation of any subset of this candidate.
 	
-  \cite{Sanchez07} proposed the CT\_EXT algorithm for computing all the
+  \cite{Sanchez07} proposed the \setword{CT\_EXT}{CTEXT} algorithm for computing all the
   TT. Following a traversing order similar to that in LEX, this algorithm searches for
   testors without verifying the typical condition. This way, a larger number of candidates are 
   evaluated, in comparison to LEX; but the cost of each evaluation is lower. Results from experiments
   show that CT\_EXT is faster than the previous existing algorithms for most datasets. Then, \cite{Lias09}
-  presented the BR algorithm, a Recursive algorithm based on 
+  presented the \setword{BR}{BR} algorithm, a Recursive algorithm based on 
   Binary operations. BR is very similar to LEX in its bones but its recursive nature encloses a great
   gain. Given a candidate subset, the remaining features are tested a priori and those being rejected are
   excluded from subsequent evaluations. \cite{Sanchez10} presented a cumulative
@@ -563,7 +684,7 @@
   evaluating the minimum number of candidates in the state of the art. The main drawback of fast-BR and 
   BR is, as in LEX, the high cost of evaluating the typical condition for each candidate. 
  
-  Recently, a new internal typical testor--finding algorithm (YYC) was proposed by~\cite{Alba14}. Although 
+  Recently, a new internal typical testor--finding algorithm (\setword{YYC}{YYC}) was proposed by~\cite{Alba14}. Although 
   they claim that this algorithm verify less candidates than previous alternatives, two weak points should
   be addressed. First, BR is not included in comparisons; and second, the evaluation cost for a candidate
   in YYC is high compared to that of previous algorithms. YYC verifications involve calculations of the 
@@ -588,7 +709,8 @@
   terms such as discernibility and basic matrix, rows and columns are not used in the paper. The
   algorithm is presented in an iterative fashion and its recursive nature is not cleared expressed.
   
-  \cite{WangP07} proposed a new algorithm for computing all the reducts (RGonCRS). Even though this algorithm 
+  \cite{WangP07} proposed a new algorithm for computing all the reducts \setword{RGonCRS}{RGonCRS}. 
+  Even though this algorithm 
   was developed independently and reported two years before to the one reported in~\citep{Lias09}, it is very 
   similar to BR. Notice that this is a rough set approach to the problem and the nomenclature is totally 
   different to that of BR. Essentially, every proposition supporting the pruning process in \citep{WangP07} 
@@ -598,7 +720,7 @@
   \item It starts searching the core and looks for reducts as supersets of the core.
   \item A recursive implementation, instead of the iterative solution used in BR, is proposed.
   \item During the algorithm execution, contributing attributes are sorted as in the Johson reducer.
-  \item A second algorithm (SRGonCRS) is proposed for subdividing the dataset and the reducts are
+  \item A second algorithm \setword{SRGonCRS}{SRGonCRS} is proposed for subdividing the dataset and the reducts are
   		incrementally found.
   \end{itemize}
   
@@ -637,7 +759,7 @@
   does not implies its applicability to larger cases where such acceleration is needed. On the other hand, 
   runtime estimations for FPGA component executions are made by means of a oscilloscope without taking into 
   account communication overhead.
-
+%TODO añadir una tabla comparativa de los algoritmos.
 \clearpage
 \section{Research Proposal}\label{ResearchProposal} 
  In this section we present the justification and motivation, the research questions, the objectives and the
@@ -738,11 +860,13 @@
 
 \subsection{Research Objectives}\label{Goals} 
   The main objective in our research is the \emph{development of new algorithms for computing reducts in
-  information systems; which will be comparable to the state of the art algorithms 
-  in most datasets, and faster in some kind of datasets}. These algorithms will use some properties 
+  information systems; which will be comparable to state of the art algorithms 
+  in most datasets, and faster in some specific kinds of datasets}. 
+  
+  These algorithms will use some properties 
   of the basic matrix to conveniently select the traversing strategy for the search space. We will explore two
   variants of this problem, the problem of computing all the reducts and the problem of computing globally 
-  shortest reducts, in information systems. The problem of finding shortest reducts has also 
+  shortest reducts. The problem of finding shortest reducts has also 
   exponential complexity~\citep{Lin04} but different pruning rules could be used.
   
   Our specific objectives are:
@@ -756,7 +880,7 @@
 %  \item Find a relationship between the traversed space and the expected cost of each traversing strategy
 %  		for computing all the reducts.
   
-  \item Developing a new algorithm for computing all the reducts in information systems.
+  \item Developing a new algorithm for computing all the reducts.
   		
   \item Finding a relationship between some properties of the basic matrix and the fastest 
   		traversing strategy for computing globally shortest reducts.
@@ -767,7 +891,7 @@
 %  \item Find a relationship between the traversed space and the expected cost of each traversing strategy
 %  		for computing globally shortest reducts.
   
-  \item Developing a new algorithm for computing globally shortest reducts in information systems.
+  \item Developing a new algorithm for computing globally shortest reducts.
 %  
 %  \item Redesign and implement in a hardware fashion the proposed algorithms in order to evaluated the
 %  		runtime reduction achieved by these accelerations.  		
@@ -780,14 +904,13 @@
 %  		aspects. First, algorithms from Rough Sets Theory and Testor Theory will be exposed under a 
 %  		unified theoretical framework. Second, propositions supporting algorithms reported in the literature will
 %  		be explained using the same theoretical basis. 
-  \item A new algorithm for computing all the reducts in information systems which will be comparable to 
-  		the state of the art algorithms in most datasets, and faster in some kind of datasets.
-  \item A new algorithm for computing shortest reducts in information systems which will be comparable to 
-  		the state of the art algorithms in most datasets, and faster in some kind of datasets.
-  \item A meta-characterization of algorithms efficiency in relation to some properties of the
+  \item A new algorithm for computing all the reducts, which will be comparable to 
+  		state of the art algorithms in most datasets, and faster in some specific kinds of datasets.
+  \item A new algorithm for computing shortest reducts, which will be comparable to 
+  		state of the art algorithms in most datasets, and faster in some specific kind of datasets.
+  \item A meta-characterization of algorithms' efficiency in relation to some properties of the
   		basic matrix associated to a dataset.
-  \item Software and hardware implementations for computing both, all the reducts and shortest reducts in 
-  		information systems.
+  \item Software and hardware implementations for computing both, all the reducts and shortest reducts.
   \end{itemize}
 
 
@@ -796,32 +919,35 @@
 	\item Finding a relationship between some properties of the basic matrix and the fastest 
   		  traversing strategy for computing all the reducts.\label{task1_all}
 	\begin{itemize}
-  		\item Generating a set of random datasets, systematically covering the space of possible combinations in 
-  			  the values of the properties of basic matrices (factorial design).
+  		\item Generating a set of random datasets, systematically covering the space of possible combinations
+  			  of properties of basic matrices (factorial design). These properties are, for instance, the 
+  			  density of ones in the basic matrix, the minimum and maximum number of ones in a row, the 
+  			  standard deviation of the density of ones in rows and columns, etc.
   		\item Implementing the main traversing strategies reported in the literature for the computation of all
   			  reducts.
   		\item Generating an information system with the properties of each basic matrix, using 
   			  the fastest strategy as decision attribute.
   		\item Extracting a relevant subset of properties for determining a priori the appropriate 
-  			  traversing strategy for a given dataset; and the rules governing this relation.
+  			  traversing strategy for a given dataset; and the rules governing this relation. We will use
+  			  Rough Set Theory for this purpose.
   		\item Proposing a new algorithm for computing all the reducts using the rules found in
-  			  the previous task.
-  		\item Evaluating the proposed algorithm over synthetic and benchmarking datasets.
+  			  the previous step.
+  		\item Evaluating the proposed algorithm over synthetic and benchmarking datasets~\citep{Bache13}.
   	\end{itemize}
   	\item Finding a relationship between the traversed space and the expected cost of traversing strategies.
   	\label{task2_all}
   	\begin{itemize}
   		\item Implementing the main traversing strategies reported in the literature for the computation of all
-  			  reducts in a way that we can collect statistics for every execution stage.
+  			  reducts in such a way that we can collect statistics for every execution stage.
   		\item Making a statistical description  of strategies' runtime cost over synthetic and benchmarking
   			  datasets.
   		\item Finding a correlation between the traversed space and the expected cost of traversing strategies.
   	\end{itemize}
   	\item Developing a new algorithm for computing all the reducts in information systems.
   	\begin{itemize}
-  		\item Proposing a new algorithm for computing all the reducts based on relations found in 
-  			  tasks~\ref{task1_all} and~\ref{task2_all}.
-  		\item Evaluate the proposed algorithm over synthetic and benchmarking datasets.
+  		\item Proposing a new algorithm for computing all the reducts based on the relations found in 
+  			  steps~\ref{task1_all} and~\ref{task2_all}.
+  		\item Evaluating the proposed algorithm over synthetic and benchmarking datasets.
   	\end{itemize}
   	
   	\item Finding a relationship between some properties of the basic matrix and the fastest 
@@ -833,22 +959,22 @@
   			  the fastest strategy as decision attribute.
   		\item Extracting the relevant subset of properties for determining a priori the appropriate 
   			  traversing strategy for a given dataset; and the rules governing this relation.
-  		\item Proposing a new algorithm for computing shrotest reducts using the classifier found in
-  			  the previous task.
+  		\item Proposing a new algorithm for computing shrotest reducts using the rules found in
+  			  the previous step.
   		\item Evaluating the proposed algorithm over synthetic and benchmarking datasets.
   	\end{itemize}
   	\item Finding a relationship between the traversed space and the expected cost of traversing strategies.
   	\label{task2_short}
   	\begin{itemize}
   		\item Implementing the main traversing strategies reported for the computation of globally shortest 
-  			  reducts in a way that we can collect statistics for every execution stage.
+  			  reducts in such a way that we can collect statistics for every execution stage.
   		\item Making a statistical description  of strategies' runtime cost over synthetic and benchmarking.
   		\item Finding a correlation between the traversed space and the expected cost of traversing strategies.
   	\end{itemize}
   	\item Developing a new algorithm for computing shortest reducts in information systems.
   	\begin{itemize}
-  		\item Proposing a new algorithm for computing shortest reducts based on relations found in 
-  			  tasks~\ref{task1_short} and~\ref{task2_short}.
+  		\item Proposing a new algorithm for computing shortest reducts based on the relations found in 
+  			  steps~\ref{task1_short} and~\ref{task2_short}.
   		\item Evaluating the proposed algorithm over synthetic and benchmarking datasets.
   	\end{itemize}
 %  	\item Implement in a hardware fashion the proposed algorithms.
@@ -860,8 +986,8 @@
 %  			  shortest reducts in information systems.
 %  		\item Evaluate the implemented algorithm over synthetic and benchmarking datasets.
 %  	\end{itemize}
-  	Finally, the proposed algorithms will be redesigned and implemented in a hardware fashion in order to 
-  	evaluate the speed up that can be obtained.
+  	\item Finally, the proposed algorithms will be redesigned and implemented in a hardware fashion in order to 
+  		  evaluate the speed up that can be obtained.
 \end{enumerate}
 
 \clearpage 
@@ -924,7 +1050,7 @@
 		\hline
 		Submit final draft of dissertation to supervisors &&&&&&&&&&\cellcolor[gray]{0.9}&&\\
 		\hline
-		Submit final version of dissertation to the committee &&&&&&&&&&&\cellcolor[gray]{0.9}&\\
+		Submit final version of dissertation to the PhD committee &&&&&&&&&&&\cellcolor[gray]{0.9}&\\
 		\hline
 		
  	\end{tabular}             
