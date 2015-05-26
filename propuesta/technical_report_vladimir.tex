@@ -479,33 +479,34 @@
        					\citep{Tiwari13}
        				}
        			}
-       			\pstree[levelsep=4em]{\Tr{\PSBS{Sequential}}}{
+       			\pstree[levelsep=3.5em]{\Tr{\PSBS{Sequential}}}{
        				\small \Shortstack[c]{
        					\hyperref[quickreduct]{\textsc{quickreduct}}\\
-       					EBR\\
+       					%EBR\\
        					\citep{Yang08}
        				}
        			}
        			\pstree[levelsep=3em]{\Tr{\PSBS{Subdivision}}}{
        				\small \Shortstack[l]{
-       					FSDC-RS\\
-       					FSDC-RS		
+       					\hyperref[FSDCRS]{FSDC-RS}\\
+       					\hyperref[FSDCRS]{FSDC-HS}	
        				}
        			}
        		}
-       		\pstree[levelsep=5em]{\Tr{\PSBS{Evolutionary}}}{
+       		\pstree[levelsep=6em]{\Tr{\PSBS{Evolutionary}}}{
        			\small \Shortstack[c]{
-       				RSFSACO\\
-       				AntRSAR\\
-       				GenRSAR\\
-       				~~\citep{Bjorvand97}
+       				\citep{Wroblewski95}\\
+       				~~\citep{Bjorvand97}\\
+       				\hyperref[AntRSAR]{AntRSAR}\\
+       				\hyperref[GenRSAR]{GenRSAR}\\
+       				\hyperref[RSFSACO]{RSFSACO}
        			}
        		}
        		}
        \pstree[levelsep=3.5em]{\Tr{\PSBS{Minimal}}}{
        		\small \Shortstack[c]{
        			\citep{Lin04}\\
-       			RSAR-SAT	
+       			\hyperref[RSARSAT]{RSAR-SAT}		
        		}
        }
   }
@@ -517,16 +518,19 @@
     	\center
     \pstree{\Tr{\PSBL{Algorithms for Computing all the Reducts}}}{%
     \pstree{\Tr{\PSBS{Rough Sets}}}{%
-    		\pstree[levelsep=2em]{\Tr{\PSBS{Subdivision}}}{
+    		\pstree[levelsep=5em]{\Tr{\PSBS{Subdivision}}}{
     			\small \Shortstack[l]{
-    				\hyperref[SRGonCRS]{SRGonCRS}		  
+    				\hyperref[SRGonCRS]{SRGonCRS}\\
+    				\hyperref[DT]{DT}\\
+    				\hyperref[DT]{DISC FUNCTION}\\
+    				\hyperref[DT]{CANDIDATE REDUCTS}	  
        		}
     		}
        	\pstree[levelsep=4.5em]{\Tr{\PSBS{Sequential}}}{
        		\small \Shortstack[l]{
        			\citep{Starzyk99}\\
        			\hyperref[RGonCRS]{RGonCRS}\\
-       			RSAR-SAT						  
+       			\hyperref[RSARSAT]{RSAR-SAT}						  
        		}
        	}
   }
@@ -614,9 +618,9 @@
   
   The method presented in~\citep{Jiao10} improves the efficiency of computing reducts by means of subdivision 
   of the dataset. The original dataset is broken down into a master-table and several sub-tables that are simpler,
-  more manageable. Results are then joined together in order to solve the original dataset. Different variants
-  for decomposition of a reduct computation problem are discussed and proposed in~\citep{Strakowski08}.
-  
+  more manageable. Two algorithms are proposed (\setword{FSDC-RS}{FSDCRS} and FSDC-HS) using 
+  different decomposition strategies. Results are then joined together in order to solve the original dataset. 
+    
   Special attention deserves the approaches using genetic algorithms to discover locally shortest reducts. Although 
   these algorithms do not guarantee finding globally shortest reducts, many reducts may be found in a determined
   time. A good point in this approach is the use of the fitness function to guide the search down to a set of 
@@ -624,10 +628,12 @@
   strings with a positional representation of attributes presence in the candidate set. The fitness function
   depends on the number of attributes in the subset, penalizing strings with a large number of bits set. The 
   second optimization parameter is the number of objects classified by the given candidate. The reduct should 
-  discern as many objects as possible.
+  discern as many objects as possible. \cite{Jensen03} also introduced a simple algorithm 
+  (\setword{GenRSAR}{GenRSAR}), which uses a genetic search strategy in order to determine reducts.
   
-  Other evolutionary approaches to reduct computation include Ant Colony Optimization~\citep{Jensen03}
-  and~\citep{Chen10}; and Particle Swarm Optimization~\citep{Wang07}.
+  Other evolutionary approaches to reduct computation include Ant Colony Optimization~\citep{Jensen03} 
+  (\setword{AntRSAR}{AntRSAR}) and~\citep{Chen10} (\setword{RSFSACO}{RSFSACO}); and Particle Swarm 
+  Optimization~\citep{Wang07}.
     
   In~\citep{Lin04}, a heuristic is followed to find a short reduct. This first reduct is used to limit the search
   space, in order to only consider those attributes combinations with lower cardinality. 
@@ -638,7 +644,8 @@
   possibilities of attribute combinations, which is unfeasible in most cases.
   
   Although originally intended for computing a single minimal reduct, the algorithm proposed in~\citep{Jensen14}
-  may be modified in order to obtain all the reducts in an Information System. The method introduced in this work
+  (\setword{RSAR-SAT}{RSARSAT}) may be modified in order to obtain all the reducts in an Information System. 
+  The method introduced in this work
   reduces the problem of finding a reduct from the discernibility function to the SAT problem~\citep{Davis62}. 
   The boolean function generated in this way is always satisfied since the complete set of attributes is a trivial
   solution.
@@ -724,6 +731,8 @@
   		incrementally found.
   \end{itemize}
   
+  Different variants (\setword{DT}{DT}, DISC FUNCTION and CANDIDATE REDUCTS) for decomposition of a reduct 
+  computation problem are discussed and proposed in~\citep{Strakowski08}.
 
 \subsection{Parallel Accelerations}
 
