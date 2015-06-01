@@ -334,8 +334,10 @@
   Once the discernibility matrix $M_{IS}$ is found, we can define the \textit{discernibility function} $f_{IS}$.
   This is a Boolean function of $n$ Boolean variables $c_1^*, c_2^*,...,c_n^*$, representing the presence of
   the corresponding attribute (True) or its absence (False) in $M_{IS}$. Here, the disjunction ($\vee$) and 
-  conjunction ($\wedge$) operators have their common meaning.
-  %TODO definir la operacion sobre un conjunto
+  conjunction ($\wedge$) operators have their common meaning. Their evaluation over a set of Boolean variables
+  $X=\lbrace x_1^*, x_2^*, ..., x_n^* \rbrace$ should be interpreted as 
+  $\wedge X= x_1^* \wedge x_2^* \wedge ... \wedge x_n^* $.
+
   \begin{equation}
   	f_{IS}(c_1^*, c_2^*,...,c_n^*)=\wedge \lbrace \vee c_{ij}^* : 1 \leq j \leq i \leq |U|, 
   									m_{ij} \neq \emptyset \rbrace
@@ -768,7 +770,7 @@
   does not implies its applicability to larger cases where such acceleration is needed. On the other hand, 
   runtime estimations for FPGA component executions are made by means of a oscilloscope without taking into 
   account communication overhead.
-%TODO añadir una tabla comparativa de los algoritmos.
+  
 \clearpage
 \section{Research Proposal}\label{ResearchProposal} 
  In this section we present the justification and motivation, the research questions, the objectives and the
@@ -778,7 +780,11 @@
 \subsection{Justification and Motivation}\label{Justification}
   RST can be used to reduce the number of attributes in a dataset without relevant information lost. 
   Therefore, there has been a lot of research on finding reducts, particularly, shortest 
-  reducts~\citep{Jensen14}. %TODO exponer la importancia x muchos autores
+  reducts~\citep{Jensen14}. \cite{Zheng14} highlighted the relevance of feature selection through rough
+  set reducts and illustrated the current research activity on this topic. Recently, \cite{Jiang15} said that 
+  attribute reduction is one of the most important tasks in rough sets and, as a consequence,  many strategies 
+  for finding reducts have been investigated. In general, we find consensus in the literature about both,
+  the relevance and the actuality of research on rough set reducts.
   
   Heuristic methods such as~\citep{Chouchoulas01,Jensen04,Zhong01} are fast alternatives for finding 
   reducts but they do not guarantee a shortest reduct. Stochastic approaches~\citep{Wroblewski95,Jensen03,
