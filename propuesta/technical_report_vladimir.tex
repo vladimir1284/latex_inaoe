@@ -286,13 +286,13 @@
   POS_{\lbrace c_1, c_2 \rbrace}(d)&=& U
   \end{array}$$
  
-\subsection{Reducts and Core}
+\subsection{Reducts and Core}\label{def_reduct}
   Given an information system $IS=(U,A)$ with condition attributes set $C$ and decision attributes set
   $D$ such that $A=C \cup D$ and $C \cap D =\emptyset$. A subset $B \subseteq C$ is a \textit{reduct} 
   of $IS$ relative to $D$ if
   \begin{enumerate}
   	\item $POS_B(D)=POS_C(D)$. \label{cond_1}
-  	\item $B$ is a minimal subset (with respect to inclusion) satisfying condition~\ref{cond_1}.
+  	\item $B$ is a minimal subset (with respect to inclusion) satisfying condition~\ref{cond_1}.\label{cond_2}
   \end{enumerate}
   
   The intersection of all the reducts in an IS is called the \textit{core}, the attributes that cannot be
@@ -1114,6 +1114,55 @@
 %		4 & July 2017 & Third and fourth Experiments (\ref{exprimet3} \& \ref{exprimet4})\\
 % 	\end{tabular}             
 % 	\end{table}
+
+\documentclass[authoryear,11pt]{elsarticle}
+\begin{document}
+
+\section{Preliminary Results}
+	In this section, we expose the advances and results obtained in this PhD research until present.
+	Our first studies were directed to hardware implementations of algorithm for computing
+	irreducible testors. Thus, in the subsection~\ref{OnlyTT} we present a new architecture 
+	for computing irreducible testors, which is based on the platform proposed by \cite{Rojas12}. 
+	This result has been reported in~\citep{Rodriguez14}. Then, in subsection~\ref{CTH} we
+	describe a new platform for computing irreducible testors, inspired in the CT\_EXT algorithm.
+	This platform was presented to be published in the review \emph{Expert Systems with 
+	Applications\footnote{http://www.journals.elsevier.com/expert-systems-with-applications/}}, and
+	it is currently under the second revision.
+	 
+	
+\subsection{A Hardware Architecture for Filtering Irreducible Testors}\label{OnlyTT}
+	\cite{Rojas12} presented a hardware-software platform for computing typical testors, based on the BT algorithm, 
+	that included a new module for eliminating most of the non typical testors before transferring them to a host 
+	software application for final filtering. Main disadvantages of this approach are the huge amount of data that 
+	must be transferred to the PC and the extra cost of the final filtering stage in the software component.  
+	For this reason, we developed a hardware module for eliminating all non typical testors 
+	on the FPGA device, reducing the amount of data that must be transferred to the PC. This architecture is 
+	applicable to any algorithm for computing typical testors implemented in FPGA, since it operates in the 
+	candidate evaluation process.
+	
+	In the hardware platform, a feature subset is handled as an $n$-tuple, using a positional 
+	representation for all the $n$ attributes of a basic matrix ($BM$). Given a subset $T$, its $n$-tuple 
+	representation has a 1 in the corresponding position $j$ for each $x_j \in T$ and 0 otherwise.
+	The information of $BM$ is hold in the $BM$ hardware module. This module handles the process of 
+	deciding whether an $n$-tuple is a testor of $BM$, by comparing the candidate against each one of the $BM$'s rows.
+
+	In our proposed architecture, an \textit{N~to~N~Decoder} is introduced into each 
+	row of the basic matrix. This new component receives as input 
+	the result of the AND operation between the current candidate and the corresponding $BM$ row.
+	The output from the \textit{N~to~N~Decoder} repeats the input when there is only one bit set
+	to 1, and returns the null $n$-tuple $(0,...,0)$ otherwise. For those rows with only one bit having a 1 after ANDed 
+	with the candidate, the attribute in the position of that bit is indispensable if the candidate is a testor.
+	
+	Two operations are added to the $BM$ module in order to verify the condition~\ref{cond_2} of the definition
+	of reduct in section~\ref{def_reduct}\footnote{Notice that we are, indeed, finding typical testors here. We used the 
+	definition of reduct from section~\ref{def_reduct} based on the close relation between these two concepts~\citep{Lazo15}}.
+	First, a bitwise OR operation is performed among the output of the \textit{N~to~N~Decoder} of every row. 
+	The result of this operation has a 1 in the positions corresponding to each indispensable attribute in the current 
+	candidate. This value is then compared to the current candidate, and 	given that this comparison holds equality and the 
+	current candidate is a testor; we say that the current candidate is a typical testor.
+
+
+\subsection{A Hardware Architecture for the CT\_EXT Algorithm}\label{CTH}
 
 %-------------------------------------------------------------------------------
 % Bibliography
