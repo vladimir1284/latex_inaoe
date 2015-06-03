@@ -4,6 +4,7 @@
 
 
 \setlength{\parskip}{1em}			% espaciar parrafos
+\newtheorem{proposition}{Proposition}
 
 \usepackage{hyperref}				% enlaces en el pdf
 \hypersetup{backref,colorlinks=true}	% colores en vez de cajas en los enlaces
@@ -18,6 +19,10 @@
 \usepackage{datetime}				% Fecha de creado
 \usepackage{pst-tree}				% Para la taxonomía
 \usepackage{stackengine}				% Para listar los articulos en el nodo de la taxonomía
+\usepackage{algorithm}				% Para el seudocódigo
+\usepackage{setspace}				% Para el seudocódigo
+\usepackage{amsmath}					% Para el seudocódigo
+\usepackage[noend]{algpseudocode}	% Para el seudocódigo
 
 
 %-------------------------------------------------------------------------
@@ -887,37 +892,18 @@
   \begin{enumerate}
   \item Finding a relationship between some properties of the basic matrix and the fastest 
   		traversing strategy for computing all reducts.
-  		  	
-%  \item Find a relationship between some properties of the discernibility matrix and the fastest 
-%  		decomposition method for computing all the reducts.
-  		
-%  \item Find a relationship between the traversed space and the expected cost of each traversing strategy
-%  		for computing all the reducts.
   
   \item Developing a new algorithm for computing all reducts.
   		
   \item Finding a relationship between some properties of the basic matrix and the fastest 
   		traversing strategy for computing globally shortest reducts.
-  		  	
-%  \item Finding a relationship between some properties of the discernibility matrix and the fastest 
-%  		decomposition method for computing globally shortest reducts.
-  		
-%  \item Find a relationship between the traversed space and the expected cost of each traversing strategy
-%  		for computing globally shortest reducts.
   
   \item Developing a new algorithm for computing globally shortest reducts.
-%  
-%  \item Redesign and implement in a hardware fashion the proposed algorithms in order to evaluated the
-%  		runtime reduction achieved by these accelerations.  		
+
   \end{enumerate}
 
 \subsection{Expected Contributions}\label{Contributions} 
-  %Expected contributions from this research are:
   \begin{itemize}
-%  \item A survey on algorithms for reducts computations. The novelty of this contribution relay in two
-%  		aspects. First, algorithms from Rough Sets Theory and Testor Theory will be exposed under a 
-%  		unified theoretical framework. Second, propositions supporting algorithms reported in the literature will
-%  		be explained using the same theoretical basis. 
   \item A new algorithm for computing all reducts, which will be comparable to 
   		state of the art algorithms in most datasets, and faster in some specific kinds of datasets.
   \item A new algorithm for computing shortest reducts, which will be comparable to 
@@ -991,15 +977,6 @@
   			  steps~\ref{task1_short} and~\ref{task2_short}.
   		\item Evaluating the proposed algorithm over synthetic and benchmarking datasets.
   	\end{itemize}
-%  	\item Implement in a hardware fashion the proposed algorithms.
-%  	\begin{itemize}
-%  		\item Redesign and implement in a hardware fashion the proposed algorithm for computing
-%  			  all the reducts in information systems.
-%  		\item Evaluate the implemented algorithm over synthetic and benchmarking datasets.
-%  		\item Redesign and implement in a hardware fashion the proposed algorithm for computing
-%  			  shortest reducts in information systems.
-%  		\item Evaluate the implemented algorithm over synthetic and benchmarking datasets.
-%  	\end{itemize}
   	\item Finally, the proposed algorithms will be redesigned and implemented in a hardware fashion in order to 
   		  evaluate the speed up that can be obtained.
 \end{enumerate}
@@ -1077,16 +1054,16 @@
 \section{Preliminary Results}
 	In this section, we expose the advances and results obtained in this PhD research until present.
 	Our first studies were directed to hardware implementations of algorithm for computing
-	irreducible testors. Thus, in the subsection~\ref{OnlyTT} we present a new architecture 
-	for computing irreducible testors, which is based on the platform proposed by \cite{Rojas12}. 
+	typical testors. Thus, in the subsection~\ref{OnlyTT} we present a new architecture 
+	for computing typical testors, which is based on the platform proposed by \cite{Rojas12}. 
 	This result has been reported in~\citep{Rodriguez14}. Then, in subsection~\ref{CTH} we
-	describe a new platform for computing irreducible testors, based on the CT\_EXT algorithm.
+	describe a new platform for computing typical testors, based on the CT\_EXT algorithm.
 	This platform was presented to be published in the review \emph{Expert Systems with 
 	Applications\footnote{http://www.journals.elsevier.com/expert-systems-with-applications/}}, and
 	it is currently under the second revision.
 	 
 	
-\subsection{A Hardware Architecture for Filtering Irreducible Testors}\label{OnlyTT}
+\subsection{A Hardware Architecture for Filtering Typical Testors}\label{OnlyTT}
 	\cite{Rojas12} presented a hardware-software platform for computing typical testors, based on the BT algorithm, 
 	that included a new module for eliminating most of the non typical testors before transferring them to a host 
 	software application for final filtering. Main disadvantages of this approach are the huge amount of data that 
@@ -1175,7 +1152,7 @@
 	between each row of $BM$ and the corresponding candidate. Rows in the right side show the decoder output 
 	taking as input its corresponding left row. In the last row, the result of an OR operation over all 
 	above $n$-tuples is shown. According to our previous explanation, the candidate $\{c_1,c_2\}$ is an 
-	irreducible testor given that the result of the OR operation is equal to the candidate itself; while the
+	typical testor given that the result of the OR operation is equal to the candidate itself; while the
 	candidate $\{c_1,c_2,c_3\}$ is not.
 	
 \subsubsection{Evaluation and Discussion}
@@ -1224,11 +1201,212 @@
 	of the same order of magnitude. For those basic matrices with a large number of typical testors, the final 
 	filtering stage could be  even more expensive than the main testors computation, as is the case for the dataset 
 	labelled \textit{german}. The total runtime for the previous architecture is the sum of the FPGA and the 
-	PC runtime. Our proposed platform will require only the FPGA runtime. Although finding all irreducible testors 
+	PC runtime. Our proposed platform will require only the FPGA runtime. Although finding all typical testors 
 	for these datasets does not constitute a complex computational problem, they serve to show our point.
 
 \subsection{A Hardware Architecture based the CT\_EXT Algorithm}\label{CTH}
-
+	Here, we present an efficient hardware software platform for computing typical
+	testors based on the CT-EXT algorithm proposed in~\citep{Sanchez07}. The main contribution of this
+	work is the design and implementation of a hardware architecture that traverses the search space in a 
+	different order than that presented in \citep{Rojas07, Rojas12,Rodriguez14}. This strategy evaluates less
+	candidate subsets than previous architectures, which results in shorter runtime. In comparison to the 
+	software versions of CT-EXT~\citep{Sanchez07, Sanchez10}, our proposal evaluates a candidate every clock 
+	cycle, which leads to a faster execution. The runtime gain of our new hardware software platform is
+	demonstrated throughout	experiments over synthetic datasets.
+	
+\subsubsection{CT-EXT algorithm}
+	CT-EXT is one of the fastest algorithms for computing all typical testors reported in the 
+	state of the art~\citep{Sanchez07,Sanchez10,Piza14}. In order to describe this algorithm we 
+	introduce some definitions and notations.	
+	
+	Let $T$ be a subset of attributes, $T$ is a testor of the basic matrix $BM$ if the attributes in $T$ do 
+	not form a zero row 	in $BM$. It means that every row in $BM$ has at least a 1 in those columns corresponding 
+	to attributes belonging to $T$. We say that a testor $T$ is a typical testor if all the proper subsets of 
+	$T$ are not	testors.
+	
+	We can interpret a typical testor as a subset of attributes being jointly sufficient and individually
+	necessary to differentiate every pair of objects belonging to different classes.
+	
+	During the search, CT-EXT follows the idea that an attribute contributes to a subset $T$ (candidate to 
+	be a typical testor) if after adding this attribute to $T,$ the attributes in $T$ form less zero rows 
+	in $BM$ than the amount of zero rows before adding the attribute. This idea is used for pruning the search
+	space.
+	
+	The following proposition, introduced and proved in~\citep{Sanchez07}, constitutes the basis for the CT-EXT
+	algorithm.
+	
+	\begin{proposition}\label{prop1} 
+	Given $T \subseteq R$ and $c_j \in R$ such that $c_j \notin T$. If $c_j$ 
+	does not contribute to $T$, then $T\cup\{c_j\}$ cannot be a subset of any typical testor.
+	\end{proposition}
+	
+	Algorithm~\ref{ctext_algo} shows the pseudocode of CT-EXT, a detailed explanation of
+	this algorithm can be seen in~\citep{Sanchez07}. The function SortBM$(BM)$ sorts the basic matrix as follows.
+	Randomly select one of the rows of $BM$ with the fewest number of 1's. The selected row goes first and
+	all columns in which it has a 1 are moved to the left.
+	
+	\begin{algorithm}
+	\begin{spacing}{1.0}
+	\begin{small}
+	\caption{CT-EXT algorithm}\label{ctext_algo}
+	\begin{algorithmic}[1]
+	%\Procedure{CT-EXT}{}
+	\State \textbf{Input: } $BM$ - basic matrix with $m$ rows and $n$ columns.
+	\State \textbf{Output: } $TT$ - set of typical testors.
+	\State $TT \gets \{\}$
+	\State $j \gets 0$ \Comment{first attribute from $BM$ to be analyzed}
+	\State $BM \gets$ SortBM$(BM)$
+	\While{$BM[0,j] \neq 0$}\label{row1condition}
+	\State $T \gets \{c_j\}$ \Comment{current attribute subset}
+	\State $testor, typical, zero\_rows \gets$ Evaluate$(BM,T)$
+	\If{$testor=TRUE$}
+	\If{$typical=TRUE$} \Comment{$T$ is a typical testor}
+	\State $TT \gets TT \cup T$
+	\EndIf
+	\Else
+	\State $i \gets j+1$
+	\While{$i < n$}
+	\State $T \gets T \cup \{c_i\}$
+	\State $zero\_rows\_last \gets zero\_rows$
+	\State $testor, typical, zero\_rows \gets$ Evaluate$(BM,T)$
+	\If{$zero\_rows = zero\_rows\_last$}
+	\State $T \gets T \setminus \{c_i\}$ \Comment{attribute $X_i$ does not contribute}
+	\Else
+	\If{$testor=TRUE$}
+	\If{$typical=TRUE$}
+	\State $TT \gets TT \cup T$
+	\EndIf
+	\State $T \gets T \setminus \{c_i\}$
+	\State $zero\_rows \gets zero\_rows\_last$
+	\EndIf
+	\EndIf
+	\If{$i = n-1$}
+	\State $k \gets$ LastOne($T$)
+	\If{$k = i$}
+	\State $T \gets T \setminus \{c_k\}$
+	\State $k \gets$ LastOne($T$)
+	\EndIf
+	\If{$k \neq j$}
+	\State $T \gets T \setminus \{c_k\}$
+	\State $testor, typical, zero\_rows \gets$ Evaluate$(BM,T)$
+	\State $i \gets k+1$
+	\Else
+	\State $i \gets i+1$
+	\EndIf
+	\Else
+	\State $i \gets i+1$
+	\EndIf
+	\EndWhile
+	\EndIf
+	\State $j \gets j+1$
+	\EndWhile
+	%\EndProcedure
+	\end{algorithmic}
+	\end{small}
+	\end{spacing}
+	\end{algorithm}
+	
+	The function Evaluate$(BM,T)$ returns three values: $testor$, $typical$ and $zero\_rows$. $testor$ is 
+	TRUE if the set $T$ is a testor of $BM$ and FALSE otherwise. $typical$ is TRUE if the set $T$ is a
+	typical testor and FALSE otherwise. $zero\_rows$ is the amount of zero rows of $T$. The function
+	LastOne($T$) returns the position of the rightmost element in the set $T$.
+	
+	The proposed hardware platform replaces candidates generator module in the design of \citep{Rodriguez14}
+	by a brand new module. Minor changes are introduced in the rest of the platform in order to integrate
+	this new module. Essentially, the general scheme from previous architectures is followed.
+	
+\subsubsection{Evaluation and Discussion}
+	In order to show the performance of the proposed platform, it was compared against a software 
+	implementation of the CT-EXT algorithm~\citep{Sanchez07} and the BT hardware platform previously 
+	reported in~\citep{Rodriguez14}; which is the most recent hardware implementation for computing typical
+	testors reported in the literature.
+	
+	Either CT-EXT or BT hardware implementations are capable of evaluating a candidate per clock 
+	cycle. If both architectures are running at the same frequency, as it will be the case in our experiments, 
+	there are two reasons for differences in running time. The first one is the time taken for reorganization 
+	of basic matrix, which is a more complex process in BT, altough it can be neglected as shown in
+	\citep{Rojas12}. The second and the most relevant, is the amount of candidates to be evaluated. 
+	
+	Regarding to the software implementation, the CT-EXT hardware platform has two disadvantages. First, 
+	VHDL code is generated for each $BM$ data and a process of synthesis must be executed previously to 
+	executing the algorithm; while this is unnecessary in the software version of CT-EXT. Secondly, the 
+	software will be running in a PC at a frequency of 3.10GHz while FPGA architecture will run at 50MHz. 
+	
+	These disadvantages make the hardware approach useful (faster) under two conditions. First, the number of 
+	candidates to be evaluated is big enough to overcome the synthesis overhead. Second, the dimensions of the 
+	$BM$ are big enough to provide a considerable speed up of the candidate evaluation process. Although 
+	the hardware architecture could be designed for a fixed maximum matrix size and receive the $BM$ through the 
+	USB port, by doing this, the size of the problem which can be solved would be significantly reduced. The 
+	synthesis process comprehend an optimization of the design, taking advantage of the $BM$ data distribution for 
+	the reduction of the generated hardware configuration. The number of operations for the evaluation of a single 
+	candidate, in the software approach, is proportional to the number of rows and it is directly related to the 
+	number of columns in the $BM$. Using this approach it is possible to achieve a significant reduction in the
+	processing time, even if operating at a much lower clock frequency, by evaluating a candidate on each clock
+	cycle.
+	
+	With these points in mind and in order to show the usability of the proposed platform, 
+	three kinds of basic matrices were randomly generated. Each type containing different percentage of 1's: 
+	\begin{enumerate}
+		\item Very-low density matrices: approximately 8\%.
+		\item Low density matrices: approximately 33\%.
+		\item Medium density matrices: approximately 45\%.
+	\end{enumerate}
+	
+	Higher density matrices were discarded because they do not constitute a computationally expensive problem, 
+	as stated by \cite{Rojas12}. Here after, we will be referring to these three sets of matrices by its 
+	approximate density of~1's.
+	
+	\begin{figure}[htb]
+	\centering
+	\begin{minipage}{.5\textwidth}
+	  \centering
+	   \includegraphics[width=6cm , height=6cm]{low_density.eps}
+	  \caption{Total runtime for density 8\%.}
+	  \label{fig:result1}
+	\end{minipage}%
+	\begin{minipage}{.5\textwidth}
+	  \centering
+	   \includegraphics[width=6cm , height=6cm]{med_density.eps}
+	  \caption{Total runtime for density 33\%.}
+	  \label{fig:result2}
+	\end{minipage}
+	\end{figure}
+	
+	\begin{figure}[htb]
+	    \begin{center}
+	       \includegraphics[height=6cm]{med48_density.eps}
+	    \end{center}
+	\caption{Total runtime for density 45\%.}
+	\label{fig:result3}
+	\end{figure}	
+	
+	For our experiments, 30 basic matrices of different sizes were randomly generated. 
+	A random number generator was used to generate rows, which are
+	filtered for the minimum and maximum number of 1's allowed. In this way the desired density was
+	controlled. If accepted, the row is verified as basic against the saved rows. Basic rows 
+	are saved until the desired number of rows is reached. 
+	
+	For the hardware platforms, we measure the runtimes including the time for the following stages: $BM$ 
+	input parsing and VHDL code generation, synthesis process, and typical testor computation (with the
+	hardware component running at 50MHz). The number of rows for each type of matrices is conditioned by the
+	dimensions of the biggest matrix that may be synthesized at the desired running frequency.
+	All experiments are performed using an Intel(R) Core(TM) i5-2400 CPU @ 3.10GHz for software executions and 
+	an Atlys board, powered by a Spartan-6 LX45 FPGA device, for the hardware components.
+	Figures\,\ref{fig:result1}, \,\ref{fig:result2}, and \,\ref{fig:result3} show graphics of the runtime 
+	(in hours) for the three types of basic matrices. 
+	
+	The proposed CT-EXT hardware platform (CTH) results were taken as reference for axis limits in 
+	Figures\,\ref{fig:result1}, \,\ref{fig:result2}, and \,\ref{fig:result3}.
+	Slowest executions of the CT-EXT software implementation (CTS) are not shown in order to keep clarity in 
+	the figures. 
+	The hardware platform for BT (BTH) was not able to met the constrain of 50MHz clock frequency for some 
+	matrices and running it at a lower frequency produces longer execution time; which fall out of the limits 
+	of the figures.
+	
+	Experiment results show that the proposed platform beats the software implementation of
+	the CT-EXT algorithm, with ratios of around \textbf{one order} of magnitude. However, for large 
+	enough datasets this improvement could be significantly higher, as can be inferred from 
+	Figure\,\ref{fig:result3}.
 %-------------------------------------------------------------------------------
 % Bibliography
 %-------------------------------------------------------------------------------
