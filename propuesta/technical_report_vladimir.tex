@@ -5,6 +5,8 @@
 
 \setlength{\parskip}{1em}			% espaciar parrafos
 \newtheorem{proposition}{Proposition}
+\newtheorem{definition}{Definition}
+\newtheorem{proof}{Proof}
 
 \usepackage{hyperref}				% enlaces en el pdf
 \hypersetup{backref,colorlinks=true}	% colores en vez de cajas en los enlaces
@@ -23,6 +25,8 @@
 \usepackage{setspace}				% Para el seudocódigo
 \usepackage{amsmath}					% Para el seudocódigo
 \usepackage[noend]{algpseudocode}	% Para el seudocódigo
+\usepackage{multicol}				% Para el seudocódigo
+%\usepackage{algorithmic}
 
 
 %-------------------------------------------------------------------------
@@ -297,6 +301,9 @@
   	\item $POS_B(D)=POS_C(D)$. \label{cond_1}
   	\item $B$ is a minimal subset (with respect to inclusion) satisfying condition~\ref{cond_1}.\label{cond_2}
   \end{enumerate}
+
+  We call any subset $B \subseteq C$ satisfying condition~\ref{cond_1} a super-reduct whether it satisfies
+  condition~\ref{cond_2} or not.
   
   The intersection of all reducts of an IS is called the \textit{core}, the attributes that cannot be
   eliminated without reducing the classification accuracy.
@@ -357,53 +364,6 @@
   
   From this example we can easily see that the only reduct (also the core) for this IS is $c_1$.
   
-%\subsection{Attributes Dependency and Significance}
-%  One important aspect of data analysis is the study of dependencies between attributes describing the 
-%  objects. Intuitively, a subset of attributes $D$ depends totally on a set of attributes $B$, denoted 
-%  $B \Rightarrow D$ if all attribute values from $D$ are uniquely determine by values of attributes
-%  in $B$. Formally in RST we say that for $B,D \subset A$, $D$ depends on $B$ in a degree 
-%  $k(0 \leq k \leq 1)$, denoted $B \Rightarrow _{k}D$ if
-%  
-%  \begin{equation}
-%  	k=\gamma _B (D)=\frac{|POS_B(D)|}{|U|}
-%  \end{equation}
-%    
-%  This is called the \textit{Positive Dependency Degree}, and it is the ratio of the number of objects belonging
-%  to the positive region to the number of all objects in universe $U$. If $k=1$, $D$ depends totally on $B$, if
-%  $0 < k < 1$, $D$ depends partially (in a degree $k$) on $B$ and if $k=0$, $D$ does not depends on $B$.
-%  
-%  Taking for example the positive regions from subsection~\ref{subsect_Pos}, we can see that
-%  
-%  $$\begin{array}{lcccc}  
-%  \gamma _{\lbrace c_1 \rbrace} (d)&=&\frac{|U|}{|U|}&=&1\\
-%  \gamma _{\lbrace c_2 \rbrace}(d)&=& \frac{|\lbrace x_1,x_2,x_3,x_4\rbrace|}{|U|}&=&\frac{4}{7} \\
-%  \gamma _{\lbrace c_1, c_2 \rbrace}(d)&=&\frac{|U|}{|U|}&=&1
-%  \end{array}$$
-%  
-%  We can express the \textit{significance} of feature $c \in B$ upon $D$ as
-%  
-%  \begin{equation}
-%  	SIG(c,B,D)=\gamma _B (D)-\gamma _{B-\lbrace c \rbrace} (D)
-%  \end{equation}
-%  
-%  From  the previous example:
-%  
-%  $$\begin{array}{lcccccc}
-%  SIG(c_1,\lbrace c_1, c_2 \rbrace,d)&=&\gamma _{\lbrace c_1, c_2 \rbrace}(d)
-%  										-\gamma _{\lbrace c_2 \rbrace}(d)
-%  										&=&1-\frac{4}{7}&=&\frac{3}{7}\\
-%  SIG(c_2,\lbrace c_1, c_2 \rbrace,d)&=&\gamma _{\lbrace c_1, c_2 \rbrace}(d)
-%  										-\gamma _{\lbrace c_1 \rbrace}(d)
-%  										&=&1-1&=&0
-%  \end{array}$$
-%  
-%  From this it follows that attribute $c_1$ is indispensable, but attribute $c_2$ can be dispense when 
-%  considering the dependency between the decision attribute $d$ on condition attributes $c_1$ and $c_2$.
-%  
-%  Finally, we would like to say that an alternative definition of reduct from dependency exist. We say 
-%  that a subset $B \in C$ is a reduct of $C$ if it is a minimal set (with respect to inclusion) satisfying 
-%  the condition $\gamma _B(D)=\gamma _C(D)$.
-
 \subsection{Binary Discernibility Matrix}
   The \textit{Binary Discernibility Matrix} is a binary table representing the discernibility sets between pairs 
   of objects. This is another representation of the information in $M_{IS}$. In the binary discernibility
@@ -543,7 +503,7 @@
   	\pstree{\Tr{\PSBS{Testor Theory}}}{%
   		\pstree[levelsep=3em]{\Tr{\PSBS{FPGA}}}{
   			\scriptsize \Shortstack[l]{\citep{Cumplido06}\\
-  					 			  BT~\citep{Rojas07}}
+  					 			  \hyperref[BT]{BT}~\citep{Rojas07}}
   		}
        	\pstree[levelsep=5.5em]{\Tr{\PSBS{Sequential}}}{
       			\scriptsize \Shortstack[r]{\hyperref[BT]{BT \& TB}~\citep{Ruiz85}\\
@@ -557,59 +517,12 @@
   \label{fig_Tax2}
   \end{figure}
  
-% \newcolumntype{L}[1]{>{\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
-% \begin{table}[t]
-%	\caption{reduct computation algorithms.} \label{tab_Alg}
-%	\centering
-% 	\begin{tabular}{l||L{13cm}}
-% 		\multicolumn{1}{c||}{Codename} &  \multicolumn{1}{c}{Publication} \\
-% 		\hline \hline
-%		\textsc{quickreduct} 	&  Rough set-aided keyword reduction for text 
-%								   categorization~\citep{Chouchoulas01} \\
-%		YangLiHuang 				&  An Attribute Reduction Algorithm by Rough Set Based on Binary Discernibility
-%				 				   Matrix~\citep{Yang08}\\
-%		EBR						&  A rough set--aided system for sorting WWW bookmarks~\citep{Jensen01}\\
-%		RSFSACO					&  A rough set approach to feature selection based on ant colony 
-%								   optimization~\citep{Chen10}\\
-%		AntRSAR					&  Finding rough set reducts with ant colony optimization~\citep{Jensen03}\\
-%		GenRSAR					&  Finding rough set reducts with ant colony optimization~\citep{Jensen03}\\
-%		BjorvandKomorowski		&  Practical applications of genetic algorithms for efficient reduct 
-%								   computation~\citep{Bjorvand97}\\
-%		\hline		   
-%		BTHW						&  FPGA Based Architecture for Computing Testors~\citep{Rojas07}\\
-%		BruteForce				&  On the Design and Implementation of a High Performance Configurable
-%								   Architecture for Testor Identification~\citep{Cumplido06}\\
-%		TiwariKothariShah		&  FPGA Implementation of a Reduct Generation Algorithm based on Rough 
-%								   Set Theory~\citep{Tiwari13}\\
-%		TiwariKothari			&  Architecture and Implementation of Attribute Reduction Algorithm Using 
-%								   Binary Discernibility Matrix~\citep{Tiwari11}\\
-%		DM-Reduct				&  FPGA in Rough--Granular Computing: Reduct Generation~\citep{Kopczynski14}\\
-%		DT-Reduct				&  FPGA in Rough--Granular Computing: Reduct Generation~\citep{Kopczynski14}\\
-%		SRGonCRS					&  Highly Scalable Rough Set Reducts Generation~\citep{WangP07}\\
-%		FSDC-RS					&  Two novel feature selection methods based on decomposition and 
-%								   composition~\citep{Jiao10}\\
-%		FSDC-RS					&  Two novel feature selection methods based on decomposition and 
-%								   composition~\citep{Jiao10}\\
-%		\hline
-%		TB \& BT					&  BT and TB algorithms for computing all irreducible testors~\citep{Ruiz85}\\
-%		CT--EXT					&  CT--EXT: an algorithm for computing typical testor set~\citep{Sanchez07}\\
-%		LEX						&  LEX: a new algorithm for the calculus of typical
-%								   testors~\citep{Santiesteban03}\\
-%		BR						&  BR: A new method for computing all typical testors~\citep{Lias09}\\
-%		YYC						&  YYC: A Fast Performance Incremental Algorithm for Finding Typical
-%								   Testors~\citep{Alba14}\\
-%		RSAR	--SAT				&  Finding rough and fuzzy--rough set reducts with SAT~\citep{Jensen14}\\
-%		Expansion Algorithm		&  Reduct generation in information systems~\citep{Starzyk99}\\
-%		GonCRS					&  Highly Scalable Rough Set Reducts Generation~\citep{WangP07}\\	
-% 	\end{tabular}             
-% \end{table}
- 
 \subsection{Algorithm Finding a Single Reduct}
   The algorithm presented in~\citep{Chouchoulas01} \setword{\textsc{quickreduct}}{quickreduct} starts with 
   an empty set of attributes and adds, one at a time, the attribute having the highest significance. 
   This greedy algorithm evaluates the significance of an attribute by the number of objects added to 
   the positive region after its inclusion.  
-  A similar approach is the Johnson Reducer~\citep{Johnson74}, first introduced in RST in \citep{Ohrn00}.
+  A similar approach is the Johnson Reducer~\citep{Johnson74}, first introduced in RST by \cite{Ohrn00}.
   This simple greedy algorithm begins with an empty set of attributes evaluating each conditional attribute in the
   discernibility function according to a heuristic measure. In the simplest case, those attributes with highest 
   appearance frequency within the logical clauses of the discernibility function, are considered to be more
@@ -641,7 +554,7 @@
   Optimization~\citep{Wang07}.
     
   In~\citep{Lin04}, a heuristic is followed to find a short reduct. This first reduct is used to limit the search
-  space, in order to only consider those attributes combinations with lower cardinality. 
+  space, in order to only consider those attribute combinations with lower cardinality. 
   The main drawback of this algorithm is that the second step searches for reducts by checking all possible 
   $s$-subtables of the whole database. A $s$-subtable means a subtable whose conditional attribute set have 
   size $s$. In other words, it is a decision table with conditional attribute subset of size $s$ plus the decision
@@ -774,8 +687,45 @@
   runtime estimations for FPGA component executions are made by means of a oscilloscope without taking into 
   account communication overhead.
   
-  %TODO Recapitulación 
+\subsection{Partial Conclusions}
+
+  From our literature review, we came to the following conclusions. First; we can state, from the close
+  relationship between the concepts of typical testor and reduct~\citep{Lazo15}, that algorithms for finding
+  typical testors can be used for computing reducts and vice-versa. We found that the development of algorithms
+  from Testor Theory are biased to the finding of all the typical testors of an information system. Algorithms
+  from Rough Set Theory, on the other hand, are mainly divided into three categories:
+  \begin{itemize}
+	  \item Algorithms for computing a psudo-optimal reduct according to a criterion (which is, most of the 
+	  		time, the cardinality of the obtained reduct).
+	  \item Algorithms for computing	a shortest reduct.
+	  \item Algorithms for computing	all reducts.
+  \end{itemize}
+  The most proliferative research area in Rough Set Theory is the development of algorithms for computing a 
+  psudo-optimal reduct. 
   
+  We found two algorithms for finding all reducts and two algorithms for finding shortest reducts from Rough 
+  Set Theory. These algorithms have several efficiency disadvantages since they do not work over the simplified
+  discernibility matrix and use expensive representations of data. Most of the ideas for pruning the search
+  space in these algorithms can be found in Testor Theory as well, but we found interesting approaches to the
+  application of these ideas, which are unexplored in Testor Theory. Hardware accelerations of algorithms for
+  computing reducts are intended to computing a single psudo-optimal reduct. Since this is not a exponentially
+  complex task, we found these hardware platforms lesser useful.
+  
+  Algorithms for finding typical testors operate over the simplified discernibility matrix (basic matrix). Notice
+  that computing the basic matrix from the original dataset has quadratic complexity regarding the number of
+  objects (rows) in the dataset, while computing all the typical testors has exponential complexity regarding the
+  number of attributes (columns). 
+  In most computationally expensive datasets, operating over the simplified discernibility matrix is a gain. 
+  Properties used by these algorithms are supported by boolean operations and bits manipulations, which lead to
+  faster implementations. We identified fast-CT\_EXT \citep{Sanchez10} and fast-BR \citep{Lias13} as the fastest
+  algorithms reported in the literature for finding typical testors. Hardware accelerations reported from Testor
+  Theory are intended to compute all the typical testors and their main disadvantage is  that the size of the
+  basic matrix to be solved is limited by the hardware resources available in the FPGA device.
+  
+  In the search for algorithms to overcome the exponential complexity of the problem of computing all reducts or
+  shortest reducts, the last word has not been said. In our preliminary results, we propose 
+  two new algorithms to show that significant improvements can be obtained by exploring new pruning rules.
+
 \section{Research Proposal}\label{ResearchProposal} 
  In this section we present the justification and motivation, the research questions, the objectives and the
  expected contributions of this PhD. research proposal. We also include a detailed methodology and the schedule 
@@ -1052,13 +1002,41 @@
 	  	
 
 \section{Preliminary Results}
-	In this section, we expose the advances and results obtained in this PhD research until present.
-	Our first studies were directed to hardware implementations of algorithm for computing
-	typical testors. Thus, in the subsection~\ref{OnlyTT} we present a new architecture 
-	for computing typical testors, which is based on the platform proposed by \cite{Rojas12}. 
-	This result has been reported in~\citep{Rodriguez14}. Then, in subsection~\ref{CTH} we
-	describe a new platform for computing typical testors, based on the CT\_EXT algorithm.
-	This platform was presented to be published in the review \emph{Expert Systems with 
+	In this section, we expose the preliminary results of this PhD research.
+	Our first studies were directed to algorithms for computing typical testors. 
+	Throughout our first literature review, we found that there are two kinds of algorithms for computing 
+	typical testors: the \emph{internal scale} algorithms and the \emph{external scale} algorithms. 
+	The former analyse the matrix to find out some conditions that guarantee that a subset of attributes 
+	is a typical testor. The latter search typical testors over the whole power set of attributes, 
+	avoiding unnecessary evaluations by means of a pruning strategy. 
+	Internal scale algorithms evaluates, usually, less candidates than external scale algorithms but the
+	analysed conditions require a higher computational cost. The search of fast algorithms for computing
+	typical testors has been biased to external scale algorithms for this reason \citep{Alba14}.
+	
+	\cite{Rojas07} presented a hardware implementation of the external scale algorithm BT, and show a 
+	comparative study including a brute force hardware approach and software implementations of BT and 
+	CT~\citep{Bravo83} algorithms. 
+	This hardware implementation of BT was faster than other existing algorithms for finding 
+	typical	testors (although the hardware architecture was only capable of finding testors; which should 
+	be filtered afterwards by a software component in a hosting PC to dismiss the non typical testors). 
+	In~\citep{Rojas12} a new component was introduced to this platform in order to filter most testors in 
+	the FPGA device before transferring results to the hosting PC. We identified the final filtering stage,
+	in the hosting PC, as the main drawback of both platforms \citep{Rojas07,Rojas12}.
+	Thus, in the subsection~\ref{OnlyTT} we present a new architecture 
+	for computing typical testors, which is capable of finding all the typical testors without the
+	final filtering stage. 
+	The runtime gain of our proposal is shown using some benchmarking datasets \citep{Bache13}.
+	This result has been reported in~\citep{Rodriguez14}. 
+	
+	As a next step in our preliminary work, we included in our study the CT\_EXT algorithm \citep{Sanchez07}.
+	CT\_EXT evaluates less candidates than BT in most cases, without including more complicated operations.
+	As a result, CT\_EXT is faster than BT in most datasets. Following the idea of \cite{Rojas07}, we explore
+	the possible speedup of a hardware platform inspired in CT\_EXT.
+	Then, in subsection~\ref{CTH} we	describe a new platform for computing typical testors, based on the 
+	CT\_EXT algorithm. This new hardware implementation outperforms existing implementations of algorithms 
+	for computing typical testors. A comparative execution, including algorithms reported in 
+	\citep{Rodriguez14,Sanchez07}, is carried out over several synthetically generated basic matrices.
+	This platform was presented to be published in the journal of \emph{Expert Systems with 
 	Applications\footnote{http://www.journals.elsevier.com/expert-systems-with-applications/}}, and
 	it is currently under the second revision.
 	 
@@ -1066,16 +1044,16 @@
 \subsection{A Hardware Architecture for Filtering Typical Testors}\label{OnlyTT}
 	\cite{Rojas12} presented a hardware-software platform for computing typical testors, based on the BT algorithm, 
 	that included a new module for eliminating most of the non typical testors before transferring them to a host 
-	software application for final filtering. Main disadvantages of this approach are the huge amount of data that 
+	software application for final filtering. The main disadvantages of this approach are the huge amount of data that 
 	must be transferred to the PC and the extra cost of the final filtering stage in the software component.  
 	For this reason, we developed a hardware module for eliminating all non typical testors 
-	on the FPGA device, reducing the amount of data that must be transferred to the PC. This architecture is 
-	applicable to any algorithm for computing typical testors implemented in FPGA, since it operates in the 
-	candidate evaluation process.
+	on the hardware component; reducing the amount of data that must be transferred to the PC and eliminating the final
+	filtering. This architecture is applicable to any algorithm for computing typical testors implemented on FPGA devices,
+	since it operates in the candidate evaluation process.
 	
-	In the hardware platform, a feature subset is handled as an $n$-tuple, using a positional 
+	In the hardware platform \citep{Rojas12}, a feature subset is handled as an $n$-tuple, using a positional 
 	representation for all the $n$ attributes of a basic matrix ($BM$). Given a subset $T$, its $n$-tuple 
-	representation has a 1 in the corresponding position $j$ for each $c_j \in T$ and 0 otherwise.
+	representation has a 1 in the corresponding position $j$ for each $c_j \in T$ and 0 anywhere else.
 	The information of $BM$ is hold in the $BM$ hardware module. This module handles the process of 
 	deciding whether an $n$-tuple is a testor of $BM$, by comparing the candidate against each one of the 
 	$BM$'s rows.
@@ -1088,17 +1066,18 @@
 	1 after ANDed with the candidate, the attribute in the position of that bit is indispensable if the 
 	candidate is a testor.
 	
-	Two operations are added to the $BM$ module in order to verify the condition~\ref{cond_2} of the definition
-	of reduct in Subsection~\ref{def_reduct}\footnote{Notice that we are, indeed, finding typical testors here. We
-	used the definition of reduct from section~\ref{def_reduct} based on the close relation between these two
-	concepts~\citep{Lazo15}}.
+	Two operations are added to the $BM$ module in order to verify the typical condition of testors.
+%	condition~\ref{cond_2} of the definition
+%	of reduct in Subsection~\ref{def_reduct}\footnote{Notice that we are, indeed, finding typical testors here. We
+%	used the definition of reduct from section~\ref{def_reduct} based on the close relation between these two
+%	concepts~\citep{Lazo15}}.
 	First, a bitwise OR operation is performed among the output of the \textit{N~to~N~Decoder} of every row. 
 	The result of this operation has a 1 in the positions corresponding to each indispensable attribute in the
-	current 	candidate. This value is then compared to the current candidate, and 	given that this comparison 
+	current 	candidate. This value is then compared to the current candidate, and 	if this comparison 
 	holds equality and the current candidate is a testor; we say that the current candidate is a typical testor.
 	
 	Lets us take for example the basic matrix shown in Table~\ref{tab_SDM}. We are going to illustrate the 
-	operation of the proposed architecture using two testors for this basic matrix. First we will evaluate 
+	operation of the proposed architecture using two testors for this basic matrix. First, we will evaluate 
 	the candidate $\{c_1,c_2\}$ which is a typical testor. Secondly, the candidate $\{c_1,c_2,c_3\}$ will 
 	be evaluated. This last attribute set is a superset of $\{c_1,c_2\}$ and thus, it is not a typical testor.
 	
@@ -1151,30 +1130,33 @@
 	Left rows of Table~\ref{tabTypical} and Table~\ref{tabNonTypical} show the result of the AND operation 
 	between each row of $BM$ and the corresponding candidate. Rows in the right side show the decoder output 
 	taking as input its corresponding left row. In the last row, the result of an OR operation over all 
-	above $n$-tuples is shown. According to our previous explanation, the candidate $\{c_1,c_2\}$ is an 
+	above $n$-tuples is shown. According to our previous explanation, the candidate $\{c_1,c_2\}$ is a 
 	typical testor given that the result of the OR operation is equal to the candidate itself; while the
 	candidate $\{c_1,c_2,c_3\}$ is not.
 	
 \subsubsection{Evaluation and Discussion}
 	This proposed architecture sends only typical testors from the FPGA device to the 
 	host PC. This modification eliminates the final filtering stage in the software component of the 
-	hardware-software platform~\citep{Rojas12}. The main draw back of our proposed modification is its 
-	dependence with basic matrix dimensions which could lead to a larger hardware realization when the
-	number of rows is much bigger than the number of columns in the basic matrix. 
+	hardware-software platform~\citep{Rojas12}. The main drawback of our proposed modification is its 
+	dependence on the basic matrix dimensions which could lead to a larger hardware architecture (uses a greater
+	percentage of the FPGA device) when the number of rows is much bigger than the number of columns in the basic 
+	matrix. 
 	
-	The final filtering stage in the software component needed in the original platform~\cite{Rojas12} checks 
-	every pair of testors received from the FPGA. Testors which are superset of any other testor are 
-	eliminated as they do not satisfy the condition~\ref{cond_2} stated in Subsection~\ref{def_reduct}. We 
-	can establish the lower boundary of the computational complexity for this process as $N(N-1)/2$, 
-	where $N$ is the number of typical testors in the basic matrix. 
+	The final filtering stage in the software component needed in the original platform \citep{Rojas12} checks 
+	every testor received from the FPGA. Testors which are superset of any other testor are 
+	eliminated as they do not satisfy the typical condition. We 
+	can establish a lower boundary of the computational complexity for this process as $N(N-1)/2$, 
+	where $N$ is the number of typical testors in the basic matrix. This is the complexity of verifying that
+	the received testors are typical given that they all are typical testors (best case of the final filtering 
+	process).
 	
-	Table~\ref{tabTimes} shows the runtime, including the testors computation and the final filtering stage, 
+	Table~\ref{tabTimes} shows the runtime, including testor computation and final filtering, 
 	for some basic matrices obtained from real data. For this purpose eight standard datasets from the UCI
 	Repository of Machine Learning \citep{Bache13} were used.
 	Columns in Table~\ref{tabTimes} show the dataset name, the number of candidates tested by the BT algorithm,
-	the number of typical testors found, the runtime for the main algorithm execution in the 
-	FPGA device and the final filtering stage in the host PC. For these runtime calculations, 
-	a frequency of 3.6GHz was used for software execution and 50MHz for the FPGA architecture.
+	the number of typical testors found, the runtime for the main algorithm execution on the 
+	FPGA device and the final filtering stage on the host PC. For these runtime calculations, 
+	a core i5 processor at 3.6GHz was used for software execution and 50MHz for the FPGA architecture.
 	
 	\begin{table}[htb]
 	%\renewcommand{\arraystretch}{1.3}
@@ -1201,38 +1183,39 @@
 	of the same order of magnitude. For those basic matrices with a large number of typical testors, the final 
 	filtering stage could be  even more expensive than the main testors computation, as is the case for the dataset 
 	labelled \textit{german}. The total runtime for the previous architecture is the sum of the FPGA and the 
-	PC runtime. Our proposed platform will require only the FPGA runtime. Although finding all typical testors 
-	for these datasets does not constitute a complex computational problem, they serve to show our point.
+	PC runtime. Our proposed platform will require only the FPGA runtime, as the proposed modifications do not 
+	increase the runtime. Although finding all typical testors for these datasets does not constitute a complex 
+	computational problem, they serve to show the benefit of our proposal.
 
 \subsection{A Hardware Architecture based the CT\_EXT Algorithm}\label{CTH}
 	Here, we present an efficient hardware software platform for computing typical
-	testors based on the CT-EXT algorithm proposed in~\citep{Sanchez07}. The main contribution of this
+	testors based on the CT\_EXT algorithm proposed in~\citep{Sanchez07}. The main contribution of this
 	work is the design and implementation of a hardware architecture that traverses the search space in a 
 	different order than that presented in \citep{Rojas07, Rojas12,Rodriguez14}. This strategy evaluates less
-	candidate subsets than previous architectures, which results in shorter runtime. In comparison to the 
-	software versions of CT-EXT~\citep{Sanchez07, Sanchez10}, our proposal evaluates a candidate every clock 
+	candidate subsets than previous architectures, which results in shorter runtime. Moreover, unlike 
+	software versions of CT\_EXT~\citep{Sanchez07, Sanchez10}, our proposal evaluates a candidate every clock 
 	cycle, which leads to a faster execution. The runtime gain of our new hardware software platform is
-	demonstrated throughout	experiments over synthetic datasets.
+	shown throughout	experiments over synthetic datasets.
 	
-\subsubsection{CT-EXT algorithm}
-	CT-EXT is one of the fastest algorithms for computing all typical testors reported in the 
-	state of the art~\citep{Sanchez07,Sanchez10,Piza14}. In order to describe this algorithm we 
+\subsubsection{CT\_EXT algorithm}
+	CT\_EXT is one of the fastest algorithms for computing all typical testors reported in the 
+	literature~\citep{Sanchez07,Sanchez10,Piza14}. In order to describe this algorithm we 
 	introduce some definitions and notations.	
 	
-	Let $T$ be a subset of attributes, $T$ is a testor of the basic matrix $BM$ if the attributes in $T$ do 
+	Let $T$ be a subset of attributes, $T$ is a testor of a basic matrix $BM$ if the attributes in $T$ do 
 	not form a zero row 	in $BM$. It means that every row in $BM$ has at least a 1 in those columns corresponding 
-	to attributes belonging to $T$. We say that a testor $T$ is a typical testor if all the proper subsets of 
-	$T$ are not	testors.
+	to attributes belonging to $T$. We say that a testor $T$ is a typical testor if all its proper subsets 
+	are not	testors.
 	
 	We can interpret a typical testor as a subset of attributes being jointly sufficient and individually
 	necessary to differentiate every pair of objects belonging to different classes.
 	
-	During the search, CT-EXT follows the idea that an attribute contributes to a subset $T$ (candidate to 
+	During the search, CT\_EXT follows the idea that an attribute contributes to a subset $T$ (candidate to 
 	be a typical testor) if after adding this attribute to $T,$ the attributes in $T$ form less zero rows 
 	in $BM$ than the amount of zero rows before adding the attribute. This idea is used for pruning the search
 	space.
 	
-	The following proposition, introduced and proved in~\citep{Sanchez07}, constitutes the basis for the CT-EXT
+	The following proposition, introduced and proved in~\citep{Sanchez07}, constitutes the basis for the CT\_EXT
 	algorithm.
 	
 	\begin{proposition}\label{prop1} 
@@ -1240,7 +1223,7 @@
 	does not contribute to $T$, then $T\cup\{c_j\}$ cannot be a subset of any typical testor.
 	\end{proposition}
 	
-	Algorithm~\ref{ctext_algo} shows the pseudocode of CT-EXT, a detailed explanation of
+	Algorithm~\ref{ctext_algo} shows the pseudocode of CT\_EXT, a detailed explanation of
 	this algorithm can be seen in~\citep{Sanchez07}. The function SortBM$(BM)$ sorts the basic matrix as follows.
 	Randomly select one of the rows of $BM$ with the fewest number of 1's. The selected row goes first and
 	all columns in which it has a 1 are moved to the left.
@@ -1248,9 +1231,9 @@
 	\begin{algorithm}
 	\begin{spacing}{1.0}
 	\begin{small}
-	\caption{CT-EXT algorithm}\label{ctext_algo}
+	\caption{CT\_EXT algorithm}\label{ctext_algo}
 	\begin{algorithmic}[1]
-	%\Procedure{CT-EXT}{}
+	%\Procedure{CT\_EXT}{}
 	\State \textbf{Input: } $BM$ - basic matrix with $m$ rows and $n$ columns.
 	\State \textbf{Output: } $TT$ - set of typical testors.
 	\State $TT \gets \{\}$
@@ -1270,9 +1253,9 @@
 	\State $zero\_rows\_last \gets zero\_rows$
 	\State $testor, typical, zero\_rows \gets$ Evaluate$(BM,T)$
 	\If{$zero\_rows = zero\_rows\_last$}
-	\State $T \gets T \setminus \{c_i\}$ \Comment{attribute $X_i$ does not contribute}
+	\State $T \gets T \setminus \{c_i\}$ \Comment{attribute $c_i$ does not contribute}
 	\Else
-	\If{$testor=TRUE$}
+	\If{$testor=TRUE$} \Comment{attribute $c_i$ contributes}
 	\If{$typical=TRUE$}
 	\State $TT \gets TT \cup T$
 	\EndIf
@@ -1311,37 +1294,37 @@
 	typical testor and FALSE otherwise. $zero\_rows$ is the amount of zero rows of $T$. The function
 	LastOne($T$) returns the position of the rightmost element in the set $T$.
 	
-	The proposed hardware platform replaces candidates generator module in the design of \citep{Rodriguez14}
-	by a brand new module. Minor changes are introduced in the rest of the platform in order to integrate
-	this new module. Essentially, the general scheme from previous architectures is followed.
+	The proposed hardware platform replaces the candidate generator module in the design of \citep{Rodriguez14}
+	by a completely new module. Some changes are also introduced in the rest of the platform in order to integrate
+	this new module.
 	
 \subsubsection{Evaluation and Discussion}
 	In order to show the performance of the proposed platform, it was compared against a software 
-	implementation of the CT-EXT algorithm~\citep{Sanchez07} and the BT hardware platform previously 
-	reported in~\citep{Rodriguez14}; which is the most recent hardware implementation for computing typical
-	testors reported in the literature.
+	implementation of the CT\_EXT algorithm~\citep{Sanchez07} and the BT hardware platform previously 
+	reported in~\citep{Rodriguez14}; which is the most recent and fastest hardware implementation for computing 
+	typical	testors reported in the literature.
 	
-	Either CT-EXT or BT hardware implementations are capable of evaluating a candidate per clock 
+	Either CT\_EXT or BT hardware implementations are capable of evaluating a candidate per clock 
 	cycle. If both architectures are running at the same frequency, as it will be the case in our experiments, 
-	there are two reasons for differences in running time. The first one is the time taken for reorganization 
-	of basic matrix, which is a more complex process in BT, altough it can be neglected as shown in
+	there are two reasons for differences in running time. The first one is the time taken for reorganizing 
+	of basic matrix, which is a more expensive process in BT, although it can be neglected as shown in
 	\citep{Rojas12}. The second and the most relevant, is the amount of candidates to be evaluated. 
 	
-	Regarding to the software implementation, the CT-EXT hardware platform has two disadvantages. First, 
-	VHDL code is generated for each $BM$ data and a process of synthesis must be executed previously to 
-	executing the algorithm; while this is unnecessary in the software version of CT-EXT. Secondly, the 
+	Regarding to the software implementation, the CT\_EXT hardware platform has two disadvantages. First, 
+	VHDL code is generated for each $BM$ data, and a synthesis process must be executed previously to 
+	executing the algorithm; while this is unnecessary in the software version of CT\_EXT. Secondly, the 
 	software will be running in a PC at a frequency of 3.10GHz while FPGA architecture will run at 50MHz. 
 	
-	These disadvantages make the hardware approach useful (faster) under two conditions. First, the number of 
+	These disadvantages make our hardware approach useful (faster) under two conditions. First, the number of 
 	candidates to be evaluated is big enough to overcome the synthesis overhead. Second, the dimensions of the 
 	$BM$ are big enough to provide a considerable speed up of the candidate evaluation process. Although 
 	the hardware architecture could be designed for a fixed maximum matrix size and receive the $BM$ through the 
-	USB port, by doing this, the size of the problem which can be solved would be significantly reduced. The 
+	USB port, by doing this, the size of the problem that can be solved would be significantly reduced. The 
 	synthesis process comprehend an optimization of the design, taking advantage of the $BM$ data distribution for 
 	the reduction of the generated hardware configuration. The number of operations for the evaluation of a single 
 	candidate, in the software approach, is proportional to the number of rows and it is directly related to the 
-	number of columns in the $BM$. Using this approach it is possible to achieve a significant reduction in the
-	processing time, even if operating at a much lower clock frequency, by evaluating a candidate on each clock
+	number of columns in the $BM$. Using this approach, it is possible to achieve a significant reduction in the
+	processing time, even operating at a much lower clock frequency, by evaluating a candidate on each clock
 	cycle.
 	
 	With these points in mind and in order to show the usability of the proposed platform, 
@@ -1389,24 +1372,333 @@
 	For the hardware platforms, we measure the runtimes including the time for the following stages: $BM$ 
 	input parsing and VHDL code generation, synthesis process, and typical testor computation (with the
 	hardware component running at 50MHz). The number of rows for each type of matrices is conditioned by the
-	dimensions of the biggest matrix that may be synthesized at the desired running frequency.
-	All experiments are performed using an Intel(R) Core(TM) i5-2400 CPU @ 3.10GHz for software executions and 
+	dimensions of the biggest matrix that can be synthesized at the desired running frequency.
+	All experiments were performed using an Intel(R) Core(TM) i5-2400 CPU @ 3.10GHz for software executions and 
 	an Atlys board, powered by a Spartan-6 LX45 FPGA device, for the hardware components.
 	Figures\,\ref{fig:result1}, \,\ref{fig:result2}, and \,\ref{fig:result3} show graphics of the runtime 
 	(in hours) for the three types of basic matrices. 
 	
-	The proposed CT-EXT hardware platform (CTH) results were taken as reference for axis limits in 
+	The results of the proposed CT\_EXT hardware platform (CTH) were taken as reference for axis limits in 
 	Figures\,\ref{fig:result1}, \,\ref{fig:result2}, and \,\ref{fig:result3}.
-	Slowest executions of the CT-EXT software implementation (CTS) are not shown in order to keep clarity in 
+	Slowest executions of the CT\_EXT software implementation (CTS) are not shown in order to keep clarity in 
 	the figures. 
 	The hardware platform for BT (BTH) was not able to met the constrain of 50MHz clock frequency for some 
-	matrices and running it at a lower frequency produces longer execution time; which fall out of the limits 
+	matrices and running it at a lower frequency would produce longer execution time; which fall out of the limits 
 	of the figures.
 	
 	Experiment results show that the proposed platform beats the software implementation of
-	the CT-EXT algorithm, with ratios of around \textbf{one order} of magnitude. However, for large 
+	the CT\_EXT algorithm, with ratios of around one order of magnitude. However, for large 
 	enough datasets this improvement could be significantly higher, as can be inferred from 
 	Figure\,\ref{fig:result3}.
+
+
+\subsection{A New Recursive Algorithm for Reduct Computation}
+	In this subsection we present a new \textbf{R}ecursive algorithm using the \textbf{S}implified 
+	\textbf{D}iscernibility \textbf{M}atrix (RSDM) for computing all the reducts in a dataset. 
+
+\subsubsection{Concepts for RSDM}
+	In this subsection we will be working with the binary representation of the simplified discernibility matrix
+	(SDM). The following is a definition of super-reduct equivalent to the condition~\ref{cond_1} stated in 
+	Subsection~\ref{def_reduct}.
+	
+	\begin{definition}\label{def:testor}
+		Let $T \subseteq R$ be a subset of attributes from a dataset. We say that T is a super-reduct iff in the
+		sub-matrix of SDM formed by the columns corresponding to attributes in T, there is not any zero row (row 
+		having only zeros).
+	\end{definition}
+		
+	\begin{definition}\label{def:contrib}
+		Let $T \subseteq R$ and  $c_i \in R$ such that $c_i \notin T$. We say that $c_i$ contributes to T iff the
+		number of zero rows, in the sub-matrix of SDM formed by the columns corresponding to attributes in 
+		$T\cup\{c_i\}$, is lower than that in T.
+	\end{definition}		
+		
+	For a fast implementation of the RSDM algorithm, columns in $SDM$ are coded as binary words with as many 
+	bits as 	rows has $SDM$. The cumulative mask for an attribute $c_i$ is denoted as $cm_{c_i}$ and is defined as 
+	the binary word representing the ith column in $SDM$. The cumulative mask for a subset of attributes $T=\lbrace
+	c_{i1},c_{i2},...,c_{ik} \rbrace$ is defined	as $cm_T = cm_{c_{i1}} \vee cm_{c_{i2}} \vee ... \vee cm_{c_{ik}}$
+	where $\vee$ stands for the binary OR operator. It is not hard to see that the number of 0's in $cm_T$ equals
+	the number of zero rows in the sub-matrix of $SDM$ formed by the columns corresponding to attributes in T. 
+	According to the definition~\ref{def:contrib}, $c_i$ contributes to $T$ iff $cm_{T\cup c_i}$ has more 1's than 
+	$cm_T$. 	The incremental nature of RSDM is given by the associative property of the OR operation, such that 
+	$cm_{T\cup c_i}=cm_T\vee cm_{c_i}$. Notice from this last formulation, that $c_i$ contributes to $T$ iff 
+	$cm_{T\cup c_i}\neq cm_T$ since $cm_{T\cup c_i}$ cannot have less 1's than $cm_T$. It is easy to see, from 
+	definition~\ref{def:testor} that $T \subseteq R$ is a super-reduct iff $cm_T=(1,...,1)$ (has a 1 in every bit).
+	
+	The core of the RSDM algorithm is supported by the proposition~\ref{prop3}.		
+	
+	\begin{proposition}\label{prop3} 
+		Given $T \subseteq R$, $Z \subseteq R$ and  $c_i \in R$ such that $c_i \notin Z$ and $T \subseteq Z$. If 
+		$c_i$ does not contribute to T or form a super-reduct with T, then $Z\cup\{c_i\}$ cannot be a subset of any 
+		reduct.
+	\end{proposition}	
+	
+	\begin{proof}
+		As $T \subseteq Z$, $cm_T$ cannot have more 1's than $cm_Z$ by the definition of the cumulative mask.
+		If $c_i$ does not contribute to $T$ then, $cm_{T \cup \lbrace c_i \rbrace}$ does not have more 1's than
+		$cm_T$; and, by transitivity, $cm_{Z \cup \lbrace c_i \rbrace}$ cannot have more 1's than $cm_Z$. 
+		Notice that  $\lbrace T \cup \lbrace c_i \rbrace\rbrace \subseteq \lbrace Z \cup \lbrace c_i
+		\rbrace\rbrace$.
+		If $T \cup \lbrace c_i \rbrace$ is a super-reduct, $\lbrace Z \cup \lbrace c_i \rbrace\rbrace$ cannot be a 
+		reduct, given that it is a superset of a super-reduct; which contradicts the condition~\ref{cond_2} of the
+		definition of reduct (Subsection~\ref{def_reduct}).
+	\end{proof}
+
+
+\subsubsection{The RSDM Algorithm}
+%
+	The first step in the RSDM algorithm is the sorting of the $SDM$ in order to reduce the search space. One of 
+	the rows of $SDM$ having the minimum number of 1's is moved up to the first row. Then, columns are rearranged 
+	so that those columns having a 1 in the first row, stay in the leftmost side of the $SDM$. A $SDM$, sorted in 
+	this way, can be seen in Table~\ref{tab:SDM}. A pseudocode for RSDM is shown in algorithm~\ref{alg1}. 
+	
+	\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+	\renewcommand{\algorithmicensure}{\textbf{Output:}}
+	%\begin{multicols}{2}
+	\begin{algorithm}
+	\caption{Recursively calculate super-reducts in $SDM$}
+	\label{alg1}
+	\begin{multicols}{2}
+	\begin{algorithmic}[1]
+	  \Require Sorted $SDM$
+      \Ensure $SR$ - set of super-reducts
+	  \State $i \Leftarrow 0$, $SR \Leftarrow \emptyset$
+	  \While {$SDM(0,i) \neq 0$}\label{line:firstrow}
+	  	\If {$cm_{c_i} = (1,...,1)$}\label{line:singleT}
+	  		\State $SR \Leftarrow SR\cup \lbrace c_i \rbrace$
+	  	\Else
+	  		\State eval($\lbrace c_i \rbrace$, $cm_{c_i}$, $\lbrace c_{i+1},..., c_m\rbrace$)\label{line:eval}
+	  	\EndIf
+	  	\State $i \Leftarrow i+1$
+	  \EndWhile
+	  \item[] \item[] \item[]
+	  \State eval($B$,$cm_B$,$C$)
+	  \ForAll{$c \in C$} 
+	  	\State $cm_{B\cup \lbrace c\rbrace}=cm_B \vee cm_c$
+	  	\If {$cm_{B\cup \lbrace c\rbrace}\neq cm_B$}\label{line:contrib}
+	  		\If {$cm_{B\cup \lbrace c\rbrace}=(1,...,1)$}
+	  			\State $C \Leftarrow C\setminus c$\label{line:remT} 
+	  			\State $SR \Leftarrow SR\cup\lbrace B\cup \lbrace c\rbrace \rbrace$
+	  		\EndIf
+	  	\Else
+	  		\State $C \Leftarrow C\setminus c$\label{line:remNoContrib} 
+	  	\EndIf
+	  \EndFor
+	  \ForAll{$c \in C$} 
+	  	\State $C \Leftarrow C\setminus c$
+	  	\State eval($B\cup \lbrace c\rbrace$,$cm_{B\cup \lbrace c\rbrace}$,$C$)\label{line:recursive} 
+	  \EndFor
+	\end{algorithmic}
+	\end{multicols}
+	\end{algorithm}
+	
+	
+	The algorithm execution starts with the first element (column) in the sorted $SDM$ and repeats until an 
+	attribute with a 0 in the first row is reached (line~\ref{line:firstrow}). Notice that for the rest of the
+	candidates the first row will always be an empty row. If this single attribute is a super-reduct
+	(line~\ref{line:singleT}) then it is saved in the super-reducts' set $SR$; else, the recursive evaluator 
+	is called with the current attribute as the base set $B$ and the remaining attributes to its right as the 
+	tail set $C$ (line~\ref{line:eval}).
+	In the recursive function, every attribute in the tail is tested for contribution to the base set 
+	(line~\ref{line:contrib}). The attributes are removed from the tail set for furthers evaluations, given
+	that they form a super-reduct (line~\ref{line:remT}) or do not contribute to $B$
+	(line~\ref{line:remNoContrib}).
+	This a priori evaluation and rejection of non-contributing and testor-forming attributes constitutes the key
+	gain of our proposed algorithm, and it is supported by proposition~\ref{prop3}.
+	Finally, the remaining attributes in the tail set, are concatenated with $B$ and used as base set for
+	subsequent recursive evaluations with the remaining $C$ as tail (line~\ref{line:recursive}).
+	
+	\begin{table}[!htb]
+      \centering
+        \caption{Sorted Simplified Discernibility Matrix}
+        \begin{tabular}{ccccc}\label{tab:SDM}
+            $c_0$ & $c_1$ & $c_2$ & $c_3$ & $c_4$\\
+        		\hline
+        		1&1&0&0&0\\
+        		0&1&0&0&1\\
+        		1&0&0&1&0\\
+        		0&0&1&0&1\\
+        		\\
+        \end{tabular} 
+	\end{table}	
+		
+	Lets take for example the simplified discernibility matrix from Table~\ref{tab:SDM}. The candidates evaluated 
+	by CT\_EXT and RSDM  are shown in Table~\ref{tab:run}. Notice that while CT\_EXT evaluates 17 candidates,
+	in RSDM, only 13 candidates are evaluated.
+	
+	\begin{table}[!htb]\scriptsize
+		\setlength{\tabcolsep}{.05em}
+		\caption{Example execution}\label{tab:run}
+      	\centering
+    		\begin{tabular}{|lllll|lllll|}
+    		\hline
+    		\multicolumn{5}{|c|}{CT\_EXT} & \multicolumn{5}{c|}{RSDM}\\
+    		\hline
+    		\{$ x_0$\} 	 		& \{$x_0,x_1,x_4$\}	& \{$x_0,x_3$\}		& \{$x_1,x_2,x_3$\}	& \{$x_1,x_4$\}	
+    		& \{$x_0$\}			& \{$x_0,x_4$\} 		& \{$x_1,x_3$\} 		& \{$x_1,x_3,x_4$\}	&\\
+    		\{$x_0,x_1$\} 		& \{$x_0,x_2$\}  	& \{$x_0,x_4$\}		& \{$x_1,x_2,x_4$\}	& 
+    		& \{$x_0,x_1$\}		& \{$x_0,x_1,x_2$\} 	& \{$x_1,x_4$\}		&&\\
+    		\{$x_0,x_1,x_2$\}	& \{$x_0,x_2,x_3$\}	& \{$x_1$\}			& \{$x_1,x_3$\}	  	&			
+    		& \{$x_0,x_2$\} 		& \{$x_1$\}		 	& \{$x_1,x_2,x_3$\}	&&\\
+    		\{$x_0,x_1,x_3$\} 	& \{$x_0,x_2,x_4$\}	& \{$x_1,x_2$\} 		& \{$x_1,x_3,x_4$\}	&			
+    		& \{$x_0,x_3$\} 		& \{$x_1,x_2$\}	 	& \{$x_1,x_2,x_4$\}	&&\\
+    		\hline
+		\end{tabular}
+	\end{table}
+
+
+\subsection{A New Algorithm for Reduct Computation Based on the Gap Elimination and the Contribution}
+
+	In this subsection we propose a new algorithm based on the \textbf{G}ap elimination and the
+	\textbf{C}ontribution, using the \textbf{S}implified \textbf{D}iscernibility \textbf{M}atrix (GCSDM), for
+	computing all the reducts in a dataset. The main difference between this algorithm and CT\_EXT is the
+	gap elimination; which leads to a great runtime reduction as we will show afterwards. Algorithms LEX and
+	fast-BR are based on the concept of exclusion \citep{Lias13}; which implies several iterations for evaluating 
+	a candidate. GCSDM, on the other hand, is based on the concept of contribution (as well as CT\_EXT) for a 
+	simpler candidate evaluation.
+
+\subsubsection{Concepts for GCSDM}
+
+	The concept of gap was first introduced by \cite{Santiesteban03} for the LEX algorithm, as shown in the
+	definition~\ref{def:gap}.
+	
+	\begin{definition}\label{def:gap}
+		Let $L \subseteq R$ be a subset of attributes from a dataset, such that $L = \lbrace c_{j_0},...,c_{j_s}
+		\rbrace$ and $c_{j_0}<...<c_{j_s}$. We denote the attribute $c_p \in L$ gap of L, where $j_0 \leq p \leq
+		j_s$ such that $p=\mathrm{max}(j_q | c_{j_q},c_{j_{q+1}} \in L \wedge j_{q+1} \neq j_q)$.
+	\end{definition}
+	
+	In other words, the gap is the attribute in $L$ with the highest index such that its consecutive attribute in 
+	$L$ is not its consecutive attribute in $SDM$.
+	
+	Lets take for example the simplified discernibility matrix from Table~\ref{tab:SDM1}:
+	\begin{itemize}
+	\item \{$x_0,x_1,x_2,x_3$\} there is no gap.
+	\item \{$x_0,x_1,x_2,x_5,x_6$\} the gap is $x_2$.
+	\item \{$x_0,x_1,x_2,x_4,x_6$\} the gap is $x_4$.
+	\item \{$x_0,x_1,x_4,x_5,x_6$\} the gap is $x_1$.
+	\end{itemize}
+	
+	\begin{table}[!htb]
+      \centering
+        \caption{Sorted Simplified Discernibility Matrix}
+        \begin{tabular}{ccccccc}\label{tab:SDM1}
+            $c_0$ & $c_1$ & $c_2$ & $c_3$ & $c_4$ & $c_5$ & $c_6$\\
+        		\hline
+        		1&0&0&0&0&0&0\\
+        		0&1&0&1&0&0&0\\
+        		0&0&0&0&0&0&1\\
+        		0&0&1&0&1&0&0\\
+        		0&0&0&0&0&1&0\\
+        \end{tabular} 
+	\end{table}
+	
+	The gap elimination is supported by the proposition~\ref{prop:gap}. In order to clarify the basis of gap
+	elimination we exemplify the lexicographical traversing order with a $SDM$ of three attributes:
+	
+	\{$c_0$\}, \{$c_0,c_1$\}, \{$c_0,c_1,c_2$\}, \{$c_0,c_2$\}, \{$c_1$\}, \{$c_1,c_2$\}, \{$c_2$\}
+		
+	\begin{proposition}\label{prop:gap} 
+		Let $L \subseteq R$ be a reduct, such that $L = \lbrace c_{j_0},...,c_{j_s}$, $c_{j_0}<...<c_{j_s}$
+		and $c_{j_s}$ is the last attribute in SDM. If there is a gap $c_p$ in L, being $L' = \lbrace
+		c_{j_0},...,c_{p-1},c_{p+1}\rbrace$; then, there is no any attribute subset between L and $L'$ (in the
+		lexicographical order) being a reduct.
+	\end{proposition}	
+	
+	\begin{proof}
+		
+	\end{proof}
+	
+	\begin{table}[!htb]
+		\caption{Partial execution}\label{tab:patial}
+      	\centering
+    		\begin{tabular}{|c|lc|c|lc|}
+    		\hline
+    		Iter & \multicolumn{1}{c}{Candidate} & \multicolumn{1}{c|}{Evaluation}
+    		& Iter & \multicolumn{1}{c}{Candidate} & \multicolumn{1}{c|}{Evaluation}\\
+    		\hline
+    		~1 & \{$x_0$\} 	 				& C		& 10 & \{$x_0,x_1,x_4$\} 			& C \\	
+    		~2 & \{$x_0,x_1$\}				& C 		& 11 & \{$x_0,x_1,x_4,x_5$\}		& C \\
+    		~3 & \{$x_0,x_1,x_2$\} 			& C  	& 12 & \{$x_0,x_1,x_4,x_5,x_6$\}*	& TT \\
+    		~4 & \{$x_0,x_1,x_2,x_3$\}		& NC 	& 13 & \cellcolor[gray]{0.9}\{$x_0,x_1,x_4,x_6$\}	& NT	 \\
+    		~5 & \{$x_0,x_1,x_2,x_4$\}		& NC 	& 14 & \cellcolor[gray]{0.9}\{$x_0,x_1,x_5$\}		& C \\
+    		~6 & \{$x_0,x_1,x_2,x_5$\} 		& C		& 15 & \cellcolor[gray]{0.9}\{$x_0,x_1,x_5,x_6$\} & NT \\
+    		~7 & \{$x_0,x_1,x_2,x_5,x_6$\}*	& TT 	& 16 & \cellcolor[gray]{0.9}\{$x_0,x_1,x_6$\}	& NT \\
+    		~8 & \cellcolor[gray]{0.9}\{$x_0,x_1,x_2,x_6$\} 		& NT	 	& 17 & \{$x_0,x_2$\}			& C \\
+    		~9 & \{$x_0,x_1,x_3$\}			& NC 	&$\cdots$& ~~~~$\cdots$		& $\cdots$\\
+    		\hline
+		\end{tabular}
+	\end{table}
+
+\subsubsection{The GCSDM Algorithm}	
+	
+	\begin{algorithm}
+	\caption{GCSDM algorithm for computing all reducts}
+	\label{alg:GCSDM}
+	\begin{algorithmic}[1]
+	  \Require Sorted $SDM$
+      \Ensure $RR$ - the complete set of reducts
+	  \State $B \Leftarrow \emptyset$, $RR \Leftarrow \emptyset$, $c \Leftarrow 0$
+	  \While {\textbf{not} done}
+	  \State $reduct \Leftarrow \mathrm{False}$, $superReduct \Leftarrow \mathrm{False}$, 
+	  		 $contributes \Leftarrow \mathrm{False}$
+	  	\If {$B = \emptyset$}\label{line:singleT}
+	  		\State $cm_B \Leftarrow (0,...,0)$
+	  	\Else
+	  		\State $cm_B \Leftarrow CM[\mathrm{getLast}(B)]$
+	  	\EndIf
+	  	\State $cm_{B\cup \lbrace c\rbrace} \Leftarrow cm_B \vee cm_c$
+	  	\State $CM[c] \Leftarrow cm_{B\cup \lbrace c\rbrace}$
+	  	\If {$cm_{B\cup \lbrace c\rbrace}\neq cm_B$}\label{line:contrib}
+	  		\State $contributes \Leftarrow \mathrm{True}$
+	  		\If {$cm_{B\cup \lbrace c\rbrace}=(1,...,1)$}
+	  			\State $superReduct \Leftarrow \mathrm{True}$
+	  			\State $em_{B\cup \lbrace c\rbrace} \Leftarrow (0,...,0)$, $cm \Leftarrow (0,...,0)$
+	  			\ForAll{$x \in B\cup \lbrace c\rbrace$} 
+	  				\State $em_{B\cup \lbrace c\rbrace} \Leftarrow (em_{B\cup \lbrace c\rbrace}\wedge \neg 
+	  						cm_x) \vee (\neg cm \wedge cm_x)$
+	  				\State $cm \Leftarrow CM[x]$
+	  			\EndFor
+	  			\State $reduct \Leftarrow \mathrm{True}$
+	  			\ForAll{$x \in B$} 
+	  				\If {$em_{B\cup \lbrace c\rbrace}\wedge cm_x=(0,...,0)$}
+	  					\State $reduct \Leftarrow \mathrm{False}$
+	  					\State \textbf{break}
+	  				\EndIf
+	  			\EndFor
+	  		\EndIf
+	  	\EndIf
+	  	\If {$c=$LastAttribute} \Comment{Reached the last column of the binary $SDM$}
+	  		\If {$reduct$ \textbf{or} \textbf{not} $superReduct$} \Comment{Eliminate existing gap}
+	  			\State $last \Leftarrow c$
+	  			\While {$\mathrm{getLast}(B)=(last-1)$}
+	  				\State $last \Leftarrow \mathrm{getLast}(B)$
+	  				\State $B \Leftarrow B\setminus last$
+	  				\If {$\vert B \vert =1$}
+	  					\State \textbf{break}
+	  				\EndIf
+	  			\EndWhile
+	  		\Else
+	  			\State $B \Leftarrow B\setminus \mathrm{getLast}(B)$
+	  		\EndIf
+	  		\State $c \Leftarrow  \mathrm{getLast}(B)+1$
+	  		\State $B \Leftarrow B\setminus \mathrm{getLast}(B)$
+	  	\Else
+	  		\If {\textbf{not} $contributes$ \textbf{or} $superReduct$}
+	  			\State $c \Leftarrow \mathrm{getLast}(B)+1$
+	  			\State $B \Leftarrow B\setminus \mathrm{getLast}(B)$
+	  		 \EndIf
+	  		 \If {$contributes$ \textbf{and} \textbf{not} $superReduct$}
+	  		 	\State $c \Leftarrow c+1$
+	  		 \EndIf
+	  	\EndIf
+	  	\If {$cm_c[0] = 0$} \Comment{First row in column $c$ has a 0}
+	  		\State $done \Leftarrow \mathrm{True}$
+	  	\EndIf
+	  \EndWhile 
+	\end{algorithmic}
+	\end{algorithm}
+	
 %-------------------------------------------------------------------------------
 % Bibliography
 %-------------------------------------------------------------------------------
