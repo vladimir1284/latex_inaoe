@@ -1299,7 +1299,7 @@
 	by a completely new module. Some changes are also introduced in the rest of the platform in order to integrate
 	this new module.
 	
-\subsubsection{Evaluation and Discussion}
+\subsubsection{Evaluation and Discussion}\label{subsect:CTEXT_eval}
 	In order to show the performance of the proposed platform, it was compared against a software 
 	implementation of the CT\_EXT algorithm~\citep{Sanchez07} and the BT hardware platform previously 
 	reported in~\citep{Rodriguez14}; which is the most recent and fastest hardware implementation for computing 
@@ -1837,26 +1837,178 @@
     		\hline
 		\end{tabular}
 	\end{table}
+	
+	\cite{Alba14} pointed out that CT\_EXT has a surprisingly low performance over identity matrices. 
+	In fact, CT\_EXT traverses the complete power set of attribute combinations. The introduction of
+	the gap elimination solves this drawback in such a way that a minimum number of candidate 
+	verifications is required for this kind of matrices.
 
 \subsubsection{Evaluation and Discussion}
 
+	In order to evaluate the performance of GCSDM, we present here a comparative analysis of different
+	algorithms over synthetically generated simplified discernibility matrices. For this experiment we
+	selected CT\_EXT and fastBR in addition to our two proposals. These algorithms are reported in the 
+	literature as the fastest algorithms for typical testor computation. Algorithms for computing all
+	reducts such as RGonCRS \citep{WangP07} and that proposed in \citep{Starzyk00} were not included
+	since they showed a lower performance in our preliminary experiments. 
+	
+	The experimental units for this experiments are 57 randomly generated $SDM$. Our independent 
+	variables are the density of 1's in the $SDM$ and the standard deviation of density of 1's in rows
+	of $SDM$. The distribution of values for these variables is shown in Figures~\ref{fig:density} 
+	and~\ref{fig:std} respectively. The dependent variable is the fastest algorithm; whose levels are:
+	CT\_EXT, fastBR, RSDM and GCSDM. The treatments are the selected algorithms; which are applied
+	all to every experimental unit. Each combination is executed three times and the runtime is 
+	estimated by the fastest execution. This process ensures us a 95\% confidence interval according
+	to \cite{Haveraaen01}. The execution order was randomized to control the runtime bias due to the
+	operating system load. All experiments were run on a G1620 Intel processor at 2.7GHz with 2GB
+	in RAM over a GNU/Linux operating system.
+	
+	\begin{figure}[htb]
+	\begin{minipage}{.5\textwidth}
+	    \begin{center}
+	       \includegraphics[height=8cm]{density_freq.eps}
+	    \end{center}
+	\caption{Distribution of densities in $SDM$ under study.}
+	\label{fig:density}
+	~
+	\end{minipage}%
+	\begin{minipage}{.5\textwidth}
+	    \begin{center}
+	       \includegraphics[height=8cm]{std_freq.eps}
+	    \end{center}
+	\caption{Distribution of standard deviation of density in rows for all $SDM$ under study.}
+	\label{fig:std}
+	\end{minipage}	
+	\end{figure}		
+	
+	In order to obtain the desired density and standard deviation of density in rows, we used the 
+	matrix generator described in subsection~\ref{subsect:CTEXT_eval}. We control the maximum and
+	minimum number of 1's in a randomly generated row. In this way, the desired density is computed
+	as the mean number of 1's in a row, divided by the number of attributes (columns). Keeping 
+	constant this central value, we can modify at the same time the maximum and minimum number of
+	allowed 1's in a row to control the standard deviation. For each desired pair of values (density 
+	and standard deviation), three different matrices were generated.
+	
+	Figure~\ref{fig:scattDensity} shows a scatter plot of the execution runtime as a function of 
+	the density of 1's in the $SDM$. The execution runtime is taken from the fastest algorithm for 
+	each case. The dots are grouped by the best performing (fastest)	algorithm for that particular 
+	matrix as shown in the legend of the figure. There can be identified three distinct groups of 
+	matrices by its density:
+	\begin{itemize}
+	\item Low density matrices: density $<$ 0.3.
+	\item Medium density matrices: 0.3 $<$ density $<$ 0.7.
+	\item High density matrices: density $>$ 0.7.
+	\end{itemize}
+	The best performing algorithm for all low density matrices is GCSDM, fastBR was the fastest for
+	all medium density matrices and RSDM outperforms the other algorithms in most of the high
+	density matrices. The fact that high density $SDM$ does not constitute a complex computational
+	task for reduct computation is clearly visible in Figure~\ref{fig:scattDensity}. Notice that
+	CT\_EXT was never the best performing algorithm while fastBR was the fastest in the greater number
+	of matrices.
+		
+	\begin{figure}[htb]
+	\begin{minipage}{.48\textwidth}
+	    \begin{center}
+	       \includegraphics[height=8cm]{scatter_density.eps}
+	    \end{center}
+	\caption{Best performing algorithm runtime vs. density of 1's for all $SDM$ under study.}
+	\label{fig:scattDensity}
+	\end{minipage}%
+	~
+	\begin{minipage}{.48\textwidth}
+	    \begin{center}
+	       \includegraphics[height=8cm]{scatter_std.eps}
+	    \end{center}
+	\caption{Best performing algorithm runtime vs. standard deviation of density in rows for 
+			 all $SDM$ under study.}
+	\label{fig:scattStd}
+	\end{minipage}	
+	\end{figure}	
+	
+	Since all matrices for this experiment have the same dimensions, we can say that low density
+	matrices showed a relatively high complexity. For this reason, the apparent fact that GCSDM outperforms 
+	the other algorithms for this kind of matrices, deserves special attention. On the other hand, result 
+	of RSDM on high density matrices presents a lesser importance. Figure~\ref{fig:scattDensity} shows a trend
+	to the reduction of the computational complexity of reduct computation, regarding the increase of the
+	density in the $SDM$.
+	
+	Figure~\ref{fig:scattStd} shows a scatter plot of the execution runtime as a function of 
+	the standard deviation of the density of 1's in the rows of the $SDM$. As can be seen, there is no
+	clear relationship between the runtime or the fastest algorithm and the standard deviation of density.
+	Notice (combining information from Figures~\ref{fig:scattDensity} and~\ref{fig:scattStd}) that both, 
+	low and high density matrices are related to low values of the standard deviation. In fact, it impossible
+	to increase the standard deviation in the extremes values of density without affecting the mean
+	number of 1's in a row.
+	
+	Figure~\ref{fig:TimeReducts} shows a scatter plot of the execution runtime as a function of the 
+	number of reducts in the $SDM$. There can be seen a positive correlation between these two variables.
+	This trend is natural since we all know that the time complexity is at least as high as the space 
+	complexity which exceeds the size of the solution. For low density matrices we can see a runtime cost
+	beyond the trend for the rest of matrices. For high density matrices, there can be seen a low number
+	of reducts which partially explains their low runtime. 
+	
+	\begin{figure}[htb]
+	\begin{minipage}{.48\textwidth}
+	    \begin{center}
+	       \includegraphics[height=8cm]{runtimeReducts.eps}
+	    \end{center}
+	\caption{Best performing algorithm runtime vs. the number of reducts.}
+	\label{fig:TimeReducts}
+	\end{minipage}%
+	~
+	\begin{minipage}{.48\textwidth}
+	    \begin{center}
+	       \includegraphics[height=8cm]{scatter_CTvsGAP.eps}
+	    \end{center}
+	\caption{CT\_EXT runtime vs. GCSDM runtime.}
+	\label{fig:CTvsGAP}
+	~
+	\end{minipage}	
+	\end{figure}		
+	
+	Figure~\ref{fig:CTvsGAP} shows a scatter plot of the runtime of CT\_EXT vs. GCSDM for the $SDM$ used in
+	this experiments. Although GCSDM outperforms CT\_EXT in most cases, we can see that there is a specially
+	high runtime gain for low density matrices. Based on the evidence of Figure~\ref{fig:CTvsGAP}, we 
+	proposed a one-sided t-test to evaluate the overall performance of GCSDM over CT\_EXT. We suppose that
+	our sample of 57 $SDM$ is a random sample representing the universe of $SDM$ and state the following
+	\textbf{null hypothesis}: \emph{there is no difference between the GCSDM and CT\_EXT runtime}. As 
+	\textbf{alternative hypothesis} we have: \emph{the runtime of CT\_EXT is greater than the runtime of GCSDM}.
+	The output from R\footnote{http://www.r-project.org} software supports the alternative hypothesis beyond
+	a 95\% confidence interval. Indeed, the p-value suggest that the probability of obtaining an experimental
+	result like that shown in Figure~\ref{fig:CTvsGAP}, given that the null hypothesis is true, is only 
+	0.0008428.
+	
+	\begin{quote}
+		\qquad{}	Paired one-sided t-test\\
+
+		data:  CT\_EXT runtime and GCSDM runtime\\
+		t = 3.3, df = 56, p-value = 0.0008428\\
+		alternative hypothesis: true difference in means is greater than 0\\
+		95 percent confidence interval:\\
+		 6976.147ms  \qquad{}  Inf\\
+		sample estimates:\\
+		mean of the differences \\
+		 \qquad{}    14145.54ms
+	\end{quote}
 
 \newpage 
 \section{Conclusions}
-	This PhD. research proposal is focused on the problem of computing all the reducts and its related problem of computing
-	shortest reducts of an information system. These are problems with exponential complexity which are actively studied.
-	The theoretical bases were introduced to provide a unique nomenclature for the document and ensure that it is self
-	contained. We present a revision of the related work to show the most relevant approach to the problem solution as well as 
-	need of	new research in this area. Then, the methodology that will guide our future research is presented.
+	This PhD. research proposal is focused on the problem of computing all the reducts and its related problem of
+	computing shortest reducts of an information system. These are problems with exponential complexity which are
+	actively studied. The theoretical bases were introduced to provide a unique nomenclature for the document and
+	ensure that it is self contained. We present a revision of the related work to show the most relevant approach
+	to the problem solution as well as need of new research in this area. Then, the methodology that will guide 
+	our future research is presented.
 	
-	As preliminary results, we presented two new hardware architectures for computing typical testors and two new algorithms
-	for reduct computation. Our first work is a modified hardware platform for computing typical testors and was published in 
-	the 	memories of a relevant international conference on reconfigurable computing. Our second result is a new hardware 
-	architecture for computing typical testors and it is currently under the second revision to be published on a journal.
-	Our two proposed algorithm for computing all reducts were faster than existing algorithms for some kinds of datasets.
+	As preliminary results, we presented two new hardware architectures for computing typical testors and two new
+	algorithms for reduct computation. Our first work is a modified hardware platform for computing typical 
+	testors and was published in the memories of a relevant international conference on reconfigurable computing.
+	Our second result is a new hardware architecture for computing typical testors and it is currently under the
+	second revision to be published on a journal. Our two proposed algorithm for computing all reducts were faster
+	than existing algorithms for some kinds of datasets.
 	
-	Finally, based on our preliminary results, we conclude that our objectives are reachable, in the scheduled time, following 
-	the proposed methodology.
+	Finally, based on our preliminary results, we conclude that our objectives are reachable, in the scheduled
+	time, following 	the proposed methodology.
 	
 %-------------------------------------------------------------------------------
 % Bibliography
