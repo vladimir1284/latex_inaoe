@@ -1887,7 +1887,8 @@
 	as the mean number of 1's in a row, divided by the number of attributes (columns). Keeping 
 	constant this central value, we can modify at the same time the maximum and minimum number of
 	allowed 1's in a row to control the standard deviation. For each desired pair of values (density 
-	and standard deviation), three different matrices were generated.
+	and standard deviation), three different matrices were generated. A total of 57 matrices with
+	30 columns and 2000 rows was generated.
 	
 	Figure~\ref{fig:scattDensity} shows a scatter plot of the execution runtime as a function of 
 	the density of 1's in the $SDM$. The execution runtime is taken from the fastest algorithm for 
@@ -1929,7 +1930,7 @@
 	matrices showed a relatively high complexity. For this reason, the apparent fact that GCSDM outperforms 
 	the other algorithms for this kind of matrices, deserves special attention. On the other hand, result 
 	of RSDM on high density matrices presents a lesser importance. Figure~\ref{fig:scattDensity} shows a trend
-	to the reduction of the computational complexity of reduct computation, regarding the increase of the
+	to the reduction of the computational complexity of reduct computation regarding the increase of the
 	density in the $SDM$.
 	
 	Figure~\ref{fig:scattStd} shows a scatter plot of the execution runtime as a function of 
@@ -1973,12 +1974,12 @@
 	our sample of 57 $SDM$ is a random sample representing the universe of $SDM$ and state the following
 	\textbf{null hypothesis}: \emph{there is no difference between the GCSDM and CT\_EXT runtime}. As 
 	\textbf{alternative hypothesis} we have: \emph{the runtime of CT\_EXT is greater than the runtime of GCSDM}.
-	The output from R\footnote{http://www.r-project.org} software supports the alternative hypothesis beyond
+	The output from the R\footnote{http://www.r-project.org} software supports the alternative hypothesis beyond
 	a 95\% confidence interval. Indeed, the p-value suggest that the probability of obtaining an experimental
 	result like that shown in Figure~\ref{fig:CTvsGAP}, given that the null hypothesis is true, is only 
 	0.0008428.
 	
-	\begin{quote}
+	\begin{figure}
 		\qquad{}	Paired one-sided t-test\\
 
 		data:  CT\_EXT runtime and GCSDM runtime\\
@@ -1989,8 +1990,81 @@
 		sample estimates:\\
 		mean of the differences \\
 		 \qquad{}    14145.54ms
-	\end{quote}
+	\end{figure}
+	
+	In order to evaluate the performance improvement of GCSDM over fastBR, which is the fastest algorithm 
+	reported in the literature, we present a new experiment. A total 	of 83 low density matrices, with 30 
+	columns, was generated using the same procedure exposed above. This time, we generated $SDM$ with 1000 
+	rows so we can detect any dependence of the found relationship with the number of rows. We timed the 
+	execution runtime of reduct computation over all matrices using fastBR and GCSDM. 
+	Again we ran three execution of each possible combination in a randomized experiment.
+	
+	Figure~\ref{fig:runtime_low} shows the execution runtime as a function of the density of 1's in the $SDM$.
+	There can be seen two interesting facts in Figure~\ref{fig:runtime_low}. First, there is a well defined
+	line delimiting those $SDM$ for which GCSDM is faster than fastBR (densities under 0.3). Second, the
+	execution runtime of GCSDM increases monotonically with the increase of the density of 1's in the $SDM$.
+	
+	\begin{figure}[htb]
+	\begin{minipage}{.48\textwidth}
+	    \begin{center}
+	       \includegraphics[height=8cm]{runtimeVSdensity_low.eps}
+	    \end{center}
+	\caption{Best performing algorithm runtime vs. density of 1's for all $SDM$ under study.}
+	\label{fig:runtime_low}
+	\end{minipage}%
+	~
+	\begin{minipage}{.48\textwidth}
+	    \begin{center}
+	       \includegraphics[height=8cm]{rate_runtime.eps}
+	    \end{center}
+	\caption{fastBR runtime over GCSDM runtime  vs. density of 1's for all $SDM$ under study.}
+	\label{fig:BRvsGAP}
+	\end{minipage}	
+	\end{figure}	
+	
+	In Figure~\ref{fig:BRvsGAP} we show the runtime rate between fastBR and GCSDM; where values above
+	1 mean a runtime gain of GCSDM over fastBR. For lower densities we have up to two orders of magnitude gain.
+	We found an exponential relationship between this rate and the density of the $SDM$. Notice that the 
+	vertical axis in Figure~\ref{fig:BRvsGAP} is logarithmic.
+	
+	To explain this behaviour we must go deeply into the main difference between fastBR and GCSDM. In 
+	GCSDM we compute the exclusion mask and evaluate the proposition~\ref{prop:exclude} only for those
+	candidates proven as super-reducts, in order to verify them as reducts. In fastBR, on the other hand,
+	the proposition~\ref{prop:exclude} is evaluated for each contributing candidate. As a result, fastBR
+	evaluates less candidates than GCSDM but at a higher cost per candidate. The attribute exclusion
+	occurs when there is at least one column, in the sub-matrix of $SDM$ formed by those attributes in the 
+	current candidate, that can be removed without increasing the number of zero rows in this sub-matrix.
+	The exclusion is more common in matrices with a higher density of 1's, as can be inferred from  
+	Figure~\ref{fig:BRvsGAP}. 
+	
+	Lets take for instance the extreme case of the identity matrix where there is no exclusion at all,
+	since every attribute is indispensable to form a reduct. 	For this $SDM$, GCSDM needs to evaluate as 
+	many candidates as fastBR but makes a single verification for exclusion with the set of all attributes. 
+	On the other hand, fastBR verifies the exclusion for each candidate, which leads to an additional 
+	computational cost.
+	
+	Formally, we propose a one-sided t-test to evaluate the relative performance of GCSDM over fastBR in
+	low density matrices. We selected the 62 $SDM$, having a density 	of 1's lower than 0.3, from our original 
+	83 matrices. We suppose that this random sample is representative of the universe of $SDM$ with density 
+	under 0.3. As \textbf{null hypothesis} we have: \emph{there is no difference between the GCSDM and fastBR 
+	runtime for $SDM$ with density of 1's lower than 0.3}. As \textbf{alternative hypothesis} we have: 
+	\emph{the runtime of fastBR is greater than the runtime of GCSDM for $SDM$ with density of 1's lower than 
+	0.3}. The following output from the R software supports the alternative hypothesis beyond a 95\% confidence
+	interval.
+	
+	\begin{figure}
+		\qquad{}	Paired one-sided t-test\\
 
+		data:  fastBR runtime and GCSDM runtime\\
+		t = 11.0838, df = 61, p-value $<$ 2.2e-16\\
+		alternative hypothesis: true difference in means is greater than 0\\
+		95 percent confidence interval:\\
+		 75124.33ms  \qquad{}  Inf\\
+		sample estimates:\\
+		mean of the differences \\
+		 \qquad{}    88453.32ms
+	\end{figure}
+	
 \newpage 
 \section{Conclusions}
 	This PhD. research proposal is focused on the problem of computing all the reducts and its related problem of
