@@ -184,96 +184,9 @@
   table~\ref{tab_IS}, $d$ is the decision attribute; this is a two-class system. \textit{Condition attributes} 
   do not absolutely determine the class but help to decide to which class an object belongs to. In supervised 
   classification, condition attributes are the only information available for classifying new objects; while, 
-  decision attributes are only available for objects in the training set. An IS with distinguished decision and 
+  decision attributes are only available for objects in the training set. An IS with decision and 
   condition attributes is called a decision table. In table~\ref{tab_IS}, $c_1$, $c_2$ and $c_3$ are condition 
   attributes.
- 
-%\subsection{Indiscernibility Relations}
-%  For an object $x \in U$, the information about $x$ with respect to a set $B \subseteq A$ may be defined as
-%  \textit{the B-information set} 
-%  
-%  \begin{equation}
-%  	Inf_B(x)=\lbrace (a,a(x)):a \in B \rbrace
-%  \end{equation}  
-%  
-%  of $x$.
-%  
-%  \emph{Indiscernibility relation} of $B$ is defined as follows:
-%  
-%  \begin{equation}
-%  	(x,y) \in IND_B \Longleftrightarrow Inf_B(x)=Inf_B(y)
-%  \end{equation} 
-%  
-%  Equivalent classes $[x]_B$ of the relation $IND_B$ represent therefore elementary (atomic) portions
-%  of knowledge represented by the subsystem $IS_B=(U,B)$.
-%  
-%  For a \textit{concept} (set of objects), $X \subseteq U$, we say that $X$ is \textit{B-exact} if and 
-%  only if
-%  	
-%  \begin{equation}
-%  	X=\cup_{i=1}^{k} [x_i]_B
-%  \end{equation} 
-%  
-%  for some $x_1, x_2,...,x_k \in U$ i.e. where $X$ is the union of some \textit{B-indiscernibility} classes.
-%  
-%  For example, in table~\ref{tab_IS} the three possible subset of conditional attributes are 
-%  $\lbrace c_1 \rbrace$, $\lbrace c_2 \rbrace$ and $\lbrace c_1, c_2 \rbrace$. The indiscernibility relation 
-%  for these sets defines three partitions of the universe:
-%  
-%  $$\begin{array}{lcc}
-%  IND_{\lbrace c_1 \rbrace} &=& \lbrace \lbrace x_1, x_2 \rbrace, 
-%  								\lbrace x_3, x_4 \rbrace, 
-%  								\lbrace x_5, x_6, x_7 \rbrace \rbrace \\
-%  IND_{\lbrace c_2 \rbrace} &=& \lbrace \lbrace x_1, x_4, x_6 \rbrace, 
-%  								\lbrace x_2 \rbrace, 
-%  								\lbrace x_3 \rbrace,
-%  								\lbrace x_5, x_7 \rbrace \rbrace \\
-%  IND_{\lbrace c_1, c_2 \rbrace} &=& \lbrace \lbrace x_1 \rbrace, 
-%  									\lbrace x_2 \rbrace, 
-%  									\lbrace x_3 \rbrace,
-%  									\lbrace x_4 \rbrace,
-%  									\lbrace x_5, x_7 \rbrace,
-%  									\lbrace x_6 \rbrace \rbrace 
-%  \end{array}$$
-%
-%\subsection{Concept Approximations}
-%  RST capability of handling non-exact (rough) concepts arises from the approximation of a rough concept 
-%  by means of two crisp concepts: the \textit{lower} and the \textit{upper approximations of} $X$. 
-%  Denoted by $\underline{B}X$ and $\overline{B}X$, respectively as follows:
-%  
-%  \begin{equation}
-%  	\begin{array}{lcc}
-%  	\underline{B}X &=& \lbrace x \in U : [x]_B \subseteq X \rbrace\\
-%  	\overline{B}X  &=& \lbrace x:[x]_B \cap X \neq \emptyset \rbrace
-%  	\end{array}
-%  \end{equation}
-%  
-%  We would say that objects in $\underline{B}X$ can be certainly classified as elements of $X$ on the 
-%  basis of knowledge in $IS_B$, while objects in $\overline{B}X$ can only be possibly classified as 
-%  elements of $X$ on the basis of knowledge in $IS_B$. In other words, $\underline{B}X$ is 
-%  composed by those objects in $X$ having no indiscernible objects outside $X$. $\overline{B}X$ on the 
-%  other hand, is composed by all objects in $X$ plus all objects outside $X$ having an indiscernible 
-%  object in $X$.
-%  
-%  The set 
-%  
-%  \begin{equation}
-%  	BN_B(X)=\overline{B}X-\underline{B}X
-%  \end{equation}
-%  
-%  is called the \textit{B-boundary region of X} and it contains the objects which neither are certainly 
-%  members of $X$ nor they are certainly member of $U-X$. The presence of a non-empty boundary region
-%  indicates that the concept in question is rough (\textit{B-rough}).
-%  
-%  From the previous example we can see that e.g. concept $X=\lbrace x_1,x_2,x_3 \rbrace$ is rough for the 
-%  three attributes sets while e.g. the concept $Y=\lbrace x_1,x_2 \rbrace$ is both $\lbrace c_2 \rbrace$-
-%  and $\lbrace c_1, c_2 \rbrace$-exact. Notice that
-%  
-%  $$\begin{array}{lcc}
-%  \underline{c_1}X &=& \emptyset\\
-%  \overline{c_1}X  &=& \lbrace x_1,x_2,x_3,x_4,x_6 \rbrace\\
-%  \underline{c_2}X &=& \lbrace x_1,x_2 \rbrace
-%  \end{array}$$
   
 \subsection{Positive Region}\label{subsect_Pos}
   Decision attributes induce a partition of the universe $U$ into equivalence classes 
@@ -688,7 +601,7 @@
   but it also included a new module that eliminates most of the non typical testors before transferring 
   them to a host software application for final filtering. 
   
-\subsection{Discussion}
+\subsection{Concluding Remarks}
 
   From our literature review, we found that algorithms for finding typical testors can be used for computing 
   reducts and vice-versa \citep{Lazo15}. We also noticed that the development of algorithms from Testor 
@@ -697,19 +610,20 @@
   \begin{itemize}
 	  \item Algorithms for computing a pseudo-optimal reduct according to a criterion (which is, most of the 
 	  		time, the cardinality of the obtained reduct).
-	  \item Algorithms for computing	a shortest reduct.
+	  \item Algorithms for computing	one shortest reduct.
 	  \item Algorithms for computing	all reducts.
   \end{itemize}
   The most proliferative research area in Rough Set Theory is the development of algorithms for computing a 
   pseudo-optimal reduct. 
   
-  We found two algorithms for finding all reducts and two algorithms for finding shortest reducts from Rough 
-  Set Theory. These algorithms have several disadvantages since they do not work over the simplified
-  discernibility matrix and use expensive data representations. Most of the ideas for pruning the search
-  space in these algorithms can be found in Testor Theory as well, but we found interesting approaches to the
-  application of these ideas, which are unexplored in Testor Theory. Hardware accelerations of algorithms for
-  computing reducts are focused on computing a single pseudo-optimal reduct. Since this is not a exponentially
-  complex task, we found these hardware platforms less useful.
+  We found two algorithms for finding all reducts \citep{Starzyk00,WangP07} and two algorithms for finding 
+  shortest reducts \citep{Lin04,Jensen14} from Rough Set Theory. These algorithms have several disadvantages 
+  since they do not work over the simplified discernibility matrix and use complex data representations. 
+  Most of the ideas for pruning the search space in these algorithms can be found in Testor Theory as well, 
+  however, we found interesting ideas, which are unexplored in Testor Theory.
+  Hardware accelerations of algorithms for computing reducts are focused on computing a single pseudo-optimal
+  reduct \citep{Tiwari11,Tiwari12,Tiwari13,Grzes13,Kopczynski14,Tiwari14}. Since this problem is not an 
+  exponentially complex task, we found these hardware platforms less useful.
   
   Algorithms for finding typical testors operate over the simplified discernibility matrix (basic matrix). Notice
   that computing the basic matrix from the original dataset has quadratic complexity regarding the number of
@@ -719,12 +633,13 @@
   Properties used by these algorithms are supported by boolean operations and bit manipulations, which lead to
   faster implementations. We identified fast-CT\_EXT \citep{Sanchez10} and fast-BR \citep{Lias13} as the fastest
   algorithms reported in the literature for finding typical testors. Hardware accelerations reported into Testor
-  Theory are focused on computing all the typical testors and their main disadvantage is  that the size of the
-  basic matrix to be solved is limited by the hardware resources available in the FPGA device.
+  Theory \citep{Cumplido06,Rojas07,Rojas12} are focused on computing all the typical testors, and their main
+  disadvantage is  that the size of the basic matrix to be solved is limited by the hardware resources available 
+  in the FPGA device.
   
   In the search for algorithms to overcome the exponential complexity of the problem of computing all reducts or
   shortest reducts, the last word has not been said. In our preliminary results, we propose 
-  two new algorithms to show that significant improvements can be obtained by exploring new pruning rules.
+  two new algorithms to show that improvements can be obtained by exploring new pruning rules.
 
 \section{Research Proposal}\label{ResearchProposal} 
  In this section we present the justification and motivation, the research questions, the objectives and the
@@ -847,6 +762,7 @@
 
 \subsection{Methodology}\label{Methodology} 
 \begin{enumerate}
+	\item Critical study of the most recent and fastest algorithms for computing reducts.
 	\item Finding a relationship between some properties of the basic matrix and the fastest 
   		  traversing strategy for computing all reducts.\label{task1_all}
 	\begin{itemize}
@@ -987,9 +903,9 @@
 	Our first studies were directed to algorithms for computing typical testors. 
 	Throughout our first literature review, we found that there are two kinds of algorithms for computing 
 	typical testors: \emph{internal scale} algorithms and \emph{external scale} algorithms. 
-	The former analyse the matrix to find out some conditions that guarantee that a subset of attributes 
+	The former analyze the matrix to find out some conditions that guarantee that a subset of attributes 
 	is a typical testor. The latter search typical testors over the whole power set of attributes, 
-	avoiding unnecessary evaluations by means of a pruning strategy. 
+	avoiding unnecessary evaluations by pruning some attribute subsets. 
 	Internal scale algorithms usually evaluates less candidates than external scale algorithms but each 
 	candidate evaluation has a higher computational cost. Therefore, the search of fast algorithms for computing
 	typical testors has been biased to external scale algorithms \citep{Alba14}.
@@ -999,7 +915,7 @@
 	CT \citep{Bravo83} algorithms. 
 	This hardware implementation of BT was faster than other existing algorithms for finding all
 	typical	testors (although the hardware architecture was only capable of finding testors; which should 
-	be filtered afterwards by a software component in a hosting PC to dismiss the non typical testors). 
+	be filtered afterwards by a software component in a hosting PC to remove the non typical testors). 
 	In \citep{Rojas12} a new component was introduced to this platform in order to filter most of the non 
 	typical testors in the FPGA device before transferring them to the hosting PC. We identified the final
 	filtering stage, in the hosting PC, as the main drawback of both platforms \citep{Rojas07,Rojas12}.
@@ -1009,23 +925,37 @@
 	The runtime performance of our proposal is shown using some benchmarking datasets \citep{Bache13}.
 	This result has been reported in \citep{Rodriguez14}. 
 	
-	As a next step in our preliminary work, we included in our study the CT\_EXT algorithm \citep{Sanchez07}.
+	As a next step in our preliminary work, we included in our study the CT\_EXT algorithm \citep{Sanchez07},
+	which has one of the fastest strategy for traversing the search space.
 	CT\_EXT evaluates less candidates than BT in most cases, without including more complicated operations.
-	As a result, CT\_EXT is faster than BT in most datasets. Following the idea of \cite{Rojas07}, we explore
-	the possible speedup of a hardware platform inspired in CT\_EXT.
-	Then, in the subsection~\ref{CTH} we describe a new platform for computing typical testors, based on the 
+	As a result, CT\_EXT is faster than BT in most datasets. Following the idea of \cite{Rojas07}, we introduce
+	a hardware platform inspired in CT\_EXT.
+	Then, in the subsection~\ref{CTH} we describe the new platform for computing typical testors, based on the 
 	CT\_EXT algorithm. This new hardware implementation outperforms existing implementations of algorithms 
 	for computing typical testors. A runtime comparison, including algorithms reported in 
 	\citep{Rodriguez14,Sanchez07}, is carried out over several synthetically generated basic matrices.
-	This platform was reported in the journal of \emph{Expert Systems with 
+	This result was reported in the journal of \emph{Expert Systems with 
 	Applications\footnote{http://www.journals.elsevier.com/expert-systems-with-applications/}}.
-	 
+	%TODO poner el enlace al articulo 
+	
+	In the rest of this section, we propose and evaluate two new algorithms for finding all reducts of 
+	an information systems. Throughout the critical study proposed in the first step of our methodology,
+	we identified some properties of reduct computation that we used to develop the algorithms presented in
+	subsections~\ref{RSDM} and~\ref{GCSDM}. These results, partially cover the fourth point of our
+	methodology, and some elements of these algorithms will be present in a final version of an algorithm
+	for computing all reducts. Most of the second point in the methodology was covered in these subsections.
+	We also implemented several traversing strategies and evaluated them over synthetically generated matrices.
+	Finally, we extracted some rules for selecting the fastest strategy, based on properties of the simplified
+	discernibility matrix.
 	
 \subsection{A Hardware Architecture for Filtering Typical Testors}\label{OnlyTT}
-	\cite{Rojas12} presented a hardware-software platform for computing typical testors, based on the BT algorithm, 
-	that included a new module for eliminating most of the non typical testors before transferring them to a host 
-	software application for final filtering. The main disadvantages of this approach are the huge amount of data
-	that must be transferred to the PC and the extra cost of the final filtering stage in the software component.  
+	The first step of our methodology includes the critical study of the most recent and fastest algorithms for 
+	computing reducts. In this direction we started studying the hardware implementations of algorithms for 
+	computing typical testors. \cite{Rojas12} presented a hardware-software platform for computing typical testors,
+	based on the BT algorithm, that included a new module for eliminating most of the non typical testors before 
+	transferring them to a host software application for final filtering. 
+	The main disadvantages of this approach are the huge amount of data that must be transferred to the PC and 
+	the extra cost of the final filtering stage in the software component.  
 	For this reason, we developed a hardware module for eliminating all non typical testors on the hardware
 	component; reducing the amount of data that must be transferred to the PC and eliminating the final filtering. 	
 	This architecture is applicable to any algorithm for computing typical testors implemented on FPGA devices,
@@ -1048,7 +978,7 @@
 	
 	Two operations are added to the $BM$ module in order to verify the typical condition of testors.
 	First, a bitwise OR operation is performed among the output of the \textit{N~to~N~Decoder} of every row. 
-	The result of this operation has a 1 in the positions corresponding to each indispensable attribute in the
+	The result of this operation has a 1 in those positions corresponding to each indispensable attribute in the
 	current 	candidate. This value is then compared to the current candidate, and 	if this comparison 
 	holds equality and the current candidate is a testor, then the current candidate is a typical testor.
 	
@@ -1165,10 +1095,11 @@
 	computational problem, they serve to show the benefit of our proposal.
 
 \subsection{A Hardware Architecture based the CT\_EXT Algorithm}\label{CTH}
-	As a second preliminary result, we present an efficient hardware software platform for computing typical
-	testors based on the CT\_EXT algorithm \citep{Sanchez07}. The main contribution of this
-	work is the design and implementation of a hardware architecture that traverses the search space in a 
-	different order than that presented in \citep{Rojas07, Rojas12,Rodriguez14}. This strategy evaluates less
+	Following with the critical study of our research proposal, we studied the hardware implementation of the 
+	CT\_EXT algorithm which is one of the most recent and fastest algorithms reported in the literature, after
+	studying the work in \citep{Rojas12} we designed a and implemented a new hardware architecture that traverses
+	the search space in a different order than that presented in \citep{Rojas07, Rojas12,Rodriguez14}.
+	This strategy evaluates less
 	candidate subsets than previous architectures, which results in shorter runtime. Moreover, unlike 
 	software versions of CT\_EXT \citep{Sanchez07, Sanchez10}, our proposal evaluates a candidate every clock 
 	cycle, which leads to a faster execution. The runtime gain of our new hardware software platform is
@@ -1273,10 +1204,10 @@
 	implementation, an attribute candidate is coded into an $n$-tuple as we described in the
 	subsection~\ref{OnlyTT}.
 	
-	The proposed hardware platform replaces the candidate generator module in the design of \citep{Rodriguez14}
-	by a completely new module. Some changes are also introduced in the rest of the platform in order to integrate
-	this new module. Moreover, the module for eliminating all non typical testors on the hardware component,
-	proposed in the subsection~\ref{OnlyTT}, is also included.
+	In the proposed hardware platform we replaced the candidate generator module previously proposed in
+	\citep{Rodriguez14} by a completely new module. Some design changes were also introduced in the rest of 
+	the platform in order to integrate this new module. Moreover, the module for eliminating all non typical
+	testors on the hardware component, proposed in the subsection~\ref{OnlyTT}, is also included.
 	
 \subsubsection{Evaluation and Discussion}\label{subsect:CTEXT_eval}
 	In order to show the performance of the proposed platform, it was compared against a software 
@@ -1372,9 +1303,12 @@
 	Figure\,\ref{fig:result3}.
 
 
-\subsection{A New Recursive Algorithm for Reduct Computation}
-	In this subsection we present a new \textbf{R}ecursive algorithm using the \textbf{S}implified 
-	\textbf{D}iscernibility \textbf{M}atrix (RSDM) for computing all the reducts in a dataset. 
+\subsection{A New Recursive Algorithm for Reduct Computation}\label{RSDM}
+	In this subsection we propose a new \textbf{R}ecursive algorithm using the \textbf{S}implified 
+	\textbf{D}iscernibility \textbf{M}atrix (RSDM) for computing all the reducts in a dataset. This
+	new algorithm is based on the concept of contribution as CT\_EXT; but non contributing attributes
+	are discarded a priori, avoiding more unnecessary evaluations. Compared to CT\_EXT, the number 
+	of evaluated candidates in RSDM is smaller; but each evaluation has a higher cost. 
 
 \subsubsection{Concepts for RSDM}
 	In this subsection, we will be working with the binary representation of the simplified discernibility matrix
@@ -1393,7 +1327,7 @@
 	\begin{definition}\label{def:contrib}
 		Let $T \subseteq R$ and  $c_i \in R$ such that $c_i \notin T$. We say that $c_i$ contributes to T iff the
 		number of zero rows, in the sub-matrix of SDM formed by the columns corresponding to attributes in 
-		$T\cup\{c_i\}$, is lower than that in T.
+		$T\cup\{c_i\}$, is lower than in T.
 	\end{definition}		
 		
 	For a fast implementation of the RSDM algorithm, columns in $SDM$ are coded as binary words with as many 
@@ -1401,7 +1335,7 @@
 	the binary word representing the $i$th column in $SDM$. The cumulative mask for a subset of attributes
 	$T=\lbrace c_{i1},c_{i2},...,c_{ik} \rbrace$ is defined	as $cm_T = cm_{c_{i1}} \vee cm_{c_{i2}} \vee ... 
 	\vee cm_{c_{ik}}$ where $\vee$ stands for the binary OR operator. It is not hard to see that the number of 
-	0's in $cm_T$ is equal to the number of zero rows in the sub-matrix of $SDM$ formed by the columns
+	0's in $cm_T$ is the same as the number of zero rows in the sub-matrix of $SDM$ formed by the columns
 	corresponding to attributes in $T$. 
 	According to the definition~\ref{def:contrib}, $c_i$ contributes to $T$ iff $cm_{T\cup c_i}$ has more 1's than 
 	$cm_T$. 	The incremental nature of RSDM is given by the associative property of the OR operation, such that 
@@ -1506,9 +1440,10 @@
 		
 	Lets take for example the simplified discernibility matrix from Table~\ref{tab:SDM}. The candidates evaluated 
 	by CT\_EXT and RSDM  are shown in Table~\ref{tab:run}. Notice that while CT\_EXT evaluates 17 candidates,
-	in RSDM, only 13 candidates are evaluated. Another important comment about RSDM is that the output set 
-	contains all the reducts and some super-reducts that must be dismissed by checking inclusion or by any other
-	way.
+	in RSDM, only 13 candidates are evaluated. 
+%	Another important comment about RSDM is that the output set 
+%	contains all the reducts and some super-reducts that must be dismissed by checking inclusion or by any other
+%	way.
 	
 	\begin{table}[!htb]\small
 		\setlength{\tabcolsep}{.1em}
@@ -1531,9 +1466,113 @@
 	\end{table}
 
 \subsubsection{Evaluation and Discussion}
+	In order to evaluate the performance of RSDM, we present a comparative execution over synthetically generated 
+	simplified discernibility matrices. For this experiment, we selected CT\_EXT as reference, because it is one
+	of the fastest algorithms reported in the literature. Comparing RSDM with CT\_EXT makes possible to evaluate
+	the effect of the difference in the traversing order between these two algorithms; and its relation to some 
+	$SDM$ properties (the number of rows and the density of 1's). 
+	
+	Our experimental units are 380 $SDM$ homogeneously divided into five groups regarding their number of rows (200,
+	1100, 2000, 2900 and 3800 rows). Each matrix has 30 attributes and was randomly generated using the procedure
+	exposed in the subsection~\ref{CTH}. Our controlled variables are the number of rows in the $SDM$ and the
+	density of 1's. Matrices were divided into three levels of density:
+	
+	\begin{enumerate}
+		\item Very-low density: approximately 20\% (75~matrices).
+		\item Low density: approximately 30\% (125~matrices).
+		\item Medium density: approximately 47\% (180~matrices).
+	\end{enumerate}
+	
+	The treatments for this experiment are CT\_EXT and RSDM; which are applied all to every experimental unit. 
+	Each combination is executed three times and the runtime is estimated by the fastest execution. This process 
+	ensures us a 95\% confidence interval according to \cite{Haveraaen01}. The execution order was randomized to 
+	control the runtime bias due to the operating system load. All experiments were run on a G1620 Intel processor 
+	at 2.7GHz with 2GB in RAM over a GNU/Linux operating system.
+	
+	\begin{figure}[htb]
+	\centering
+	\begin{minipage}{.45\textwidth}
+	  \centering
+	   \includegraphics[width=6cm , height=6cm]{vlow_density.eps}
+	  \caption{Execution runtime for matrices with densities around~20\%.}
+	  \label{fig:vlow}
+	\end{minipage}%
+	~~~
+	\begin{minipage}{.45\textwidth}
+	  \centering
+	   \includegraphics[width=6cm , height=6cm]{low_density1.eps}
+	  \caption{Execution runtime for matrices with densities around~30\%.}
+	  \label{fig:low}
+	\end{minipage}
+	\end{figure}
+	
+	Figures~\ref{fig:vlow},~\ref{fig:low} and~\ref{fig:med} show the execution runtime of CT\_EXT and RSDM for $SDM$ 
+	with very-low, low and medium densities respectively. Each point, in these figures, represents the average
+	execution runtime for all the matrices having the same number of rows. Figure~\ref{fig:average} shows the average 
+	execution runtime of CT\_EXT and RSDM for all the $SDM$, without taking their density into account.
+	
+	From Figures~\ref{fig:vlow}-\ref{fig:med} we notice a positive correlation between the 
+	performance improvement of RSDM over CT\_EXT, and the density of 1's in the $SDM$. Indeed, there is no apparent
+	difference between RSDM and CT\_EXT runtime for very-low density matrices. In RSDM, every remaining attribute 
+	(according to the lexicographical traversing order) is evaluated for contribution with the current candidate subset. 
+	When some of the remaining attributes do not contribute to the current candidate subset, they are excluded from 
+	subsequent evaluations over supersets of the current candidate. CT\_EXT, on the other hand, follows strictly the 
+	lexicographical order, and may evaluate a non contributing attribute several times. However, this advantage is 
+	reduced for matrices with a very low density of 1's, where the probability of finding non contributing attributes 
+	is lower. 
+	
+	\begin{figure}[htb]
+	\centering
+	\begin{minipage}{.45\textwidth}
+	  \centering
+	   \includegraphics[width=6cm , height=6cm]{med_density1.eps}
+	  \caption{Execution runtime for matrices with densities around~47\%.}
+	  \label{fig:med}
+	\end{minipage}%
+	~~~
+	\begin{minipage}{.45\textwidth}
+	  \centering
+	   \includegraphics[width=6cm , height=6cm]{average.eps}
+	  \caption{Average execution runtime.}
+	  \label{fig:average}
+	\end{minipage}
+	\end{figure}	
+	
+	Another important peculiarity that we notice from Figures~\ref{fig:vlow}-\ref{fig:average} is an increasing runtime reduction
+	of RSDM over CT\_EXT, regarding the number of rows in the $SDM$. This trend has to be explained based on implementation
+	details. The recursive nature of RSDM requires a complex memory handling to keep the cumulative mask of evaluated 
+	candidates. CT\_EXT, on the other hand, uses a simple table to this end; which is indexed by the current evaluated
+	attribute. As a result, RSDM requires a larger number of operations for a candidate evaluation, but these extra operations 
+	are independent of the $SDM$ dimensions. With the increase of the number of rows, the cost of evaluating a single candidate
+	is augmented. Thus, for matrices with a larger number of rows, the improvement of evaluating less candidates becomes significant
+	in relation to the cost of the extra operations.	
+	
+	From Figures~\ref{fig:low} and \ref{fig:med}, we propose a one-sided t-test to evaluate the relative performance of RSDM over 
+	CT\_EXT in low and medium density matrices with more than 1000 rows. We selected the 252 $SDM$ having these characteristics, from 
+	our original 380 matrices. We suppose that this random sample is representative of the universe of $SDM$ with a density 
+	between 0.3 and 0.5. Our \textbf{null hypothesis} is: \emph{there is no difference between the RSDM and CT\_EXT 
+	runtime for $SDM$ with density of 1's between 0.3 and 0.5, and more than 1000 rows}; and our \textbf{alternative hypothesis}: 
+	\emph{the runtime of CT\_EXT is greater than the runtime of RSDM for $SDM$ with density of 1's between 0.3 and 0.5, and more than 
+	1000 rows}. The output from the R\footnote{http://www.r-project.org} software supports the alternative hypothesis beyond 
+	a 95\% confidence interval.
+	
+	\begin{figure}
+		\qquad{}	Paired one-sided t-test\\
 
-\subsection{A New Algorithm for Reduct Computation Based on the Gap Elimination and Contribution}
+		data:  CT\_EXT runtime and RSDM runtime\\
+		t = 25.5347, df = 251, p-value $<$ 2.2e-16\\
+		alternative hypothesis: true difference in means is greater than 0\\
+		95 percent confidence interval:\\
+		 16512.34ms  \qquad{}  Inf\\
+		sample estimates:\\
+		mean of the differences \\
+		 \qquad{}    17653.75ms
+	\end{figure}
+	
+	Based on this result, we can conclude that RSDM is faster than CT\_EXT for matrices with more than 1000 rows and a density of 1's
+	between 	0.3 and 0.5. Given our experimental results, the probability of an erroneous conclusion is lower than 2.2e-16.
 
+\subsection{A New Algorithm for Reduct Computation Based on the Gap Elimination and Contribution}\label{GCSDM}
 	In this subsection we propose a new algorithm based on the \textbf{G}ap elimination and
 	\textbf{C}ontribution, using the \textbf{S}implified \textbf{D}iscernibility \textbf{M}atrix (GCSDM), for
 	computing all the reducts in a dataset. The main difference between this algorithm and CT\_EXT is the
@@ -1596,7 +1635,7 @@
 	\begin{proof}
 		Lets denote $L$ as $\mu+\delta$, where $\delta= \lbrace c_{j_q}, c_{j_q+1},...,c_{j_s}\rbrace$, $j_q>p+1$
 		and $\mu = \lbrace c_{j_0},...,c_{j_k},c_{j_p}\rbrace$; such that attributes in $\delta$ are consecutive 
-		in $SDM$. Every attribute subset between L and $L'$ (following the	lexicographical order) can be 
+		in $SDM$. Every attribute subset between L and $L'$ (following the lexicographical order) can be 
 		denoted as $\lambda=\mu+\nu$, where $\nu \subset \delta$. Thus, every $\lambda$ between L and $L'$ is a
 		proper subset of $L$. Given that L is a reduct, a proper subset of L cannot be a reduct according to the 
 		irreducible condition of reducts. 
@@ -1613,7 +1652,7 @@
 	\end{corollary}
 	
 	In Table~\ref{tab:patial} we show a partial execution of CT\_EXT over the $SDM$ from Table~\ref{tab:SDM1} to 
-	illustrate the gap elimination. The first 17 evaluated candidates, out of 41, are presented 
+	illustrate the gap elimination. The first 17 evaluated candidates out of 41, are presented 
 	along with their evaluation. For this particular case, GCSDM evaluates only 23 candidates 
 	for a runtime reduction above the 40\%. Candidates of iterations 7 and 12 are reducts, which include the last
 	attribute in $SDM$ ($c_6$). Candidates of iterations 8, 13, 14, 15 and 16 are proper subsets of reducts, as
@@ -1829,7 +1868,7 @@
 \subsubsection{Evaluation and Discussion}
 
 	In order to evaluate the performance of GCSDM, we present here a comparative analysis of different
-	algorithms over synthetically generated simplified discernibility matrices. For this experiment we
+	algorithms over synthetically generated simplified discernibility matrices. For this experiment, we
 	selected CT\_EXT and fastBR in addition to our two proposals. These algorithms are reported in the 
 	literature as the fastest algorithms for typical testor computation. Algorithms for computing all
 	reducts such as RGonCRS \citep{WangP07} and that proposed in \citep{Starzyk00} were not included
@@ -1841,10 +1880,10 @@
 	and~\ref{fig:std} respectively. The dependent variable is the fastest algorithm; whose levels are:
 	CT\_EXT, fastBR, RSDM and GCSDM. The treatments are the selected algorithms; which are applied
 	all to every experimental unit. Each combination is executed three times and the runtime is 
-	estimated by the fastest execution. This process ensures us a 95\% confidence interval according
-	to \cite{Haveraaen01}. The execution order was randomized to control the runtime bias due to the
-	operating system load. All experiments were run on a G1620 Intel processor at 2.7GHz with 2GB
-	in RAM over a GNU/Linux operating system.
+	estimated by the fastest execution. 
+	The execution order was randomized to control the runtime bias due to the operating system load, as 
+	we did in the subsection~\ref{RSDM}. All experiments were run on a G1620 Intel processor at 2.7GHz with 
+	2GB in RAM over a GNU/Linux operating system.
 	
 	\begin{figure}[htb]
 	\begin{minipage}{.5\textwidth}
@@ -1957,8 +1996,8 @@
 	our sample of 57 $SDM$ is a random sample representing the universe of $SDM$ and state the following
 	\textbf{null hypothesis}: \emph{there is no difference between the GCSDM and CT\_EXT runtime}. As 
 	\textbf{alternative hypothesis} we have: \emph{the runtime of CT\_EXT is greater than the runtime of GCSDM}.
-	The output from the R\footnote{http://www.r-project.org} software supports the alternative hypothesis beyond
-	a 95\% confidence interval. Indeed, the p-value suggest that the probability of obtaining an experimental
+	The output from the R software supports the alternative hypothesis beyond
+	a 95\% confidence interval. Indeed, the p-value suggests that the probability of obtaining an experimental
 	result like that shown in Figure~\ref{fig:CTvsGAP}, given that the null hypothesis is true, is only 
 	0.0008428.
 	
@@ -2054,17 +2093,21 @@
 	computing shortest reducts of an information system. These are problems with exponential complexity which are
 	actively studied. The theoretical bases were introduced to provide a unique nomenclature for the document and
 	ensure that it is self contained. We present a revision of the related work to show the most relevant 
-	approaches to the problem solution as well as the need for new research in this area. Then, the objectives and
-	methodology that will guide our future research is presented.
+	approaches to the problem solution and based on this review we highlight the need for further research in this
+	area. Then, research proposal is introduced which contains the justification and motivation, research 
+	questions, our research objectives and the methodology that will guide our research.
 	
 	As preliminary results, we presented two new hardware architectures for computing typical testors and two new
 	algorithms for reduct computation. Our first work is a modified hardware platform for computing typical 
 	testors and was published in the memories of a relevant international conference on reconfigurable computing.
-	Our second result is a new hardware architecture for computing typical testors and it is currently under the
-	second revision to be published on a journal. Our two proposed algorithm for computing all reducts are faster
-	than existing algorithms for some kinds of datasets.
-	%TODO aquí sería bueno mencionar en que tipo de bases de datos y comentar que estos resultados serán publicados posteriormente, dado que comentas en los anteriores donde se han o están publicando
-	
+	Our second result is a new hardware architecture for computing typical testors and has been reported in the
+	journal of Expert Systems With Applications. Our two proposed algorithm for computing all reducts are faster
+	than existing algorithms for some kinds of datasets. RSDM was the fastest algorithm for $SDM$ with density 
+	above 0.7 while GCSDM outperforms the rest of the evaluated algorithms in $SDM$ with density under 0.3. These 
+	results will be reported in a congress or a journal specialized in Rough Set Theory.
+
+	Throughout our preliminary work, we covered most of the first four points in our proposed methodology, related
+	to algorithms for computing all reducts of an information system.
 	Finally, based on our preliminary results, we conclude that our objectives are reachable, in the scheduled
 	time, following 	the proposed methodology.
 	
