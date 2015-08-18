@@ -76,7 +76,7 @@
 		the discernibility capacity of the whole set of attributes. Reduct computation has an exponential
 		complexity regarding the number of attributes in the information system. In the literature, several
 		algorithms for reduct computation have been reported, but their high computational cost makes 
-		their use infeasible in large problems. For this reason, in this research we will develop new fast
+		them infeasible in large problems. For this reason, in this research we will develop new fast
 		algorithms in two directions, the computation of all reducts and the computation of globally 
 		shortest reducts. The proposed algorithms will be faster than state of the art algorithms, and hence 
 		the reduct computation will be viable for larger information systems than it is today. As part of this 
@@ -133,7 +133,7 @@
   computation time. One strength of our research is that we will be evaluating, for the first time, these two 
   families of algorithms in the same arena.
      
-  Throughout our research we will conduct a comparative study between the most relevant algorithms for reduct 
+  Throughout our research, we will conduct a comparative study between the most relevant algorithms for reduct 
   computation. Although our main focus will be on algorithms for computing all reducts and globally shortest
   reducts, experiences from heuristics approaches will be considered as well. We will be exploring the relationship 
   between algorithms' performance and characteristics of the information system. Based on this relationship,
@@ -394,7 +394,7 @@
   	
   \begin{figure}[htb] 
     	\center
-    \pstree{\Tr{\PSBL{Algorithms for Computing all Reducts}}}{%
+    \pstree[treesep=.75cm]{\Tr{\PSBL{Algorithms for Computing all Reducts}}}{%
     \pstree{\Tr{\PSBS{Rough Sets}}}{%
     		\pstree[levelsep=3em]{\Tr{\PSBS{Subdivision}}}{
     			\scriptsize \Shortstack[l]{
@@ -523,8 +523,8 @@
   evaluating the minimum number of candidates in the state of the art. The main drawback of fast-BR and 
   BR is, as in LEX, the high cost of evaluating the typical condition for each candidate. 
  
-  Recently, a new internal typical testor--finding algorithm (\setword{YYC}{YYC}) was proposed by \cite{Alba14}. Although 
-  they claim that this algorithm verify less candidates than previous alternatives, two weak points should
+  Recently, a new internal scale typical testor--finding algorithm (\setword{YYC}{YYC}) was proposed by \cite{Alba14}. 
+  Although they claim that this algorithm verify less candidates than previous alternatives, two weak points should
   be addressed. First, BR is not included in their comparisons; and second, the evaluation cost for a candidate
   in YYC is high compared to that of previous algorithms. YYC verifications involve calculations of the 
   Hamming weight.
@@ -549,8 +549,8 @@
   algorithm is presented in an iterative fashion and its recursive nature is not clearly expressed.
   
   \cite{WangP07} proposed a new algorithm for computing all reducts \setword{RGonCRS}{RGonCRS}. 
-  Even though this algorithm 
-  was developed independently and reported two years before to the one reported in \citep{Lias09}, it is very 
+  Even though this algorithm was developed independently and reported two years before to the one 
+  reported in \linebreak \citep{Lias09}, it is very 
   similar to BR. Notice that this is a rough set approach to the problem and the nomenclature is totally 
   different from that of BR. Essentially, every proposition supporting the pruning process in \citep{WangP07} 
   have an equivalent proposition in \citep{Lias09}. The main differences of RGonCRS with BR are:
@@ -583,7 +583,7 @@
   In \citep{Grzes13,Kopczynski14}, an FPGA application for a single reduct computation is presented. Although
   authors claim that a huge acceleration is achieved, some weak points have to be mentioned. Experiments presented 
   in \citep{Kopczynski14} to validate their results are performed over a small dataset which in our experience 
-  does not implies its applicability to larger cases where such acceleration is needed. On the other hand, 
+  does not imply its applicability to larger cases where such acceleration is needed. On the other hand, 
   runtime estimations for the FPGA component executions are made by means of an oscilloscope without taking into 
   account communication overhead.
   
@@ -901,8 +901,10 @@
 \section{Preliminary Results}
 	In this section, we expose the preliminary results of this PhD research.
 	Our first studies were directed to algorithms for computing typical testors. 
-	Throughout our first literature review, we found that there are two kinds of algorithms for computing 
-	typical testors: \emph{internal scale} algorithms and \emph{external scale} algorithms. 
+	Throughout our literature review, we found that there are two kinds of algorithms for computing 
+	typical testors: \emph{internal scale} algorithms, such as CT \citep{Bravo83}, CC \citep{Aguila84} and
+	YYC \citep{Alba14}; and \emph{external scale} algorithms, such as BT and TB \citep{Ruiz85}, LEX 
+	\citep{Santiesteban03}, CT\_EXT \citep{Sanchez07} and BR \citep{Lias09}. 
 	The former analyze the matrix to find out some conditions that guarantee that a subset of attributes 
 	is a typical testor. The latter search typical testors over the whole power set of attributes, 
 	avoiding unnecessary evaluations by pruning some attribute subsets. 
@@ -915,54 +917,57 @@
 	CT \citep{Bravo83} algorithms. 
 	This hardware implementation of BT was faster than other existing algorithms for finding all
 	typical	testors (although the hardware architecture was only capable of finding testors; which should 
-	be filtered afterwards by a software component in a hosting PC to remove the non typical testors). 
+	be filtered afterwards by a software component in a hosting PC, to remove the non typical testors). 
 	In \citep{Rojas12} a new component was introduced to this platform in order to filter most of the non 
 	typical testors in the FPGA device before transferring them to the hosting PC. We identified the final
 	filtering stage, in the hosting PC, as the main drawback of both platforms \citep{Rojas07,Rojas12}.
-	Thus, in the subsection~\ref{OnlyTT} we present a new architecture 
-	for computing typical testors, which is capable of finding all the typical testors without needing
-	a final filtering stage. 
-	The runtime performance of our proposal is shown using some benchmarking datasets \citep{Bache13}.
+	Thus, in the subsection~\ref{OnlyTT} we present a new architecture for computing typical testors, which 
+	is capable of finding all the typical testors without needing a final filtering stage. 
+	The runtime performance of our proposal is shown using some benchmarking datasets \citep{Bache13}, as 
+	we propose in our methodology.
 	This result has been reported in \citep{Rodriguez14}. 
 	
 	As a next step in our preliminary work, we included in our study the CT\_EXT algorithm \citep{Sanchez07},
-	which has one of the fastest strategy for traversing the search space.
-	CT\_EXT evaluates less candidates than BT in most cases, without including more complicated operations.
+	which uses one of the fastest strategies for traversing the search space.
+	CT\_EXT evaluates less candidates than BT (used in our previous preliminary result) in most cases, without 
+	including more complicated operations.
 	As a result, CT\_EXT is faster than BT in most datasets. Following the idea of \cite{Rojas07}, we introduce
 	a hardware platform inspired in CT\_EXT.
 	Then, in the subsection~\ref{CTH} we describe the new platform for computing typical testors, based on the 
 	CT\_EXT algorithm. This new hardware implementation outperforms existing implementations of algorithms 
 	for computing typical testors. A runtime comparison, including algorithms reported in 
-	\citep{Rodriguez14,Sanchez07}, is carried out over several synthetically generated basic matrices.
-	This result was reported in the journal of \emph{Expert Systems with 
-	Applications\footnote{http://www.journals.elsevier.com/expert-systems-with-applications/}}.
-	%TODO poner el enlace al articulo 
+	\citep{Rodriguez14,Sanchez07}, is carried out over several synthetically generated basic matrices, as 
+	suggested in the second step of our methodology.
+	This result was accepted in the journal of \emph{Expert Systems with 
+	Applications\footnote{http://www.sciencedirect.com/science/article/pii/S0957417415004972}}.
 	
-	In the rest of this section, we propose and evaluate two new algorithms for finding all reducts of 
-	an information systems. Throughout the critical study proposed in the first step of our methodology,
-	we identified some properties of reduct computation that we used to develop the algorithms presented in
-	subsections~\ref{RSDM} and~\ref{GCSDM}. These results, partially cover the fourth point of our
-	methodology, and some elements of these algorithms will be present in a final version of an algorithm
-	for computing all reducts. Most of the second point in the methodology was covered in these subsections.
-	We also implemented several traversing strategies and evaluated them over synthetically generated matrices.
-	Finally, we extracted some rules for selecting the fastest strategy, based on properties of the simplified
-	discernibility matrix.
+	As part of the preliminary results of this PhD proposal,  we propose and evaluate two new algorithms for 
+	finding all the reducts from an information system. Throughout the critical study proposed in the first step 
+	of our methodology, we identified some properties of reduct computation that we used to develop the algorithms 
+	presented in subsections~\ref{RSDM} and~\ref{GCSDM}. These results, partially cover the second point of our
+	methodology, and some elements of these algorithms will be used for the algorithm to be proposed in the
+	fourth point. 
+	
+	Additionally, in subsections~\ref{RSDM} and~\ref{GCSDM}, we also implemented several traversing strategies and 
+	evaluated them over synthetically generated matrices. These experiments aim to look for rules that would allow 
+	selecting the fastest strategy, based on properties of the simplified discernibility matrix.
 	
 \subsection{A Hardware Architecture for Filtering Typical Testors}\label{OnlyTT}
 	The first step of our methodology includes the critical study of the most recent and fastest algorithms for 
-	computing reducts. In this direction we started studying the hardware implementations of algorithms for 
+	computing reducts. In this direction, we started studying the hardware implementations of algorithms for 
 	computing typical testors. \cite{Rojas12} presented a hardware-software platform for computing typical testors,
-	based on the BT algorithm, that included a new module for eliminating most of the non typical testors before 
+	based on the BT algorithm, that included a module for eliminating most of the non typical testors before 
 	transferring them to a host software application for final filtering. 
 	The main disadvantages of this approach are the huge amount of data that must be transferred to the PC and 
 	the extra cost of the final filtering stage in the software component.  
-	For this reason, we developed a hardware module for eliminating all non typical testors on the hardware
-	component; reducing the amount of data that must be transferred to the PC and eliminating the final filtering. 	
-	This architecture is applicable to any algorithm for computing typical testors implemented on FPGA devices,
-	as we will show in the subsection~\ref{CTH}.
+	For this reason, we developed a new hardware module for eliminating all non typical testors on the hardware
+	component; reducing the amount of data that must be transferred to the PC and eliminating the final filtering
+	stage. 	
+	This new module can be used together with any algorithm for computing typical testors implemented on an FPGA 
+	device, as we will show in the subsection~\ref{CTH}.
 	
 	In the hardware platform \citep{Rojas12}, a feature subset is handled as an $n$-tuple, using a positional 
-	representation for all the $n$ attributes of a basic matrix ($BM$). Given a subset $T$, its $n$-tuple 
+	representation for the $n$ attributes of a basic matrix ($BM$). Given a subset $T$, its $n$-tuple 
 	representation has a 1 in the corresponding position $j$ for each $c_j \in T$ and 0 anywhere else.
 	The information of $BM$ is hold in the $BM$ hardware module. This module handles the process of 
 	deciding whether an $n$-tuple is a testor of $BM$, by comparing the candidate against each one of the 
@@ -1044,13 +1049,9 @@
 \subsubsection{Evaluation and Discussion}
 	This proposed architecture sends only typical testors from the FPGA device to the 
 	host PC. This modification eliminates the final filtering stage in the software component of the 
-	hardware-software platform \citep{Rojas12}. The main drawback of our proposed modification is its 
-	dependence on the basic matrix dimensions which could lead to a larger hardware architecture (a greater
-	percentage of the FPGA device) when the number of rows is much bigger than the number of columns in the basic 
-	matrix. 
-	
-	The final filtering stage in the software component needed in the original platform \citep{Rojas12} checks 
-	every testor received from the FPGA. Testors which are superset of any other testor are 
+	hardware-software platform \citep{Rojas12}. On the other hand, the final filtering stage in the 
+	software component needed in the original platform \citep{Rojas12} checks 
+	every testor received from the FPGA. Testors which are a superset of any other testor are 
 	eliminated because they do not satisfy the typical condition. We 
 	can establish a lower boundary of the computational complexity for this process as $N(N-1)/2$, 
 	where $N$ is the number of typical testors in the basic matrix. This is the complexity of verifying that
@@ -1062,12 +1063,13 @@
 	Repository of Machine Learning \citep{Bache13} were used.
 	Columns in Table~\ref{tabTimes} show the dataset name, the number of candidates tested by the BT algorithm,
 	the number of typical testors found, the runtime for the BT algorithm execution on the 
-	FPGA device and the final filtering stage on the host PC. For these runtime calculations, 
-	a core i5 processor at 3.6GHz was used for software execution and 50MHz for the FPGA architecture.
+	FPGA device and the final filtering stage on the host PC, which only is needed by the original architecture.
+	For these runtime calculations, a core i5 processor at 3.6GHz was used for the software component and 50MHz for 
+	the FPGA architecture.
 	
 	\begin{table}[htb]
 	%\renewcommand{\arraystretch}{1.3}
-	\caption{Algorithm execution and typical testors filtering stage runtimes for benchmarking datasets}
+	\caption{Algorithm execution and typical testors filtering stage runtime for benchmarking datasets}
 	\label{tabTimes}
 	\centering
 	\begin{tabular}{lccccc}
@@ -1086,13 +1088,17 @@
 	\end{tabular}
 	\end{table}
 	
-	For most datasets shown in Table~\ref{tabTimes} the FPGA and PC runtimes are 
+	For most datasets shown in Table~\ref{tabTimes} the FPGA and PC runtime are 
 	of the same order of magnitude. For those basic matrices with a large number of typical testors, the final 
 	filtering stage could be  even more expensive than the BT algorithm, as is the case for the \textit{german}
-	dataset. The total runtime for the previous architecture is the sum of the FPGA and PC runtimes. Our proposed
+	dataset. The total runtime for the original architecture is the sum of the FPGA and PC runtimes. Our proposed
 	platform only requires the FPGA runtime, since the proposed modifications do not increase the runtime.
 	Although finding all typical testors for these datasets does not constitute a complex 
 	computational problem, they serve to show the benefit of our proposal.
+	
+	A drawback of our proposed modification is its dependence on the basic matrix dimensions which could lead to a 
+	larger hardware architecture (a greater percentage of the FPGA device) when the number of rows is much bigger 
+	than the number of columns in the basic matrix. 
 
 \subsection{A Hardware Architecture based the CT\_EXT Algorithm}\label{CTH}
 	Following with the critical study of our research proposal, we studied the hardware implementation of the 
@@ -1200,14 +1206,15 @@
 	The function Evaluate$(BM,T)$ returns three values: $testor$, $typical$ and $zero\_rows$. $testor$ is 
 	TRUE if the set $T$ is a testor of $BM$ and FALSE otherwise. $typical$ is TRUE if the set $T$ is a
 	typical testor and FALSE otherwise. $zero\_rows$ is the amount of zero rows of $T$. The function
-	LastOne($T$) returns the position of the rightmost element in the set $T$. Notice that for this hardware
-	implementation, an attribute candidate is coded into an $n$-tuple as we described in the
-	subsection~\ref{OnlyTT}.
+	LastOne($T$) returns the position of the rightmost 1 of the binary codification of the set $T$. Notice 
+	that for this hardware implementation, an attribute candidate is coded into an $n$-tuple as we described 
+	in the subsection~\ref{OnlyTT}.
 	
-	In the proposed hardware platform we replaced the candidate generator module previously proposed in
-	\citep{Rodriguez14} by a completely new module. Some design changes were also introduced in the rest of 
+	In the proposed hardware platform, we replaced the candidate generator module previously proposed in
+	\citep{Rodriguez14}, which follows the BT traversing order, by a completely new module following the
+	lexicographical traversing order of CT\_EXT. Some design changes were also introduced in the rest of 
 	the platform in order to integrate this new module. Moreover, the module for eliminating all non typical
-	testors on the hardware component, proposed in the subsection~\ref{OnlyTT}, is also included.
+	testors on the hardware component, proposed in the subsection~\ref{OnlyTT}, was also included.
 	
 \subsubsection{Evaluation and Discussion}\label{subsect:CTEXT_eval}
 	In order to show the performance of the proposed platform, it was compared against a software 
@@ -1217,7 +1224,7 @@
 	
 	Either CT\_EXT or BT hardware implementations are capable of evaluating a candidate per clock 
 	cycle. If both architectures are running at the same frequency, as it will be the case in our experiments, 
-	there are two reasons for differences in running time. The first one is the time taken for reorganizing 
+	there are two reasons for runtime differences. The first one is the time taken for reorganizing 
 	the basic matrix, which is a more expensive process in BT, although it can be neglected as shown in
 	\citep{Rojas12}. The second and the most relevant, is the amount of candidates to be evaluated. 
 	
@@ -1232,13 +1239,12 @@
 	the hardware architecture could be designed for a fixed maximum matrix size and receive the $BM$ through the 
 	USB port, by doing this, the size of the problem that can be solved would be significantly reduced. The 
 	synthesis process comprehend an optimization of the design, taking advantage of the $BM$ data distribution for 
-	the reduction of the generated hardware configuration. The number of operations for the evaluation of a single 
+	reducing the generated hardware configuration. The number of operations for the evaluation of a single 
 	candidate, in the software approach, is proportional to the number of rows and it is directly related to the 
-	number of columns in the $BM$. Using this approach, it is possible to achieve a significant reduction in the
-	processing time, even operating at a much lower clock frequency, by evaluating a candidate on each clock
-	cycle.
+	number of columns in the $BM$. Using this approach, it is possible to achieve a significant runtime reduction,
+	even operating at a much lower clock frequency, by evaluating a candidate on each clock cycle.
 	
-	With these points in mind, and in order to show the usability of the proposed platform, 
+	With these points in mind, and in order to show the advantages of the proposed platform, 
 	three kinds of basic matrices were randomly generated. Each type containing a different percentage of 1's: 
 	\begin{enumerate}
 		\item Very-low density matrices: approximately 8\%.
@@ -1277,7 +1283,7 @@
 	For our experiments, 30 basic matrices of different sizes were randomly generated. 
 	A random number generator was used to generate rows, which are
 	filtered for the minimum and maximum number of 1's allowed. In this way the desired density was
-	controlled. If accepted, the row is verified as basic against the saved rows. Basic rows 
+	controlled. If accepted, a row is verified as basic against the saved rows. Basic rows 
 	are saved until the desired number of rows is reached. 
 	
 	For the hardware platforms, we measure the runtimes including the time for the following stages: $BM$ 
@@ -1285,8 +1291,8 @@
 	hardware component running at 50MHz). The number of rows for each type of matrices (very-low:~400, low:~225,
 	medium:~255) is conditioned by the dimensions of the biggest matrix that can be synthesized at the desired
 	running frequency.
-	All experiments were performed using an Intel(R) Core(TM) i5-2400 CPU @ 3.10GHz for software executions and 
-	an Atlys board, powered by a Spartan-6 LX45 FPGA device, for the hardware components.
+	All experiments were performed using an Intel(R) Core(TM) i5-2400 CPU @ 3.10GHz for software and 
+	an Atlys board, powered by a Spartan-6 LX45 FPGA device, for the hardware.
 	Figures\,\ref{fig:result1}, \,\ref{fig:result2}, and \,\ref{fig:result3} show graphics of the runtime 
 	(in hours) for the three types of basic matrices. 
 	
@@ -1306,8 +1312,8 @@
 \subsection{A New Recursive Algorithm for Reduct Computation}\label{RSDM}
 	In this subsection we propose a new \textbf{R}ecursive algorithm using the \textbf{S}implified 
 	\textbf{D}iscernibility \textbf{M}atrix (RSDM) for computing all the reducts in a dataset. This
-	new algorithm is based on the concept of contribution as CT\_EXT; but non contributing attributes
-	are discarded a priori, avoiding more unnecessary evaluations. Compared to CT\_EXT, the number 
+	new algorithm is based on the concept of contribution like CT\_EXT; but non contributing attributes
+	are discarded a priori, avoiding even more unnecessary evaluations. Compared to CT\_EXT, the number 
 	of evaluated candidates in RSDM is smaller; but each evaluation has a higher cost. 
 
 \subsubsection{Concepts for RSDM}
@@ -1321,8 +1327,8 @@
 		having only zeros).
 	\end{definition}
 	
-	The following definition constitutes the key concept in CT\_EXT and RSDM, and is also an important component 
-	of BR and RGonCRS.
+	The following definition constitutes the key concept in CT\_EXT and RSDM, and it is also an important component 
+	of the algorithms BR and RGonCRS.
 		
 	\begin{definition}\label{def:contrib}
 		Let $T \subseteq R$ and  $c_i \in R$ such that $c_i \notin T$. We say that $c_i$ contributes to T iff the
@@ -1334,7 +1340,7 @@
 	bits as 	rows in the $SDM$. The cumulative mask for an attribute $c_i$, denoted as $cm_{c_i}$, is defined as 
 	the binary word representing the $i$th column in $SDM$. The cumulative mask for a subset of attributes
 	$T=\lbrace c_{i1},c_{i2},...,c_{ik} \rbrace$ is defined	as $cm_T = cm_{c_{i1}} \vee cm_{c_{i2}} \vee ... 
-	\vee cm_{c_{ik}}$ where $\vee$ stands for the binary OR operator. It is not hard to see that the number of 
+	\vee cm_{c_{ik}}$ where $\vee$ represents the binary OR operator. It is not hard to see that the number of 
 	0's in $cm_T$ is the same as the number of zero rows in the sub-matrix of $SDM$ formed by the columns
 	corresponding to attributes in $T$. 
 	According to the definition~\ref{def:contrib}, $c_i$ contributes to $T$ iff $cm_{T\cup c_i}$ has more 1's than 
@@ -1346,28 +1352,32 @@
 	The RSDM algorithm is supported by the proposition~\ref{prop3}.		
 	
 	\begin{proposition}\label{prop3} 
-		Given $T \subseteq Z \subseteq R$ and  $c_i \in R$ such that $c_i \notin Z$ and $T \subseteq Z$. If 
+		Given $T \subseteq Z \subseteq R$ and  $c_i \in R$ such that $c_i \notin Z$. If 
 		$c_i$ does not contribute to T or form a super-reduct with T, then $Z\cup\{c_i\}$ cannot be a subset of any 
 		reduct.
 	\end{proposition}	
 	
 	\begin{proof}
-		As $T \subseteq Z$, $cm_T$ cannot have more 1's than $cm_Z$ by the definition of the cumulative mask.
-		If $c_i$ does not contribute to $T$ then, $cm_{T \cup \lbrace c_i \rbrace}$ does not have more 1's than
-		$cm_T$; and, by transitivity, $cm_{Z \cup \lbrace c_i \rbrace}$ cannot have more 1's than $cm_Z$. 
-		Notice that  $\lbrace T \cup \lbrace c_i \rbrace\rbrace \subseteq \lbrace Z \cup \lbrace c_i
-		\rbrace\rbrace$.
-		If $T \cup \lbrace c_i \rbrace$ is a super-reduct, $\lbrace Z \cup \lbrace c_i \rbrace\rbrace$ cannot be a 
-		reduct, given that it is a superset of a super-reduct; which contradicts the condition~\ref{cond_2} of the
+%		As $T \subseteq Z$, $cm_T$ cannot have more 1's than $cm_Z$ by the definition of the cumulative mask.
+%		If $c_i$ does not contribute to $T$ then, $cm_{T \cup \lbrace c_i \rbrace}$ does not have more 1's than
+%		$cm_T$; and, by transitivity, $cm_{Z \cup \lbrace c_i \rbrace}$ cannot have more 1's than $cm_Z$. 
+%		Notice that  $\lbrace T \cup \lbrace c_i \rbrace\rbrace \subseteq \lbrace Z \cup \lbrace c_i
+%		\rbrace\rbrace$.
+		From the proposition~\ref{prop1}, if $c_j$ does not contribute to $T$, then $T\cup\{c_j\}$ cannot be a subset 
+		of any reduct. Since $\lbrace T \cup \lbrace c_i \rbrace\rbrace \subseteq \lbrace Z \cup \lbrace c_i
+		\rbrace\rbrace$, if $Z\cup\{c_j\}$ is a subset of a reduct, then $T\cup\{c_j\}$ must be a subset of a 
+		reduct; which contradicts the proposition~\ref{prop1}.
+		If $T \cup \lbrace c_i \rbrace$ is a super-reduct, $ Z \cup \lbrace c_i \rbrace$ cannot be a 
+		reduct, since it is a superset of a super-reduct; which contradicts the condition~\ref{cond_2} of the
 		definition of reduct (Subsection~\ref{def_reduct})\footnote{Herein after denoted as irreducible condition} .
 	\end{proof}
 
 
 \subsubsection{The RSDM Algorithm}
 %
-	The first step in the RSDM algorithm is sorting the $SDM$ in order to reduce the search space. The sorting
-	process is the same that we presented in the subsection~\ref{CTH} for CT\_EXT. A $SDM$, sorted in 
-	this way, can be seen in Table~\ref{tab:SDM}. The pseudocode for RSDM is shown in algorithm~\ref{alg:RSDM}. 
+	The first step in the RSDM algorithm consist in sorting the $SDM$ in order to reduce the search space. 
+	The sorting process is the same that we presented in the subsection~\ref{CTH} for CT\_EXT. A $SDM$, sorted in 
+	this way, can be seen in Table~\ref{tab:SDM}. The pseudocode for RSDM is shown in Algorithm~\ref{alg:RSDM}. 
 	
 	\begin{table}[!htb]
       \centering
@@ -1382,6 +1392,21 @@
         		\\
         \end{tabular} 
 	\end{table}	
+	
+		The algorithm execution starts with the first element (column) in the sorted $SDM$ and repeats until an 
+	attribute with a 0 in the first row is reached (line~\ref{line:firstrow}). Notice that for the rest of the
+	candidates, the first row will always be an empty row. If this single attribute is a super-reduct
+	(line~\ref{line:singleT}) then it is saved in the super-reduct set $SR$; else, the recursive evaluator 
+	(line~\ref{line:recursiveFun}) is called with the current attribute as the base set $B$ and the remaining 
+	attributes to its right as the tail set $C$ (line~\ref{line:eval}).
+	In the recursive procedure, every attribute in the tail is tested whether contributes or not to the base set 
+	(line~\ref{line:contrib}). The attributes are removed from the tail set for furthers evaluations, if they 
+	form a super-reduct (line~\ref{line:remT}) or they do not contribute to $B$ (line~\ref{line:remNoContrib}).
+	This a priori evaluation and rejection of attributes constitutes the key of our proposed algorithm, and it 
+	is supported by proposition~\ref{prop3}.
+	Finally, the remaining attributes in the tail set are concatenated with $B$, one at a time, and used as base 
+	set for subsequent recursive evaluations with the remaining attributes in $C$ as tail
+	(line~\ref{line:recursive}).
 	
 	\renewcommand{\algorithmicrequire}{\textbf{Input:}}
 	\renewcommand{\algorithmicensure}{\textbf{Output:}}
@@ -1403,7 +1428,7 @@
 	  	\State $i \Leftarrow i+1$
 	  \EndWhile
 	  %\item[] \item[] \item[]
-	  \State eval($B$,$cm_B$,$C$)
+	  \State eval($B$,$cm_B$,$C$)\label{line:recursiveFun}
 	  \ForAll{$c \in C$} 
 	  	\State $cm_{B\cup \lbrace c\rbrace}=cm_B \vee cm_c$
 	  	\If {$cm_{B\cup \lbrace c\rbrace}\neq cm_B$}\label{line:contrib}
@@ -1422,21 +1447,6 @@
 	\end{algorithmic}
 	%\end{multicols}
 	\end{algorithm}
-	
-	
-	The algorithm execution starts with the first element (column) in the sorted $SDM$ and repeats until an 
-	attribute with a 0 in the first row is reached (line~\ref{line:firstrow}). Notice that for the rest of the
-	candidates the first row will always be an empty row. If this single attribute is a super-reduct
-	(line~\ref{line:singleT}) then it is saved in the super-reduct set $SR$; else, the recursive evaluator 
-	is called with the current attribute as the base set $B$ and the remaining attributes to its right as the 
-	tail set $C$ (line~\ref{line:eval}).
-	In the recursive function, every attribute in the tail is tested for contribution to the base set 
-	(line~\ref{line:contrib}). The attributes are removed from the tail set for furthers evaluations, if they 
-	form a super-reduct (line~\ref{line:remT}) or do not contribute to $B$ (line~\ref{line:remNoContrib}).
-	This a priori evaluation and rejection of non-contributing and testor-forming attributes constitutes the key
-	of our proposed algorithm, and it is supported by proposition~\ref{prop3}.
-	Finally, the remaining attributes in the tail set are concatenated with $B$ and used as base set for
-	subsequent recursive evaluations with the remaining $C$ as tail (line~\ref{line:recursive}).
 		
 	Lets take for example the simplified discernibility matrix from Table~\ref{tab:SDM}. The candidates evaluated 
 	by CT\_EXT and RSDM  are shown in Table~\ref{tab:run}. Notice that while CT\_EXT evaluates 17 candidates,
@@ -1447,7 +1457,7 @@
 	
 	\begin{table}[!htb]\small
 		\setlength{\tabcolsep}{.1em}
-		\caption{Example execution}\label{tab:run}
+		\caption{Candidates evaluated by CT\_EXT and RSDM for the matrix of Table~\ref{tab:SDM}}\label{tab:run}
       	\centering
     		\begin{tabular}{|lllll|lllll|}
     		\hline
@@ -1467,12 +1477,12 @@
 
 \subsubsection{Evaluation and Discussion}
 	In order to evaluate the performance of RSDM, we present a comparative execution over synthetically generated 
-	simplified discernibility matrices. For this experiment, we selected CT\_EXT as reference, because it is one
-	of the fastest algorithms reported in the literature. Comparing RSDM with CT\_EXT makes possible to evaluate
-	the effect of the difference in the traversing order between these two algorithms; and its relation to some 
-	$SDM$ properties (the number of rows and the density of 1's). 
+	simplified discernibility matrices. For this experiment, we selected CT\_EXT as reference algorithm because 
+	it is one of the fastest algorithms reported in the literature. Comparing RSDM with CT\_EXT makes possible to
+	evaluate the effect of the difference in the traversing order between these two algorithms; and its relation 
+	to some 	$SDM$ properties (the number of rows and the density of 1's). 
 	
-	Our experimental units are 380 $SDM$ homogeneously divided into five groups regarding their number of rows (200,
+	For our experiments we used 380 $SDMs$ divided into five groups regarding their number of rows (200,
 	1100, 2000, 2900 and 3800 rows). Each matrix has 30 attributes and was randomly generated using the procedure
 	exposed in the subsection~\ref{CTH}. Our controlled variables are the number of rows in the $SDM$ and the
 	density of 1's. Matrices were divided into three levels of density:
@@ -1483,78 +1493,79 @@
 		\item Medium density: approximately 47\% (180~matrices).
 	\end{enumerate}
 	
-	The treatments for this experiment are CT\_EXT and RSDM; which are applied all to every experimental unit. 
-	Each combination is executed three times and the runtime is estimated by the fastest execution. This process 
-	ensures us a 95\% confidence interval according to \cite{Haveraaen01}. The execution order was randomized to 
-	control the runtime bias due to the operating system load. All experiments were run on a G1620 Intel processor 
-	at 2.7GHz with 2GB in RAM over a GNU/Linux operating system.
+	For this experiment, CT\_EXT and RSDM were applied over every $SDM$. 
+	Each combination was executed three times and the runtime was estimated using the fastest execution. This
+	process 	ensures a 95\% confidence interval according to \cite{Haveraaen01}. 
+	The execution order was randomized to control the runtime bias due to the operating system load. All 
+	experiments were run on a G1620 Intel processor at 2.7GHz with 2GB in RAM over a GNU/Linux operating system.
 	
 	\begin{figure}[htb]
 	\centering
 	\begin{minipage}{.45\textwidth}
 	  \centering
 	   \includegraphics[width=6cm , height=6cm]{vlow_density.eps}
-	  \caption{Execution runtime for matrices with densities around~20\%.}
+	  \caption{Runtime for matrices with densities around~20\%.}
 	  \label{fig:vlow}
 	\end{minipage}%
 	~~~
 	\begin{minipage}{.45\textwidth}
 	  \centering
 	   \includegraphics[width=6cm , height=6cm]{low_density1.eps}
-	  \caption{Execution runtime for matrices with densities around~30\%.}
+	  \caption{Runtime for matrices with densities around~30\%.}
 	  \label{fig:low}
 	\end{minipage}
 	\end{figure}
 	
-	Figures~\ref{fig:vlow},~\ref{fig:low} and~\ref{fig:med} show the execution runtime of CT\_EXT and RSDM for $SDM$ 
+	Figures~\ref{fig:vlow},~\ref{fig:low} and~\ref{fig:med} show the runtime of CT\_EXT and RSDM for $SDMs$ 
 	with very-low, low and medium densities respectively. Each point, in these figures, represents the average
-	execution runtime for all the matrices having the same number of rows. Figure~\ref{fig:average} shows the average 
-	execution runtime of CT\_EXT and RSDM for all the $SDM$, without taking their density into account.
+	runtime for all the matrices having the same number of rows. Figure~\ref{fig:average} shows the
+	average runtime of CT\_EXT and RSDM for all the $SDMs$, without taking their density into account.
 	
 	From Figures~\ref{fig:vlow}-\ref{fig:med} we notice a positive correlation between the 
 	performance improvement of RSDM over CT\_EXT, and the density of 1's in the $SDM$. Indeed, there is no apparent
 	difference between RSDM and CT\_EXT runtime for very-low density matrices. In RSDM, every remaining attribute 
-	(according to the lexicographical traversing order) is evaluated for contribution with the current candidate subset. 
+	(according to the lexicographical traversing order) is evaluated for contribution with the current candidate
+	subset. 
 	When some of the remaining attributes do not contribute to the current candidate subset, they are excluded from 
-	subsequent evaluations over supersets of the current candidate. CT\_EXT, on the other hand, follows strictly the 
+	subsequent evaluations over supersets of the current candidate. CT\_EXT, on the other hand, strictly follows the 
 	lexicographical order, and may evaluate a non contributing attribute several times. However, this advantage is 
-	reduced for matrices with a very low density of 1's, where the probability of finding non contributing attributes 
-	is lower. 
+	reduced for matrices with a very low density of 1's, where the probability of finding non contributing
+	attributes is lower. 
 	
 	\begin{figure}[htb]
 	\centering
 	\begin{minipage}{.45\textwidth}
 	  \centering
 	   \includegraphics[width=6cm , height=6cm]{med_density1.eps}
-	  \caption{Execution runtime for matrices with densities around~47\%.}
+	  \caption{Runtime for matrices with densities around~47\%.}
 	  \label{fig:med}
 	\end{minipage}%
 	~~~
 	\begin{minipage}{.45\textwidth}
 	  \centering
 	   \includegraphics[width=6cm , height=6cm]{average.eps}
-	  \caption{Average execution runtime.}
+	  \caption{Average runtime.}
 	  \label{fig:average}
 	\end{minipage}
 	\end{figure}	
 	
-	Another important peculiarity that we notice from Figures~\ref{fig:vlow}-\ref{fig:average} is an increasing runtime reduction
-	of RSDM over CT\_EXT, regarding the number of rows in the $SDM$. This trend has to be explained based on implementation
-	details. The recursive nature of RSDM requires a complex memory handling to keep the cumulative mask of evaluated 
-	candidates. CT\_EXT, on the other hand, uses a simple table to this end; which is indexed by the current evaluated
-	attribute. As a result, RSDM requires a larger number of operations for a candidate evaluation, but these extra operations 
-	are independent of the $SDM$ dimensions. With the increase of the number of rows, the cost of evaluating a single candidate
-	is augmented. Thus, for matrices with a larger number of rows, the improvement of evaluating less candidates becomes significant
-	in relation to the cost of the extra operations.	
+	Another important peculiarity that we notice from Figures~\ref{fig:vlow}-\ref{fig:average} is an increasing
+	runtime reduction of RSDM over CT\_EXT, regarding the number of rows in the $SDM$. This trend is because the 
+	recursive nature of RSDM requires a complex memory handling to keep the cumulative mask of evaluated candidates. 
+	CT\_EXT, on the other hand, uses a simple table to this end; which is indexed by the current evaluated
+	attribute. As a result, RSDM requires a larger number of operations for each candidate evaluation, but these 
+	extra operations are independent of the $SDM$ dimensions. With the increase of the number of rows, the cost of 
+	evaluating a single candidate is greater. Thus, for matrices with a larger number of rows, the improvement of 
+	evaluating less candidates becomes significant in relation to the cost of the extra operations.	
 	
-	From Figures~\ref{fig:low} and \ref{fig:med}, we propose a one-sided t-test to evaluate the relative performance of RSDM over 
-	CT\_EXT in low and medium density matrices with more than 1000 rows. We selected the 252 $SDM$ having these characteristics, from 
-	our original 380 matrices. We suppose that this random sample is representative of the universe of $SDM$ with a density 
-	between 0.3 and 0.5. Our \textbf{null hypothesis} is: \emph{there is no difference between the RSDM and CT\_EXT 
-	runtime for $SDM$ with density of 1's between 0.3 and 0.5, and more than 1000 rows}; and our \textbf{alternative hypothesis}: 
-	\emph{the runtime of CT\_EXT is greater than the runtime of RSDM for $SDM$ with density of 1's between 0.3 and 0.5, and more than 
-	1000 rows}. The output from the R\footnote{http://www.r-project.org} software supports the alternative hypothesis beyond 
-	a 95\% confidence interval.
+	From Figures~\ref{fig:low} and \ref{fig:med}, we propose to apply a one-sided t-test to assess the relative 
+	performance of RSDM over CT\_EXT in low and medium density matrices with more than 1000 rows. We selected from 
+	our original 380 matrices, the 252 $SDMs$ having these characteristics. Our \textbf{null hypothesis} is: 
+	\emph{there is no difference between the RSDM and CT\_EXT runtime for $SDMs$ with density between 0.3 and 0.5, 
+	and more than 1000 rows}; and our \textbf{alternative hypothesis}: \emph{the runtime of CT\_EXT is higher than 
+	the runtime of RSDM for $SDMs$ with density between 0.3 and 0.5, and more than 1000 rows}. The output from the 
+	R\footnote{http://www.r-project.org} software (Figure~\ref{fig:R_RSDM}) supports the alternative hypothesis 
+	beyond a 95\% confidence interval.
 	
 	\begin{figure}
 		\qquad{}	Paired one-sided t-test\\
@@ -1567,19 +1578,24 @@
 		sample estimates:\\
 		mean of the differences \\
 		 \qquad{}    17653.75ms
+		
+		\centering
+	  	\caption{R output for the t-test of mean CT\_EXT and RSDM runtime.}
+	  	\label{fig:R_RSDM}
 	\end{figure}
 	
-	Based on this result, we can conclude that RSDM is faster than CT\_EXT for matrices with more than 1000 rows and a density of 1's
-	between 	0.3 and 0.5. Given our experimental results, the probability of an erroneous conclusion is lower than 2.2e-16.
+	Based on this result, we can conclude that RSDM is faster than CT\_EXT for matrices with more than 1000 rows 
+	and density between 0.3 and 0.5.
 
 \subsection{A New Algorithm for Reduct Computation Based on the Gap Elimination and Contribution}\label{GCSDM}
 	In this subsection we propose a new algorithm based on the \textbf{G}ap elimination and
 	\textbf{C}ontribution, using the \textbf{S}implified \textbf{D}iscernibility \textbf{M}atrix (GCSDM), for
-	computing all the reducts in a dataset. The main difference between this algorithm and CT\_EXT is the
-	gap elimination; which leads to a great runtime reduction as we will show afterwards. Algorithms LEX and
-	fast-BR also use the gap elimination but are based on the concept of exclusion \citep{Lias13}; which implies 
-	several iterations for evaluating a candidate. GCSDM, on the other hand, is based on the concept of 
-	contribution (as well as CT\_EXT) for a simpler candidate evaluation. The concept of exclusion is used in
+	computing all the reducts in a dataset. The main difference between the algorithm introduced in this section
+	and CT\_EXT is the gap elimination; which leads to a great runtime reduction as we will show afterwards.
+	LEX and fast-BR algorithms also use gap elimination but they are based on the concept of exclusion
+	\citep{Lias13}; which implies 
+	several iterations for evaluating each candidate. GCSDM, on the other hand, is based on the concept of 
+	contribution (as CT\_EXT), which allows a simpler candidate evaluation. The concept of exclusion is used in
 	GCSDM, over the identified super-reducts, to verify the irreducible condition. 
 
 \subsubsection{Concepts for GCSDM}
@@ -1589,9 +1605,9 @@
 	
 	\begin{definition}\label{def:gap}
 		Let $L \subseteq R$ be a subset of attributes from a dataset, such that $L = \lbrace c_{j_0},...,c_{j_s}
-		\rbrace$ and $c_{j_0}<\cdots <c_{j_s}$ according to their order in the dataset. We denote the attribute
-		$c_p$ gap of L, where $c_p \in L$ and $j_0 \leq p \leq	j_s$ such that 
-		$p=\mathrm{max}(j_q | c_{j_q},c_{j_{q+1}} \in L \wedge j_{q+1} \neq j_q)$.
+		\rbrace$ and $c_{j_0}<\cdots <c_{j_s}$ according to their order in the dataset. The gap of L is the
+		attribute $c_p \in L$ with $j_0 \leq p <	j_s$ such that $p=\mathrm{max}(j_q | c_{j_q},c_{j_{q+1}} \in 
+		L \wedge j_{q+1} \neq j_q+1)$.
 	\end{definition}
 	
 	In other words, the gap is the attribute in $L$ with the highest index such that its consecutive attribute in 
@@ -1599,7 +1615,7 @@
 	
 	\begin{table}[!htb]
       \centering
-        \caption{Sorted Simplified Discernibility Matrix}
+        \caption{A sorted Simplified Discernibility Matrix}
         \begin{tabular}{ccccccc}\label{tab:SDM1}
             $c_0$ & $c_1$ & $c_2$ & $c_3$ & $c_4$ & $c_5$ & $c_6$\\
         		\hline
@@ -1620,47 +1636,48 @@
 	\end{array}$$
 	
 	
-	The gap elimination is supported by the proposition~\ref{prop:gap}. In order to clarify the basis of the gap
-	elimination we exemplify the lexicographical traversing order with a $SDM$ of three attributes:
+	The gap elimination is supported by the proposition~\ref{prop:gap} \citep{Santiesteban03}. In order to clarify
+	the basis of the gap elimination we show the lexicographical traversing order for a $SDM$ with three
+	attributes (columns):
 	
 	\{$c_0$\}, \{$c_0,c_1$\}, \{$c_0,c_1,c_2$\}, \{$c_0,c_2$\}, \{$c_1$\}, \{$c_1,c_2$\}, \{$c_2$\}
 		
 	\begin{proposition}\label{prop:gap} 
 		Let $L \subseteq R$ be a reduct, such that $L = \lbrace c_{j_0},...,c_{j_s}\rbrace$, $c_{j_0}<\cdots
-		<c_{j_s}$ and $c_{j_s}$ is the last attribute in SDM. If there is a gap $c_p$ in L, being $L' = \lbrace
+		<c_{j_s}$ and $c_{j_s}$ is the last attribute in SDM. If there is a gap $c_p$ in L, and $L' = \lbrace
 		c_{j_0},...,c_{j_k},c_{p+1}\rbrace$, $j_0<\cdots <j_k<=p-1$; then, no attribute subset between L and $L'$
 		(following the lexicographical order) is a reduct.
 	\end{proposition}	
-	
-	\begin{proof}
-		Lets denote $L$ as $\mu+\delta$, where $\delta= \lbrace c_{j_q}, c_{j_q+1},...,c_{j_s}\rbrace$, $j_q>p+1$
-		and $\mu = \lbrace c_{j_0},...,c_{j_k},c_{j_p}\rbrace$; such that attributes in $\delta$ are consecutive 
-		in $SDM$. Every attribute subset between L and $L'$ (following the lexicographical order) can be 
-		denoted as $\lambda=\mu+\nu$, where $\nu \subset \delta$. Thus, every $\lambda$ between L and $L'$ is a
-		proper subset of $L$. Given that L is a reduct, a proper subset of L cannot be a reduct according to the 
-		irreducible condition of reducts. 
-	\end{proof}
+%	
+%	\begin{proof}
+%		Lets denote $L$ as $\mu+\delta$, where $\delta= \lbrace c_{j_q}, c_{j_q+1},...,c_{j_s}\rbrace$, $j_q>p+1$
+%		and $\mu = \lbrace c_{j_0},...,c_{j_k},c_{j_p}\rbrace$; such that attributes in $\delta$ are consecutive 
+%		in $SDM$. Every attribute subset between L and $L'$ (following the lexicographical order) can be 
+%		denoted as $\lambda=\mu+\nu$, where $\nu \subset \delta$. Thus, every $\lambda$ between L and $L'$ is a
+%		proper subset of $L$. Given that L is a reduct, a proper subset of L cannot be a reduct according to the 
+%		irreducible condition of reducts. 
+%	\end{proof}
 	
 	From the proposition~\ref{prop:gap} we have the following corollary; which is relevant to GCSDM in order to
 	avoid other unnecessary evaluations.
 	
 	\begin{corollary}\label{coro:gap} 
 		Let $L \subseteq R$ be a non super-reduct, such that $L = \lbrace c_{j_0},...,c_{j_s}\rbrace$, 
-		$c_{j_0}<...<c_{j_s}$ and $c_{j_s}$ is the last attribute in SDM. If there is a gap $c_p$ in L, being 
+		$c_{j_0}<...<c_{j_s}$ and $c_{j_s}$ is the last attribute in SDM. If there is a gap $c_p$ in L, and 
 		$L' = \lbrace c_{j_0},...,c_{j_k},c_{p+1}\rbrace$, $j_0<...<j_k<=p-1$; then, no attribute 
 		subset between L and $L'$ (following the lexicographical order) is a reduct.
 	\end{corollary}
 	
-	In Table~\ref{tab:patial} we show a partial execution of CT\_EXT over the $SDM$ from Table~\ref{tab:SDM1} to 
+	In Table~\ref{tab:patial} we show a partial execution of CT\_EXT over the $SDM$ of Table~\ref{tab:SDM1} to 
 	illustrate the gap elimination. The first 17 evaluated candidates out of 41, are presented 
 	along with their evaluation. For this particular case, GCSDM evaluates only 23 candidates 
-	for a runtime reduction above the 40\%. Candidates of iterations 7 and 12 are reducts, which include the last
+	for a runtime reduction above the 40\%. Candidates of iterations 7 and 12 are reducts, both including the last
 	attribute in $SDM$ ($c_6$). Candidates of iterations 8, 13, 14, 15 and 16 are proper subsets of reducts, as
-	indicated by the proposition~\ref{prop:gap}, and cannot be a reduct. Thus; the evaluation of shadowed
-	candidates in Table~\ref{tab:patial}, is unnecessary. 
+	indicated by the proposition~\ref{prop:gap}, and they cannot be a reduct. Thus, the evaluation of shadowed
+	candidates in Table~\ref{tab:patial} is unnecessary. 
 	
 	\begin{table}[!htb]
-		\caption{Partial execution of CT\_EXT over the $SDM$ from Table~\ref{tab:SDM1}. The evaluation of a
+		\caption{Partial execution of CT\_EXT over the $SDM$ of Table~\ref{tab:SDM1}. The evaluation of a
 		 		 candidate is labelled as C - the added attribute 
 				 contributes, NC - the added attribute does not contribute, R - the candidate is a reduct, or
 				 NSR - the last attribute is reached and the candidate is not a super-reduct.}\label{tab:patial}
@@ -1688,8 +1705,8 @@
 	
 	\begin{definition}\label{def:exclusion}
 		Let $L \subseteq R$ be a subset of attributes from a dataset. We call exclusion mask of L, denoted as 
-		$em_L$, to the binary word in which the ith bit is 1 if the ith row in $SDM$ has only 1 in a single 
-		column of those columns corresponding to attributes in L, and it is 0 otherwise.
+		$em_L$, to the binary word in which the $i^{\mathit{th}}$ bit is 1 if the $i^{\mathit{th}}$ row in $SDM$
+		has a 1 in only one 	column of those columns corresponding to attributes in L, and it is 0 otherwise.
 	\end{definition}
 	
 	For instance, from the $SDM$ in Table~\ref{tab:SDM1} we have:
@@ -1719,28 +1736,28 @@
 	
 \subsubsection{The GCSDM Algorithm}	
 
-	The first step in the GCSDM algorithm is sorting the $SDM$ in the same way as we did for RSDM. 
-	The pseudocode for GCSDM is shown in algorithm~\ref{alg:GCSDM}. Unlike RSDM, this algorithm returns
+	The first step in the GCSDM algorithm consist in sorting the $SDM$ in the same way as we did for RSDM. 
+	The pseudocode for GCSDM is shown in Algorithm~\ref{alg:GCSDM}. Unlike RSDM, this algorithm returns
 	only the set of all reducts.
 	
 	We start with an empty base subset $B$ and the position of the first attribute in $c$\footnote{Here we 
 	abuse of notation by using $c$ for both an attribute and a number denoting its position in $SDM$}. Then
 	we assign a null vector to the cumulative mask ($cm_B$) for $B=\emptyset$ or retrieve its calculated value
 	for	$B\neq \emptyset$ (lines~\ref{line:emptyB}-\ref{line:notEmpty}). $CM$ stores the calculated cumulative 
-	masks, indexed by the last attribute in $B$.	The function getLast$(B)$ returns the last attribute in $B$
+	masks, indexed by the last attribute in $B$.	The function getLast$(B)$ returns the last attribute in $B$.
 	%or its position as the case may be. 
-	In the line~\ref{line:updateCM} we update the cumulative mask and in
+	In the line~\ref{line:updateCM}, we update the cumulative mask and in
 	the line~\ref{line:contrib} we evaluate the contribution of $c$ to $B$. The cumulative mask of an 
 	attribute $cm_c$ has the same meaning as in RSDM. If the current attribute $c$ contributes, we evaluate
 	the super-reduct condition on $B\cup \lbrace c\rbrace$ (line~\ref{line:superReduct}). For super-reducts,
 	we use the proposition~\ref{prop:cumul} to compute the exclusion mask $em_{B\cup \lbrace c\rbrace}$ 
-	(lines~\ref{line:em}-\ref{line:emEnd}) and verify the irreducible condition (lines~\ref{line:reduct}-
-	\ref{line:reductEnd}), by means of the proposition~\ref{prop:exclude}. At this point, the candidate 
+	(lines~\ref{line:em}-\ref{line:emEnd}) and we verify the irreducible condition (lines~\ref{line:reduct}-
+	\ref{line:reductEnd}) by means of the proposition~\ref{prop:exclude}. At this point, the candidate 
 	evaluation is finished.
 	
 	From line~\ref{line:cg} to the end, the next candidate subset ($B\cup \lbrace c\rbrace$) is generated. 
 	LastAttribute holds the position of the last attribute in $SDM$. If the last attribute is
-	reached, if the current candidate is a reduct or it is not a super-reduct, we eliminate the gap
+	reached, we check if the current candidate is a reduct or it is not a super-reduct, to eliminate the gap
 	(lines~\ref{line:gap}-\ref{line:gapEnd}). If the last attribute is reached but the current candidate is 
 	a super-reduct, the last attribute in $B$ is removed (line~\ref{line:remLast}). If the last attribute is 
 	not reached yet, there are two possibilities. The current candidate is a super-reduct or the current
@@ -1755,7 +1772,7 @@
 	\label{alg:GCSDM}
 	\begin{algorithmic}[1]
 	  \Require Sorted $SDM$
-      \Ensure $RR$ - the complete set of reducts
+      \Ensure $RR$ - set of all reducts
 	  \State $B \Leftarrow \emptyset$, $RR \Leftarrow \emptyset$, $c \Leftarrow 0$
 	  \While {\textbf{not} done}
 	  \State $reduct \Leftarrow \mathrm{False}$, $superReduct \Leftarrow \mathrm{False}$, 
@@ -1784,6 +1801,9 @@
 	  					\State \textbf{break}\label{line:reductEnd}
 	  				\EndIf
 	  			\EndFor
+	  			\If {$reduct$}
+	  				\State $RR \Leftarrow RR \cup \lbrace B\cup \lbrace c\rbrace \rbrace$
+	  			\EndIf
 	  		\EndIf
 	  	\EndIf
 	  	\If {$c=$LastAttribute} \Comment{Reached the last column of the binary $SDM$}\label{line:cg}
@@ -1818,9 +1838,9 @@
 	\end{algorithm}
 	
 	In Table~\ref{tab:sample_GCSDM} we show an execution example of GCSDM over the $SDM$ from Table~\ref{tab:SDM1}.
-	The columns labelled C, SR and R stands for the candidate evaluation results on \textbf{C}ontribution, 
-	\textbf{S}uper-\textbf{R}educt and \textbf{R}educt conditions, respectively. Notice that the gap elimination 
-	occurs after candidates of iterations 7, 11, 16, 23 (reducts) and 19 (not super-reduct).
+	The columns labelled C, SR and R represent the result of the candidate evaluation on
+	\textbf{C}ontribution, \textbf{S}uper-\textbf{R}educt and \textbf{R}educt conditions, respectively. Notice that
+	the gap elimination occurs after candidates of iterations 7, 11, 16, 23 (reducts) and 19 (not super-reduct).
 	
 	\begin{table}[!htb]
 		\caption{Sample Execution of GCSDM.}\label{tab:sample_GCSDM}
@@ -1861,26 +1881,24 @@
 	\end{table}
 	
 	\cite{Alba14} pointed out that CT\_EXT has a surprisingly low performance over identity matrices. 
-	In fact, CT\_EXT traverses the complete power set of attribute combinations. The introduction of
-	the gap elimination solves this drawback in such a way that a minimum number of candidate 
+	In fact; CT\_EXT, for this kind of matrices, traverses the complete power set of attribute combinations. 
+	The introduction of the gap elimination solves this drawback in such a way that a minimum number of candidate 
 	verifications is required for this kind of matrices.
 
 \subsubsection{Evaluation and Discussion}
 
-	In order to evaluate the performance of GCSDM, we present here a comparative analysis of different
-	algorithms over synthetically generated simplified discernibility matrices. For this experiment, we
-	selected CT\_EXT and fastBR in addition to our two proposals. These algorithms are reported in the 
-	literature as the fastest algorithms for typical testor computation. Algorithms for computing all
-	reducts such as RGonCRS \citep{WangP07} and that proposed in \citep{Starzyk00} were not included
-	since they showed a lower performance in our preliminary experiments. 
+	In order to evaluate the performance of GCSDM, we present a comparative analysis of different
+	algorithms over synthetically generated simplified discernibility matrices ($SDMs$). For this experiment, we
+	selected CT\_EXT and fastBR, reported in the literature as the fastest algorithms for typical testor
+	computation, in addition to our two proposals. Algorithms for computing all reducts such as RGonCRS
+	\citep{WangP07} and that proposed in \citep{Starzyk00} were not included since they showed a lower performance
+	in our preliminary experiments. 
 	
-	The experimental units for this experiments are 57 randomly generated $SDM$. Our independent 
-	variables are the density of 1's in the $SDM$ and the standard deviation of density of 1's in rows
-	of $SDM$. The distribution of values for these variables is shown in Figures~\ref{fig:density} 
-	and~\ref{fig:std} respectively. The dependent variable is the fastest algorithm; whose levels are:
-	CT\_EXT, fastBR, RSDM and GCSDM. The treatments are the selected algorithms; which are applied
-	all to every experimental unit. Each combination is executed three times and the runtime is 
-	estimated by the fastest execution. 
+	This experiment was done over 57 randomly generated $SDMs$. The density of 1's in the $SDM$ and the standard
+	deviation of the density of 1's in the rows of the $SDM$ are shown in the Figures~\ref{fig:density} 
+	and~\ref{fig:std} respectively. The selected algorithms (CT\_EXT, fastBR, RSDM and GCSDM) were applied over
+	every matrix. 
+	Each combination was executed three times and the runtime is estimated using the fastest execution. 
 	The execution order was randomized to control the runtime bias due to the operating system load, as 
 	we did in the subsection~\ref{RSDM}. All experiments were run on a G1620 Intel processor at 2.7GHz with 
 	2GB in RAM over a GNU/Linux operating system.
@@ -1890,7 +1908,7 @@
 	    \begin{center}
 	       \includegraphics[height=8cm]{density_freq.eps}
 	    \end{center}
-	\caption{Distribution of densities in $SDM$ under study.}
+	\caption{Distribution of densities in the $SDMs$ under study.}
 	\label{fig:density}
 	~
 	\end{minipage}%
@@ -1898,7 +1916,7 @@
 	    \begin{center}
 	       \includegraphics[height=8cm]{std_freq.eps}
 	    \end{center}
-	\caption{Distribution of standard deviation of density in rows for all $SDM$ under study.}
+	\caption{Distribution of standard deviation of density in rows for all $SDMs$ under study.}
 	\label{fig:std}
 	\end{minipage}	
 	\end{figure}		
@@ -1910,31 +1928,30 @@
 	constant this central value, we can modify at the same time the maximum and minimum number of
 	allowed 1's in a row to control the standard deviation. For each desired pair of values (density 
 	and standard deviation), three different matrices were generated. A total of 57 matrices with
-	30 columns and 2000 rows was generated.
+	30 columns and 2000 rows were generated.
 	
-	Figure~\ref{fig:scattDensity} shows a scatter plot of the execution runtime as a function of 
-	the density of 1's in the $SDM$. The execution runtime is taken from the fastest algorithm for 
+	Figure~\ref{fig:scattDensity} shows a scatter graph of the runtime as a function of 
+	the density of 1's in the $SDM$. The runtime is taken from the fastest algorithm for 
 	each case. The dots are grouped by the best performing (fastest)	algorithm for that particular 
 	matrix as shown in the legend of the figure. There can be identified three distinct groups of 
-	matrices by its density:
+	matrices by their density:
 	\begin{itemize}
 	\item Low density matrices: density $<$ 0.3.
 	\item Medium density matrices: 0.3 $<$ density $<$ 0.7.
 	\item High density matrices: density $>$ 0.7.
 	\end{itemize}
-	The best performing algorithm for all low density matrices is GCSDM, fastBR was the fastest for
-	all medium density matrices and RSDM outperforms the other algorithms in most of the high
-	density matrices. The fact that high density $SDM$ does not constitute a complex computational
+	The fastest algorithm for low density matrices is GCSDM, fastBR was the fastest for
+	medium density matrices and RSDM outperforms the other algorithms in most of the high
+	density matrices. The fact that high density $SDMs$ do not constitute a complex computational
 	task for reduct computation is clearly visible in Figure~\ref{fig:scattDensity}. Notice that
-	CT\_EXT was never the best performing algorithm while fastBR was the fastest in the greater number
-	of matrices.
+	CT\_EXT was never the best performing algorithm while fastBR was the fastest in most matrices.
 		
 	\begin{figure}[htb]
 	\begin{minipage}{.48\textwidth}
 	    \begin{center}
 	       \includegraphics[height=8cm]{scatter_density.eps}
 	    \end{center}
-	\caption{Best performing algorithm runtime vs. density of 1's for all $SDM$ under study.}
+	\caption{Fastest algorithm runtime vs. density of 1's for all $SDMs$ under study.}
 	\label{fig:scattDensity}
 	\end{minipage}%
 	~
@@ -1942,40 +1959,39 @@
 	    \begin{center}
 	       \includegraphics[height=8cm]{scatter_std.eps}
 	    \end{center}
-	\caption{Best performing algorithm runtime vs. standard deviation of density in rows for 
-			 all $SDM$ under study.}
+	\caption{Fastest algorithm runtime vs. standard deviation of density in rows for 
+			 all $SDMs$ under study.}
 	\label{fig:scattStd}
 	\end{minipage}	
 	\end{figure}	
 	
 	Since all matrices for this experiment have the same dimensions, we can say that low density
 	matrices showed a relatively high complexity. For this reason, the apparent fact that GCSDM outperforms 
-	the other algorithms for this kind of matrices, deserves special attention. On the other hand, result 
-	of RSDM on high density matrices presents a lesser importance. Figure~\ref{fig:scattDensity} shows a trend
-	to the reduction of the computational complexity of reduct computation regarding the increase of the
-	density in the $SDM$.
+	the other algorithms for this kind of matrices, deserves special attention. On the other hand, the result 
+	of RSDM on high density matrices seems less important. 
+%	Figure~\ref{fig:scattDensity} shows a trend
+%	to the reduction of the computational complexity of reduct computation regarding the increase of the
+%	density in the $SDM$.
 	
-	Figure~\ref{fig:scattStd} shows a scatter plot of the execution runtime as a function of 
-	the standard deviation of the density of 1's in the rows of the $SDM$. As can be seen, there is no
-	clear relationship between the runtime or the fastest algorithm and the standard deviation of density.
+	Figure~\ref{fig:scattStd} shows a scatter graph of the runtime as a function of 
+	the standard deviation of the density of 1's in the rows of the $SDM$. As it can be seen, there is no
+	clear relationship between the runtime of the fastest algorithm and the standard deviation of density.
 	Notice (combining information from Figures~\ref{fig:scattDensity} and~\ref{fig:scattStd}) that both, 
-	low and high density matrices are related to low values of the standard deviation. In fact, it impossible
-	to increase the standard deviation in the extremes values of density without affecting the mean
-	number of 1's in a row.
+	low and high density matrices are related to low values of the standard deviation. In fact, it is not 
+	possible to increase the standard deviation in the extreme values of density.
 	
-	Figure~\ref{fig:TimeReducts} shows a scatter plot of the execution runtime as a function of the 
+	Figure~\ref{fig:TimeReducts} shows a scatter graph of the runtime as a function of the 
 	number of reducts in the $SDM$. There can be seen a positive correlation between these two variables.
-	This is a natural trend, since we all know that the time complexity is at least as high as the space 
-	complexity which exceeds the size of the solution. For low density matrices we can see a runtime cost
-	beyond the trend for the rest of matrices. For high density matrices, there can be seen a low number
-	of reducts which partially explains their low runtime. 
+	This is a natural trend, since the time complexity is at least as high as the space 
+	complexity; which exceeds the size of the solution. For high density matrices, there are a low number
+	of reducts which partially explains their lower computational cost (see Figure~\ref{fig:TimeReducts}). 
 	
 	\begin{figure}[htb]
 	\begin{minipage}{.48\textwidth}
 	    \begin{center}
 	       \includegraphics[height=8cm]{runtimeReducts.eps}
 	    \end{center}
-	\caption{Best performing algorithm runtime vs. the number of reducts.}
+	\caption{Fastest algorithm runtime vs. the number of reducts.}
 	\label{fig:TimeReducts}
 	\end{minipage}%
 	~
@@ -1985,21 +2001,16 @@
 	    \end{center}
 	\caption{CT\_EXT runtime vs. GCSDM runtime.}
 	\label{fig:CTvsGAP}
-	~
 	\end{minipage}	
 	\end{figure}		
 	
-	Figure~\ref{fig:CTvsGAP} shows a scatter plot of the runtime of CT\_EXT vs. GCSDM for the $SDM$ used in
-	this experiments. Although GCSDM outperforms CT\_EXT in most cases, we can see that there is a specially
-	high runtime gain for low density matrices. Based on the evidence of Figure~\ref{fig:CTvsGAP}, we 
-	proposed a one-sided t-test to evaluate the overall performance of GCSDM over CT\_EXT. We suppose that
-	our sample of 57 $SDM$ is a random sample representing the universe of $SDM$ and state the following
-	\textbf{null hypothesis}: \emph{there is no difference between the GCSDM and CT\_EXT runtime}. As 
-	\textbf{alternative hypothesis} we have: \emph{the runtime of CT\_EXT is greater than the runtime of GCSDM}.
-	The output from the R software supports the alternative hypothesis beyond
-	a 95\% confidence interval. Indeed, the p-value suggests that the probability of obtaining an experimental
-	result like that shown in Figure~\ref{fig:CTvsGAP}, given that the null hypothesis is true, is only 
-	0.0008428.
+	Figure~\ref{fig:CTvsGAP} shows a scatter graph of the runtime of CT\_EXT vs. GCSDM for the $SDMs$ used in
+	this experiment. Although GCSDM outperforms CT\_EXT in most cases. Based on the evidence of
+	Figure~\ref{fig:CTvsGAP}, we proposed a one-sided t-test to evaluate the overall performance of GCSDM over
+	CT\_EXT. Our \textbf{null hypothesis} is: \emph{there is no difference between the GCSDM and CT\_EXT runtime}.
+	As \textbf{alternative hypothesis} we have: \emph{the runtime of CT\_EXT is higher than the runtime of GCSDM}.
+	The output from the R software (Figure~\ref{fig:R_GCSDM}) supports the alternative hypothesis beyond a 95\%
+	confidence interval. 
 	
 	\begin{figure}
 		\qquad{}	Paired one-sided t-test\\
@@ -2012,26 +2023,29 @@
 		sample estimates:\\
 		mean of the differences \\
 		 \qquad{}    14145.54ms
+		 
+		\centering
+	  	\caption{R output for the t-test of mean CT\_EXT and GCSDM runtime.}
+	  	\label{fig:R_GCSDM}
 	\end{figure}
 	
 	In order to evaluate the performance improvement of GCSDM over fastBR, which is the fastest algorithm 
 	reported in the literature, we present a new experiment. A total 	of 83 low density matrices, with 30 
-	columns, was generated using the same procedure exposed above. This time, we generated $SDM$ with 1000 
-	rows so we can detect any dependence of the found relationship with the number of rows. We timed the 
-	execution runtime of reduct computation over all matrices using fastBR and GCSDM. 
+	columns, was generated using the same procedure above described. This time, we generated $SDMs$ with 1000 
+	rows. We evaluated the runtime of reduct computation over all matrices using fastBR and GCSDM. 
 	Again we ran three execution of each possible combination in a randomized experiment.
 	
-	Figure~\ref{fig:runtime_low} shows the execution runtime as a function of the density of 1's in the $SDM$.
-	There can be seen two interesting facts in Figure~\ref{fig:runtime_low}. First, there is a well defined
-	line delimiting those $SDM$ for which GCSDM is faster than fastBR (densities under 0.3). Second, the
-	execution runtime of GCSDM increases monotonically with the increase of the density of 1's in the $SDM$.
+	Figure~\ref{fig:runtime_low} shows the runtime as a function of the density of 1's in the $SDM$.
+	There can be seen two interesting facts. First, there is a well defined
+	line delimiting those $SDMs$ for which GCSDM is faster than fastBR (densities under 0.3). Second, the
+	runtime of GCSDM increases monotonically with the increase of the density of 1's in the $SDM$.
 	
 	\begin{figure}[htb]
 	\begin{minipage}{.48\textwidth}
 	    \begin{center}
 	       \includegraphics[height=8cm]{runtimeVSdensity_low.eps}
 	    \end{center}
-	\caption{Best performing algorithm runtime vs. density of 1's for all $SDM$ under study.}
+	\caption{Fastest algorithm runtime vs. density of 1's for all $SDMs$ under study.}
 	\label{fig:runtime_low}
 	\end{minipage}%
 	~
@@ -2039,13 +2053,14 @@
 	    \begin{center}
 	       \includegraphics[height=8cm]{rate_runtime.eps}
 	    \end{center}
-	\caption{fastBR runtime over GCSDM runtime  vs. density of 1's for all $SDM$ under study.}
+	\caption{fastBR runtime over GCSDM runtime  vs. density of 1's for all $SDMs$ under study.}
 	\label{fig:BRvsGAP}
 	\end{minipage}	
 	\end{figure}	
 	
 	In Figure~\ref{fig:BRvsGAP} we show the runtime rate between fastBR and GCSDM; where values above
-	1 mean a runtime gain of GCSDM over fastBR. For lower densities we have up to two orders of magnitude gain.
+	1 mean a runtime improvement of GCSDM over fastBR. For lower densities we have up to two orders of 
+	magnitude rate.
 	We found an exponential relationship between this rate and the density of the $SDM$. Notice that the 
 	vertical axis in Figure~\ref{fig:BRvsGAP} is logarithmic.
 	
@@ -2056,23 +2071,22 @@
 	evaluates less candidates than GCSDM but at a higher cost per candidate. The attribute exclusion
 	occurs when there is at least one column, in the sub-matrix of $SDM$ formed by those attributes in the 
 	current candidate, that can be removed without increasing the number of zero rows in this sub-matrix.
-	The exclusion is more common in matrices with a higher density of 1's, as can be inferred from  
+	The exclusion is more frequent in matrices with a higher density of 1's, as it can be inferred from  
 	Figure~\ref{fig:BRvsGAP}. 
 	
 	Lets take for instance the extreme case of the identity matrix where there is no exclusion at all,
 	since every attribute is indispensable to form a reduct. 	For this $SDM$, GCSDM needs to evaluate as 
 	many candidates as fastBR but makes a single verification for exclusion with the set of all attributes. 
-	On the other hand, fastBR verifies the exclusion for each candidate, which leads to an additional 
+	On the other hand, fastBR verifies the exclusion for each candidate, which leads to a higher 
 	computational cost.
 	
-	Formally, we propose a one-sided t-test to evaluate the relative performance of GCSDM over fastBR in
-	low density matrices. We selected the 62 $SDM$ having a density 	of 1's lower than 0.3, from our original 
-	83 matrices. We suppose that this random sample is representative of the universe of $SDM$ with density 
-	under 0.3. As \textbf{null hypothesis} we have: \emph{there is no difference between the GCSDM and fastBR 
-	runtime for $SDM$ with density of 1's lower than 0.3}. As \textbf{alternative hypothesis} we have: 
-	\emph{the runtime of fastBR is greater than the runtime of GCSDM for $SDM$ with density of 1's lower than 
-	0.3}. The following output from the R software supports the alternative hypothesis beyond a 95\% confidence
-	interval.
+	We used a one-sided t-test to evaluate the relative performance of GCSDM over fastBR in
+	low density matrices. We selected the 62 $SDMs$ having a density 	of 1's lower than 0.3, from our original 
+	83 matrices. As \textbf{null hypothesis} we have: \emph{there is no difference between the GCSDM and fastBR 
+	runtime for $SDMs$ with density of 1's lower than 0.3}. As \textbf{alternative hypothesis} we have: 
+	\emph{the runtime of fastBR is higher than the runtime of GCSDM for $SDMs$ with density of 1's lower than 
+	0.3}. The following output from the R software (Figure~\ref{fig:R_fastBRvsGCSDM}) supports the alternative
+	hypothesis beyond a 95\% confidence interval.
 	
 	\begin{figure}
 		\qquad{}	Paired one-sided t-test\\
@@ -2085,6 +2099,10 @@
 		sample estimates:\\
 		mean of the differences \\
 		 \qquad{}    88453.32ms
+		 		 
+		\centering
+	  	\caption{R output for the t-test of mean fastBR and GCSDM runtime.}
+	  	\label{fig:R_fastBRvsGCSDM}
 	\end{figure}
 	
 \newpage 
@@ -2094,17 +2112,23 @@
 	actively studied. The theoretical bases were introduced to provide a unique nomenclature for the document and
 	ensure that it is self contained. We present a revision of the related work to show the most relevant 
 	approaches to the problem solution and based on this review we highlight the need for further research in this
-	area. Then, research proposal is introduced which contains the justification and motivation, research 
-	questions, our research objectives and the methodology that will guide our research.
+	area. Then, the PhD research proposal is introduced; including justification and motivation, research 
+	questions, our research objectives, and the methodology that will guide our research.
 	
-	As preliminary results, we presented two new hardware architectures for computing typical testors and two new
-	algorithms for reduct computation. Our first work is a modified hardware platform for computing typical 
-	testors and was published in the memories of a relevant international conference on reconfigurable computing.
-	Our second result is a new hardware architecture for computing typical testors and has been reported in the
-	journal of Expert Systems With Applications. Our two proposed algorithm for computing all reducts are faster
-	than existing algorithms for some kinds of datasets. RSDM was the fastest algorithm for $SDM$ with density 
-	above 0.7 while GCSDM outperforms the rest of the evaluated algorithms in $SDM$ with density under 0.3. These 
-	results will be reported in a congress or a journal specialized in Rough Set Theory.
+	As preliminary results, we we developed a hardware module for eliminating all non typical testors on the
+	hardware component; reducing the amount of data that must be transferred to the PC and eliminating the final
+	filtering. This hardware module is applicable to any algorithm for computing typical testors implemented on
+	FPGA devices. This result was published in the memories of an international conference on reconfigurable
+	computing.
+	Our second preliminary result is a new hardware architecture of the CT EXT algorithm (which is one of the 
+	most recent and fastest algorithms reported in the literature) for computing all the typical testors. Our 
+	proposal traverses the search space in a different order than previous works, which evaluates less candidate 
+	subsets than previous architectures, resulting in shorter runtime. This result has been reported in the 
+	journal of Expert Systems With Applications. Additionally, we proposed two new algorithms for computing all 	
+	the reducts, which are faster than existing algorithms for some kinds of datasets.
+	RSDM was the fastest algorithm for $SDMs$ with density above 0.7 while GCSDM outperforms the rest of the
+	evaluated algorithms in $SDMs$ with density under 0.3. These results will be reported in a congress or a 
+	journal specialized in Rough Set Theory.
 
 	Throughout our preliminary work, we covered most of the first four points in our proposed methodology, related
 	to algorithms for computing all reducts of an information system.
