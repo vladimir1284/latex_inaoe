@@ -101,10 +101,7 @@
   As a result, information systems are usually characterized by a large number of attributes,
   degrading the performance of machine learning tools \citep{Parthalain08}.
   One of the main concepts in RST is the notion of reduct, which is a minimal subset of attributes 
-  preserving the discernibility capacity of the whole set of attributes \citep{Pawlak91}. 
-%  A new information system 
-%  using only those features in a reduct, is a reduced representation of the original data that allows obtaining  
-%  the same classification quality than the original information system. 
+  preserving the discernibility capacity of the whole set of attributes \citep{Pawlak91}.  
   However, the main restriction in practical applications of RST is that computing all reducts of an information 
   system has an exponential complexity \citep{Skowron92}. Therefore an active research line is the development 
   of fast algorithms for reduct computation.
@@ -123,6 +120,83 @@
   Fast implementations of these algorithms; based on cumulative binary operations \citep{Sanchez10}, genetic 
   algorithms \citep{Sanchez99} and hardware architectures \citep{Rojas12}; have been developed to reduce the
   computation time.   
+  \subsection{Algorithms for all Reducts and all Typical Testors Computation}
+  One of the first algorithms designed to overcome the exponential complexity (regarding
+  the number of features) of the problem of finding all TT, was 
+  proposed by \cite{Ruiz85}. This algorithm, called \setword{BT}{BT},
+  codifies a subset of features as a binary word with as many bits as features in the 
+  dataset. A 0 represents the absence of the corresponding feature in the current
+  subset while a 1 represents its inclusion. This way, candidates subsets are evaluated
+  in the natural order induced by binary numbers. The pruning process in the
+  search space is based on the minimal condition of TT and a convenient sorting
+  of the basic matrix associated to the dataset. Finally, 
+  testors found by BT algorithm must be filtered in order to remove any non-TT.
+  In \citep{Shulcloper95b} a new algorithm (REC) is presented.
+  The main drawback of REC is that it works directly over the dataset (instead of using the
+  basic matrix), handling a huge amount of superfluous information. \cite{Ayaquica97}
+  presented the algorithm CER directed to solve this problem by using a different traversing
+  order. 
+	
+  Then, \cite{Santiesteban03} proposed a new algorithm called \setword{LEX}{LEX}. The main ideas 
+  behind LEX are a new traversing order of candidates (which resembles the
+  lexicographical order in which string characters are compared) and the concept of gap. In LEX,
+  the typical condition is verified first and only for those potentially TT, the testor 
+  condition is checked. 
+  The concept of gap allows to avoid the evaluation of any subset of a candidate, given that it is
+  a TT (or a not testor) which includes the last feature in the dataset.
+	
+  \cite{Sanchez07} proposed the \setword{CT\_EXT}{CTEXT} algorithm for computing all
+  TT. Following a traversing order similar to that in LEX, this algorithm searches for
+  testors without verifying the typical condition. This way, a larger number of candidates are 
+  evaluated, in comparison to LEX; but the cost of each evaluation is lower. Results from experiments
+  show that CT\_EXT is faster than the previous existing algorithms for most datasets. Then, \cite{Lias09}
+  presented the \setword{BR}{BR} algorithm, a Recursive algorithm based on 
+  Binary operations. BR is very similar to LEX in its bones but its recursive nature encloses a great
+  improvement. Given a candidate subset, the remaining features are tested a priori and those being 
+  rejected are excluded from subsequent evaluations. \cite{Sanchez10} presented a cumulative
+  procedure for the CT\_EXT algorithm. This fast-CT\_EXT implementation drastically reduces the runtime
+  for most datasets at no extra cost. In \citep{Lias13} the
+  gap elimination and column reduction are added to BR. This fast-BR algorithm is, no doubt the one 
+  evaluating the minimum number of candidates in the state of the art. The main drawback of fast-BR and 
+  BR is, as in LEX, the high cost of evaluating the typical condition for each candidate. 
+
+  A method for the computation of all reducts in an Information System is proposed in
+  \citep{Starzyk99,Starzyk00}.
+  This is a divide and conquer approach. On each step, the absorption laws are applied over the incoming
+  discernibility matrix to obtain a basic matrix. Then, the strong equivalent attributes are compressed
+  (which is a local reduction of columns). The most discerning attribute is selected (in the same way as 
+  Johnson's reducer does) and the problem is divided into two sub-problems: 
+  \begin{itemize}
+  \item Finding reducts containing the selected attribute. Thus a recursive function is called with a new basic 
+  matrix, having only those rows where the selected attribute does not appear.
+  \item Finding reducts that do not contain the selected attribute. Thus a recursive function is called with a new 
+  discernibility matrix, removing the column corresponding to the selected attribute.
+  \end{itemize}
+  The base case in the recursion is reached when each attribute in the incoming discernibility matrix appears 
+  in a single clause. In this way, a set of super-reducts is obtained and supersets must be removed in order 
+  to obtain the final reduct set.
+  Notice that this algorithm is oriented to the binary discernibility function, then 
+  terms such as discernibility and basic matrix, rows and columns are not used in the paper. The
+  algorithm is presented in an iterative fashion and its recursive nature is not clearly expressed.
+  
+  \cite{WangP07} proposed a new algorithm for computing all reducts \setword{RGonCRS}{RGonCRS}. 
+  Even though this algorithm was developed independently and reported two years before to the one 
+  reported in \linebreak \citep{Lias09}, it is very 
+  similar to BR. Notice that this is a rough set approach to the problem and the nomenclature is totally 
+  different from that of BR. Essentially, every proposition supporting the pruning process in \citep{WangP07} 
+  have an equivalent proposition in \citep{Lias09}. The main differences of RGonCRS with BR are:
+  \begin{itemize}
+  \item It works directly over the dataset instead of the basic matrix.
+  \item It starts searching the core and looks for reducts as supersets of the core.
+  \item A recursive implementation, instead of the iterative solution used in BR, is proposed.
+  \item During the algorithm execution, contributing attributes are sorted as in the Johson reducer.
+  \item A second algorithm \setword{SRGonCRS}{SRGonCRS} is proposed for subdividing the dataset and the reducts are
+  		incrementally found.
+  \end{itemize}
+  
+  Different variants (\setword{DT}{DT}, DISC FUNCTION and CANDIDATE REDUCTS) for decomposition of a reduct 
+  computation problem are discussed and proposed in \citep{Strakowski08}.
+
 
 \section{Basic Concepts}\label{basicConcepts}
   RST is based on the assumption that every object in the universe of discourse is described, through a 
@@ -317,88 +391,6 @@
  	\end{tabular}             
  \end{table}  
     
-\subsection{Algorithms for all Reducts and all Typical Testors Computation}
-  One of the first algorithms designed to overcome the exponential complexity (regarding
-  the number of features) of the problem of finding all TT, was 
-  proposed by \cite{Ruiz85}. This algorithm, called \setword{BT}{BT},
-  codifies a subset of features as a binary word with as many bits as features in the 
-  dataset. A 0 represents the absence of the corresponding feature in the current
-  subset while a 1 represents its inclusion. This way, candidates subsets are evaluated
-  in the natural order induced by binary numbers. The pruning process in the
-  search space is based on the minimal condition of TT and a convenient sorting
-  of the basic matrix associated to the dataset. Finally, 
-  testors found by BT algorithm must be filtered in order to remove any non-TT.
-  In \citep{Shulcloper95b} a new algorithm (REC) is presented.
-  The main drawback of REC is that it works directly over the dataset (instead of using the
-  basic matrix), handling a huge amount of superfluous information. \cite{Ayaquica97}
-  presented the algorithm CER directed to solve this problem by using a different traversing
-  order. 
-	
-  Then, \cite{Santiesteban03} proposed a new algorithm called \setword{LEX}{LEX}. The main ideas 
-  behind LEX are a new traversing order of candidates (which resembles the
-  lexicographical order in which string characters are compared) and the concept of gap. In LEX,
-  the typical condition is verified first and only for those potentially TT, the testor 
-  condition is checked. %This way, the out-coming testors from this algorithm are always typical.
-  The concept of gap allows to avoid the evaluation of any subset of a candidate, given that it is
-  a TT (or a not testor) which includes the last feature in the dataset.
-	
-  \cite{Sanchez07} proposed the \setword{CT\_EXT}{CTEXT} algorithm for computing all
-  TT. Following a traversing order similar to that in LEX, this algorithm searches for
-  testors without verifying the typical condition. This way, a larger number of candidates are 
-  evaluated, in comparison to LEX; but the cost of each evaluation is lower. Results from experiments
-  show that CT\_EXT is faster than the previous existing algorithms for most datasets. Then, \cite{Lias09}
-  presented the \setword{BR}{BR} algorithm, a Recursive algorithm based on 
-  Binary operations. BR is very similar to LEX in its bones but its recursive nature encloses a great
-  improvement. Given a candidate subset, the remaining features are tested a priori and those being 
-  rejected are excluded from subsequent evaluations. \cite{Sanchez10} presented a cumulative
-  procedure for the CT\_EXT algorithm. This fast-CT\_EXT implementation drastically reduces the runtime
-  for most datasets at no extra cost. In \citep{Lias13} the
-  gap elimination and column reduction are added to BR. This fast-BR algorithm is, no doubt the one 
-  evaluating the minimum number of candidates in the state of the art. The main drawback of fast-BR and 
-  BR is, as in LEX, the high cost of evaluating the typical condition for each candidate. 
- 
-  Recently, a new internal scale typical testor--finding algorithm (\setword{YYC}{YYC}) was proposed by \cite{Alba14}. 
-  Although they claim that this algorithm verify less candidates than previous alternatives, two weak points should
-  be addressed. First, BR is not included in their comparisons; and second, the evaluation cost for a candidate
-  in YYC is high compared to that of previous algorithms. YYC verifications involve calculations of the 
-  Hamming weight.
-
-  A method for the computation of all reducts in an Information System is proposed in
-  \citep{Starzyk99,Starzyk00}.
-  This is a divide and conquer approach. On each step, the absorption laws are applied over the incoming
-  discernibility matrix to obtain a basic matrix. Then, the strong equivalent attributes are compressed
-  (which is a local reduction of columns). The most discerning attribute is selected (in the same way as 
-  Johnson's reducer does) and the problem is divided into two sub-problems: 
-  \begin{itemize}
-  \item Finding reducts containing the selected attribute. Thus a recursive function is called with a new basic 
-  matrix, having only those rows where the selected attribute does not appear.
-  \item Finding reducts that do not contain the selected attribute. Thus a recursive function is called with a new 
-  discernibility matrix, removing the column corresponding to the selected attribute.
-  \end{itemize}
-  The base case in the recursion is reached when each attribute in the incoming discernibility matrix appears 
-  in a single clause. In this way, a set of super-reducts is obtained and supersets must be removed in order 
-  to obtain the final reduct set.
-  Notice that this algorithm is oriented to the binary discernibility function, then 
-  terms such as discernibility and basic matrix, rows and columns are not used in the paper. The
-  algorithm is presented in an iterative fashion and its recursive nature is not clearly expressed.
-  
-  \cite{WangP07} proposed a new algorithm for computing all reducts \setword{RGonCRS}{RGonCRS}. 
-  Even though this algorithm was developed independently and reported two years before to the one 
-  reported in \linebreak \citep{Lias09}, it is very 
-  similar to BR. Notice that this is a rough set approach to the problem and the nomenclature is totally 
-  different from that of BR. Essentially, every proposition supporting the pruning process in \citep{WangP07} 
-  have an equivalent proposition in \citep{Lias09}. The main differences of RGonCRS with BR are:
-  \begin{itemize}
-  \item It works directly over the dataset instead of the basic matrix.
-  \item It starts searching the core and looks for reducts as supersets of the core.
-  \item A recursive implementation, instead of the iterative solution used in BR, is proposed.
-  \item During the algorithm execution, contributing attributes are sorted as in the Johson reducer.
-  \item A second algorithm \setword{SRGonCRS}{SRGonCRS} is proposed for subdividing the dataset and the reducts are
-  		incrementally found.
-  \end{itemize}
-  
-  Different variants (\setword{DT}{DT}, DISC FUNCTION and CANDIDATE REDUCTS) for decomposition of a reduct 
-  computation problem are discussed and proposed in \citep{Strakowski08}.
 
 \subsubsection{Concepts for GCSDM}
 
