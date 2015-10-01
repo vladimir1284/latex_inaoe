@@ -31,7 +31,7 @@
 
 \begin{document}
 	
-	\title{A New Algorithm for Reduct and Typical Testor Computation Based on Gap Elimination and Contribution}
+	\title{A New Algorithm for Reduct Computation Based on Gap Elimination and Contribution}
 	
 	
 	\address{Computer Science Department\\National Institute of
@@ -40,13 +40,15 @@
 	72840, M\'{e}xico} 
 	
 	\begin{abstract}
-		In this paper we make a review of reported algorithms for computing rough set reducts and typical testors.
-		Under certain assumptions, computing the complete set of reducts and computing all the typical testors 
-		of an Information System can be seen as the same problem. We study the advantages of algorithms using
-		a simplified discernibility matrix and binary cumulative operations. Then expose a relationship between
-		the runtime of different strategies and the density of ones in the simplified binary discernibility matrix.
-		Based on this relationship we propose a new algorithms for computing all reducts. Finally, the proposed 
-		algorithm is evaluated over several UCI datasets.
+		Attribute reduction is a key aspect of Rough Sets Theory.  Finding the complete set of reducts is relevant 
+		in several real-world applications such as the assessment of attribute relevance, multi-objective cost-sensitive 
+		attribute reduction and dynamic reduct computation. The main limitation in the application of
+		Rough Sets methods is that finding all reducts of an Information System has exponential complexity 
+		regarding its number of attributes. Several algorithms have been reported to reduce the execution time
+		of reduct computation. Unfortunately, most of these algorithms relay on complex operations and data
+		structures. Therefore, in this paper we propose a new algorithm for computing all reducts, based on
+		binary cumulative operations, which uses the Gap elimination and the Contribution for pruning the search
+		space. Finally, the proposed algorithm is evaluated over synthetic and real datasets.
 	\end{abstract}
 	
 	\begin{keyword}
