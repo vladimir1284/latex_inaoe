@@ -31,7 +31,7 @@
 
 \begin{document}
 	
-	\title{A New Algorithm for Reduct and Typical Testor Computation Based on Gap Elimination and Contribution}
+	\title{A New Algorithm for Reduct and Typical Testor Computation Using Gap Elimination and Contribution}
 	
 	
 	\address{Computer Science Department\\National Institute of
@@ -42,15 +42,16 @@
 	\begin{abstract}
 		In this paper we make a review of reported algorithms for computing rough set reducts and typical testors.
 		Under certain assumptions, computing the complete set of reducts and computing all the typical testors 
-		of an Information System can be seen as the same problem. We study the advantages of algorithms using
-		a simplified discernibility matrix and binary cumulative operations. Then expose a relationship between
-		the runtime of different strategies and the density of ones in the simplified binary discernibility matrix.
-		Based on this relationship we propose a new algorithms for computing all reducts. Finally, the proposed 
-		algorithm is evaluated over several UCI datasets.
+		of an Information System can be seen as the same problem. We expose the advantages of algorithms using
+		the simplified discernibility matrix and binary cumulative operations. Then we study the relationship
+		between the runtime of different strategies and the density of ones in the simplified binary 
+		discernibility matrix.
+		Based on this relationship we propose a new algorithm for computing all reducts. Finally, the performance
+		of the proposed algorithm is evaluated over several UCI datasets.
 	\end{abstract}
 	
 	\begin{keyword}
-		Rough Sets\sep Dimensionality Reduction\sep Reduct Computation.
+		Rough Sets\sep Typical Testor\sep Reduct Computation.
 	\end{keyword}
 
 	\maketitle
@@ -70,18 +71,18 @@
   One of the main concepts in RST is the notion of reduct, which is a minimal subset of attributes 
   preserving the discernibility capacity of the whole set of attributes \citep{Pawlak91}.  
   However, the main restriction in practical applications of RST is that computing all reducts of an information 
-  system has an exponential complexity \citep{Skowron92}. 
+  system is NP--hard \citep{Skowron92}. 
   
   Most of the work on reduct computation has been devoted to finding a single optimal reduct (having the minimum 
-  number of attributes) or a reduced number of reducts. Several heuristic approaches searches for a pseudo optimal
-  reduct using a determined measure \citep{Chouchoulas01,Ohrn00}. Some stochastic approaches including Genetic
+  number of attributes) or a limited number of reducts. Several heuristic approaches search for a pseudo optimal
+  reduct using some greedy strategy \citep{Chouchoulas01,Ohrn00}. Stochastic approaches including Genetic
   Algorithms \citep{Wroblewski95}, Ant Colony Optimization \citep{Jensen03,Chen10} and Particle Swarm Optimization 
-  \citep{Wang07} has been also reported. In this paper, on the other hand, we are focused on solving the problem
-  of computing all reducts.
+  \citep{Wang07} has been also reported in order to achieve better global optimizations. In this paper, on the
+  other hand, we are focused on solving the problem of computing all reducts.
   
 % Algoritmos para el cálculo de reductos
-  An earlier method for computating of all reducts in an Information System is presented in
-  \citep{Starzyk99,Starzyk00}.
+  An early method for computing of all reducts of an Information System was presented by \linebreak
+  \cite{Starzyk99,Starzyk00}.
   This is a divide and conquer approach. On each step, the absorption laws are applied over the incoming
   discernibility function to obtain a reduced set of clauses. Then, the strong equivalent attributes are 
   compressed, avoiding duplicated combinations. The most discerning attribute is selected and the problem 
@@ -168,22 +169,20 @@
   be addressed. First, BR is not included in their comparisons; and second, the evaluation cost for a candidate
   in YYC is high compared to that of previous algorithms. YYC verifications involve calculations of the 
   Hamming weight.
-  
-%TODO Discución sobre machine oriented vs clauses oriended algorithms
-  
+    
 % Utilidad de todos los reductos
   Although most algorithm for reduct computation search for a single reduct or a small subset of reducts, 
-  the complete set of reducts of information systems is useful in some recent applications. \cite{Xu2013}
-  developed a multi-objective cost-sensitive attribute reduction. First, they compute all reducts of an 
-  information system. Then, they separately calculate the money and time cost of every reduct. Finally, 
+  the complete set of reducts of an information systems is useful for some recent applications. \cite{Xu2013}
+  developed a multi-objective cost-sensitive attribute reduction. As a first step, they compute all reducts of 
+  the information system. Then, they separately calculate the money and time cost of every reduct. Finally, 
   the worst reducts are dismissed, leaving a Pareto optimal solution set. From this smaller set of reducts,
   a user can easily make a selection. On the other hand, \cite{Mukamakuza2014} developed three new algorithms
   for dynamic reducts computation. This first step in all the three approaches is the finding of all the 
-  reducts. Then, the complete set of reducts was filtered in order to obtain an optimum subset, from which 
-  dynamic reducts are computed. They show that this procedure improve the performance of dynamic reduct 
+  reducts. Then, the complete set of reducts is filtered in order to obtain an optimum subset, from which 
+  dynamic reducts are computed. They showed that this procedure improve the performance of dynamic reduct 
   computation algorithms.	
-  From Testor Theory, \cite{Torres2014} use informational weight to identify risk factors on transfusion 
-  related acute lung injury, and to establish an assessment for each variable.  Informational weight is 
+  From Testor Theory, \cite{Torres2014} used the informational weight to identify risk factors on transfusion 
+  related acute lung injury; and to establish an assessment for each variable.  Informational weight is 
   a percentage value indicating the presence of each variable in the whole set of typical testors. This is 
   a real life application for exacts algorithms computing the complete set of typical testors.	
 	
@@ -191,22 +190,25 @@
   Recently, \cite{chen2015} exposed the relation between reduct computation and the minimum vertex cover
   problem in graph theory. Given that both of these problems can be translated into the calculation of
   prime implicants of a Boolean function, they applied algorithms designed for reduct computation in the
-  solution of vertex cover problem. This unification opens a new spectrum of real-world applications for 
-  fast reduct computation algorithms. They stand that the vertex cover problem has been used in applications 
+  solution of the minimum vertex cover problem. This unification opens a new spectrum of real-world applications
+  for fast reduct computation algorithms. They stand that the vertex cover problem has been used in applications 
   such as crew scheduling, VLSI design, nurse scheduling and industrial machine assignments.
   The connexion with the problem of computing the prime implicants of a Boolean function, makes the fast 
-  algorithms computing all reducts relevant in other applications. For instance,\cite{Li2015} present 
+  algorithms computing all reducts relevant in other applications. For instance, \cite{Li2015} present 
   new technique for mining frequent patterns from the minimal disjunctive normal form.
 
 % descripción de la propuesta
-  Recent algorithms from Testor Theory are based on fast binary cumulative operations \citep{Sanchez10,Lias13}.
+  Recent algorithms from Testor Theory are based on fast binary cumulative operations \linebreak
+  \citep{Sanchez10,Lias13}.
   In this work, we show the advantages of this approach over Boolean clause oriented algorithms from rough
   set theory \citep{WangP07,Jensen14}. Following this idea, we propose a new algorithm tackling the inefficient
   behaviour of CT\_EXT in some cases \citep{Alba14}, by adding the gap elimination. In relation to fast-BR, our 
   proposed algorithm evaluates more candidates in most cases, but the evaluation cost is lower. Then we show 
   that for those dataset with a low density of ones in its simplified discernibility matrix, our algorithm is 
-  faster than the other alternatives. Experiments are carried out over several UCI datasets \citep{Bache13} in 
-  order to evaluate our proposal.
+  faster than the other alternatives. The main contribution of this work is the study of the relation between
+  the algorithms performance and the density of ones in the simplified binary discernibility matrix. The later
+  is a property that can be verified a priori for selecting the fastest algorithm for the given dataset.
+  Experiments are carried out over several UCI datasets \citep{Bache13} in order to evaluate our proposal.
   
   
 
