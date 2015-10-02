@@ -68,7 +68,7 @@
   When data is collected or recorded, every single aspect (attribute) of the object under study is considered 
   to have a complete representation and to ensure that no potentially useful information is lost.
   As a result, information systems are usually characterized by a large number of attributes,
-  degrading the performance of machine learning tools \citep{Parthalain08}.
+  however, this degrades the performance of machine learning tools \citep{Parthalain08}.
   One of the main concepts in RST is the notion of reduct, which is a minimal subset of attributes 
   preserving the discernibility capacity of the whole set of attributes \citep{Pawlak91}.  
   However, the main restriction in practical applications of RST is that computing all reducts of an information 
@@ -76,10 +76,10 @@
   
   Most of the work on reduct computation has been devoted to finding a single optimal reduct (having the minimum 
   number of attributes) or a reduced number of reducts. Several heuristic approaches searches for a pseudo optimal
-  reduct using a determined measure \citep{Chouchoulas01,Ohrn00}. Some stochastic approaches including Genetic
-  Algorithms \citep{Wroblewski95}, Ant Colony Optimization \citep{Jensen03,Chen10} and Particle Swarm Optimization 
-  \citep{Wang07} has been also reported. In this paper, on the other hand, we are focused on solving the problem
-  of computing all reducts.
+  reduct using a determined measure \citep{Zheng14,Liang2014}. Some stochastic approaches including Genetic
+  Algorithms \citep{Feng2012,Hedar2015}, Ant Colony Optimization \citep{Jensen03,Chebrolu2015} and Particle Swarm 
+  Optimization \citep{Chen15,Luan2015} have been also reported. In this paper, on the other hand, we are focused 
+  on solving the problem of computing all reducts.
   
 % Algoritmos para el cálculo de reductos
   An earlier method for computating of all reducts in an Information System is presented in
@@ -111,7 +111,7 @@
   the dataset, which implies recurrent dynamic memory allocation and huge data manipulation.
   \cite{Chen2012} proposed a new strategy for obtaining the simplified discernibility matrix with a reduced
   computational complexity. They introduced the concept of sample pair selection, and use it instead of computing 
-  and absorbing the binary discernibility matrix. Finally, some algorithms for computing all reducts are presented
+  and absorbing the binary discernibility matrix. Finally, new algorithms for computing all reducts are presented
   and evaluated in this work. Unfortunately, they do not show a significant performance improvement by using their
   proposed strategy. Nevertheless, they experiments support that algorithms working over the simplified 
   discernibility matrix are faster than those working on larger representations of the dataset, in most cases.
@@ -120,17 +120,17 @@
   \citep{Jensen14} (RSAR-SAT) may be modified in order to obtain all reducts in an Information System. 
   The method introduced in this work reduces the problem of finding a reduct from the discernibility function 
   to the SAT problem \citep{Davis62}. The boolean function generated in this way is always satisfied since the
-  complete set of attributes is a trivial solution. This algorithms resembles that presented in \citep{Starzyk99}
+  complete set of attributes is a trivial solution. This algorithm resembles that one presented in \citep{Starzyk99}
   but introduces the elimination of unit clauses at each recursive call. Since it searches for one shortest
   reduct, there is no need for a final filtering stage for super-reduct elimination.
-    
+     	
 % Relación con los testores
   Recently the RST reducts have been related to the typical testors (TT) from the logical combinatorial approach 
-  to pattern recognition \citep{Lazo15}. Testor Theory was created by \cite{Cheguis55} as a tool for analysis of 
-  problems connected with control and diagnosis of faults in circuits. 
-  Testor Theory can be used for feature selection as shown in \citep{Ruiz08} and \citep{Martinez01}. 
-  Algorithms for typical testors computation can be applied to reduct computation due to the similarity between
-  these two concepts. 
+  to pattern recognition \citep{Lazo15}. Testor Theory was originally created by \cite{Cheguis55} as a tool for 
+  analysis of problems connected with control and diagnosis of faults in circuits. 
+  However, Testor Theory was extended in order to be used for feature selection as shown in \citep{Ruiz08} and 
+  \citep{Martinez01}. Algorithms for typical testors computation can be applied to reduct computation due to the 
+  similarity between these two concepts. 
   
     One of the first algorithms designed to overcome the exponential complexity (regarding
   the number of attributes) of the problem of finding all TT, was 
@@ -149,8 +149,8 @@
   behind LEX are a new traversing order of candidates (which resembles the
   lexicographical order in which string characters are compared) and the concept of \emph{gap}. In LEX,
   the typical (irreducible) condition is verified first and only for those potentially TT, the testor 
-  condition is checked. The \emph{gap} elimination avoids the evaluation of any subset of a candidate, given 
-  that it is a TT (or a not testor) including the last attribute in the dataset.
+  condition is checked. Given a TT (or a not testor) including the last attribute in the dataset, the \emph{gap} 
+  elimination avoids the evaluation of any subset of this candidate.
   \cite{Sanchez07} proposed the CT\_EXT algorithm for computing all
   TT. Following a traversing order similar to that in LEX, this algorithm searches for
   testors without verifying the typical condition. In this way, a larger number of candidates are 
@@ -174,15 +174,16 @@
 %TODO Discución sobre machine oriented vs clauses oriended algorithms
   
 % Utilidad de todos los reductos
-  Although most algorithm for reduct computation search for a single reduct or a small subset of reducts, 
+  Although most algorithms for reduct computation search for a single reduct or a small subset of reducts, 
   the complete set of reducts of information systems is useful in some recent applications. \cite{Xu2013}
   developed a multi-objective cost-sensitive attribute reduction. First, they compute all reducts of an 
-  information system. Then, they separately calculate the money and time cost of every reduct. Finally, 
-  the worst reducts are dismissed, leaving a Pareto optimal solution set. From this smaller set of reducts,
-  a user can easily make a selection. On the other hand, \cite{Mukamakuza2014} developed three new algorithms
-  for dynamic reducts computation. This first step in all the three approaches is the finding of all the 
+  information system. Then, they separately calculate the cost, in terms of time and money, of every reduct. 
+  Finally, the worst reducts are dismissed, leaving a Pareto optimal solution set. From this smaller set of 
+  reducts, a user can easily select an optimum subset. On the other hand, \cite{Mukamakuza2014} developed 
+  three new algorithms for dynamic reducts computation. 
+  This first step in all the three algorithms is the finding of all the 
   reducts. Then, the complete set of reducts was filtered in order to obtain an optimum subset, from which 
-  dynamic reducts are computed. They show that this procedure improve the performance of dynamic reduct 
+  dynamic reducts are computed. They show that this procedure improves the performance of dynamic reduct 
   computation algorithms.	
   From Testor Theory, \cite{Torres2014} use informational weight to identify risk factors on transfusion 
   related acute lung injury, and to establish an assessment for each variable.  Informational weight is 
