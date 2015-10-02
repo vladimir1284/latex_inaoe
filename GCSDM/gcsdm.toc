@@ -1,0 +1,16 @@
+\contentsline {section}{\numberline {1}Introduction}{3}{section.1}
+\contentsline {section}{\numberline {2}Basic Concepts}{3}{section.2}
+\contentsline {subsection}{\numberline {2.1}Information System}{4}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Positive Region}{4}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}Reducts and Core}{4}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.4}Discernibility Matrix and Discernibility Function}{5}{subsection.2.4}
+\contentsline {subsection}{\numberline {2.5}Binary Discernibility Matrix}{6}{subsection.2.5}
+\contentsline {subsection}{\numberline {2.6}Simplified Discernibility Matrix}{6}{subsection.2.6}
+\contentsline {subsection}{\numberline {2.7}Algorithms for all Reducts and all Typical Testors Computation}{7}{subsection.2.7}
+\contentsline {subsection}{\numberline {2.8}Concluding Remarks}{8}{subsection.2.8}
+\contentsline {subsection}{\numberline {2.9}Parallel Accelerations}{8}{subsection.2.9}
+\contentsline {subsection}{\numberline {2.10}A New Algorithm for Reduct Computation Based on the Gap Elimination and Contribution}{10}{subsection.2.10}
+\contentsline {subsubsection}{\numberline {2.10.1}Concepts for GCSDM}{10}{subsubsection.2.10.1}
+\contentsline {subsubsection}{\numberline {2.10.2}The GCSDM Algorithm}{12}{subsubsection.2.10.2}
+\contentsline {subsubsection}{\numberline {2.10.3}Evaluation and Discussion}{14}{subsubsection.2.10.3}
+\contentsline {section}{\numberline {3}Conclusions}{19}{section.3}
