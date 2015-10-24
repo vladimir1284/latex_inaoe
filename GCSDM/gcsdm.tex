@@ -88,8 +88,7 @@
   \citep{Jensen14}, operates over the binary discernibility function, which leads to inefficient data 
   representations. Then, a faster algorithm based on several properties for pruning the search space is proposed
   by \cite{WangP07}. This is a very elaborated algorithm, its main drawback is that it works directly
-  over the dataset instead of the discernibility matrix. 
-  
+  over the dataset instead of the discernibility matrix.   
      	
 % Relación con los testores
   RST reducts have been related to the typical testors (TT) from the logical combinatorial approach 
@@ -131,8 +130,7 @@
   for fast reduct computation algorithms. They stood that the vertex cover problem has been used in applications 
   such as crew scheduling, VLSI design, nurse scheduling and industrial machine assignments.
   The connexion with the problem of computing the prime implicants of a Boolean function, makes fast 
-  algorithms for computing all reducts relevant in other applications. For instance, \cite{Li2015} presented
-  a new technique for mining frequent patterns from the minimal disjunctive normal form.
+  algorithms for computing all reducts relevant in other applications. For instance, \cite{Li2015} presented a new technique for mining frequent patterns from the minimal disjunctive normal form.
 
 % descripción de la propuesta
 %  Latest algorithms from Testor Theory are based on fast binary cumulative operations \linebreak
@@ -149,7 +147,7 @@
   RST is based on the assumption that every object an the universe of discourse is described, through a 
   set of attributes, by some information associated to it. This information constitutes the basis for the
   classification of unseen objects. RST motto is \textit{Let the data speak for themselves} \citep{Tiwari14}.
-  
+
   From the RST point of view, two objects are indistinguishable (indiscernible) if they have an equivalent 
   value for each attribute in their description. Indiscernibility relations arising this way constitute the
   mathematical foundations of RST. 
@@ -164,7 +162,6 @@
   called the \textit{value set} of $A$. Attributes in $A$ are further divided into condition attributes $C$ and 
   decision attributes $D$ such that $A=C \cup D$ and $C \cap D =\emptyset$. 
   Table~\ref{tab_IS} shows an example of an IS.
-  
   
  \begin{table}[htb]
 		\caption{An Information System.} \label{tab_IS}
@@ -183,7 +180,6 @@
  	\end{tabular}             
  \end{table}
  
-   
   \textit{Decision attributes} determine to which class an object belongs to. In the IS of
   table~\ref{tab_IS}, $d$ is the decision attribute; this is a two-class system. \textit{Condition attributes} 
   do not absolutely determine the class but help to decide to which class an object belongs to. In supervised 
@@ -195,8 +191,7 @@
 \subsection{Positive Region}\label{subsect_Pos}
   Decision attributes induce a partition of the universe $U$ into equivalence classes 
   (\textit{decision classes}). Since we will be trying to associate a decision class to an object, 
-  based on the attributes belonging to $B \subseteq C$, we are interested in those 
-  $B-classes$ (classes induced by $B$) which correspond to classes induced by $D$. 
+  based on the attributes belonging to $B \subseteq C$, we are interested in those $B-classes$ (classes induced by $B$) which correspond to classes induced by $D$. 
   This idea leads to the notion of the  \textit{positive region of the decision}. The set $POS_B(D)$, 
   called the \textit{B-positive region of D}, is defined as the set of all objects in $U$ such 
   that all the indistinguishable objects (under the knowledge in $B$) belong to the same class induced 
@@ -319,7 +314,7 @@
 		$x_8,x_6$ & 1 & 0 & 0 & 0 & 0 & 1 & 0 
  	\end{tabular}             
   \end{table}
-  
+
 \subsection{Simplified Binary Discernibility Matrix}
   The \textit{Simplified Binary Discernibility Matrix} (SBDM) is a reduced version of the binary discernibility
   matrix after applying absorption laws. Reducts of the information system, may be computed from this reduced matrix \citep{Yao09}. An equivalent concept exists in Testor Theory, called \textit{Basic Matrix}. Table~\ref{tab:SBDM1} shows the SBDM from the binary discernibility matrix in Table~\ref{tab_BDM}.
@@ -339,7 +334,6 @@
  \end{table}  
  
 %TODO Hacer la referencia a la salvedad para usar algoritmos de testores para reductos
-
  
 \section{Related Work}\label{relatedWork}
 % Algoritmos para el cálculo de reductos
@@ -410,8 +404,7 @@
 		having only zeros).
 	\end{definition}
 	
-	The following definition constitutes the key concept in CT\_EXT \citep{Sanchez07} and our proposed algorithm,
-	and it is also an important component of the algorithms BR \citep{Lias09} and RGonCRS
+	The following definition constitutes the key concept in CT\_EXT \citep{Sanchez07} and our proposed algorithm, and it is also an important component of the algorithms BR \citep{Lias09} and RGonCRS
 	\citep{WangP07}.
 		
 	\begin{definition}\label{def:contrib}
@@ -438,8 +431,7 @@
 		L \wedge j_{q+1} \neq j_q+1)$.
 	\end{definition}
 	
-	In other words, the gap is the attribute in $L$ with the highest index such that its consecutive attribute in 
-	$L$ is not its consecutive attribute in $SBDM$.
+	In other words, the gap is the attribute in $L$ with the highest index such that its consecutive attribute in $L$ is not its consecutive attribute in $SBDM$.
 	
 	Lets take for example the simplified discernibility matrix from Table~\ref{tab:SBDM1}, then:
 	$$\begin{array}{ll}
@@ -448,8 +440,8 @@
 	\lbrace c_0,c_1,c_2,c_4,c_6\rbrace 	& \mathrm{the~gap~is~} c_4\\
 	\lbrace c_0,c_1,c_4,c_5,c_6\rbrace 	& \mathrm{the~gap~is~} c_1
 	\end{array}$$
-	
-	
+
+
 	The pruning property of gap elimination is supported by the proposition~\ref{prop:gap} \citep{Santiesteban03}. In order to clarify	the basis of the gap elimination, we show the lexicographical traversing order for a $SBDM$ with three attributes (columns):
 	
 	\{$c_0$\}, \{$c_0,c_1$\}, \{$c_0,c_1,c_2$\}, \{$c_0,c_2$\}, \{$c_1$\}, \{$c_1,c_2$\}, \{$c_2$\}
@@ -581,8 +573,7 @@
 	  		\EndIf
 	  	\EndIf
 	  	\If {$c=$LastAttribute} \Comment{Last column of $SBDM$ is reached}\label{line:cg}
-	  		\If {$reduct$ \textbf{or} \textbf{not} $superReduct$} \Comment{Eliminate the 
-	  																			gap}\label{line:gap}
+	  		\If {$reduct$ \textbf{or} \textbf{not} $superReduct$} \Comment{Eliminate the gap}\label{line:gap}
 	  			\State $last \Leftarrow c$
 	  			\While {$\mathrm{getLast}(B)=(last-1)$}
 	  				\State $last \Leftarrow \mathrm{getLast}(B)$
@@ -609,7 +600,7 @@
 	  \EndWhile 
 	\end{algorithmic}
 	\end{algorithm}
-	
+
 		The pseudocode for GCreduct is shown in Algorithm~\ref{alg:GCreduct}. The algorithm starts with an empty subset $B$ and the position of the first attribute in $c$\footnote{Here we abuse of notation by using $c$ for both an attribute and a number denoting its position in $SBDM$}. Then we assign a null vector to the cumulative mask ($cm_B$) for $B=\emptyset$ or retrieve its calculated value, from $CM$, for $B\neq \emptyset$ (lines~\ref{line:emptyB}-\ref{line:notEmpty}). $CM$ stores the calculated cumulative masks, indexed by the last attribute in $B$. The function getLast$(B)$ returns the last attribute in $B$.
 		In the line~\ref{line:updateCM}, we update the cumulative mask and in
 		the line~\ref{line:contrib} we evaluate the contribution of $c$ to $B$. If the current attribute $c$ contributes, we evaluate the super--reduct condition on $B\cup \lbrace c\rbrace$ (line~\ref{line:superReduct}). For super--reducts, we use the proposition~\ref{prop:cumul} to compute the exclusion mask $em_{B\cup \lbrace c\rbrace}$ (lines~\ref{line:em}-\ref{line:emEnd}) and we verify the irreducible condition (lines~\ref{line:reduct}-\ref{line:reductEnd}) by means of the proposition~\ref{prop:exclude}. At this point, the candidate evaluation is finished.
@@ -650,7 +641,6 @@
     		10 & \{$c_0,c_1,c_4$\}		& 5 & \{$c_0,c_1,c_4,c_5$\}		& True & False &   & Add a new attribute.\\
     		11 & \{$c_0,c_1,c_4,c_5$\}	& 6 & \{$c_0,c_1,c_4,c_5,c_6$\} 	& True & True & True & Eliminate the gap ($c_1$).\\
     		12 & \{$c_0$\} 				& 2 & \{$c_0,c_2$\}				& True & False &   & Add a new attribute.\\
-    		13 & \{$c_0,c_2$\} 			& 3 & \{$c_0,c_2,c_3$\}			& True & False &   & Add a new attribute.\\
     		14 & \{$c_0,c_2,c_3$\} 		& 4 & \{$c_0,c_2,c_3,c_4$\}		& False &   &   & Remove $c_4$.\\
     		15 & \{$c_0,c_2,c_3$\}		& 5 & \{$c_0,c_2,c_3,c_5$\}		& True & False &   & Add a new attribute.\\
     		16 & \{$c_0,c_2,c_3,c_5$\}	& 6 & \{$c_0,c_2,c_3,c_5,c_6$\} 	& True & True & True & Eliminate the gap ($c_3$).\\
