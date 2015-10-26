@@ -136,7 +136,7 @@
 %  Latest algorithms from Testor Theory are based on fast binary cumulative operations \linebreak
 %  \citep{Sanchez10,Lias13}.
   In this work, we show the advantages of fast binary cumulative operations \citep{Sanchez10,Lias13} over other 
-  approaches from rough set theory \citep{WangP07,Jensen14}. Following this idea, we propose a new algorithm, by using the pruning property of gap elimination. In relation to fast-BR, which is one of the latest and fastest reported algorithms; our proposed algorithm evaluates more candidates in most cases, but the evaluation cost is lower, as it will be shown in our experiments. Then we show that our algorithm performs faster than all other recent reported alternatives in
+  approaches from rough set theory \citep{WangP07,Jensen14}. Following this idea, we propose a new algorithm, by using the pruning property of gap elimination. In relation to fast--BR, which is one of the latest and fastest reported algorithms; our proposed algorithm evaluates more candidates in most cases, but the evaluation cost is lower, as it will be shown in our experiments. Then we show that our algorithm performs faster than all other recent reported alternatives in
   many cases. 
   The main contribution of this work is the design and evaluation of a new algorithm for reduct computation,
   based on  the pruning properties of gap elimination and attribute contribution. In order to evaluate our proposal, experiments are carried out over several standard datasets \citep{Bache13} and synthetic data.
@@ -369,8 +369,8 @@
   
   \cite{Sanchez10} presented a cumulative procedure for the CT\_EXT algorithm. This fast-CT\_EXT implementation
   drastically reduces the runtime for most datasets at no extra cost. In \citep{Lias13} the pruning property of
-  gap elimination and column reduction are added to BR. This fast-BR algorithm is, no doubt, the one 
-  evaluating the minimum number of candidates in the state of the art. The main drawback of fast-BR and 
+  gap elimination and column reduction are added to BR. This fast--BR algorithm is, no doubt, the one 
+  evaluating the minimum number of candidates in the state of the art. The main drawback of fast--BR and 
   BR is, as in LEX, the high cost of evaluating the typical condition for each candidate.
   
   Recently, a new internal scale typical testor--finding algorithm (YYC) was proposed by \cite{Alba14}. 
@@ -623,7 +623,7 @@
 	
 	\begin{table}[!htb]
 		\caption{Execution of GCreduct over the SBDM of Table~\ref{tab:SSBDM1}.}\label{tab:sample_GCreduct}
-      	\centering
+      	\centering \scriptsize
     		\begin{tabular}{|c|l|c|l|c|c|c|l|}
     		\hline
     		Iter & \multicolumn{1}{c|}{$B$} & $c$ & \multicolumn{1}{c|}{$B\cup \lbrace c\rbrace$} 
@@ -653,7 +653,7 @@
     		23 & \{$c_0,c_3,c_4,c_5$\}	& 6 & \{$c_0,c_3,c_4,c_5,c_6$\} 	& True & True & True & Eliminate the gap ($c_0$).\\
     		\hline
     		24 & \{\} 					& 1 & \{$c_1$\} 					& 
-    		\multicolumn{4}{l|}{\scriptsize Algorithm finishes because $c_1$ has a 0 in the first row of $SBDM$ (line~\ref{line:done})}\\
+    		\multicolumn{4}{p{5cm}|}{Algorithm finishes because $c_1$ has a 0 in the first row of $SBDM$ (line~\ref{line:done})}\\
     		\hline
 		\end{tabular}
 	\end{table}
@@ -665,55 +665,58 @@
 %
 \section{Evaluation and Discussion}\label{evaluation}
 
-%	In order to evaluate the performance of GCreduct, we present a comparative analysis with different algorithms over synthetically generated binary simplified discernibility matrices ($SBDMs$). For this experiment, we selected CT\_EXT and fastBR, reported in the literature as the fastest algorithms for typical testor computation.
-%	
-%	This experiment was done over 57 randomly generated $SBDMs$. The density of 1's in the $SBDM$ and the standard deviation of the density of 1's in the rows of the $SBDM$ are shown in the Figures~\ref{fig:density} and~\ref{fig:std} respectively. The selected algorithms (CT\_EXT, fastBR and GCreduct) were applied over every matrix. 
-%	Each combination was executed three times and the runtime is estimated using the fastest execution. This
-%	process ensures a 95\% confidence interval according to \cite{Haveraaen01}. The execution order was randomized to control the runtime bias due to the operating system load. All experiments were run on a G1620 Intel processor at 2.7GHz with 2GB in RAM over a GNU/Linux operating system.
-%	
-%	%TODO Generador de filas
-%	A random number generator was used to generate rows, which are filtered for the minimum and maximum number of 1's allowed. In this way, the desired density is computed as the mean number of 1's in a row, divided by the number of attributes (columns). Keeping constant this central value, we can modify at the same time the maximum and minimum number of	allowed 1's in a row to control the standard deviation. For each desired pair of values (density and standard deviation), three different matrices were generated. A total of 57 matrices with 30 columns and 2000 rows were generated.
-%			
+\subsection{Evaluation Over Synthetic Data}
+	In order to evaluate the performance of GCreduct as a function of some properties of the $SBDMs$, we present a comparative analysis with CT\_EXT and fast--BR over synthetically generated binary simplified discernibility matrices. We selected these algorithms because they showed a better performance in our previous experiments. This time, we will use the Java implementation\footnote{We used the original implementation of these algorithms from their authors} of the three algorithms, since they are at least one order of magnitude faster than their MatLab implementations.
+	
+	This experiment was done over 500 randomly generated $SBDMs$ with 30 columns and 2000 rows. The two properties of the $SBDM$ that we explore with these matrices are:
+	\begin{description}
+		\item[The density of 1's:] The number of ones divided by the number of cells of the $SBDMs$.
+		\item[The standard deviation of 1's in the rows:] The standard deviation of the density of 1's calculated for each row.
+	\end{description}
+	The density of 1's is homogeneously distributed among the 500 $SBDMs$, in the range (0.15--0.80). The selected algorithms (CT\_EXT, fast--BR and GCreduct) were applied over every matrix. Each combination was executed three times and the runtime is estimated using the fastest execution. This process ensures a 95\% confidence interval according to \cite{Haveraaen01}. The execution order was randomized to control the runtime bias due to the operating system load. All experiments were run on a Core i7-5820K Intel processor at 3.30GHz, with 32GB in RAM, over a GNU/Linux operating system.
+	
+	Rows were generated with a random number of 1's between the minimum and maximum allowed. New rows are added if they form a $SBDM$ with those rows already in the matrix; otherwise, they are discarded. In this way, the desired density is computed as the mean number of 1's in a row, divided by the number of attributes (columns). Keeping constant this central value, we can modify at the same time the maximum and minimum number of	allowed 1's in a row to control the standard deviation. For each desired pair of values (density and standard deviation), several different matrices were generated. 
+			
+	\begin{figure}[htb]
+		\begin{center}
+			\includegraphics[height=8cm]{runtime_density.eps}
+		\end{center}
+		\caption{Fastest algorithm runtime vs. density of 1's for all $SBDMs$ under study.}
+		\label{fig:scattDensity}
+	\end{figure}	
+
+	Figure~\ref{fig:scattDensity} shows a scatter graph of the runtime as a function of 
+	the density of 1's in the $SBDM$. The runtime is taken from the fastest algorithm for 
+	each case. The dots are grouped by the best performing (fastest) algorithm for that particular 
+	matrix as shown in the legend of the figure. There can be identified three distinct groups of 
+	matrices by their density:
+	\begin{itemize}
+	\item Low density matrices: density $<$ 0.35.
+	\item Medium density matrices: 0.35 $<$ density $<$ 0.7.
+	\item High density matrices: density $>$ 0.7.
+	\end{itemize}
+	The fastest algorithm for low density matrices is GCreduct, fast--BR was the fastest for medium, and the three algorithms presented a similar performance for high	density matrices. The fact that high density $SBDMs$ do not constitute a complex computational task for reduct computation \citep{Rojas12} is clearly visible in Figure~\ref{fig:scattDensity}. 
+
 %	\begin{figure}[htb]
-%		\begin{center}
-%			\includegraphics[height=8cm]{scatter_density.eps}
-%		\end{center}
-%		\caption{Fastest algorithm runtime vs. density of 1's for all $SBDMs$ under study.}
-%		\label{fig:scattDensity}
+%	    \begin{center}
+%	       \includegraphics[height=8cm]{scatter_std.eps}
+%	    \end{center}
+%	\caption{Fastest algorithm runtime vs. standard deviation of density in rows for 
+%			 all $SBDMs$ under study.}
+%	\label{fig:scattStd}
 %	\end{figure}	
-%
-%	Figure~\ref{fig:scattDensity} shows a scatter graph of the runtime as a function of 
-%	the density of 1's in the $SBDM$. The runtime is taken from the fastest algorithm for 
-%	each case. The dots are grouped by the best performing (fastest) algorithm for that particular 
-%	matrix as shown in the legend of the figure. There can be identified three distinct groups of 
-%	matrices by their density:
-%	\begin{itemize}
-%	\item Low density matrices: density $<$ 0.3.
-%	\item Medium density matrices: 0.3 $<$ density $<$ 0.7.
-%	\item High density matrices: density $>$ 0.7.
-%	\end{itemize}
-%	The fastest algorithm for low density matrices is GCreduct, fastBR was the fastest for medium, and the three algorithms presented a similar performance for high	density matrices. The fact that high density $SBDMs$ do not constitute a complex computational task for reduct computation \citep{Rojas12} is clearly visible in Figure~\ref{fig:scattDensity}. 
-%
-%%	\begin{figure}[htb]
-%%	    \begin{center}
-%%	       \includegraphics[height=8cm]{scatter_std.eps}
-%%	    \end{center}
-%%	\caption{Fastest algorithm runtime vs. standard deviation of density in rows for 
-%%			 all $SBDMs$ under study.}
-%%	\label{fig:scattStd}
-%%	\end{figure}	
-%	
-%	Since all matrices for this experiment have the same dimensions, we can say that low density
-%	matrices showed a relatively high complexity. For this reason, the apparent fact that GCreduct outperforms 
-%	the other algorithms for this kind of matrices, deserves special attention. 
-%	
+	
+	Since all matrices for this experiment have the same dimensions, we can say that low density
+	matrices showed a relatively high complexity. For this reason, the apparent fact that GCreduct outperforms 
+	the other algorithms for this kind of matrices, deserves special attention. 
+	
 %	Figure~\ref{fig:scattStd} shows a scatter graph of the runtime as a function of 
 %	the standard deviation of the density of 1's in the rows of the $SBDM$. As it can be seen, there is no
 %	clear relationship between the runtime of the fastest algorithm and the standard deviation of density.
 %	Notice (combining information from Figures~\ref{fig:scattDensity} and~\ref{fig:scattStd}) that both, 
 %	low and high density matrices are related to low values of the standard deviation. In fact, it is not 
 %	possible to increase the standard deviation in the extreme values of density.
-%	
+	
 %	Figure~\ref{fig:TimeReducts} shows a scatter graph of the runtime as a function of the 
 %	number of reducts in the $SBDM$. There can be seen a positive correlation between these two variables.
 %	This is a natural trend, since the time complexity is at least as high as the space 
@@ -727,111 +730,71 @@
 %	\caption{Fastest algorithm runtime vs. the number of reducts.}
 %	\label{fig:TimeReducts}
 %	\end{figure}
+	\begin{figure}[htb]
+	    \begin{center}
+	       \includegraphics[height=8cm]{CT_gcreduct.eps}
+	    \end{center}
+	\caption{Runtime ratio of CT\_EXT to GCreduct as a function of density.}
+	\label{fig:CTvsGAP}
+	\end{figure}		
+	
+	Figure~\ref{fig:CTvsGAP} shows a scatter graph of the runtime ratio of CT\_EXT to GCreduct for the $SBDMs$ used in	this experiment. GCreduct clearly outperforms CT\_EXT for matrices with densities under 0.4. This conclusion is not so clear for the rest of matrices. For this reason, we propose a one-sided t-test to evaluate the performance of GCreduct over CT\_EXT for the 313 $SBDMs$ with density over 0.4. Our \textbf{null hypothesis} is: \emph{there is no difference between the GCreduct and CT\_EXT runtime for $SBDMs$ with density over 0.4}. As \textbf{alternative hypothesis} we have: \emph{the runtime of CT\_EXT is higher than the runtime of GCreduct for $SBDMs$ with density over 0.4}. The output from the R\footnote{http://www.r-project.org} software (Figure~\ref{fig:R_GCreduct}) supports the alternative hypothesis beyond a 95\% confidence interval. We may conclude from this experiment that GCreduct significantly outperforms CT\_EXT for all $SBDMs$ used.
+	
+	\begin{figure}
+		\qquad{}	Paired one-sided t-test\\
+
+		data:  CT\_EXT runtime and GCreduct runtime\\
+		t = 4.9303, df = 312, p-value = 6.683e-07\\
+		alternative hypothesis: true difference in means is greater than 0\\
+		95 percent confidence interval:\\
+		 1825.268ms  \qquad{}  Inf\\
+		sample estimates:\\
+		mean of the differences \\
+		 \qquad{}    2743.18ms
+		 
+		\centering
+	  	\caption{R output for the t-test of mean CT\_EXT and GCreduct runtime.}
+	  	\label{fig:R_GCreduct}
+	  	
+	\end{figure}
+		\begin{figure}[htb]
+			\begin{center}
+				\includegraphics[height=8cm]{BR_gcreduct.eps}
+			\end{center}
+			\caption{Runtime ratio of fast--BR to GCreduct as a function of density.}
+			\label{fig:BRvsGAP}	
+		\end{figure}
+		
+	Figure~\ref{fig:BRvsGAP} shows a scatter graph of the runtime ratio of fast--BR to GCreduct for the $SBDMs$ used in	this experiment. There is a well defined line delimiting those $SBDMs$ for which GCreduct is faster than fast--BR (densities under 0.35). Notice that the same can be observed for higher density $SBDMs$ but the runtime for these matrices is very low (Figure~\ref{fig:scattDensity}). In order to explain this behavior we must go deeply into the main difference between fast--BR and GCreduct. In GCreduct we compute the exclusion mask and evaluate the proposition~\ref{prop:exclude} only for those candidates proven as super-reducts, in order to verify them as reducts. In fast--BR, on the other hand, the proposition~\ref{prop:exclude} is evaluated for each candidate with a contributing attribute. As a result, fast--BR evaluates less candidates than GCreduct but at a higher cost per candidate. The attribute exclusion occurs when there is at least one column in the sub-matrix of $SBDM$, considering only the attributes in the current candidate, that can be removed without increasing the number of zero rows in this sub-matrix. The exclusion is more frequent in matrices with a higher density of 1's, as it can be inferred from  Figure~\ref{fig:BRvsGAP}. 
+	
 %	\begin{figure}[htb]
 %	    \begin{center}
-%	       \includegraphics[height=8cm]{scatter_CTvsGAP.eps}
-%	    \end{center}
-%	\caption{CT\_EXT runtime vs. GCreduct runtime.}
-%	\label{fig:CTvsGAP}
-%	\end{figure}		
-%	
-%	Figure~\ref{fig:CTvsGAP} shows a scatter graph of the runtime of CT\_EXT vs. GCreduct for the $SBDMs$ used in
-%	this experiment. Although GCreduct outperforms CT\_EXT in most cases. Based on the evidence of
-%	Figure~\ref{fig:CTvsGAP}, we proposed a one-sided t-test to evaluate the overall performance of GCreduct over
-%	CT\_EXT. Our \textbf{null hypothesis} is: \emph{there is no difference between the GCreduct and CT\_EXT runtime}.
-%	As \textbf{alternative hypothesis} we have: \emph{the runtime of CT\_EXT is higher than the runtime of GCreduct}.
-%	The output from the R software (Figure~\ref{fig:R_GCreduct}) supports the alternative hypothesis beyond a 95\%
-%	confidence interval. 
-%	
-%	\begin{figure}
-%		\qquad{}	Paired one-sided t-test\\
-%
-%		data:  CT\_EXT runtime and GCreduct runtime\\
-%		t = 3.3, df = 56, p-value = 0.0008428\\
-%		alternative hypothesis: true difference in means is greater than 0\\
-%		95 percent confidence interval:\\
-%		 6976.147ms  \qquad{}  Inf\\
-%		sample estimates:\\
-%		mean of the differences \\
-%		 \qquad{}    14145.54ms
-%		 
-%		\centering
-%	  	\caption{R output for the t-test of mean CT\_EXT and GCreduct runtime.}
-%	  	\label{fig:R_GCreduct}
-%	\end{figure}
-%	
-%	In order to evaluate the performance improvement of GCreduct over fastBR, which is the fastest algorithm 
-%	reported in the literature, we present a new experiment. A total 	of 83 low density matrices, with 30 
-%	columns, was generated using the same procedure above described. This time, we generated $SBDMs$ with 1000 
-%	rows. We evaluated the runtime of reduct computation over all matrices using fastBR and GCreduct. 
-%	Again we ran three execution of each possible combination in a randomized experiment.
-%	
-%	Figure~\ref{fig:runtime_low} shows the runtime as a function of the density of 1's in the $SBDM$.
-%	There can be seen two interesting facts. First, there is a well defined
-%	line delimiting those $SBDMs$ for which GCreduct is faster than fastBR (densities under 0.3). Second, the
-%	runtime of GCreduct increases monotonically with the increase of the density of 1's in the $SBDM$.
-%	
-%	\begin{figure}[htb]
-%	    \begin{center}
-%	       \includegraphics[height=8cm]{runtimeVSdensity_low.eps}
+%	       %\includegraphics[height=8cm]{runtimeVSdensity_low.eps}
 %	    \end{center}
 %	\caption{Fastest algorithm runtime vs. density of 1's for all $SBDMs$ under study.}
 %	\label{fig:runtime_low}
 %	\end{figure}
-%	\begin{figure}[htb]
-%	    \begin{center}
-%	       \includegraphics[height=8cm]{rate_runtime.eps}
-%	    \end{center}
-%	\caption{fastBR runtime over GCreduct runtime  vs. density of 1's for all $SBDMs$ under study.}
-%	\label{fig:BRvsGAP}	
-%	\end{figure}	
-%	
-%	In Figure~\ref{fig:BRvsGAP} we show the runtime rate between fastBR and GCreduct; where values above
-%	1 mean a runtime improvement of GCreduct over fastBR. For lower densities we have up to two orders of 
-%	magnitude rate.
-%	We found an exponential relationship between this rate and the density of the $SBDM$. Notice that the 
-%	vertical axis in Figure~\ref{fig:BRvsGAP} is logarithmic.
-%	
-%	In order to explain this behaviour we must go deeply into the main difference between fastBR and GCreduct. 
-%	In GCreduct we compute the exclusion mask and evaluate the proposition~\ref{prop:exclude} only for those
-%	candidates proven as super-reducts, in order to verify them as reducts. In fastBR, on the other hand,
-%	the proposition~\ref{prop:exclude} is evaluated for each contributing candidate. As a result, fastBR
-%	evaluates less candidates than GCreduct but at a higher cost per candidate. The attribute exclusion
-%	occurs when there is at least one column, in the sub-matrix of $SBDM$ considering only the attributes in the 
-%	current candidate, that can be removed without increasing the number of zero rows in this sub-matrix.
-%	The exclusion is more frequent in matrices with a higher density of 1's, as it can be inferred from  
-%	Figure~\ref{fig:BRvsGAP}. 
-%	
-%	Lets take for instance the extreme case of the identity matrix where there is no exclusion at all,
-%	since every attribute is indispensable to form a reduct. 	For this $SBDM$, GCreduct needs to evaluate as 
-%	many candidates as fastBR but makes a single verification for exclusion with the set of all attributes. 
-%	On the other hand, fastBR verifies the exclusion for each candidate, which leads to a higher 
-%	computational cost.
-%	
-%	We used a one-sided t-test to evaluate the relative performance of GCreduct over fastBR in
-%	low density matrices. We selected the 62 $SBDMs$ having a density 	of 1's lower than 0.3, from our original 
-%	83 matrices. As \textbf{null hypothesis} we have: \emph{there is no difference between the GCreduct and fastBR 
-%	runtime for $SBDMs$ with density of 1's lower than 0.3}. As \textbf{alternative hypothesis} we have: 
-%	\emph{the runtime of fastBR is higher than the runtime of GCreduct for $SBDMs$ with density of 1's lower than 
-%	0.3}. The following output from the R software (Figure~\ref{fig:R_fastBRvsGCreduct}) supports the alternative
-%	hypothesis beyond a 95\% confidence interval.
-%	
-%	\begin{figure}
-%		\qquad{}	Paired one-sided t-test\\
-%
-%		data:  fastBR runtime and GCreduct runtime\\
-%		t = 11.0838, df = 61, p-value $<$ 2.2e-16\\
-%		alternative hypothesis: true difference in means is greater than 0\\
-%		95 percent confidence interval:\\
-%		 75124.33ms  \qquad{}  Inf\\
-%		sample estimates:\\
-%		mean of the differences \\
-%		 \qquad{}    88453.32ms
-%		 		 
-%		\centering
-%	  	\caption{R output for the t-test of mean fastBR and GCreduct runtime.}
-%	  	\label{fig:R_fastBRvsGCreduct}
-%	\end{figure}
+	
+	Lets take for instance the extreme case of the identity matrix where there is no exclusion at all, since every attribute is indispensable to form a reduct. For this $SBDM$, GCreduct needs to evaluate as many candidates as fast--BR but makes a single verification for exclusion with the set of all attributes. On the other hand, fast--BR verifies the exclusion for each candidate, which leads to a higher computational cost.
+	
+	We used a one-sided t-test to evaluate the overall performance of GCreduct over fast--BR for this experiment. As \textbf{null hypothesis} we have: \emph{there is no difference between the GCreduct and fast--BR runtime}. As \textbf{alternative hypothesis} we have: \emph{the runtime of fast--BR is higher than the runtime of GCreduct}. The following output from the R software (Figure~\ref{fig:R_fast--BRvsGCreduct}) supports the alternative	hypothesis beyond a 95\% confidence interval.
+	
+	\begin{figure}
+		\qquad{}	Paired one-sided t-test\\
+
+		data:  fast--BR runtime and GCreduct runtime\\
+		t = 6.3585, df = 489, p-value = 2.34e-10\\
+		alternative hypothesis: true difference in means is greater than 0\\
+		95 percent confidence interval:\\
+		 20719.24ms  \qquad{}  Inf\\
+		sample estimates:\\
+		mean of the differences \\
+		 \qquad{}    27967.91ms
+		 		 
+		\centering
+	  	\caption{R output for the t-test of mean fast--BR and GCreduct runtime.}
+	  	\label{fig:R_fast--BRvsGCreduct}
+	\end{figure}
 	
 %\newpage 
 \section{Conclusions}\label{conclusions}
