@@ -28,6 +28,10 @@
 \usepackage{multicol}				% Para el seudocódigo
 %\usepackage{algorithmic}
 
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
 \begin{document}
 %	
 %	\title{A New Algorithm for Reduct Computation Based on the Pruning Properties of Gap Elimination 
@@ -673,7 +677,7 @@
 	
 	\begin{table}[!htb]
 		\setlength{\tabcolsep}{3pt}
-		\caption{Algorithms execution over standard information systems.}\label{tab:matlab}
+		\caption{RGonCRS and GCreduct execution over standard information systems.}\label{tab:matlab}
 		\centering \scriptsize
 		\begin{tabular}{|l|c|c|c|r|c|c|r|r|}
 			\hline
@@ -698,7 +702,7 @@
 			%soybean & 36 & 683 & 570 & -- & 33	& 0,60 &  & 187,22 \\ %& 182,51 & \textbf{19,11}\\
 			sponge & 46 & 76 & 10992 & \textbf{68,23} & 68 & 0,01 & 144,35 & 144,36 \\ %& 236,99 & \textbf{25,81}\\		
 			student-mat & 32 & 395 & 617921 & 21632,40 & 6253 & 0,42 & 5150,72 & \textbf{5151,14}\\
-			student-por & 32 & 649 & 904963 & - & 8717 & 0,90 & 11843,56 & \textbf{11844,46} \\
+			student-por & 32 & 649 & 904963 & 27568.81 & 8717 & 0,90 & 11843,56 & \textbf{11844,46} \\
     		\hline
     	\end{tabular}
     \end{table}
@@ -735,6 +739,36 @@
 	There is a well defined line delimiting those \textit{SBDMs} for which GCreduct is faster than fast--BR (densities under 0.35). In order to explain this behavior we must go deeply into the main difference between fast--BR and GCreduct. In GCreduct we compute the exclusion mask and evaluate the proposition~\ref{prop:exclude} only for those candidates proven as super-reducts, in order to verify them as reducts. In fast--BR, on the other hand, the proposition~\ref{prop:exclude} is evaluated for each candidate with a contributing attribute. As a result, fast--BR evaluates less candidates than GCreduct but at a higher cost per candidate. The attribute exclusion occurs when there is at least one column in the sub-matrix of \textit{SBDM}, considering only the attributes in the current candidate, that can be removed without increasing the number of zero rows in this sub-matrix. The exclusion is more frequent in matrices with a higher density of 1's, as it can be inferred from  Figure~\ref{fig:scattDensity}. Take for instance the extreme case of the identity matrix where there is no exclusion at all, since every attribute is indispensable to form a reduct. For this kind of \textit{SBDMs}, GCreduct needs to evaluate as many candidates as fast--BR but the former makes a single verification for exclusion with the set of all attributes. On the other hand, fast--BR verifies the exclusion for each candidate, which leads to a higher computational cost.
 	
 	Statistical tests showed that GCreduct was significantly faster than fast--CT\_EXT for low and medium density matrices, above a 95\% confidence interval. For high density \textit{SBDMs} there was no significant difference between these two algorithms. From these results we conclude that fast--CT\_EXT is no longer an state of the art algorithm. In relation to fast--BR, GCreduct showed a significant runtime reduction for low density matrices while it was significantly slower for medium and high density matrices. GCreduct presented a significant improvement over fast--BR in the overall analysis, due to the higher runtime taken by low density matrices. Nevertheless, a great advantage can be taken of selecting the appropriate algorithm for each information system, as it will be shown in the next subsection. 
+	
+\subsection{Evaluation Over Standard Information Systems}
+
+	\begin{table}[!htb]
+		\setlength{\tabcolsep}{3pt}
+		\caption{fast--CT\_EXT, fast--BR and GCreduct execution over standard information systems.}\label{tab:java}
+		\centering \scriptsize
+		\begin{tabular}{|l|C {2cm}|C {2cm}|c|c|c|c|}
+			\hline
+			Dataset & Null Columns & Repeated Columns & Density & fast--CT\_EXT & fast--BR & GCreduct\\
+			\hline
+			anneal	& 13 & 0 & 0,21 & 0,13 & 0,13 & \textbf{0,06} \\ 
+			chessKingRookVKingPawn & 5 & 2 & 0,03 & 7,70 & 0,02 & \textbf{0,00} \\
+			chronic--kidney--disease & 0 & 0 & 0,59 & \textbf{0,01} & 0,02 & 0,02\\
+			credit--g & 0 & 0 & 0,34 & \textbf{0,06} & 0,13 & 0,07\\
+			cylinder-bands & 3 & 0 & 0,55 & 5,04 & \textbf{0,66} & 4,45\\
+			dermatology & 0 & 0 & 0,34 & 20,09 & \textbf{4,72} & 11,51\\
+			flags & 0 & 0 & 0,35 & \textbf{0,70} & 1,24 & 0,72\\
+			heart--c & 0 & 0 & 0,49 & 0,00 & 0,01 & \textbf{0,00}\\
+			ionosphere & 1 & 0 & 0,74 & 0,14 & \textbf{0,09} & 0,14\\
+			lungCancer & 1 & 2 & 0,47 & 173,68 & \textbf{7,41} & 133,62\\
+			molecular--biology--promoters & 0 & 0 & 0,76 & 140,35 & \textbf{14,75} & 139,71\\ 
+			movement--libras & 0 & 0 & 0,97 & \textbf{0,06} & 0,23 & 0,07\\
+			ozone & 0 & 0 & 0,93 & 0,87 & 0,62 & \textbf{0,51}\\ 
+			sponge & 2 & 2 & 0,42 & 0,88 & \textbf{0,18} & 0,92\\	
+			student-mat & 0 & 0 & 0,44 & 773,61 & \textbf{62,41} & 727,93\\
+			student-por & 0 & 0 & 0,42 & 1216,42 & \textbf{201,66} & 1716,47\\
+    		\hline
+    	\end{tabular}
+    \end{table}
 
 
 \section{Conclusions}\label{conclusions}
