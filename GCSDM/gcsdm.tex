@@ -668,12 +668,15 @@
 %	for this kind of matrices.
 %%
 \section{Evaluation and Discussion}\label{evaluation}
-	In this section, we evaluate our proposed algorithm over standard information systems and synthetic \textit{SBDMs}. We make a comparative analysis versus RGonCRS, fast--CT\_EXT, and fast--BR; which are the most recent and fastest algorithms in the state of the art. %A thorough discussion of each experimental result is presented.
+	In this section, we evaluate our proposed algorithm over standard information systems and synthetic \textit{SBDMs}. We make a comparative analysis versus RGonCRS, fast--CT\_EXT, and fast--BR; which are the most recent and fastest algorithms in the state of the art for reduct computation. We used in all cases the author's implementation of these reported algorithms. All experiments were run on a Core i7-5820K Intel processor at 3.30GHz, with 32GB in RAM, running GNU/Linux.
 	
-\subsection{GCreduct vs. RGonCRS}
-	In order to make a comparison with RGonCRS, we implemented our proposed algorithm in Matlab and we used the author's implementation of RGonCRS. We selected 14 information systems from \citep{Bache13} which lead to a costly reduct computation. This experiment was run in MATLAB R2015a on a Core i7-5820K Intel processor at 3.30GHz, with 32GB in RAM, over a GNU/Linux operating system.
+	In the subsection~\ref{sub:matlab}, GCreduct is compared against RGonCRS. This experiment was carried out over standard information systems. Then, in the subsection~\ref{sub:synth} we propose a comparative study with fast--CT\_EXT and fast--BR over synthetic \textit{SBDMs}. From this second experiment, we obtained an empirical rule for selecting the fastest algorithms for a given problem. Finally, in the  subsection~\ref{sub:eval}, we evaluate the found rule over standard information systems.
 	
-	Table~\ref{tab:matlab} shows the runtime of both algorithms for each matrix. The total runtime for GCreduct, shown in the last column of Table~\ref{tab:matlab}, is the sum of the time taken for computing the \textit{SBDM} and the algorithm runtime.
+\subsection{GCreduct vs. RGonCRS}\label{sub:matlab}
+	In order to make a fair comparison against RGonCRS, we used its author's implementation in Matlab and implemented GCreduct in Matlab as well. The selected 14 information systems from the UCI machine learning repository \citep{Bache13} include the most complex information systems used in \citep{Lias13,Sanchez10,WangP07}. Objects with missing data are removed as in \citep{WangP07}. This experiment was run using MATLAB R2015a.
+	%TODO zoo, spect-train, mushroom
+	
+	Table~\ref{tab:matlab} shows the runtime of both algorithms for each matrix. The total runtime for GCreduct, shown in the last column of Table~\ref{tab:matlab}, includes the time taken for computing the \textit{SBDM}. Since GCreduct performed better than RGonCRS in most information systems, we made a one sided paired Wilcoxon signed rank test, as suggested by \cite{Demsar2006}. This test show a statistically significant difference (p--value = 0.03) in favor of GCreduct.
 	
 	\begin{table}[!htb]
 		\setlength{\tabcolsep}{3pt}
@@ -683,7 +686,7 @@
 			\hline
 			&&&& RGonCRS & \multicolumn{2}{c|}{\textit{SBDM}} & \multicolumn{2}{c|}{GCreduct}\\ %fast--CT\_EXT & fast--BR\\
 			\cline{6-9}
-			Dataset & Attributes & Instances & Reducts & \multicolumn{1}{c|}{runtime} & rows & runtime & \multicolumn{1}{c|}{runtime} & \multicolumn{1}{c|}{total} \\ %& \multicolumn{1}{c|}{runtime}\\
+			Dataset & Attributes & Instances & Reducts & \multicolumn{1}{c|}{runtime(s)} & rows & runtime(s) & \multicolumn{1}{c|}{runtime(s)} & \multicolumn{1}{c|}{total(s)} \\ %& \multicolumn{1}{c|}{runtime}\\
 			\hline
 			anneal	& 39 & 798 & 313 & 24,14 & 62 & 0,15 & 7,14 & \textbf{7,29} \\ % & 58,33 & 15,97\\
 			%cardiotocography & 21 & 2126 & 383 & -- & 81 & 1,03 &  & 1,71 \\ %& 1,73 & \textbf{1 ,56}\\
@@ -708,68 +711,72 @@
     \end{table}
     
 
-\subsection{Evaluation Over Synthetic Data}
-	In order to evaluate the performance of GCreduct regarding the density of 1's in the \textit{SBDM}, we present a comparative analysis with fast--CT\_EXT and fast--BR over synthetically generated binary simplified discernibility matrices. For this experiment, we will use the Java implementation\footnote{We used the implementation of these algorithms from their authors} of the three algorithms. These implementations perform faster than Matlab versions as it will be shown later.
+\subsection{Evaluation Over Synthetic Data}\label{sub:synth}
+	In order to evaluate the performance of GCreduct versus fast--CT\_EXT and fast--BR, we present a comparative analysis over synthetically generated \textit{SBDMs}. For this experiment, we implemented our proposed algorithm in Java to make a fair comparison against Java implementations of fast--CT\_EXT and fast--BR, provided by their authors. This implementation of GCreduct performs, at least, one order of magnitude faster than the Matlab implementation; as can be seen by comparing Table~\ref{tab:matlab} and Table~\ref{tab:java}.
 	
-	This experiment was done over 500 randomly generated \textit{SBDMs} with 30 columns and 2000 rows. The property of the \textit{SBDM} that we explore with these matrices is the \emph{density of 1's}: the number of ones divided by the number of cells of the \textit{SBDMs} \citep{Rojas12,Lias13,Rodriguez15}. The density of 1's is uniformly distributed among the 500 \textit{SBDMs}, in the range (0.15--0.80). Rows were generated with a random number of 1's between the minimum and maximum allowed. New rows are added if they form a \textit{SBDM} with those rows already in the matrix; otherwise, they are discarded. In this way, the desired density is computed as the average number of 1's in the rows, divided by the number of attributes (columns). Keeping constant this central value, we can modify at the same time the maximum and minimum number of	allowed 1's in a row to control the standard deviation. For each value of density, several different matrices were generated. 
-	
-	The three algorithms were applied over every matrix, and again, all experiments were run on a Core i7-5820K Intel processor at 3.30GHz, with 32GB in RAM, over a GNU/Linux operating system.
-			
+	This experiment was done over 500 randomly generated \textit{SBDMs} with 30 columns and 2000 rows; which is a good size in order to keep reasonable runtime for the three algorithms. Previous studies \citep{Rojas12,Lias13,Rodriguez15}, divide the \textit{SBDMs} by its \emph{density of 1's}; ie the number of ones divided by the number of cells of the \textit{SBDMs}. For this reason, our 500 \textit{SBDMs} has densities of 1's uniformly distributed in the range (0.20--0.80) using a step of 0.04. Matrices with higher or lower densities are difficult to obtain using a random method. For each value of density, several different matrices were generated. 
+				
 	\begin{figure}[htb]
 		\begin{center}
-			\includegraphics[height=8cm]{overall.eps}
+			\includegraphics[height=8cm]{overal.eps}
 		\end{center}
-		\caption{Average algorithms' runtime vs. density of 1's for all \textit{SBDMs} under study.}
+		\caption{Average algorithms' runtime vs. density of 1's for all synthetic \textit{SBDMs}.}
 		\label{fig:scattDensity}
 	\end{figure}	
 
 	Figure~\ref{fig:scattDensity} shows the average runtime of the three algorithms, as a function of 
-	the average density of 1's in the \textit{SBDM}. The 500 matrices were split into 15 groups to discretize their range of densities. The representative value of the abscissa for each point corresponds to the average density of all matrices in the group. Dots represents the averaged runtime of all matrices in the group while the error bars show the standard deviation. There can be identified three distinct groups of matrices by their density:
+	the average density of 1's in the synthetic \textit{SBDM}. For clarity purposes, the 500 matrices were split into 15 groups discretizing the range of densities. Each group having approximately 33 \textit{SBDMs}. In the Figure ~\ref{fig:scattDensity}, each  value of the \textit{x} axis corresponds to the average density of all matrices in the group. Notice that, due to the random generation process, although the 15 density bins have the same width; the number of matrices in each bin is not the same, and the mean density does not corresponds to its central value. The \textit{y} value represents the averaged runtime of all matrices in the group, while the vertical bars show the standard deviation. 
+	
+	From Figure~\ref{fig:scattDensity}, we see that the fastest algorithm for low density matrices was GCreduct, fast--BR was the fastest for medium, and the three algorithms presented a similar performance for high density matrices. The fact that high density \textit{SBDMs} do not constitute a complex computational task for reduct computation \citep{Rojas12} is clearly visible in Figure~\ref{fig:scattDensity}. For this reason, a detailed analysis in this region lacks of relevance.
+	
+	From this result, we identify three distinct groups of matrices by their density:
 	\begin{itemize}
-	\item Low density matrices: density $<$ 0.35.
-	\item Medium density matrices: 0.35 $\leq$ density $\leq$ 0.6.
-	\item High density matrices: density $>$ 0.6.
+		\item Low density matrices: density $<$ 0.35.
+		\item Medium density matrices: 0.35 $\leq$ density $\leq$ 0.6.
+		\item High density matrices: density $>$ 0.6.
 	\end{itemize}
-	The fastest algorithm for low density matrices was GCreduct, fast--BR was the fastest for medium, and the three algorithms presented a similar performance for high	density matrices. The fact that high density \textit{SBDMs} do not constitute a complex computational task for reduct computation \citep{Rojas12} is clearly visible in Figure~\ref{fig:scattDensity}. For this reason, a detailed analysis in this region lacks of relevance.
 	
-	Since all matrices for this experiment have the same dimensions, we can say that low density
-	matrices showed a relatively high complexity. Thus, the apparent fact that GCreduct outperforms 
-	the other algorithms for this kind of matrices, deserves special attention. 
+%	Since all matrices for this experiment have the same dimensions, we can say that low density
+%	matrices showed a relatively high complexity. Thus, the apparent fact that GCreduct outperforms 
+%	the other algorithms for this kind of matrices, deserves special attention. 
 		
-	There is a well defined line delimiting those \textit{SBDMs} for which GCreduct is faster than fast--BR (densities under 0.35). In order to explain this behavior we must go deeply into the main difference between fast--BR and GCreduct. In GCreduct we compute the exclusion mask and evaluate the proposition~\ref{prop:exclude} only for those candidates proven as super-reducts, in order to verify them as reducts. In fast--BR, on the other hand, the proposition~\ref{prop:exclude} is evaluated for each candidate with a contributing attribute. As a result, fast--BR evaluates less candidates than GCreduct but at a higher cost per candidate. The attribute exclusion occurs when there is at least one column in the sub-matrix of \textit{SBDM}, considering only the attributes in the current candidate, that can be removed without increasing the number of zero rows in this sub-matrix. The exclusion is more frequent in matrices with a higher density of 1's, as it can be inferred from  Figure~\ref{fig:scattDensity}. Take for instance the extreme case of the identity matrix where there is no exclusion at all, since every attribute is indispensable to form a reduct. For this kind of \textit{SBDMs}, GCreduct needs to evaluate as many candidates as fast--BR but the former makes a single verification for exclusion with the set of all attributes. On the other hand, fast--BR verifies the exclusion for each candidate, which leads to a higher computational cost.
+	There is a well defined line delimiting those \textit{SBDMs} for which GCreduct is faster than fast--BR (densities under 0.35). In order to explain this behavior we must go deeply into the main difference between fast--BR and GCreduct. In GCreduct we compute the exclusion mask and evaluate the attribute exclusion, using proposition~\ref{prop:exclude}, only for those candidates detected as super-reducts; in order to verify whether they are reducts. In fast--BR, on the other hand, the proposition~\ref{prop:exclude} is evaluated for each candidate with a contributing attribute. As a result, fast--BR evaluates less candidates than GCreduct but at a higher cost per candidate. The attribute exclusion occurs when there is at least one column in the sub-matrix of \textit{SBDM}, considering only the attributes in the current candidate, that can be removed without increasing the number of zero rows in this sub-matrix. The exclusion is more frequent in matrices with a higher density of 1's, since it given by cumulative OR operations. Take for instance the extreme case of the identity matrix where there is no exclusion at all, since every attribute is indispensable to form a reduct. For this kind of \textit{SBDMs}, GCreduct needs to evaluate as many candidates as fast--BR but the former makes a single verification for exclusion with the set of all attributes. On the other hand, fast--BR verifies the exclusion for each candidate, which leads to a higher computational cost.
 	
-	Statistical tests showed that GCreduct was significantly faster than fast--CT\_EXT for low and medium density matrices, above a 95\% confidence interval. For high density \textit{SBDMs} there was no significant difference between these two algorithms. From these results we conclude that fast--CT\_EXT is no longer an state of the art algorithm. In relation to fast--BR, GCreduct showed a significant runtime reduction for low density matrices while it was significantly slower for medium and high density matrices. GCreduct presented a significant improvement over fast--BR in the overall analysis, due to the higher runtime taken by low density matrices. Nevertheless, a great advantage can be taken of selecting the appropriate algorithm for each information system, as it will be shown in the next subsection. 
+	Friedman tests and post hoc Nemenyi-Damico-Wolfe-Dunn tests, show that GCreduct was significantly faster (p--value $< 10^{-16}$) than fast--CT\_EXT for low and medium density matrices. For high density \textit{SBDMs} there was no significant difference (p--value = 0.87) between these two algorithms. In relation to fast--BR, GCreduct showed a significant runtime reduction (p--value $< 10^{-16}$) for low density matrices while it was significantly slower (p--value $< 10^{-16}$) for medium and high density matrices. 
+%	GCreduct presented a significant improvement (p--value = 0.0068) over fast--BR in the overall analysis, due to the higher runtime taken by low density matrices. 
+	From this analysis, we conclude that GCreduct is the best algorithm for low density matrices; while fast--BR is the best for medium density matrices. For high density matrices any algorithm can be used since computing reducts of this kind of matrices does not constitute a complex computational task. Moreover, a great advantage can be taken of selecting the appropriate algorithm for each information system, as it will be shown in the next subsection. 
 	
-\subsection{Evaluation Over Standard Information Systems}
+\subsection{Evaluation Over Standard Information Systems}\label{sub:eval}
+	In this experiment, we run fast--CT\_EXT, fast--BR and GCreduct over the information systems from Table~\ref{tab:matlab}. Table~\ref{tab:java} shows the runtime for each algorithm, including the number of null and repeated columns, and the density of 1's of \textit{SBDMs}. The density is computed after eliminating null and repeated columns. In Table~\ref{tab:java}, the information systems are sorted in ascending order of their density, for clarity purposes. Although this is a small heterogeneous sample, the rule obtained in the subsection~\ref{sub:synth} can be verified in Table~\ref{tab:java}.
 
 	\begin{table}[!htb]
-		\setlength{\tabcolsep}{3pt}
 		\caption{fast--CT\_EXT, fast--BR and GCreduct execution over standard information systems.}\label{tab:java}
 		\centering \scriptsize
-		\begin{tabular}{|l|C {2cm}|C {2cm}|c|c|c|c|}
+		\begin{tabular}{|l|C {1cm}|C {1.2cm}|c|R {1.6cm}|R {1.2cm}|R {1.2cm}|}
 			\hline
-			Dataset & Null Columns & Repeated Columns & Density & fast--CT\_EXT & fast--BR & GCreduct\\
+			Dataset & Null Columns & Repeated Columns & Density &  \multicolumn{1}{C{1.6cm}|}{fast--CT\_EXT runtime(s)} &  \multicolumn{1}{C{1.2cm}|}{fast--BR runtime(s)} &  \multicolumn{1}{C{1.2cm}|}{GCreduct runtime(s)}\\
 			\hline
-			anneal	& 13 & 0 & 0,21 & 0,13 & 0,13 & \textbf{0,06} \\ 
 			chessKingRookVKingPawn & 5 & 2 & 0,03 & 7,70 & 0,02 & \textbf{0,00} \\
-			chronic--kidney--disease & 0 & 0 & 0,59 & \textbf{0,01} & 0,02 & 0,02\\
+			anneal	& 13 & 0 & 0,21 & 0,13 & 0,13 & \textbf{0,06} \\ 
 			credit--g & 0 & 0 & 0,34 & \textbf{0,06} & 0,13 & 0,07\\
-			cylinder-bands & 3 & 0 & 0,55 & 5,04 & \textbf{0,66} & 4,45\\
 			dermatology & 0 & 0 & 0,34 & 20,09 & \textbf{4,72} & 11,51\\
 			flags & 0 & 0 & 0,35 & \textbf{0,70} & 1,24 & 0,72\\
-			heart--c & 0 & 0 & 0,49 & 0,00 & 0,01 & \textbf{0,00}\\
-			ionosphere & 1 & 0 & 0,74 & 0,14 & \textbf{0,09} & 0,14\\
-			lungCancer & 1 & 2 & 0,47 & 173,68 & \textbf{7,41} & 133,62\\
-			molecular--biology--promoters & 0 & 0 & 0,76 & 140,35 & \textbf{14,75} & 139,71\\ 
-			movement--libras & 0 & 0 & 0,97 & \textbf{0,06} & 0,23 & 0,07\\
-			ozone & 0 & 0 & 0,93 & 0,87 & 0,62 & \textbf{0,51}\\ 
-			sponge & 2 & 2 & 0,42 & 0,88 & \textbf{0,18} & 0,92\\	
-			student-mat & 0 & 0 & 0,44 & 773,61 & \textbf{62,41} & 727,93\\
+			sponge & 2 & 2 & 0,42 & 0,88 & \textbf{0,18} & 0,92\\
 			student-por & 0 & 0 & 0,42 & 1216,42 & \textbf{201,66} & 1716,47\\
+			student-mat & 0 & 0 & 0,44 & 773,61 & \textbf{62,41} & 727,93\\
+			lungCancer & 1 & 2 & 0,47 & 173,68 & \textbf{7,41} & 133,62\\
+			heart--c & 0 & 0 & 0,49 & 0,00 & 0,01 & \textbf{0,00}\\
+			cylinder-bands & 3 & 0 & 0,55 & 5,04 & \textbf{0,66} & 4,45\\
+			chronic--kidney--disease & 0 & 0 & 0,59 & \textbf{0,01} & 0,02 & 0,02\\
+			ionosphere & 1 & 0 & 0,74 & 0,14 & \textbf{0,09} & 0,14\\
+			molecular--biology--promoters & 0 & 0 & 0,76 & 140,35 & \textbf{14,75} & 139,71\\ 
+			ozone & 0 & 0 & 0,93 & 0,87 & 0,62 & \textbf{0,51}\\ 
+			movement--libras & 0 & 0 & 0,97 & \textbf{0,06} & 0,23 & 0,07\\	
     		\hline
     	\end{tabular}
     \end{table}
 
+	In Table~\ref{tab:java}, the four information systems with a low density \textit{SBDM} lead to simple reduct computations. In order to show the advantage of our proposed algorithm and the rule obtained for selecting the fastest algorithm for each information system; we present another experiment. We selected for this experiment the \textit{audiology} information system from the UCI machine learning repository. \textit{Audiology} has 226 objects and 69 attributes, and its \textit{SBDM} has 174 rows with 11 null and 2 repeated columns with a density of 0,084. Due to the high number of objects with missing data, we treated missing values as a special value \citep{Li2007} for computing the \textit{SBDM}.  
 
 \section{Conclusions}\label{conclusions}
 %	This PhD research proposal is focused on the problem of computing all the reducts and its related problem of
