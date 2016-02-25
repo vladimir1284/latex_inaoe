@@ -84,7 +84,7 @@
   RST reducts have been related to the typical testors (TT) from the logical combinatorial approach 
   to pattern recognition \citep{Chikalov2013}. Testor Theory was originally created by \cite{Cheguis55} as a tool
   for analysis of problems connected with control and diagnosis of faults in circuits. 
-  However, Testor Theory has been extended in order to be used for feature selection as shown in \citep{Dmitriev1966}, \citep{Martinez01} and \citep{Ruiz08}. Algorithms for typical testors computation can be applied to reduct computation due to the similarity between these two concepts \citep{Lazo15}. There have been developed two kinds of algorithms for computing typical testors: \emph{internal scale} algorithms, such as CT \citep{Bravo83}, CC \citep{Aguila84} and YYC \citep{Alba14}; and \emph{external scale} algorithms, such as BT and TB \citep{Ruiz85}, LEX \citep{Santiesteban03}, CT\_EXT \citep{Sanchez07} and BR \citep{Lias09}. The former approach analyzes the discernibility matrix to find out some conditions to guarantee that a subset of attributes is a typical testor. The latter, searches for typical testors over the power set of attributes, avoiding unnecessary evaluations by pruning some attribute subsets. Internal scale algorithms usually evaluate less candidates than external scale algorithms but each candidate evaluation has a higher computational cost. Therefore, the search of fast algorithms for computing typical testors has been biased to external scale algorithms \citep{Alba14}.
+  However, Testor Theory has been extended in order to be used for feature selection as shown in \citep{Dmitriev1966}, \citep{Martinez01} and \citep{Ruiz08}. Algorithms for typical testors computation can be applied to reduct computation due to the similarity between these two concepts \citep{Lazo15}. There have been developed two kinds of algorithms for computing typical testors: \emph{internal scale} algorithms, such as CT \citep{Bravo83}, CC \citep{Aguila84} and YYC \citep{Alba14}; and \emph{external scale} algorithms, such as BT and TB \citep{Ruiz85}, LEX \citep{Santiesteban03}, CT\_EXT \citep{Sanchez07} and BR \citep{Lias09}. The former approach analyzes the discernibility matrix to find out some conditions to guarantee that a subset of attributes is a typical testor. The latter, searches for typical testors over the power set of attributes, avoiding unnecessary evaluations by pruning some attribute subsets. Internal scale algorithms usually evaluate less candidates than external scale algorithms but each candidate evaluation has a higher computational cost. Therefore, the search for fast algorithms for computing typical testors has been biased to external scale algorithms \citep{Alba14}.
     
 % Utilidad de todos los reductos
 %  Although most algorithms for reduct computation search for a single reduct or a small subset of reducts, 
@@ -380,7 +380,7 @@
 		Let DM a SBDM and $B \subseteq C$ and  $c_i \in C$ such that $c_i \notin B$. We say that $c_i$ contributes to $B$ iff the	number of zero rows, in the sub-matrix of DM considering only the attributes in $B\cup\{c_i\}$, is lower than considering the attributes in $B$.
 	\end{definition}		
 		
-	For a fast implementation of these algorithms \citep{Sanchez10,Lias13}, columns in a simplified discernibility matrix \textit{DM} are coded as binary words with as many bits as rows in the \textit{DM}. The cumulative mask for an attribute $c_i$, denoted as $cm_{c_i}$, is defined as the binary word representing the $i$th column in \textit{DM}. The cumulative mask for a subset of attributes $B=\lbrace c_{i1},c_{i2},...,c_{ik} \rbrace$ is defined	as $cm_B = cm_{c_{i1}} \vee cm_{c_{i2}} \vee ... \vee cm_{c_{ik}}$ where $\vee$ represents the binary OR operator. It is not hard to see that the number of 0's in $cm_B$ is the same as the number of zero rows in the sub-matrix of \textit{SBDM} considering only the attributes in $B$. 
+	For a fast implementation of these algorithms \citep{Sanchez10,Lias13}, columns in a simplified discernibility matrix \textit{DM} are coded as binary words with as many bits as rows in \textit{DM}. The cumulative mask for an attribute $c_i$, denoted as $cm_{c_i}$, is defined as the binary word representing the $i$th column in \textit{DM}. The cumulative mask for a subset of attributes $B=\lbrace c_{i1},c_{i2},...,c_{ik} \rbrace$ is defined	as $cm_B = cm_{c_{i1}} \vee cm_{c_{i2}} \vee ... \vee cm_{c_{ik}}$ where $\vee$ represents the binary OR operator. It is not hard to see that the number of 0's in $cm_B$ is the same as the number of zero rows in the sub-matrix of the \textit{SBDM}, considering only the attributes in $B$. 
 	According to the definition~\ref{def:contrib}, $c_i$ contributes to $B$ iff $cm_{B\cup c_i}$ has more 1's than 
 	$cm_B$. The incremental nature of GCreduct is given by the associative property of the OR operation, such that 
 	$cm_{B\cup c_i}=cm_B\vee cm_{c_i}$. Notice that, from this last formulation, $c_i$ contributes to $B$ iff 
@@ -397,7 +397,7 @@
 		L \wedge j_{q+1} \neq j_q+1)$.
 	\end{definition}
 	
-	In other words, the gap is the attribute in $L$ with the highest index such that its consecutive attribute in $L$ is not its consecutive attribute in \textit{SBDM}.
+	In other words, the gap is the attribute in $L$ with the highest index such that its consecutive attribute in $L$ is not its consecutive attribute in the \textit{SBDM}.
 	
 	Lets take for example a \textit{SBDM} with 7 attributes ($c_0 - c_6$):
 	$$\begin{array}{ll}
@@ -414,26 +414,20 @@
 %	\{$c_0$\}, \{$c_0,c_1$\}, \{$c_0,c_1,c_2$\}, \{$c_0,c_2$\}, \{$c_1$\}, \{$c_1,c_2$\}, \{$c_2$\}
 		
 	\begin{proposition}\label{prop:gap} 
-		Let $L \subseteq C$ be a reduct, such that $L = \lbrace c_{j_0},...,c_{j_s}\rbrace$, $c_{j_0}<\cdots
-		<c_{j_s}$ and $c_{j_s}$ is the last attribute in SBDM. If there is a gap $c_p$ in $L$, and $L' = \lbrace
-		c_{j_0},...,c_{j_k},c_{p+1}\rbrace$, $j_0<\cdots <j_k<=p-1$; then, there is not an attribute subset
-		between $L$ and $L'$ (following the lexicographical order) being a reduct.
+		Let DM a SBDM and $L \subseteq C$ be a reduct, such that $L = \lbrace c_{j_0},...,c_{j_s}\rbrace$, $c_{j_0}<\cdots	<c_{j_s}$ and $c_{j_s}$ is the last attribute in DM. If there is a gap $c_p$ in $L$, and $L' = \lbrace c_{j_0},...,c_{j_k},c_{p+1}\rbrace$, $j_0<\cdots <j_k<=p-1$; then, there is not an attribute subset between $L$ and $L'$ (following the lexicographical order) being a reduct.
 	\end{proposition}	
 	
 	From the proposition~\ref{prop:gap} we have the following corollary \citep{Santiesteban03}; which is relevant to GCreduct in order to avoid other unnecessary evaluations.
 	
 	\begin{corollary}\label{coro:gap} 
-		Let $L \subseteq C$ be a non super--reduct, such that $L = \lbrace c_{j_0},...,c_{j_s}\rbrace$, 
-		$c_{j_0}<...<c_{j_s}$ and $c_{j_s}$ is the last attribute in SBDM. If there is a gap $c_p$ in $L$, and 
-		$L' = \lbrace c_{j_0},...,c_{j_k},c_{p+1}\rbrace$, $j_0<...<j_k<=p-1$; then, there is not an attribute 
-		subset between $L$ and $L'$ (following the lexicographical order) being a reduct.
+		Let DM a SBDM and $L \subseteq C$ be a non super--reduct, such that $L = \lbrace c_{j_0},...,c_{j_s}\rbrace$, $c_{j_0}<...<c_{j_s}$ and $c_{j_s}$ is the last attribute in DM. If there is a gap $c_p$ in $L$, and $L' = \lbrace c_{j_0},...,c_{j_k},c_{p+1}\rbrace$, $j_0<...<j_k<=p-1$; then, there is not an attribute subset between $L$ and $L'$ (following the lexicographical order) being a reduct.
 	\end{corollary}
 		
 	In order to determine whether a super--reduct is a reduct (verifying the irreducible condition) the
 	exclusion mask, introduced by \cite{Lias09}, plays a fundamental role. 
 	
 	\begin{definition}\label{def:exclusion}
-		Let $L \subseteq C$ be a subset of attributes from an information system. We call exclusion mask of L, denoted as $em_L$, to the binary word in which the $i^{\mathit{th}}$ bit is 1 if the $i^{\mathit{th}}$ row in \textit{SBDM} has a 1 in only one column of those columns corresponding to attributes in L, and it is 0 otherwise.
+		Let DM a SBDM and $L \subseteq C$ be a subset of attributes from an information system. We call exclusion mask of L, denoted as $em_L$, to the binary word in which the $i^{\mathit{th}}$ bit is 1 if the $i^{\mathit{th}}$ row in DM has a 1 in only one column of those columns corresponding to attributes in L, and it is 0 otherwise.
 	\end{definition}
 	
 	For instance, from the \textit{SBDM} in Table~\ref{tab:SBDM1} we have:
@@ -446,23 +440,20 @@
 	\cite{Lias13} introduced the following proposition to support the cumulative computation of the exclusion mask.
 	
 	\begin{proposition}\label{prop:cumul} 
-		Let $L \subseteq C$ be a subset of attributes from an information system and $c_i \notin L$ an attribute of \textit{SBDM}.
-		The exclusion mask of $L \cup \lbrace c_i\rbrace$ is calculated as follows:
-		$$em_{L \cup \lbrace c_i\rbrace}=(em_L \wedge \neg cm_{c_i}) \vee (\neg cm_L \wedge cm_{c_i})$$
-		where $cm$ refers to the cumulative mask.
+		Let DM a SBDM and $L \subseteq C$ be a subset of attributes from an information system and $c_i \notin L$ an attribute of DM. The exclusion mask of $L \cup \lbrace c_i\rbrace$ is calculated as follows: $$em_{L \cup \lbrace c_i\rbrace}=(em_L \wedge \neg cm_{c_i}) \vee (\neg cm_L \wedge cm_{c_i})$$	where $cm$ refers to the cumulative mask.
 	\end{proposition}
 	
 	Finally, they stated and proved the following proposition.
 	
 	\begin{proposition}\label{prop:exclude} 
-		Let $L \subseteq R$ be a subset of attributes from an information system and $c_i \notin L$ an attribute of \textit{SBDM}.
+		Let DM a SBDM and $L \subseteq R$ be a subset of attributes from an information system and $c_i \notin L$ an attribute of DM.
 		If $\exists c_x \in L$ such that $em_{L \cup \lbrace c_i\rbrace} \wedge cm_{c_x}=(0,...,0)$. Then, $L \cup \lbrace c_i\rbrace$	is not a reduct.
 	\end{proposition}
 
 \subsection{The algorithm GCreduct}\label{description}
-	%TODO Antes de explicar los pasos del algoritmo se debería dar una explicaciíón intuitiva del algoritmo, decir de dónde o cómo surge la idea del algoritmo para hacerlo más rápido.
+	GCreduct finds reducts in the \textit{SBDM} computed from an information system. This algorithm explores the search space evaluating some candidates and avoiding others, based on previous evaluations. The use of costly operations for candidate evaluation \citep{WangP07,Lias13}, leads to a reduction in the number of evaluated candidates. However, GCreduct uses a simpler candidate evaluation, based on the attribute contribution and the gap elimination, to reduce the algorithm runtime. 
 
-	The first step in the GCreduct algorithm consists in sorting the \textit{SBDM} in order to reduce the search space \citep{Sanchez07}. First, it randomly selects one of the rows of \textit{SBDM} with the fewest number of 1's. Then, the selected row is moved to the top, and all columns in which it has a 1 are moved to the left. Table~\ref{tab:SSBDM1} shows the \textit{SBDM} from Table~\ref{tab:SBDM1}, sorted in this way. Herein after, the order of attributes in the information system is the resulting order of this sorting process.
+	The first step in the GCreduct algorithm consists in sorting the \textit{SBDM} in order to reduce the search space \citep{Sanchez07}. First, it randomly selects one of the rows of the \textit{SBDM} with the fewest number of 1's. Then, the selected row is moved to the top, and all columns in which it has a 1 are moved to the left. Table~\ref{tab:SSBDM1} shows the \textit{SBDM} from Table~\ref{tab:SBDM1}, sorted in this way. Herein after, the order of attributes in the information system is the resulting order of this sorting process.
 		
 	\begin{table}[htb]
 		\caption{Sorted Simplified Binary Discernibility Matrix computed from Table~\ref{tab:SBDM1}.}
@@ -555,7 +546,7 @@
 	  			\EndIf
 	  		\EndIf
 	  	\EndIf
-	  	\If {$c=$LastAttribute} \Comment{Last column of \textit{SBDM} is reached}\label{line:cg}
+	  	\If {$c=$LastAttribute} \Comment{Last column of the \textit{SBDM} is reached}\label{line:cg}
 	  		\If {$reduct$ \textbf{or} \textbf{not} $superReduct$} \Comment{Eliminate the gap}\label{line:gap}
 	  			\State $last \Leftarrow c$
 	  			\While {$\mathrm{getLast}(B)=(last-1)$}
@@ -584,16 +575,16 @@
 	\end{algorithmic}
 	\end{algorithm}
 
-		The pseudocode for GCreduct is shown in Algorithm~\ref{alg:GCreduct}. GCreduct starts with an empty subset of attributes $B$ and the position of the first attribute in $c$\footnote{Here we abuse of the notation by using $c$ for both an attribute and a number denoting its position in \textit{SBDM}}. Then it assigns a null vector to the cumulative mask ($cm_B$) for $B=\emptyset$ or retrieve the previously calculated value, from $CM$, for $B\neq \emptyset$ (lines~\ref{line:emptyB}-\ref{line:notEmpty}). $CM$ stores the already calculated cumulative masks, indexed by the last attribute in $B$. The function getLast$(B)$ returns the last attribute in $B$. In the line~\ref{line:updateCM}, GCreduct updates the cumulative mask and in		the line~\ref{line:contrib} it evaluates the contribution of $c$ to $B$. If the current attribute $c$ contributes, the super--reduct condition is evaluated on $B\cup \lbrace c\rbrace$ (line~\ref{line:superReduct}). For super--reducts, the proposition~\ref{prop:cumul} is used to compute the exclusion mask $em_{B\cup \lbrace c\rbrace}$ (lines~\ref{line:em}-\ref{line:emEnd}) and the irreducible condition (lines~\ref{line:reduct}-\ref{line:reductEnd}) is verified by means of the proposition~\ref{prop:exclude}. At this point, the candidate evaluation is finished.
+		The pseudocode for GCreduct is shown in Algorithm~\ref{alg:GCreduct}. GCreduct starts with an empty subset of attributes $B$ and the position of the first attribute in $c$\footnote{Here we abuse of the notation by using $c$ for both an attribute and a number denoting its position in the \textit{SBDM}}. Then it assigns a null vector to the cumulative mask ($cm_B$) for $B=\emptyset$ or retrieve the previously calculated value, from $CM$, for $B\neq \emptyset$ (lines~\ref{line:emptyB}-\ref{line:notEmpty}). $CM$ stores the already calculated cumulative masks, indexed by the last attribute in $B$. The function getLast$(B)$ returns the last attribute in $B$. In the line~\ref{line:updateCM}, GCreduct updates the cumulative mask and in		the line~\ref{line:contrib} it evaluates the contribution of $c$ to $B$. If the current attribute $c$ contributes, the super--reduct condition is evaluated on $B\cup \lbrace c\rbrace$ (line~\ref{line:superReduct}). For super--reducts, the proposition~\ref{prop:cumul} is used to compute the exclusion mask $em_{B\cup \lbrace c\rbrace}$ (lines~\ref{line:em}-\ref{line:emEnd}) and the irreducible condition (lines~\ref{line:reduct}-\ref{line:reductEnd}) is verified by means of the proposition~\ref{prop:exclude}. At this point, the candidate evaluation is finished.
 		
 		From line~\ref{line:cg} to the end, the next candidate subset ($B\cup \lbrace c\rbrace$) is generated. 
-		LastAttribute holds the position of the last attribute in \textit{SBDM}. If the last attribute is
+		LastAttribute holds the position of the last attribute in the \textit{SBDM}. If the last attribute is
 		reached, we check if the current candidate is a reduct or a non--super--reduct, to eliminate the gap
-		(lines~\ref{line:gap}-\ref{line:gapEnd}). If the last attribute in \textit{SBDM} is reached but the current candidate is a super--reduct, the last attribute in $B$ is removed (line~\ref{line:remLast}). If the last attribute is 
+		(lines~\ref{line:gap}-\ref{line:gapEnd}). If the last attribute in the \textit{SBDM} is reached but the current candidate is a super--reduct, the last attribute in $B$ is removed (line~\ref{line:remLast}). If the last attribute is 
 		not reached yet, there are two possibilities. 
 		\begin{enumerate}
 			\item The current candidate is a super--reduct or the current attribute $c$ does not contribute to $B$; then we must replace $c$ by the next attribute in the sorted \textit{SBDM} (line~\ref{line:replaceC}).
-			\item The attribute $c$ contributes to $B$ and the current candidate is not a super--reduct; then the current attribute is added to $B$ (line~\ref{line:add1}) and the next attribute in \textit{SBDM} is loaded to $c$ (line~\ref{line:add1End}).
+			\item The attribute $c$ contributes to $B$ and the current candidate is not a super--reduct; then the current attribute is added to $B$ (line~\ref{line:add1}) and the next attribute in the \textit{SBDM} is loaded to $c$ (line~\ref{line:add1End}).
 		\end{enumerate}  
 		%	The algorithm finishes when the column corresponding to the first attribute in the current candidate has a 0 in the first row.
 	
@@ -634,7 +625,7 @@
     		23 & \{$c_0,c_3,c_4,c_5$\}	& 6 & \{$c_0,c_3,c_4,c_5,c_6$\} 	& True & True & True & Eliminate the gap ($c_0$).\\
     		\hline
     		24 & \{\} 					& 1 & \{$c_1$\} 					& 
-    		\multicolumn{4}{p{5cm}|}{Algorithm finishes because $c_1$ has a 0 in the first row of \textit{SBDM} (line~\ref{line:done})}\\
+    		\multicolumn{4}{p{5cm}|}{Algorithm finishes because $c_1$ has a 0 in the first row of the \textit{SBDM} (line~\ref{line:done})}\\
     		\hline
 		\end{tabular}
 	\end{table}
@@ -650,9 +641,9 @@
 	In the subsection~\ref{sub:matlab}, GCreduct is compared against RGonCRS over standard information systems. Then, in the subsection~\ref{sub:synth} we show a comparative study with fast--CT\_EXT and fast--BR over synthetic \textit{SBDMs}. From this second experiment, we obtained an empirical rule for selecting the fastest algorithm for a given problem. Finally, in the  subsection~\ref{sub:eval}, we evaluate the found rule over standard information systems.
 	
 \subsection{GCreduct vs. RGonCRS}\label{sub:matlab}
-	In order to make a fair comparison against RGonCRS, we used its author's implementation in Matlab and we implemented GCreduct in Matlab as well. For this experiment we selected the 6 information systems from the UCI machine learning repository \citep{Bache13} used in \citep{Lias13,Sanchez10,WangP07} which have more than 20 attributes. In addition, we included other 9 datasets from the UCI machine learning repository also with more than 20 attributes. Objects with missing data are removed as in \citep{WangP07}. This experiment was run using MATLAB R2015a.
+	In order to make a fair comparison against RGonCRS, we used its author's implementation in Matlab and we implemented GCreduct in Matlab as well. For this experiment we selected the 6 information systems from the UCI machine learning repository \citep{Bache13} used in \citep{Lias13,Sanchez10,WangP07} which have more than 20 attributes. In addition, we included other 9 datasets from the UCI machine learning repository, which also have more than 20 attributes. Objects with missing data are removed as in \citep{WangP07}. This experiment was run using MATLAB R2015a.
 	
-	Table~\ref{tab:matlab} shows the runtime of both algorithms for each information system. The total runtime for GCreduct, shown in the last column of Table~\ref{tab:matlab}, includes the time taken for computing the \textit{SBDM}. Since GCreduct performed better than RGonCRS in most information systems, we made a one sided paired Wilcoxon signed rank test, as suggested by \cite{Demsar2006}. This test shows a statistically significant difference (p--value = 0.02) in favor of GCreduct. Notice that for the SPECT (train) information system, RGonCRS was not able to find a result and was excluded from the test.
+	Table~\ref{tab:matlab} shows the runtime of both algorithms for each information system. The total runtime for GCreduct, shown in the last column of Table~\ref{tab:matlab}, includes the time taken for computing the \textit{SBDM}. Since GCreduct performed better than RGonCRS in most information systems, we made a one sided paired Wilcoxon signed rank test, as suggested by \cite{Demsar2006}. This test shows a statistically significant difference (p--value = 0.02) in favor of GCreduct. Notice that for the SPECT (train) information system, RGonCRS was not able to find a result and it was excluded from the test.
 	
 	\begin{table}[!htb]
 		\setlength{\tabcolsep}{3pt}
@@ -722,7 +713,7 @@
 %	matrices showed a relatively high complexity. Thus, the apparent fact that GCreduct outperforms 
 %	the other algorithms for this kind of matrices, deserves special attention. 
 		
-	In order to explain the well defined line delimiting those \textit{SBDMs} for which GCreduct is faster than fast--BR (densities under 0.35),  we must go deeply into the main difference between these algorithms. In GCreduct we compute the exclusion mask and evaluate the attribute exclusion, using proposition~\ref{prop:exclude}, for those candidates detected as super-reducts; in order to verify whether they are reducts. In fast--BR, on the other hand, the proposition~\ref{prop:exclude} is evaluated for each candidate with a contributing attribute. The evaluation of attribute exclusion has the highest computational complexity in the algorithm ($\Theta (nm)$). The attribute exclusion occurs when there is at least one column in the sub-matrix of \textit{SBDM}, considering only the attributes in the current candidate, that can be removed without increasing the number of zero rows in this sub-matrix. The exclusion is more frequent in matrices with a higher density of 1's, since it is given by cumulative OR operations. The higher cost of candidate evaluation in fast--BR pays off for \textit{SBDMs} with densities above 0.35, because supersets of candidates with attribute exclusion are excluded from subsequent evaluations. Take for instance the extreme case of the identity matrix where there is no exclusion at all, since every attribute is indispensable to form a reduct. For this kind of \textit{SBDMs}, GCreduct needs to evaluate as many candidates as fast--BR but the former makes a single verification for exclusion with the set of all attributes. On the other hand, fast--BR verifies the exclusion for each candidate, which leads to a higher computational cost.
+	In order to explain the well defined line delimiting those \textit{SBDMs} for which GCreduct is faster than fast--BR (densities under 0.35),  we must go deeply into the main difference between these algorithms. In GCreduct we compute the exclusion mask and evaluate the attribute exclusion, using proposition~\ref{prop:exclude}, for those candidates detected as super-reducts; in order to verify whether they are reducts. In fast--BR, on the other hand, the proposition~\ref{prop:exclude} is evaluated for each candidate with a contributing attribute. The evaluation of attribute exclusion has the highest computational complexity in the algorithm ($\Theta (nm)$). The attribute exclusion occurs when there is at least one column in the sub-matrix of the \textit{SBDM}, considering only the attributes in the current candidate, that can be removed without increasing the number of zero rows in this sub-matrix. The exclusion is more frequent in matrices with a higher density of 1's, since it is given by cumulative OR operations. The higher cost of candidate evaluation in fast--BR pays off for \textit{SBDMs} with densities above 0.35, because supersets of candidates with attribute exclusion are excluded from subsequent evaluations. Take for instance the extreme case of the identity matrix where there is no exclusion at all, since every attribute is indispensable to form a reduct. For this kind of \textit{SBDMs}, GCreduct needs to evaluate as many candidates as fast--BR but the former makes a single verification for exclusion with the set of all attributes. On the other hand, fast--BR verifies the exclusion for each candidate, which leads to a higher computational cost.
 	
 	Friedman tests and post hoc Nemenyi-Damico-Wolfe-Dunn tests, show that GCreduct was significantly faster (p--value $< 10^{-16}$) than fast--CT\_EXT for low and medium density matrices. 
 %	For high density \textit{SBDMs} there was no significant difference (p--value = 0.87) between these two algorithms. 
