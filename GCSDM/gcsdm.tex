@@ -40,13 +40,7 @@
 	72840, M\'{e}xico} 
 	
 	\begin{abstract}
-		Attribute reduction is a key aspect of Rough Set Theory.  Finding the complete set of reducts is important 
-		for solving practical problems such as the assessment of attribute relevance, multi--objective 
-		cost--sensitive attribute reduction and dynamic reduct computation. The main limitation in the application
-		of Rough Set methods is that finding all reducts of an information system has exponential complexity 
-		regarding the number of attributes. Several algorithms have been reported to reduce the cost
-		of reduct computation. Unfortunately, most of these algorithms relay on complex operations and inefficient data structures. Therefore, in this paper we propose a new algorithm for computing all reducts of an
-		information system, based on the pruning properties of \textit{gap elimination} and \textit{attribute contribution}, by using binary cumulative operations. Finally, the proposed algorithm is evaluated and compared against other state of the art algorithms, over synthetic and standard information systems.
+		Attribute reduction is a key aspect of Rough Set Theory.  Finding the complete set of reducts is important for solving practical problems such as the assessment of attribute relevance, multi--objective 		cost--sensitive attribute reduction and dynamic reduct computation. The main limitation in the application of Rough Set methods is that finding all reducts of an information system has exponential complexity regarding the number of attributes. Several algorithms have been reported to reduce the cost of reduct computation. Unfortunately, most of these algorithms relay on operations for candidate evaluation with a high cost. Therefore, in this paper we propose a new algorithm for computing all reducts of an information system, based on the pruning properties of \textit{gap  elimination} and \textit{attribute contribution}, by using binary cumulative operations in order to reduce the algorithm runtime. Finally, the proposed algorithm is evaluated and compared against other state of the art algorithms, over synthetic and standard information systems.
 	\end{abstract}
 	
 	\begin{keyword}
@@ -60,7 +54,7 @@
 
 \section{Introduction}
 % BAsico sobre los reductos
-  Rough set theory (RST), proposed by Z. Pawlak in 1981 \citep{Pawlak81,Pawlak81-2,Pawlak82,Pawlak91}, 
+  Rough Set Theory (RST), proposed by Z. Pawlak in 1981 \citep{Pawlak81,Pawlak81-2,Pawlak82,Pawlak91}, 
   is a relatively new mathematical theory to deal with imperfect knowledge, in particular with vague 
   concepts. Into RST, information systems are tables of objects (rows) described by a set of attributes (columns). 
   When data is collected or recorded, every single aspect (attribute) of the objects under study is considered 
@@ -78,18 +72,19 @@
 %  Algorithms \citep{Feng2012,Hedar2015}, Ant Colony Optimization \citep{Jensen03,Chebrolu2015} and Particle Swarm 
 %  Optimization \citep{Chen15,Luan2015} have been also reported in order to achieve a better global optimization. 
 %  In this paper, on the other hand, 
-  We are focused on solving the problem of computing all reducts of an information system. Early algorithms for computing the complete set of reducts \citep{Bazan2001,Ohrn00} are integrated in RSES and ROSETTA software for rough sets computation. These algorithms are unable to solve even middle size problems \citep{Lazo15}. The divide and conquer approach presented by \cite{Starzyk99,Starzyk00}, and then modified in \citep{Jensen14}, operates over the binary discernibility function, which leads to inefficient data representations. Then, a faster algorithm based on several properties for pruning the search space is proposed by \cite{WangP07}. This is a very elaborated algorithm, its main drawback is that it works directly over the information system instead of the discernibility matrix.   
+  %We are focused on solving the problem of computing all reducts of an information system. 
+  Early algorithms for computing the complete set of reducts \citep{Bazan2001,Ohrn00} are integrated in RSES and ROSETTA software for rough sets computation. However, these algorithms are unable to solve even middle size problems \citep{Lazo15}. The divide and conquer approach presented by \cite{Starzyk99,Starzyk00}, and later modified in \citep{Jensen14}, operates over the binary discernibility function, which leads to inefficient data representations. A faster algorithm based on several properties for pruning the search space is proposed by \cite{WangP07}. This is a very efficient algorithm, nevertheless, its main drawback is that it works directly over the information system instead of the discernibility matrix.   
      	
 % Relación con los testores
-  RST reducts have been related to the typical testors (TT) from the logical combinatorial approach 
+  RST reducts have been related to Typical Testors (TT) from the logical combinatorial approach 
   to pattern recognition \citep{Chikalov2013}. Testor Theory was originally created by \cite{Cheguis55} as a tool
   for analysis of problems connected with control and diagnosis of faults in circuits. 
-  However, Testor Theory has been extended in order to be used for feature selection as shown in \citep{Dmitriev1966}, \citep{Martinez01} and \citep{Ruiz08}. Algorithms for typical testors computation can be applied to reduct computation due to the similarity between these two concepts \citep{Lazo15}. There have been developed two kinds of algorithms for computing typical testors: \emph{internal scale} algorithms, such as CT \citep{Bravo83}, CC \citep{Aguila84} and YYC \citep{Alba14}; and \emph{external scale} algorithms, such as BT and TB \citep{Ruiz85}, LEX \citep{Santiesteban03}, CT\_EXT \citep{Sanchez07} and BR \citep{Lias09}. The former approach analyzes the discernibility matrix to find out some conditions to guarantee that a subset of attributes is a typical testor. The latter, searches for typical testors over the power set of attributes, avoiding unnecessary evaluations by pruning some attribute subsets. Internal scale algorithms usually evaluate less candidates than external scale algorithms but each candidate evaluation has a higher computational cost. Therefore, the search for fast algorithms for computing typical testors has been biased to external scale algorithms \citep{Alba14}.
+  However, Testor Theory has been extended in order to be used for feature selection as shown in \citep{Dmitriev1966}, \citep{Martinez01} and \citep{Ruiz08}. Algorithms for typical testor computation can be applied to reduct computation due to the similarity between these two concepts \citep{Lazo15}. There have been developed two kinds of algorithms for computing typical testors: \emph{internal scale} algorithms, such as CT \citep{Bravo83}, CC \citep{Aguila84} and YYC \citep{Alba14}; and \emph{external scale} algorithms, such as BT and TB \citep{Ruiz85}, LEX \citep{Santiesteban03}, CT\_EXT \citep{Sanchez07} and BR \citep{Lias09}. The former approach analyzes the discernibility matrix to find out some conditions to guarantee that a subset of attributes is a typical testor. The latter, searches for typical testors over the power set of attributes, avoiding unnecessary evaluations by pruning some attribute subsets. Internal scale algorithms usually evaluate less candidates than external scale algorithms but each candidate evaluation has a higher computational cost. Therefore, the search for fast algorithms for computing typical testors has been biased to external scale algorithms \citep{Alba14}.
     
 % Utilidad de todos los reductos
 %  Although most algorithms for reduct computation search for a single reduct or a small subset of reducts, 
   The complete set of reducts of an information system is useful for solving some practical problems and real--world applications. \cite{Xu2013} developed a multi-objective cost-sensitive attribute reduction. First, they compute all reducts of an information system. Then, they separately calculate the cost, in terms of time and money, of every reduct. Finally, the worst reducts are dismissed, leaving a Pareto optimal solution set. From this smaller set of reducts, a user can easily select an optimum subset. On the other hand, \cite{Mukamakuza2014} developed three new algorithms for dynamic reduct computation. 
-  The first step in the three algorithms is finding of all the reducts. Then, the complete set of reducts 
+  The first step in the three algorithms is finding of all reducts. Then, the complete set of reducts 
   is filtered in order to obtain an optimum subset, from which dynamic reducts are computed. They showed that 
   this procedure improves the performance of dynamic reduct computation algorithms.	
   From Testor Theory, \cite{Torres2014} used the informational weight, computed through typical testors 
@@ -103,29 +98,24 @@
   problem in graph theory. Given that both of these problems can be translated into the calculation of
   prime implicants of a Boolean function, they applied algorithms designed for reduct computation in the
   solution of the minimum vertex cover problem. This unification opens a new spectrum of real-world applications
-  for fast reduct computation algorithms. \cite{chen2015} stood that the vertex cover problem has been used in applications such as crew scheduling \citep{Sherali1984}, VLSI design \citep{Bhattacharyya2000}, nurse rostering \citep{Caprara1998} and industrial machine assignments \citep{Woodyatt1993}. The connexion with the problem of computing the prime implicants of a Boolean function, makes fast algorithms for computing all reducts relevant in other applications. For instance, \cite{Li2015} presented a new technique for mining frequent patterns from the minimal disjunctive normal form.
+  for fast reduct computation algorithms. \cite{chen2015} stood that the vertex cover problem has been used in applications such as crew scheduling \citep{Sherali1984}, VLSI design \citep{Bhattacharyya2000}, nurse rostering \citep{Caprara1998} and industrial machine assignments \citep{Woodyatt1993}. The connection with the problem of computing the prime implicants of a Boolean function makes fast algorithms for computing all reducts relevant in other applications. For instance, \cite{Li2015} presented a new technique for mining frequent patterns from the minimal disjunctive normal form.
 
 % descripción de la propuesta
 %  Latest algorithms from Testor Theory are based on fast binary cumulative operations \linebreak
 %  \citep{Sanchez10,Lias13}.
 
 
-  In this work; we propose a new algorithm, GCreduct, for computing all reducts based on the pruning properties of gap elimination and attribute contribution. Additionally, we show the advantages of fast binary cumulative operations \citep{Sanchez10,Lias13} over other approaches from rough set theory \citep{WangP07,Jensen14}. In relation to fast--BR \citep{Lias13}, which is one of the latest and fastest reported algorithms; our proposed algorithm evaluates more candidates in most cases, but the evaluation cost is lower. Then, we show that our algorithm performs faster than all other recent reported alternatives in a specific kind of information systems. 
+  In this work, we propose a new algorithm, GCreduct, for computing all reducts based on the pruning properties of gap elimination and attribute contribution. Additionally, we show the advantages of fast binary cumulative operations \citep{Sanchez10,Lias13} over other approaches from rough set theory \citep{WangP07,Jensen14}. In relation to fast--BR \citep{Lias13}, which is one of the latest and fastest reported algorithms; our proposed algorithm evaluates more candidates in most cases, but the evaluation cost is lower. Then, we show that our algorithm performs faster than all other recent reported alternatives in a specific kind of information systems. 
 %  The main contribution of this work is the design and evaluation of a new algorithm for reduct computation,
 %  based on  the pruning properties of gap elimination and attribute contribution. 
   
   
-  The rest of this paper is structured as follows. Section~\ref{basicConcepts}  introduces some basic concepts needed for understanding the rest of this paper. In Section~\ref{relatedWork}, we discuss the related work on reduct and typical testors computation.  In Section~\ref{GCreduct}, we introduce the GCreduct algorithm for computing all reducts of an information system. An evaluation of the proposed algorithm and a discussion of the experimental results are presented in section~\ref{evaluation}. Finally, section~\ref{conclusions} shows our conclusions and some directions for future work.
+  The rest of this paper is structured as follows. Section~\ref{basicConcepts}  introduces some basic concepts. In Section~\ref{relatedWork}, we discuss the related work on reduct and typical testor computation.  In Section~\ref{GCreduct}, we introduce the GCreduct algorithm for computing all reducts of an information system. An evaluation of the proposed algorithm and a discussion of the experimental results are presented in section~\ref{evaluation}. Finally, section~\ref{conclusions} shows our conclusions and some directions for future work.
    
 \section{Basic Concepts}\label{basicConcepts}
-  RST is based on the assumption that every object in the universe of discourse is described, through a 
-  set of attributes, by some information associated to it. This information constitutes the basis for the
-  classification of unseen objects. RST motto is \textit{Let the data speak for themselves} \citep{Tiwari14}.
+  RST is based on the assumption that every object in the universe of discourse is described, through a set of attributes, by some information associated to it. This information constitutes the basis for the classification of unseen objects. RST motto is \textit{Let the data speak for themselves} \citep{Tiwari14}.
 
-  From the RST point of view, two objects are indistinguishable (indiscernible) if they have an same 
-  value for each attribute in their description. Indiscernibility relations arising in this way, constitute the
-  mathematical foundations of RST. 
-  Some basic concepts of RST are presented bellow.
+  From the RST point of view, two objects are indistinguishable (indiscernible) if they have the same value for each attribute in their description. Indiscernibility relations arising in this way, constitute the mathematical foundations of RST. Some basic concepts of RST are presented bellow.
   
 \subsection{Information System}
   The basic representation of data in RST is an \emph{Information System} (IS). An IS is a table with rows
@@ -133,7 +123,7 @@
   $IS=(U,A)$ where $U$ is a finite non-empty set of objects $U=\lbrace x_1,x_2,...,x_n\rbrace$, and $A$ is a 
   finite non-empty set
   of attributes (features, variables). Every attribute in $A$ is a map: $a: U \rightarrow V_a$. The set $V_a$ is
-  called the \textit{value set} of $A$. Attributes in $A$ are further divided into condition attributes $C$ and 
+  called the \textit{value set} of $a$. Attributes in $A$ are further divided into condition attributes $C$ and 
   decision attributes $D$ such that $A=C \cup D$ and $C \cap D =\emptyset$. 
   Table~\ref{tab_IS} shows an example of an IS.
   
@@ -154,22 +144,10 @@
  	\end{tabular}             
  \end{table}
  
-  \textit{Decision attributes} determine to which class an object belongs to. In the IS of
-  table~\ref{tab_IS}, $d$ is the decision attribute; this is a two-class system. \textit{Condition attributes} 
-  do not absolutely determine the class but help to decide to which class an object belongs to. In supervised 
-  classification, condition attributes are the only information available for classifying new objects; while, 
-  decision attributes are only available for objects in the training set. An IS with decision and 
-  condition attributes is called a decision system. In table~\ref{tab_IS}, $c_0$--$c_6$ are condition 
-  attributes.
+  \textit{Decision attributes} determine which class an object belongs to. In the IS of table~\ref{tab_IS}, $d$ is the decision attribute; this is a two-class system. \textit{Condition attributes} do not absolutely determine the class but help to decide which class an object belongs to. In supervised classification, condition attributes are the only information available for classifying new objects; while, decision attributes are only available for objects in the training set. An IS with decision and condition attributes is called a decision system. In table~\ref{tab_IS}, $c_0$--$c_6$ are condition attributes.
   
 \subsection{Positive Region}\label{subsect_Pos}
-  Decision attributes induce a partition of the universe $U$ into equivalence classes 
-  (\textit{decision classes}). Since we will be trying to associate a decision class to an object, 
-  based on the attributes belonging to $B \subseteq C$, we are interested in those $B-classes$ (classes induced by $B$) which correspond to classes induced by $D$. 
-  This idea leads to the notion of the  \textit{positive region of the decision}. The set $POS_B(D)$, 
-  called the \textit{B-positive region of D}, is defined as the set of all objects in $U$ such 
-  that all the indistinguishable objects (under the knowledge in $B$) belong to the same class induced 
-  by $D$.
+  Decision attributes $D$ induce a partition of the universe $U$ into equivalence classes (\textit{decision classes}). Since we will be trying to associate a decision class to an object based on the attributes belonging to $B \subseteq C$, we are interested in those $B-classes$ (classes induced by $B$) which correspond to the decision classes. This idea leads to the notion of the  \textit{positive region of the decision}. The set $POS_B(D)$, called the \textit{B-positive region of D}, is defined as the set of all objects in $U$ such that all the indistinguishable objects (under the knowledge in $B$) belong to the same decision class.
 %  
 %  Taking for example the IS in table~\ref{tab_IS}, we can see that
 %  
@@ -179,7 +157,7 @@
 %  POS_{\lbrace c_0,c_1,c_2 \rbrace}(d) &=& \lbrace x_1,x_2,x_5,x_6,x_8 \rbrace\\
 %  \end{array}$$
  
-\subsection{Reducts and Core}\label{def_reduct}
+\subsection{Reducts}\label{def_reduct}
 %  Given an information system $IS=(U,A)$ with condition attribute set $C$ and decision attribute set
 %  $D$ such that $A=C \cup D$ and $C \cap D =\emptyset$. 
   A subset $B \subseteq C$ is a \textit{reduct} of $IS$ relative to $D$ if
@@ -189,7 +167,7 @@
   \end{enumerate}
 
   We call super--reduct to any subset $B \subseteq C$ satisfying condition~\ref{cond_1} whether it satisfies
-  condition~\ref{cond_2} or not. The intersection of all reducts of an IS is called the \textit{core}.
+  condition~\ref{cond_2} or not.
   
 %\subsection{Discernibility Matrix}
 %  The discernibility knowledge of an information system is commonly stored in a symmetric $|U| \times |U|$
@@ -254,10 +232,9 @@
 %  
 \subsection{Binary Discernibility Matrix}
   The \textit{Binary Discernibility Matrix} is a binary table representing the discernibility sets between pairs 
-  of objects. This is another representation of the information in $M_{IS}$. In the binary discernibility
-  matrix, columns are single condition attributes and rows represents pairs of objects belonging to different 
-  classes. The discernibility element $m(i, j, c)$ for two objects $x_i$ and $x_j$ and a single condition 
-  attribute $c \in C$ is given in a binary representation, such that:
+  of objects. 
+  %This is another representation of the information in $M_{IS}$. 
+  In the binary discernibility matrix, columns are single condition attributes and rows represents pairs of objects belonging to different classes. The discernibility element $m(i, j, c)$ for two objects $x_i$ and $x_j$ and a single condition attribute $c \in C$ is given in a binary representation, such that:
   
   \begin{equation}
   	m(i, j, c)=\left\lbrace\begin{array}{cl}
@@ -290,8 +267,7 @@
   \end{table}
 
 \subsection{Simplified Binary Discernibility Matrix}\label{sect_SBDM}
-  The \textit{Simplified Binary Discernibility Matrix} (SBDM) is a reduced version of the binary discernibility
-  matrix after applying absorption laws. Reducts of the information system, may be computed from this reduced matrix \citep{Yao09}. An equivalent concept exists in Testor Theory, called \textit{Basic Matrix}. Table~\ref{tab:SBDM1} shows the SBDM from the binary discernibility matrix in Table~\ref{tab_BDM}.
+  The \textit{Simplified Binary Discernibility Matrix} (\textit{SBDM}) is a reduced version of the binary discernibility matrix after applying absorption laws. For this purpose, we represent rows in the Binary Discernibility Matrix as binary words. An OR operation is evaluated over every pair of rows, and one of the two rows is eliminated if it is equal to the resultant binary word. Reducts of an information system, can be computed from this reduced matrix \citep{Yao09}. Table~\ref{tab:SBDM1} shows the \textit{SBDM} from the binary discernibility matrix in Table~\ref{tab_BDM}.
   
      \begin{table}[htb]
 		\caption{Simplified Binary Discernibility Matrix of the Binary Discernibility Matrix in Table~\ref{tab_BDM}.}
@@ -310,15 +286,17 @@
  
 \section{Related Work}\label{relatedWork}
 % Algoritmos para el cálculo de reductos
-  An early method for computing all reducts of an information system was presented by \cite{Starzyk99,Starzyk00}.  This is a divide and conquer approach. On each step, the absorption laws are applied over the incoming discernibility function to obtain a reduced set of clauses. Then, the attributes that appear together in  clauses are compressed, avoiding duplicate combinations. The attribute appearing in the highest number of clauses is selected in each recursive call. In this way, a set of super--reducts is obtained and supersets must be removed in order to obtain the final reduct set. This algorithm was presented in an iterative fashion and its   recursive nature was not explicitly stated. 
+  An early method for computing all reducts of an information system was presented by \cite{Starzyk99,Starzyk00}.  This is a divide and conquer approach. On each step, the absorption laws are applied over the incoming discernibility function to obtain a reduced set of clauses. Then, those attributes that appear together in  clauses are compressed, avoiding duplicate combinations. The attribute appearing in the highest number of clauses is selected in each recursive call. In this way, a set of super--reducts is obtained and supersets must be removed in order to obtain the final reduct set. 
+%  This algorithm was presented in an iterative fashion and its   recursive nature was not explicitly stated. 
    
-  \cite{WangP07} proposed a new algorithm for computing all reducts, RGonCRS, based on the current rule size.   First, one of the attributes discerning between most pairs of objects in different decision classes is added   to the current candidate subset. The remaining attributes are tested for contribution (see the definition~\ref{def:contrib}). Contributing attributes are evaluated for compatibility (see the proposition~\ref{prop:exclude}). This procedure is recursively executed to explore the search space. A second algorithm, SRGonCRS, is proposed for subdividing the information system and the reducts are incrementally found. In these algorithms, the number of evaluated candidates is highly reduced in comparison to previous approaches \citep{Bazan2001,Ohrn00}. The main drawback in this work is the direct operations over the information system, which implies recurrent dynamic memory allocation and huge data manipulation.
+  \cite{WangP07} proposed a new algorithm for computing all reducts, RGonCRS, based on the current rule size (in terms of the number of clauses). First, one of the attributes discerning between most pairs of objects in different decision classes is added to the current candidate subset. The remaining attributes are tested one at a time joined to the current candidate, and attribute combinations are saved if they are reducts. This procedure is recursively executed to explore the search space. A second algorithm, SRGonCRS, is proposed for subdividing the information system and the reducts are incrementally found. In these algorithms, the number of evaluated candidates is highly reduced in comparison to previous approaches \citep{Bazan2001,Ohrn00}. The main drawback of these algorithms is that they work over the information system, which implies recurrent dynamic memory allocation and huge data manipulation.
   
-  \cite{Chen2012} proposed a fast new strategy for obtaining the simplified discernibility matrix. Their approach avoids to compute the discernibility matrix. Finally, new algorithms for computing all reducts are presented and evaluated. Unfortunately, they do not show a significant performance improvement by using their proposed strategy. Nevertheless, their experiments support that algorithms working over the simplified discernibility matrix are, in most cases, faster than those working on larger representations of the information system.
+  \cite{Chen2012} proposed a new fast strategy for obtaining the reduced discernibility matrix (a clause oriented version of the \textit{SBDM}). Their approach avoids to compute the discernibility matrix. Finally, new algorithms for computing all reducts are presented and evaluated. Unfortunately, they do not show a significant performance improvement by using their proposed strategy. Nevertheless, their experiments support that algorithms working over the reduced discernibility matrix are, in most cases, faster than those working on larger representations of the information system.
   
-  Although originally intended for computing a single minimal reduct, the algorithm proposed in \citep{Jensen14} (RSAR-SAT) may be easily modified in order to obtain all reducts of an information system. RSAR-SAT reduces the problem of finding a reduct from the discernibility function to the SAT problem \citep{Davis62}. The Boolean function generated in this way is always satisfied since the complete set of attributes is a trivial solution. This algorithm resembles the one presented in \citep{Starzyk99} but introduces the elimination of clauses which contain a single literal at each recursive call. Since it searches for one shortest reduct, there is no need for a final filtering stage for super--reduct elimination.
+  Although originally intended for computing a single minimal reduct, the algorithm proposed in \citep{Jensen14} (RSAR-SAT) may be easily modified in order to obtain all reducts of an information system. RSAR-SAT reduces the problem of finding a reduct from the discernibility function to the SAT problem \citep{Davis62}. The Boolean function generated in this way is always satisfied since the complete set of attributes is a trivial solution. This algorithm resembles the one presented in \citep{Starzyk99} but introduces the elimination of clauses which contain a single literal at each recursive call. 
+  %Since it searches for one shortest reduct, there is no need for a final filtering stage for super--reduct elimination.
 
-\subsection{Algorithms for Computing all Typical Testors}
+%\subsection{Algorithms for Computing all Typical Testors}
   One of the first algorithms designed to overcome the exponential complexity (regarding the number of attributes)
   of the problem of finding all TT, was proposed by \cite{Ruiz85} and modified by \cite{sanchez02}. This algorithm, called BT, codifies a subset of attributes as a binary word with as many bits as attributes in the information system. A 0 represents the absence of the corresponding attribute in the current subset while a 1 represents its inclusion. In this way, candidate subsets are evaluated in the natural order induced by the binary numbers. The pruning process in the search space is based on the minimal condition of TT and a convenient sorting of the discernibility matrix associated to the information system. 
   %Finally, testors found by BT must be filtered in order to remove all non-TT.
@@ -351,7 +329,7 @@
   Although they claim that this algorithm verifies less candidates than previous alternatives, two weak points
   should be addressed. First, neither BR nor fast--BR are included in their comparisons; and second, the evaluation cost for a candidate in YYC is higher compared to the evaluation cost in previous algorithms. YYC verifications involve calculations of the Hamming weight.
   
- \subsection{Concluding Remarks} 
+% \subsection{Concluding Remarks} 
  %  We also found that algorithms working over the simplified discernibility matrix \citep{Sanchez10,Chen2012,Lias13}, are preferable for information systems with $m$ attributes and $n$ objects, such that $2^m >> n^2$; while those algorithms working directly over the information system \citep{Shulcloper95b,WangP07}, perform better when $2^m~\sim~n^2$. 
   From our literature review, we found that algorithms for finding all typical testors can be used for computing all reducts and vice-versa \citep{Lazo15}. We also found that the properties of attribute contribution and compatibility are present in algorithms from both: rough sets \citep{WangP07} and testor theory \citep{Sanchez10,Lias13}. The gap elimination strategy \citep{Santiesteban03,Lias13}, on the other hand, has not been explored in rough set theory. The pruning property of gap elimination avoids a large number of verifications, as we will show later. Another important characteristic of fast algorithms for computing typical testors \citep{Sanchez10,Lias13}, is that they are oriented to fast binary cumulative operations. 
   
@@ -359,7 +337,7 @@
   
   
 \section{The GCreduct Algorithm}\label{GCreduct}
-  In this section, we introduce the GCreduct algorithm for computing all reducts of an information system. In  Subsection~\ref{properties}, we present the pruning properties used to define the GCreduct algorithm. Then, in Subsection~\ref{description}, we introduce the GCreduct algorithm. Finally, the algorithm's execution is illustrated over the information system in Table~\ref{tab_IS}.
+  In this section, we introduce the GCreduct algorithm for computing all reducts of an information system. In  Subsection~\ref{properties}, we present the pruning properties used in GCreduct. Then, in Subsection~\ref{description}, we introduce the GCreduct algorithm. Finally, the algorithm's execution is illustrated over the information system in Table~\ref{tab_IS}.
   
 %  GCreduct traverses the search space of attribute subsets in the lexicographical order (a generalization of the order given to words in a dictionary). The algorithm starts with an empty candidate subset. New attributes are added, following their order in the information system. An attribute is added if it reduces the number of indiscernible pairs of objects; regarding those discerned by the current candidate (this the pruning property of attribute contribution). Once the super--reduct condition is satisfied, the candidate is verified as a minimal subset (reduct) to be saved. Supersets of already found super--reducts are avoided in subsequent evaluations. When a reduct or a non super--reduct containing the last attribute in the information system is found, the gap elimination property allows avoiding the evaluation of its subsets. The algorithm finishes when all the remaining attribute combinations (following the lexicographical order) are insufficient for discerning at least one pair of objects with different value in the decision attribute.
 
@@ -370,34 +348,41 @@
 	Subsection~\ref{def_reduct} \citep{Lazo15}.
 	
 	\begin{definition}\label{def:testor}
-		Let DM a SBDM and $B \subseteq C$ be a subset of condition attributes of an information system. $B$ is a super--reduct iff in the sub-matrix of DM considering only the attributes in $B$, there is not any zero row (a row having only zeros).
+		Let DM be a SBDM and $B \subseteq C$ be a subset of condition attributes of an information system. $B$ is a super--reduct iff in the sub-matrix of DM considering only the attributes in $B$, there is not any zero row (a row having only zeros).
 	\end{definition}
 	
 	The following definition constitutes the key concept in CT\_EXT \citep{Sanchez07} and our proposed algorithm, and it is also an important component of the algorithms BR \citep{Lias09} and RGonCRS
 	\citep{WangP07}.
 		
 	\begin{definition}\label{def:contrib}
-		Let DM a SBDM and $B \subseteq C$ and  $c_i \in C$ such that $c_i \notin B$. We say that $c_i$ contributes to $B$ iff the	number of zero rows, in the sub-matrix of DM considering only the attributes in $B\cup\{c_i\}$, is lower than considering the attributes in $B$.
-	\end{definition}		
+		Let DM be a SBDM and $B \subseteq C$ and  $c_i \in C$ such that $c_i \notin B$. We say that $c_i$ contributes to $B$ iff the	number of zero rows, in the sub-matrix of DM considering only the attributes in $B\cup\{c_i\}$, is lower than considering the attributes in $B$.
+	\end{definition}
+	
+	From this concept,  \cite{Sanchez07} stated and proved the following proposition.
+	
+	\begin{proposition}\label{prop:contrib} 
+			Let $B \subseteq C$ and  $c_i \in C$ such that $c_i \notin B$. If $c_i$ does not contribute to $B$, then $B\cup\{c_i\}$ cannot generate any reduct.
+	\end{proposition}
+	
+	From Proposition~\ref{prop:contrib}, we present the following corollary supporting the use of the attribute contribution for pruning the search space.
+	
+	\begin{corollary}\label{coro:contrib} 
+		Let DM be a SBDM, $B \subseteq C$,  $c_i \in C$ such that $c_i \notin B$, and $c_{i+1} \in C$ such that $c_{i+1} \notin B$. Given that $c_{i+1}$ is the consecutive attribute of $c_i$ in DM, if $c_i$ does not contribute to $B$; then, there is not any attribute subset between $B\cup\{c_i\}$ and $B\cup\{c_{i+1}\}$ (following the lexicographical order) being a reduct.
+	\end{corollary}
 		
-	For a fast implementation of these algorithms \citep{Sanchez10,Lias13}, columns in a simplified discernibility matrix \textit{DM} are coded as binary words with as many bits as rows in \textit{DM}. The cumulative mask for an attribute $c_i$, denoted as $cm_{c_i}$, is defined as the binary word representing the $i$th column in \textit{DM}. The cumulative mask for a subset of attributes $B=\lbrace c_{i1},c_{i2},...,c_{ik} \rbrace$ is defined	as $cm_B = cm_{c_{i1}} \vee cm_{c_{i2}} \vee ... \vee cm_{c_{ik}}$ where $\vee$ represents the binary OR operator. It is not hard to see that the number of 0's in $cm_B$ is the same as the number of zero rows in the sub-matrix of the \textit{SBDM}, considering only the attributes in $B$. 
-	According to the definition~\ref{def:contrib}, $c_i$ contributes to $B$ iff $cm_{B\cup c_i}$ has more 1's than 
-	$cm_B$. The incremental nature of GCreduct is given by the associative property of the OR operation, such that 
-	$cm_{B\cup c_i}=cm_B\vee cm_{c_i}$. Notice that, from this last formulation, $c_i$ contributes to $B$ iff 
-	$cm_{B\cup c_i}\neq cm_B$ since $cm_{B\cup c_i}$ cannot have less 1's than $cm_B$. It is easy to see, from the
-	definition~\ref{def:testor} that $B \subseteq C$ is a super--reduct iff $cm_B=(1,...,1)$ (has a 1 in every bit).
+	For a fast implementation of these algorithms \citep{Sanchez10,Lias13}, columns in a simplified discernibility matrix \textit{DM} are coded as binary words with as many bits as rows in \textit{DM}. The cumulative mask for an attribute $c_i$, denoted as $cm_{c_i}$, is defined as the binary word representing the $i$th column in \textit{DM}. The cumulative mask for a subset of attributes $B=\lbrace c_{i1},c_{i2},...,c_{ik} \rbrace$ is defined	as $cm_B = cm_{c_{i1}} \vee cm_{c_{i2}} \vee ... \vee cm_{c_{ik}}$ where $\vee$ represents the binary OR operator. It is not hard to see that the number of 0's in $cm_B$ is the same as the number of zero rows in the sub-matrix of the \textit{SBDM}, considering only the attributes in $B$. According to the definition~\ref{def:contrib}, $c_i$ contributes to $B$ iff $cm_{B\cup c_i}$ has more 1's than $cm_B$. The incremental nature of these algorithms, also included in GCreduct, is given by the associative property of the OR operation, such that  $cm_{B\cup c_i}=cm_B\vee cm_{c_i}$. Notice that, from this last formulation, $c_i$ contributes to $B$ iff $cm_{B\cup c_i}\neq cm_B$ since $cm_{B\cup c_i}$ cannot have less 1's than $cm_B$. It is easy to see, from the definition~\ref{def:testor} that $B \subseteq C$ is a super--reduct iff $cm_B=(1,...,1)$ (has a 1 in every bit).
 
 	The concept of gap, that we will use in our proposal, was first introduced by \cite{Santiesteban03} for 
 	the LEX algorithm, as shown in the definition~\ref{def:gap}.
 	
 	\begin{definition}\label{def:gap}
-		Let $L \subseteq C$ be a subset of attributes from an information system, such that $L = \lbrace c_{j_0},...,c_{j_s}
-		\rbrace$ and $c_{j_0}<\cdots <c_{j_s}$ according to their order in the information system. The gap of $L$ is the
-		attribute $c_p \in L$ with $j_0 \leq p <	j_s$ such that $p=\mathrm{max}(j_q | c_{j_q},c_{j_{q+1}} \in 
-		L \wedge j_{q+1} \neq j_q+1)$.
+		Let $B \subseteq C$ be a subset of attributes from an information system, such that $B = \lbrace c_{j_0},...,c_{j_s}
+		\rbrace$ and $c_{j_0}<\cdots <c_{j_s}$ according to their order in the information system. The gap of $B$ is the
+		attribute $c_p \in B$ with $j_0 \leq p <	j_s$ such that $p=\mathrm{max}(j_q | c_{j_q},c_{j_{q+1}} \in 
+		B \wedge j_{q+1} \neq j_q+1)$.
 	\end{definition}
 	
-	In other words, the gap is the attribute in $L$ with the highest index such that its consecutive attribute in $L$ is not its consecutive attribute in the \textit{SBDM}.
+	In other words, the gap is the attribute in $B$ with the highest index such that its consecutive attribute in $B$ is not its consecutive attribute in the \textit{SBDM}.
 	
 	Lets take for example a \textit{SBDM} with 7 attributes ($c_0 - c_6$):
 	$$\begin{array}{ll}
@@ -414,20 +399,20 @@
 %	\{$c_0$\}, \{$c_0,c_1$\}, \{$c_0,c_1,c_2$\}, \{$c_0,c_2$\}, \{$c_1$\}, \{$c_1,c_2$\}, \{$c_2$\}
 		
 	\begin{proposition}\label{prop:gap} 
-		Let DM a SBDM and $L \subseteq C$ be a reduct, such that $L = \lbrace c_{j_0},...,c_{j_s}\rbrace$, $c_{j_0}<\cdots	<c_{j_s}$ and $c_{j_s}$ is the last attribute in DM. If there is a gap $c_p$ in $L$, and $L' = \lbrace c_{j_0},...,c_{j_k},c_{p+1}\rbrace$, $j_0<\cdots <j_k<=p-1$; then, there is not an attribute subset between $L$ and $L'$ (following the lexicographical order) being a reduct.
+		Let DM be a SBDM and $B \subseteq C$ be a reduct, such that $B = \lbrace c_{j_0},...,c_{j_s}\rbrace$, $c_{j_0}<\cdots	<c_{j_s}$ and $c_{j_s}$ is the last attribute in DM. If there is a gap $c_p$ in $B$, and $B' = \lbrace c_{j_0},...,c_{j_k},c_{p+1}\rbrace$, $j_0<\cdots <j_k<=p-1$; then, there is not an attribute subset between $B$ and $B'$ (following the lexicographical order) being a reduct.
 	\end{proposition}	
 	
 	From the proposition~\ref{prop:gap} we have the following corollary \citep{Santiesteban03}; which is relevant to GCreduct in order to avoid other unnecessary evaluations.
 	
 	\begin{corollary}\label{coro:gap} 
-		Let DM a SBDM and $L \subseteq C$ be a non super--reduct, such that $L = \lbrace c_{j_0},...,c_{j_s}\rbrace$, $c_{j_0}<...<c_{j_s}$ and $c_{j_s}$ is the last attribute in DM. If there is a gap $c_p$ in $L$, and $L' = \lbrace c_{j_0},...,c_{j_k},c_{p+1}\rbrace$, $j_0<...<j_k<=p-1$; then, there is not an attribute subset between $L$ and $L'$ (following the lexicographical order) being a reduct.
+		Let DM be a SBDM and $B \subseteq C$ be a non super--reduct, such that $B = \lbrace c_{j_0},...,c_{j_s}\rbrace$, $c_{j_0}<...<c_{j_s}$ and $c_{j_s}$ is the last attribute in DM. If there is a gap $c_p$ in $B$, and $B' = \lbrace c_{j_0},...,c_{j_k},c_{p+1}\rbrace$, $j_0<...<j_k<=p-1$; then, there is not an attribute subset between $B$ and $B'$ (following the lexicographical order) being a reduct.
 	\end{corollary}
 		
 	In order to determine whether a super--reduct is a reduct (verifying the irreducible condition) the
 	exclusion mask, introduced by \cite{Lias09}, plays a fundamental role. 
 	
 	\begin{definition}\label{def:exclusion}
-		Let DM a SBDM and $L \subseteq C$ be a subset of attributes from an information system. We call exclusion mask of L, denoted as $em_L$, to the binary word in which the $i^{\mathit{th}}$ bit is 1 if the $i^{\mathit{th}}$ row in DM has a 1 in only one column of those columns corresponding to attributes in L, and it is 0 otherwise.
+		Let DM be a SBDM and $B \subseteq C$ be a subset of attributes from an information system. We call exclusion mask of B, denoted as $em_B$, to the binary word in which the $i^{\mathit{th}}$ bit is 1 if the $i^{\mathit{th}}$ row in DM has a 1 in only one column of those columns corresponding to attributes in B, and it is 0 otherwise.
 	\end{definition}
 	
 	For instance, from the \textit{SBDM} in Table~\ref{tab:SBDM1} we have:
@@ -440,20 +425,20 @@
 	\cite{Lias13} introduced the following proposition to support the cumulative computation of the exclusion mask.
 	
 	\begin{proposition}\label{prop:cumul} 
-		Let DM a SBDM and $L \subseteq C$ be a subset of attributes from an information system and $c_i \notin L$ an attribute of DM. The exclusion mask of $L \cup \lbrace c_i\rbrace$ is calculated as follows: $$em_{L \cup \lbrace c_i\rbrace}=(em_L \wedge \neg cm_{c_i}) \vee (\neg cm_L \wedge cm_{c_i})$$	where $cm$ refers to the cumulative mask.
+		Let DM be a SBDM and $B \subseteq C$ be a subset of attributes from an information system and $c_i \notin B$ an attribute of DM. The exclusion mask of $B \cup \lbrace c_i\rbrace$ is calculated as follows: $$em_{B \cup \lbrace c_i\rbrace}=(em_B \wedge \neg cm_{c_i}) \vee (\neg cm_B \wedge cm_{c_i})$$	where $cm$ refers to the cumulative mask.
 	\end{proposition}
 	
 	Finally, they stated and proved the following proposition.
 	
 	\begin{proposition}\label{prop:exclude} 
-		Let DM a SBDM and $L \subseteq R$ be a subset of attributes from an information system and $c_i \notin L$ an attribute of DM.
-		If $\exists c_x \in L$ such that $em_{L \cup \lbrace c_i\rbrace} \wedge cm_{c_x}=(0,...,0)$. Then, $L \cup \lbrace c_i\rbrace$	is not a reduct.
+		Let DM be a SBDM and $B \subseteq R$ be a subset of attributes from an information system and $c_i \notin B$ an attribute of DM.
+		If $\exists c_x \in B$ such that $em_{B \cup \lbrace c_i\rbrace} \wedge cm_{c_x}=(0,...,0)$. Then, $B \cup \lbrace c_i\rbrace$	is not a reduct.
 	\end{proposition}
 
 \subsection{The algorithm GCreduct}\label{description}
-	GCreduct finds reducts in the \textit{SBDM} computed from an information system. This algorithm explores the search space evaluating some candidates and avoiding others, based on previous evaluations. The use of costly operations for candidate evaluation \citep{WangP07,Lias13}, leads to a reduction in the number of evaluated candidates. However, GCreduct uses a simpler candidate evaluation, based on the attribute contribution and the gap elimination, to reduce the algorithm runtime. 
+	GCreduct finds reducts in the \textit{SBDM} computed from an information system. This algorithm explores the search space evaluating some candidates and avoiding others, based on previous evaluations. Unlike other works such as \citep{WangP07,Lias13} where candidate evaluation is performed through operations with a high cost, GCreduct uses a simpler candidate evaluation, based on attribute contribution and gap elimination, to reduce the algorithm runtime. 
 
-	The first step in the GCreduct algorithm consists in sorting the \textit{SBDM} in order to reduce the search space \citep{Sanchez07}. First, it randomly selects one of the rows of the \textit{SBDM} with the fewest number of 1's. Then, the selected row is moved to the top, and all columns in which it has a 1 are moved to the left. Table~\ref{tab:SSBDM1} shows the \textit{SBDM} from Table~\ref{tab:SBDM1}, sorted in this way. Herein after, the order of attributes in the information system is the resulting order of this sorting process.
+	In order to reduce the search space, as in other works \citep{Sanchez07,Lias13}, GCreduct sorts the \textit{SBDM} as follows: first, it randomly selects one of the rows of the \textit{SBDM} with the fewest number of 1's. Then, the selected row is moved to the top, and all columns in which it has a 1 are moved to the left. Table~\ref{tab:SSBDM1} shows the \textit{SBDM} from Table~\ref{tab:SBDM1}, sorted in this way. Herein after, the order of attributes in the information system is the resulting order of this sorting process.
 		
 	\begin{table}[htb]
 		\caption{Sorted Simplified Binary Discernibility Matrix computed from Table~\ref{tab:SBDM1}.}
@@ -477,18 +462,18 @@
 		\label{fig:flowchart}
 	\end{figure}
 	
-	Figure~\ref{fig:flowchart}, shows the flowchart of GCreduct. After initializing the current candidate with the first attribute, the cumulative mask is updated (\textbf{Update cm}). Then the attribute contribution is evaluated using the definition~\ref{def:contrib} (\textbf{Contrib.}). For those candidate subsets with a contributing attribute, the super--reduct condition is evaluated using definition~\ref{def:testor} (\textbf{Super Reduct}). For super--reducts, the proposition~\ref{prop:exclude} (\textbf{Reduct}) is evaluated in order to determine whether a super--reduct is a reduct. Finally, reducts are saved (\textbf{Save Reduct}). % with $\Theta (n)$.
+	Figure~\ref{fig:flowchart} shows the flowchart of GCreduct. After initializing the current candidate with the first attribute, the cumulative mask is updated (\textbf{Update cm}). Then the attribute contribution is evaluated using the definition~\ref{def:contrib} (\textbf{Contrib.}). For those candidate subsets with a contributing attribute, the super--reduct condition is evaluated using definition~\ref{def:testor} (\textbf{Super Reduct}). For super--reducts, the proposition~\ref{prop:exclude} (\textbf{Reduct}) is evaluated in order to determine whether a super--reduct is a reduct. Finally, reducts are saved (\textbf{Save Reduct}). % with $\Theta (n)$.
 	
-	The rest of the algorithm, deals with the generation of the next candidate. 
+	The rest of the algorithm deals with the generation of the next candidate. 
 	%Unless otherwise stated, each step has $\Theta (1)$ complexity. 
-	If the current candidate does not include the last attribute of the information system, the next candidate subset is generated in one of the two following ways. When the current candidate does not contribute or it is a super--reduct, the last attribute added to the current candidate is removed before adding a new one. This procedure (\textbf{Remove one Att. Add one}) avoids the evaluation of supersets of the current candidate. Otherwise, if the current candidate contributes and it is not a super--reduct, a new attribute is added to form the next candidate (\textbf{Add one Attribute}). New attributes are always added in the lexicographical order. 
+	If the current candidate does not include the last attribute of the information system, the next candidate subset is generated in one of the two following ways: a) If the current candidate does not contribute or it is a super--reduct, the last attribute added to the current candidate is removed before adding a new one. This procedure (\textbf{Remove one Att. Add one}) avoids the evaluation of supersets of the current candidate; b) If the current candidate contributes and it is not a super--reduct, a new attribute is added to form the next candidate (\textbf{Add one Attribute}). New attributes are always added following the lexicographical order. 
 	
-	When the current candidate includes the last attribute of the information system, the next candidate subset is generated in one of the two following ways. If the current candidate is a reduct or it is not a super-reduct, the gap is eliminated by applying the corollary~\ref{coro:gap} (\textbf{Eliminate GAP}). %, with a computational complexity of $\Theta (n)$. 
-	In this way, subsets of the current candidate are avoided. Otherwise, if the current candidate is a super-reduct and it is not a reduct, the last two attributes added to the current candidate are removed and a new one is added, following the lexicographical order (\textbf{Remove Two atts. Add one}).
+	When the current candidate includes the last attribute of the information system, the next candidate subset is generated in one of the two following ways: a) If the current candidate is a reduct or it is not a super-reduct, the gap is eliminated by applying the corollary~\ref{coro:gap} (\textbf{Eliminate GAP}). %, with a computational complexity of $\Theta (n)$. 
+	In this way, subsets of the current candidate are avoided; b) If the current candidate is a super-reduct and it is not a reduct, the last two attributes added to the current candidate are removed and a new one is added, following the lexicographical order (\textbf{Remove Two atts. Add one}).
 	
-	Finally, the column of the \textit{SBDM} corresponding to the leftmost attribute in the next candidate, according to its order in the information system, is selected. If this column has a zero in its first row, the algorithm finishes (\textbf{0 in the first row}). Notice that, from this point, the cumulative mask will always have a 0 in the bit corresponding to the first row of the \textit{SBDM}; due to the sorting process described above.
+	Each time a new candidate is generated, if the column of the \textit{SBDM} corresponding to the leftmost attribute, according to its order in the information system, has a zero in the first row, the algorithm finishes (\textbf{0 in the first row}). Notice that, from this point, the cumulative mask will always have a 0 in the bit corresponding to the first row of the \textit{SBDM}; due to the sorting process described above.
 	
-	The computational complexity of the sorting process as well as the \textbf{Reduct} step, is $\Theta (nm)$, where $n$ corresponds to the number of columns and $m$ corresponds to the number of rows in the \textit{SBDM}. All other steps has a lower complexity. Thus, the computational complexity of a complete cycle is $O (nm)$. However, since reduct computation is an NP--hard problem, the number of cycles has exponential relation to $n$.
+	The computational complexity of the sorting process as well as the \textbf{Reduct} step, is $\Theta (nm)$, where $n$ corresponds to the number of columns and $m$ corresponds to the number of rows in the \textit{SBDM}. All other steps have lower complexity. Thus, the computational complexity of a complete cycle is $O (nm)$. However, since reduct computation is an NP--hard problem, the number of cycles has an exponential relation to $n$.
 %	\begin{description}
 %		\item[Step 2:] Add a new attribute to the current candidate subset, following the lexicographical order. If the current candidate has more than one attribute, go to step~4. 
 %		\item[Step 3:] If column corresponding to the only attribute in the current candidate has a 1 in the first row of \textit{SBDM}, go to step~5. Otherwise, the algorithm finishes because the first row will be a zero row (according to the ordering of \textit{SBDM}), and any subsequent candidate will not satisfy the condition of super--reduct (definition~\ref{def:testor}).
@@ -568,16 +553,16 @@
 	  			\State $c \Leftarrow c+1$\label{line:add1End}
 	  		 \EndIf
 	  	\EndIf
-	  	\If {$B = \emptyset$ \textbf{and} $cm_c[0] = 0$} \Comment{Attribute has a 0 in the first row}\label{line:done}
+	  	\If {$B = \emptyset$ \textbf{and} $cm_c[0] = 0$} \Comment{The current attribute $c$ has a 0 in the first row}\label{line:done}
 	  		\State $done \Leftarrow \mathrm{True}$
 	  	\EndIf
 	  \EndWhile 
 	\end{algorithmic}
 	\end{algorithm}
 
-		The pseudocode for GCreduct is shown in Algorithm~\ref{alg:GCreduct}. GCreduct starts with an empty subset of attributes $B$ and the position of the first attribute in $c$\footnote{Here we abuse of the notation by using $c$ for both an attribute and a number denoting its position in the \textit{SBDM}}. Then it assigns a null vector to the cumulative mask ($cm_B$) for $B=\emptyset$ or retrieve the previously calculated value, from $CM$, for $B\neq \emptyset$ (lines~\ref{line:emptyB}-\ref{line:notEmpty}). $CM$ stores the already calculated cumulative masks, indexed by the last attribute in $B$. The function getLast$(B)$ returns the last attribute in $B$. In the line~\ref{line:updateCM}, GCreduct updates the cumulative mask and in		the line~\ref{line:contrib} it evaluates the contribution of $c$ to $B$. If the current attribute $c$ contributes, the super--reduct condition is evaluated on $B\cup \lbrace c\rbrace$ (line~\ref{line:superReduct}). For super--reducts, the proposition~\ref{prop:cumul} is used to compute the exclusion mask $em_{B\cup \lbrace c\rbrace}$ (lines~\ref{line:em}-\ref{line:emEnd}) and the irreducible condition (lines~\ref{line:reduct}-\ref{line:reductEnd}) is verified by means of the proposition~\ref{prop:exclude}. At this point, the candidate evaluation is finished.
+		The pseudocode for GCreduct is shown in Algorithm~\ref{alg:GCreduct}. GCreduct starts with an empty subset of attributes $B$ and the position of the first attribute in $c$\footnote{Here we abuse of the notation by using $c$ for both an attribute and the number denoting its position in the \textit{SBDM}}. Then it assigns a null vector to the cumulative mask ($cm_B$) for $B=\emptyset$ or retrieve the previously calculated value, from $CM$, for $B\neq \emptyset$ (lines~\ref{line:emptyB}-\ref{line:notEmpty}). $CM$ stores the already calculated cumulative masks, indexed by the last attribute in $B$. The function getLast$(B)$ returns the last attribute in $B$. In the line~\ref{line:updateCM}, GCreduct updates the cumulative mask and in		the line~\ref{line:contrib} it evaluates the contribution of $c$ to $B$. If the current attribute $c$ contributes, the super--reduct condition is evaluated on $B\cup \lbrace c\rbrace$ (line~\ref{line:superReduct}). For super--reducts, the proposition~\ref{prop:cumul} is used to compute the exclusion mask $em_{B\cup \lbrace c\rbrace}$ (lines~\ref{line:em}-\ref{line:emEnd}) and the irreducible condition (lines~\ref{line:reduct}-\ref{line:reductEnd}) is verified by means of the proposition~\ref{prop:exclude}. At this point, the candidate evaluation is finished.
 		
-		From line~\ref{line:cg} to the end, the next candidate subset ($B\cup \lbrace c\rbrace$) is generated. 
+		From the line~\ref{line:cg} to the end, the next candidate subset ($B\cup \lbrace c\rbrace$) is generated. 
 		LastAttribute holds the position of the last attribute in the \textit{SBDM}. If the last attribute is
 		reached, we check if the current candidate is a reduct or a non--super--reduct, to eliminate the gap
 		(lines~\ref{line:gap}-\ref{line:gapEnd}). If the last attribute in the \textit{SBDM} is reached but the current candidate is a super--reduct, the last attribute in $B$ is removed (line~\ref{line:remLast}). If the last attribute is 
@@ -625,7 +610,7 @@
     		23 & \{$c_0,c_3,c_4,c_5$\}	& 6 & \{$c_0,c_3,c_4,c_5,c_6$\} 	& True & True & True & Eliminate the gap ($c_0$).\\
     		\hline
     		24 & \{\} 					& 1 & \{$c_1$\} 					& 
-    		\multicolumn{4}{p{5cm}|}{Algorithm finishes because $c_1$ has a 0 in the first row of the \textit{SBDM} (line~\ref{line:done})}\\
+    		\multicolumn{4}{p{5cm}|}{GCreduct finishes because $c_1$ has a 0 in the first row of the \textit{SBDM} (line~\ref{line:done})}\\
     		\hline
 		\end{tabular}
 	\end{table}
@@ -638,16 +623,18 @@
 \section{Evaluation and Discussion}\label{evaluation}
 	In this section, we evaluate our proposed algorithm over standard information systems \citep{Bache13} and synthetic \textit{SBDMs}. We make a comparative analysis versus RGonCRS, fast--CT\_EXT, and fast--BR; which are the most recent and fastest algorithms for reduct computation. We used in all cases the author's implementation of the algorithms. All experiments were run on a Core i7-5820K Intel processor at 3.30GHz, with 32GB in RAM, running GNU/Linux.
 	
-	In the subsection~\ref{sub:matlab}, GCreduct is compared against RGonCRS over standard information systems. Then, in the subsection~\ref{sub:synth} we show a comparative study with fast--CT\_EXT and fast--BR over synthetic \textit{SBDMs}. From this second experiment, we obtained an empirical rule for selecting the fastest algorithm for a given problem. Finally, in the  subsection~\ref{sub:eval}, we evaluate the found rule over standard information systems.
+	In the subsection~\ref{sub:matlab}, GCreduct is compared against RGonCRS over standard information systems, using a Matlab implementation. Then, in the subsection~\ref{sub:synth} we show a comparative study with fast--CT\_EXT and fast--BR over synthetic \textit{SBDMs}, using a Java implementation. From this second experiment, we obtained an empirical rule for selecting the fastest algorithm for a given problem. Finally, in the  subsection~\ref{sub:eval}, we evaluate the found rule over standard information systems.
 	
 \subsection{GCreduct vs. RGonCRS}\label{sub:matlab}
-	In order to make a fair comparison against RGonCRS, we used its author's implementation in Matlab and we implemented GCreduct in Matlab as well. For this experiment we selected the 6 information systems from the UCI machine learning repository \citep{Bache13} used in \citep{Lias13,Sanchez10,WangP07} which have more than 20 attributes. In addition, we included other 9 datasets from the UCI machine learning repository, which also have more than 20 attributes. Objects with missing data are removed as in \citep{WangP07}. This experiment was run using MATLAB R2015a.
+	In order to make a fair comparison against RGonCRS, we used its author's implementation in Matlab and we implemented GCreduct in Matlab as well. For this experiment we selected the 6 information systems from the UCI machine learning repository \citep{Bache13} used in \citep{Lias13,Sanchez10,WangP07} which have more than 20 attributes. In addition, we included other 11 datasets from the UCI machine learning repository, which also have more than 20 attributes. Objects with missing data are removed as in \citep{WangP07}. This experiment was run using MATLAB R2015a.
 	
-	Table~\ref{tab:matlab} shows the runtime of both algorithms for each information system. The total runtime for GCreduct, shown in the last column of Table~\ref{tab:matlab}, includes the time taken for computing the \textit{SBDM}. Since GCreduct performed better than RGonCRS in most information systems, we made a one sided paired Wilcoxon signed rank test, as suggested by \cite{Demsar2006}. This test shows a statistically significant difference (p--value = 0.02) in favor of GCreduct. Notice that for the SPECT (train) information system, RGonCRS was not able to find a result and it was excluded from the test.
+	Table~\ref{tab:matlab} shows the runtime of both algorithms for each information system. The total runtime for GCreduct, shown in the last column of Table~\ref{tab:matlab}, includes the time taken for computing the \textit{SBDM}. Since GCreduct performed better than RGonCRS in most information systems, we made a one sided paired Wilcoxon signed rank test, as suggested by \cite{Demsar2006}. This test shows a statistically significant difference (\textit{p--value} = 0.02) in favor of GCreduct.
+	
+	Notice that for the SPECT (train) information system, RGonCRS was not able to find a result and it was excluded from the statistical test. We suppose that \cite{WangP07} used a different version of SPECT (train), since we computed 26 reducts instead of the 70 reported by him.
 	
 	\begin{table}[!htb]
 		\setlength{\tabcolsep}{3pt}
-		\caption{RGonCRS and GCreduct execution over standard information systems.}\label{tab:matlab}
+		\caption{RGonCRS and GCreduct runtimes for standard information systems.}\label{tab:matlab}
 		\centering \scriptsize
 		\begin{tabular}{|l|c|c|c|r|c|c|r|r|}
 			\hline
@@ -657,7 +644,7 @@
 			\hline
 			chessKingRookVKingPawn & 37 & 3196 & 4 & 124.31 & 29 & 3.62 & 0.02 & \textbf{3.64}\\ % & 42932.93 & 3.66\\
 			anneal	& 39 & 798 & 313 & 24.14 & 62 & 0.15 & 7.14 & \textbf{7.29} \\ % & 58.33 & 15.97\\
-			SPECT (train) & 23 & 80 & 26 & -- & 16 & 0.02 & 0.51 & \textbf{0.53} \\
+			SPECT (train) & 23 & 80 & 26 & -- & 16 & 0.02 & 0.51 & 0.53 \\
 			Mushroom & 23 & 8124 & 181 & 322.70 & 19 & 18.4 & 0.54 & \textbf{18.94} \\
 			%cardiotocography & 21 & 2126 & 383 & -- & 81 & 1.03 &  & 1.71 \\ %& 1.73 & \textbf{1 .56}\\
 			credit--g & 21 & 1000 & 846 & 23.95 & 223 & 0.19 & 4.61 & \textbf{4.80} \\ %& 5.43 & 8.55\\
@@ -685,9 +672,7 @@
 	In order to evaluate the performance of GCreduct versus fast--CT\_EXT and fast--BR, we present a comparative analysis over synthetically generated \textit{SBDMs}. For this experiment, we implemented our proposed algorithm in Java to make a fair comparison against the Java implementations of fast--CT\_EXT and fast--BR, provided by their authors. 
 %	This implementation of GCreduct performs, at least, one order of magnitude faster than the Matlab implementation; as can be seen by comparing Table~\ref{tab:matlab} and Table~\ref{tab:java}.
 	
-	This experiment was done over 500 randomly generated \textit{SBDMs} with 2000 rows and 30 columns; this size was selected in order to keep reasonable runtime for the three algorithms. Previous studies \citep{Rojas12,Lias13,Rodriguez15}, categorize the \textit{SBDMs} depending on the \emph{density of 1's} they have; i.e. the number of ones divided by the number of cells of the \textit{SBDM}. For this reason, our 500 \textit{SBDMs} were generated with densities of 1's uniformly distributed in the range (0.20--0.80) using a step of 0.04. 
-%	Matrices with higher or lower densities are difficult to obtain using a random method. 
-	For each value of density, several different matrices were generated. 
+	This experiment was done over 500 randomly generated \textit{SBDMs} with 2000 rows and 30 columns; this size was selected in order to keep reasonable runtime for the three algorithms. Previous studies \citep{Rojas12,Lias13,Rodriguez15}, categorize the \textit{SBDMs} depending on the \emph{density of 1's} they have; i.e. the number of ones divided by the number of cells of the \textit{SBDM}. For this reason, our 500 \textit{SBDMs} were generated with densities of 1's uniformly distributed in the range (0.20--0.80) using a step of 0.04. For each value of density, several different matrices were generated. Due to the selected size, there is a reduced number of different \textit{SBDMs} for densities under 0.20. On the other hand, reduct computation on \textit{SBDMs} with densities above 0.8 has a lower computational cost \citep{Rojas12}.
 				
 	\begin{figure}[htb]
 		\begin{center}
@@ -699,33 +684,33 @@
 
 	For clarity purposes, the 500 matrices were split into 15 groups discretizing the range of densities, each group having approximately 33 \textit{SBDMs}. Figure~\ref{fig:scattDensity} shows the average runtime of all  matrices in each group for the three algorithms, as a function of the density of 1's in the synthetic \textit{SBDMs}. In this figure, the vertical bars show the standard deviation of each bin. 
 	
-	{	
-	Looking at the fastest algorithm in this figure, we identify three distinct groups of matrices by their density:
-	\begin{itemize}
-		\item Low density matrices: density $\leq$ 0.35.
-		\item Medium density matrices: 0.35 $<$ density $\leq$ 0.6.
-		\item High density matrices: density $>$ 0.6.
-	\end{itemize}}
+%	{	
+%	Looking at the fastest algorithm in this figure, we identify three distinct groups of matrices by their density:
+%	\begin{itemize}
+%		\item Low density matrices: density $\leq$ 0.35.
+%		\item Medium density matrices: 0.35 $<$ density $\leq$ 0.65.
+%		\item High density matrices: density $>$ 0.65.
+%	\end{itemize}}
 		
-	From Figure~\ref{fig:scattDensity}, we can see that the fastest algorithm for matrices with density under or equal 0.35 was GCreduct, fast--BR was the fastest for matrices with density between 0.35 and 0.6, and the three algorithms presented a similar performance for matrices with density above 0.6. The fact that high density \textit{SBDMs} do not constitute a complex computational task for reduct computation \citep{Rojas12} is clearly visible in Figure~\ref{fig:scattDensity}. For this reason, a detailed analysis in this region lacks of relevance.
+	From Figure~\ref{fig:scattDensity}, we can see that the fastest algorithm for matrices with density under or equal 0.35 was GCreduct, fast--BR was the fastest for matrices with density between 0.35 and 0.65, and the three algorithms presented similar performance for matrices with density above 0.65. The fact that high density \textit{SBDMs} do not constitute a complex computational task for reduct computation \citep{Rojas12} is clearly visible in Figure~\ref{fig:scattDensity}. For this reason, a detailed analysis in this region lacks of relevance.
 	
 %	Since all matrices for this experiment have the same dimensions, we can say that low density
 %	matrices showed a relatively high complexity. Thus, the apparent fact that GCreduct outperforms 
 %	the other algorithms for this kind of matrices, deserves special attention. 
 		
-	In order to explain the well defined line delimiting those \textit{SBDMs} for which GCreduct is faster than fast--BR (densities under 0.35),  we must go deeply into the main difference between these algorithms. In GCreduct we compute the exclusion mask and evaluate the attribute exclusion, using proposition~\ref{prop:exclude}, for those candidates detected as super-reducts; in order to verify whether they are reducts. In fast--BR, on the other hand, the proposition~\ref{prop:exclude} is evaluated for each candidate with a contributing attribute. The evaluation of attribute exclusion has the highest computational complexity in the algorithm ($\Theta (nm)$). The attribute exclusion occurs when there is at least one column in the sub-matrix of the \textit{SBDM}, considering only the attributes in the current candidate, that can be removed without increasing the number of zero rows in this sub-matrix. The exclusion is more frequent in matrices with a higher density of 1's, since it is given by cumulative OR operations. The higher cost of candidate evaluation in fast--BR pays off for \textit{SBDMs} with densities above 0.35, because supersets of candidates with attribute exclusion are excluded from subsequent evaluations. Take for instance the extreme case of the identity matrix where there is no exclusion at all, since every attribute is indispensable to form a reduct. For this kind of \textit{SBDMs}, GCreduct needs to evaluate as many candidates as fast--BR but the former makes a single verification for exclusion with the set of all attributes. On the other hand, fast--BR verifies the exclusion for each candidate, which leads to a higher computational cost.
+	In order to explain the line delimiting those \textit{SBDMs} for which GCreduct is faster than fast--BR (densities under 0.35), we must go deeply into the main difference between these algorithms. In GCreduct, we compute the exclusion mask and evaluate the attribute exclusion, using proposition~\ref{prop:exclude}, for those candidates detected as super-reducts; in order to verify whether they are reducts. In fast--BR, on the other hand, the proposition~\ref{prop:exclude} is evaluated for each candidate with a contributing attribute. The evaluation of the attribute exclusion has the highest computational complexity in the algorithm ($\Theta (nm)$). The attribute exclusion occurs when there is at least one column in the sub-matrix of the \textit{SBDM}, considering only the attributes in the current candidate, that can be removed without increasing the number of zero rows in this sub-matrix. The exclusion is more frequent in matrices with a higher density of 1's, since it is given by cumulative OR operations. The higher cost of candidate evaluation in fast--BR pays off for \textit{SBDMs} with higher densities (the limit identified from our experiment is 0.35), because supersets of candidates with attribute exclusion are excluded from subsequent evaluations. Take for instance the extreme case of the identity matrix, where there is no exclusion at all, since every attribute is indispensable to form a reduct. For this kind of \textit{SBDMs}, GCreduct needs to evaluate as many candidates as fast--BR but the former makes a single verification for exclusion with the set of all attributes. On the other hand, fast--BR verifies the exclusion for each candidate, which leads to a higher computational cost.
 	
-	Friedman tests and post hoc Nemenyi-Damico-Wolfe-Dunn tests, show that GCreduct was significantly faster (p--value $< 10^{-16}$) than fast--CT\_EXT for low and medium density matrices. 
-%	For high density \textit{SBDMs} there was no significant difference (p--value = 0.87) between these two algorithms. 
-	In relation to fast--BR, GCreduct showed a significant runtime reduction (p--value $< 10^{-16}$) for low density matrices while it was significantly slower (p--value $< 10^{-16}$) for medium density matrices. 
-%	GCreduct presented a significant improvement (p--value = 0.0068) over fast--BR in the overall analysis, due to the higher runtime taken by low density matrices. 
-	From this analysis, we conclude that GCreduct is the best algorithm for low density matrices; while fast--BR is the best for medium density matrices. For high density matrices any algorithm can be used since, as we already commented, computing reducts of this kind of matrices does not constitute a complex computational task. Moreover, from these conclusions, a great advantage can be taken of selecting the appropriate algorithm for each information system, as it will be shown in the next subsection. 
+	Friedman tests and post hoc Nemenyi-Damico-Wolfe-Dunn tests, show that GCreduct was significantly faster (\textit{p--value} $< 10^{-16}$) than fast--CT\_EXT for low (under 0.35) and medium (between 0.35 and 0.65) density matrices. 
+%	For high density \textit{SBDMs} there was no significant difference (\textit{p--value} = 0.87) between these two algorithms. 
+	In relation to fast--BR, GCreduct showed a significant runtime reduction (\textit{p--value} $< 10^{-16}$) for low density matrices while it was significantly slower (\textit{p--value} $< 10^{-16}$) for medium density matrices. 
+%	GCreduct presented a significant improvement (\textit{p--value} = 0.0068) over fast--BR in the overall analysis, due to the higher runtime taken by low density matrices. 
+	From this analysis, we conclude that GCreduct is the best algorithm for low density matrices; while fast--BR is the best for medium density matrices. For high (over 0.65) density matrices any algorithm can be used since, as we already commented, computing reducts of this kind of matrices does not constitute a complex computational task. Moreover, from these conclusions, a great advantage can be taken of selecting the appropriate algorithm for each information system, as it will be shown in the next subsection. 
 	
 \subsection{Evaluation Over Standard Information Systems}\label{sub:eval}
-	In this experiment, we run fast--BR and GCreduct over those information systems in Table~\ref{tab:matlab} which have a \textit{SBDM} with density of 1's lower or equal to 0.35. Table~\ref{tab:java} shows the runtime for each algorithm, including the density of \textit{SBDMs}. Information systems in Table~\ref{tab:java} are sorted in ascending order of their density, for clarity purposes. 
+	In this experiment, we run fast--BR and GCreduct over 10 information systems in Table~\ref{tab:matlab} with  densities of 1's under 0.65. Table~\ref{tab:java} shows the runtime for each algorithm, including the density of \textit{SBDMs}. Information systems in Table~\ref{tab:java} are sorted in ascending order of their density, for clarity purposes. 
 
 	\begin{table}[!htb]
-		\caption{Fast--BR and GCreduct execution over standard information systems.}\label{tab:java}
+		\caption{Fast--BR and GCreduct runtimes for standard information systems.}\label{tab:java}
 		\centering \scriptsize
 		\begin{tabular}{|l|c|R {1.2cm}|R {1.2cm}|}
 			\hline
@@ -738,9 +723,9 @@
 			credit--g & 0.34 & 0.13 & \textbf{0.07}\\
 			dermatology & 0.34 & \textbf{4.72} & 11.51\\
 			flags & 0.35 & 1.24 & \textbf{0.72}\\
-%			sponge & 0.42 & \textbf{0.18} & 0.92\\
-%			student-por & 0.42 & \textbf{201,66} & 1716,47\\
-%			student-mat & 0.44 & \textbf{62,41} & 727,93\\
+			sponge & 0.42 & \textbf{0.18} & 0.92\\
+			student-por & 0.42 & \textbf{201,66} & 1716,47\\
+			student-mat & 0.44 & \textbf{62,41} & 727,93\\
 %			lungCancer & 0.47 & \textbf{7,41} & 133,62\\
 %			heart--c & 0.49 & 0.01 & \textbf{$<$0.01}\\
 %			cylinder-bands & 0.55 & \textbf{0.66} & 4,45\\
@@ -753,14 +738,14 @@
     	\end{tabular}
     \end{table}
     
-    Although this is a small heterogeneous sample, the rule obtained in the subsection~\ref{sub:synth} can be verified in this experiment. Notice that the last four information systems in Table~\ref{tab:java} have a \textit{SBDM} with density close to the boundary of 0.35. For these information systems we cannot conclude a fastest algorithm as it is shown in Table~\ref{tab:java}. However, for those information systems which have a \textit{SBDM} with density clearly under 0.35, GCreduct performed faster. This is the case of the first three information systems in Table~\ref{tab:java}.
+    Although this is a small heterogeneous sample, the rule obtained in the subsection~\ref{sub:synth} can be verified in this experiment. Notice that from the fourth to the seventh information system in Table~\ref{tab:java} densities are close to the boundary of 0.35. For these information systems we cannot conclude a fastest algorithm as it is shown in Table~\ref{tab:java}. However, for those information systems which have a \textit{SBDM} with density clearly under 0.35, GCreduct performed faster. This is the case of the first three information systems in Table~\ref{tab:java}. For those information systems clearly above 0.35, fast-BR performed faster, as it can be seen in the last three cases.
 
 %	In Table~\ref{tab:java}, the four information systems with a low density \textit{SBDM} lead to simple reduct computations. In order to show the advantage of our proposed algorithm and the rule obtained for selecting the fastest algorithm for each information system; we present another experiment. We selected for this experiment the \textit{audiology} information system from the UCI machine learning repository. \textit{Audiology} has 226 objects and 69 attributes, and its \textit{SBDM} has 174 rows with 11 null and 2 repeated columns with a density of 0.084. Due to the high number of objects with missing data, we treated missing values as a special value \citep{Li2007} for computing the \textit{SBDM}.  
 
 \section{Conclusions}\label{conclusions}
-	In this work, we presented a new algorithm, GCreduct, for reduct computation based on the pruning properties of gap elimination and attribute contribution. In our proposed algorithm, the search space is traversed evaluating some candidate subsets and discarding others, based on previous evaluations. Algorithms reported in the literature, use costly operations for candidate evaluation in order to reduce the number of evaluated candidates. The main contribution of our proposal, on the other hand, is the use of simpler candidate evaluation to reduce the algorithm runtime. 
+	In this work, we presented a new algorithm, GCreduct, for reduct computation. In our proposed algorithm, the search space is traversed evaluating some candidate subsets and discarding others, based on previous evaluations. Algorithms reported in the literature use operations with a high cost for candidate evaluation in order to reduce the number of evaluated candidates. The main contribution of our proposal, on the other hand, is the use of simpler operations for candidate evaluation, based on the pruning properties of gap elimination and attribute contribution, which allows to reduce the required runtime. 
 	
-	In order to assess the proposed algorithm, we conducted a series of experiments over synthetic and standard information systems. Our experiments showed that GCreduct performs faster than all other recent reported alternatives in a specific kind of information systems. This result provides an instrument to select the proper algorithm for a determined information system. Further studies should be devoted to explore the relation found between the fastest algorithm for reduct computation of an information system, and the density of 1's of the \textit{SBDM} associated to it. Furthermore, the feasibility of the introduction of this relation as a preprocessing stage for reduct computation, should be studied.
+	After conducting a series of experiments over synthetic and standard information systems, we can conclude that GCreduct performs faster than all other recent reported alternatives in a specific kind of information systems. This result provides an instrument to select the proper algorithm for a determined information system, based on its density. Further studies should be devoted to explore the relation found between the fastest algorithm for reduct computation of an information system, and the density of 1's of the \textit{SBDM} associated to it. Furthermore, the feasibility of the introduction of this relation as a preprocessing stage for reduct computation, should be also studied.
 	
 %-------------------------------------------------------------------------------
 % Bibliography
