@@ -274,12 +274,11 @@
   $$f_{IS}(c_1^*,c_2^*,c_3^*)=(c_1^* \vee c_2^* \vee c_3^*) \wedge (c_1^* \vee c_2^*) 
    \wedge (c_1^* \vee c_3^*) \wedge (c_2^* \vee c_3^*) $$
   
-  From this example we can easily see that the only reduct (also the core) for this IS is $c_1$.
   
 \subsection{Binary Discernibility Matrix}
   The \textit{Binary Discernibility Matrix} is a binary table representing the discernibility sets between pairs 
   of objects. This is another representation of the information in $M_{IS}$. In the binary discernibility
-  matrix, columns are single condition attributes and rows represents pairs of objects belonging to different 
+  matrix, columns are single condition attributes and rows represent pairs of objects belonging to different 
   classes. The discernibility element $m(i, j, c)$ for two objects $x_i$ and $x_j$ and a single condition 
   attribute $c \in C$ is given in a binary representation, such that:
   
@@ -322,7 +321,7 @@
   discernibility matrix from Table~\ref{tab_BDM}.
   
      \begin{table}[htb]
-		\caption{Basic Matrix Example.} \label{tab_SDM}
+		\caption{Simplified Discernibility Matrix.} \label{tab_SDM}
 		\centering
  	\begin{tabular}{ccc}
  		$c_1$ & $c_2$ & $c_3$\\
@@ -336,7 +335,7 @@
 \section{Related Work}\label{relatedWork}
   In this section, we will be first discussing heuristic algorithms for reduct computation. Some of these 
   algorithms are capable of finding several reducts and others are intended to obtain a single \textit{shortest} 
-  reduct. Then, two kind of algorithms for computing all reducts will be exposed: those 
+  reduct. Then, two kinds of algorithms for computing all reducts will be exposed: those 
   from RST and those from Testor Theory. Finally, we will make a review of parallel accelerations reported in 
   the literature.  
   
@@ -471,7 +470,7 @@
   In \citep{Lin04}, a heuristic is followed to find a short reduct. This first reduct is used to limit the search
   space, in order to only consider those attribute combinations with lower cardinality. 
   The main drawback of this algorithm is that the second step searches for reducts by checking all possible 
-  $s$-subtables of the whole database. A $s$-subtable means a subtable whose conditional attribute set have 
+  $s$-subtables of the whole database. An $s$-subtable means a subtable whose conditional attribute set have 
   size $s$. In other words, it is a decision table with a conditional attribute subset of size $s$ plus the decision
   attributes of the original table. This final process uses no pruning strategy and explores all combinatorial
   possibilities of attribute combinations, which is unfeasible in most cases.
@@ -910,7 +909,7 @@
 	The former analyze the matrix to find out some conditions that guarantee that a subset of attributes 
 	is a typical testor. The latter search typical testors over the whole power set of attributes, 
 	avoiding unnecessary evaluations by pruning some attribute subsets. 
-	Internal scale algorithms usually evaluates less candidates than external scale algorithms but each 
+	Internal scale algorithms usually evaluate less candidates than external scale algorithms but each 
 	candidate evaluation has a higher computational cost. Therefore, the search of fast algorithms for computing
 	typical testors has been biased to external scale algorithms \citep{Alba14}.
 	
@@ -1105,7 +1104,7 @@
 \subsection{A Hardware Architecture based the CT\_EXT Algorithm}\label{CTH}
 	Following with the critical study of our research proposal, we studied the hardware implementation of the 
 	CT\_EXT algorithm which is one of the most recent and fastest algorithms reported in the literature, after
-	studying the work in \citep{Rojas12} we designed a and implemented a new hardware architecture that traverses
+	studying the work in \citep{Rojas12} we designed and implemented a new hardware architecture that traverses
 	the search space in a different order than that presented in \citep{Rojas07, Rojas12,Rodriguez14}.
 	This strategy evaluates less
 	candidate subsets than previous architectures, which results in shorter runtime. Moreover, unlike 
@@ -1302,7 +1301,7 @@
 	Figures\,\ref{fig:result1}, \,\ref{fig:result2}, and \,\ref{fig:result3}.
 	Slowest executions of the CT\_EXT software implementation (CTS) are not shown in order to keep clarity in 
 	the figures. 
-	The hardware platform for BT (BTH) was not able to met the constrain of 50MHz clock frequency for some 
+	The hardware platform for BT (BTH) was not able to meet the constrain of 50MHz clock frequency for some 
 	matrices.
 	
 	Experiment results show that the proposed platform beats the software implementation of
