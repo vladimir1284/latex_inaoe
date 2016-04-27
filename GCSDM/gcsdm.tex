@@ -456,7 +456,7 @@
 	
 	\begin{figure}[htb]
 		\begin{center}
-			\includegraphics[width=\textwidth]{flowchart.eps}
+%			\includegraphics[width=\textwidth]{flowchart.eps}
 		\end{center}
 		\caption{GCreduct flowchart.}
 		\label{fig:flowchart}
@@ -636,34 +636,28 @@
 		\setlength{\tabcolsep}{3pt}
 		\caption{RGonCRS and GCreduct runtimes for standard information systems.}\label{tab:matlab}
 		\centering \scriptsize
-		\begin{tabular}{|l|c|c|c|r|c|c|r|r|}
+		\begin{tabular}{|l|c|c|c|r|c|r|r|}
 			\hline
-			&&&& RGonCRS & \multicolumn{2}{c|}{\textit{SBDM}} & \multicolumn{2}{c|}{GCreduct}\\ %fast--CT\_EXT & fast--BR\\
-			\cline{6-9}
-			Dataset & Attributes & Instances & Reducts & \multicolumn{1}{c|}{runtime(s)} & rows & runtime(s) & \multicolumn{1}{c|}{runtime(s)} & \multicolumn{1}{c|}{total(s)} \\ %& \multicolumn{1}{c|}{runtime}\\
+			&&&& RGonCRS & \multicolumn{2}{c|}{\textit{SBDM}} & GCreduct\\ %fast--CT\_EXT & fast--BR\\
+			\cline{6-7}
+			Dataset & Attributes & Instances & Reducts & \multicolumn{1}{c|}{runtime(s)} & rows & runtime(s) & \multicolumn{1}{c|}{runtime(s)}\\ %& \multicolumn{1}{c|}{runtime}\\
 			\hline
-			chessKingRookVKingPawn & 37 & 3196 & 4 & 124.31 & 29 & 3.62 & 0.02 & \textbf{3.64}\\ % & 42932.93 & 3.66\\
-			anneal	& 39 & 798 & 313 & 24.14 & 62 & 0.15 & 7.14 & \textbf{7.29} \\ % & 58.33 & 15.97\\
-			SPECT (train) & 23 & 80 & 26 & -- & 16 & 0.02 & 0.51 & 0.53 \\
-			Mushroom & 23 & 8124 & 181 & 322.70 & 19 & 18.4 & 0.54 & \textbf{18.94} \\
-			%cardiotocography & 21 & 2126 & 383 & -- & 81 & 1.03 &  & 1.71 \\ %& 1.73 & \textbf{1 .56}\\
-			credit--g & 21 & 1000 & 846 & 23.95 & 223 & 0.19 & 4.61 & \textbf{4.80} \\ %& 5.43 & 8.55\\
-			dermatology & 35 & 366 & 112708 & 12683.77 & 1103 & 0.31 & 2359.66 & \textbf{2359.97} \\ %& \textbf{1952.15} & 2021.75\\
-			flags & 30 & 194 & 23543 & \textbf{316.50} & 390 & 0.07 & 520.34 & 520.41 \\ %& 478.34 & 590.31\\
-			sponge & 46 & 76 & 10992 & \textbf{68.23} & 68 & 0.01 & 144.35 & 144.36 \\ %& 236.99 & \textbf{25.81}\\
-			student-por & 32 & 649 & 904963 & 27568.81 & 8717 & 0.90 & 11843.56 & \textbf{11844.46} \\
-			student-mat & 32 & 395 & 617921 & 21632.40 & 6253 & 0.42 & 5150.72 & \textbf{5151.14}\\
-			lungCancer & 57 & 32 & 4183355 & \textbf{31548.48} & 237 & 0.02 & 47239.16 & 47239.19 \\ %& 51993.06 & \textbf{4148.68}\\
-			%heart--c & 14 & 303 & 98 & 0.58 & 60 & 0.06 & 0.10 & \textbf{0.16}\\ % & \textbf{0.13} & 0.14\\
-			cylinder-bands & 40 & 512 & 23506 & 152.19 & 1148 & 0.09 & 148.41 & \textbf{148.50}\\ % & 175.80 & \textbf{60.94}\\
-			chronic--kidney--disease & 25 & 400 & 299 & 1.10 & 69 & 0.04 & 0.19 & \textbf{0.23} \\ %& 0.20 & \textbf{0.19}\\
-			ionosphere & 35 & 351 & 5759 & 17.85 & 250 & 0.07 & 14.79 & \textbf{14.86}\\ % & 14.03 & \textbf{2.71}\\			
-			molecular--biology--promoters & 59 & 106 & 7456944 & 18314.41 & 2761 & 0.09 & 14374.71 & \textbf{14374.80} \\ %& 12739.86 & \textbf{2235.02}\\
-			ozone & 73 & 2536 & 82755 & 243.98 & 5751 & 0.69 & 30.13 & \textbf{30.82} \\ %& 23.24 & \textbf{13.11}\\
-			movement--libras & 91 & 360 & 17619 & 29.96 & 1117 & 0.16 & 5.83 & \textbf{6.00} \\ %& 4.55 & \textbf{2.50}\\		
-			%soybean & 36 & 683 & 570 & -- & 33	& 0.60 &  & 187.22 \\ %& 182.51 & \textbf{19.11}\\
-				
-		\hline
+			Chess (kr-vs-kp)          & 37         & 3196      & 4        & 124.31            & 29    & 4.77        & \textbf{4.79}      \\
+			Connect-4                 & 43         & 6756      & 35       & 5245.23           & 406   & 25.19       & \textbf{\emph{25.19}}     \\
+			Credit-g                  & 21         & 1000      & 846      & 23.95             & 223   & 0.17        & \textbf{4.78}      \\
+			Cylinder-bands            & 40         & 512       & 23534    & 152.19            & 1147  & 0.09        & \textbf{148.50}    \\
+			Dermatology               & 35         & 366       & 112708   & 12683.77          & 1103  & 0.32        & \textbf{2359.98}   \\
+			Diabetes                  & 50         & 101766    & 77349    & \textbf{2507.16}  & 2212  & 1.02        & 10261.38           \\
+			Flags                     & 30         & 194       & 23543    & \textbf{316.50}   & 390   & 0.07        & 520.41             \\
+			Keyword-activity          & 37         & 1530      & 3        &                   & 26    & 0.47        & 250.38             \\
+			Landsat (train)           & 37         & 4435      & 12412798 &                   & 9815  & 260.39      & \textbf{603970.39} \\
+			Lung-cancer               & 57         & 32        & 4183355  & \textbf{31548.48} & 237   & 0.02        & 47239.18           \\
+			QSAR-biodeg               & 42         & 1055      & 256      &                   & 40    & 0.31        & 57.00              \\
+			Sponge                    & 46         & 76        & 10992    & \textbf{68.23}    & 68    & 0.01        & 144.36             \\
+			Student-performance (mat) & 32         & 395       & 679121   & 21632.40          & 6904  & 2.55        & \textbf{5153.27}   \\
+			Student-performance (por) & 32         & 649       & 851584   & 27568.81          & 8158  & 8.91        & \textbf{11852.47}  \\
+			Waveform                  & 22         & 5000      & 86977    & 8739.26           & 14172 & 73.12       & \textbf{5324.35}   \\				
+			\hline
     	\end{tabular}
     \end{table}
     
@@ -676,7 +670,7 @@
 				
 	\begin{figure}[htb]
 		\begin{center}
-			\includegraphics[height=8cm]{overal.eps}
+		%	\includegraphics[height=8cm]{overal.eps}
 		\end{center}
 		\caption{Average algorithms' runtime vs. density of 1's for all synthetic \textit{SBDMs}.}
 		\label{fig:scattDensity}
@@ -706,37 +700,93 @@
 %	GCreduct presented a significant improvement (\textit{p--value} = 0.0068) over fast--BR in the overall analysis, due to the higher runtime taken by low density matrices. 
 	From this analysis, we conclude that GCreduct is the best algorithm for low density matrices; while fast--BR is the best for medium density matrices. For high (over 0.65) density matrices any algorithm can be used since, as we already commented, computing reducts of this kind of matrices does not constitute a complex computational task. Moreover, from these conclusions, a great advantage can be taken of selecting the appropriate algorithm for each information system, as it will be shown in the next subsection. 
 	
+	
+	
+	\begin{table}[]
+		\centering
+		\caption{Fast--CText, GCreduct and Fast--BR runtimes in seconds for standard information systems. Sorted by \textit{SBDM} density.}
+		\label{tab:density}
+		\begin{tabular}{|l|c|r|r|r|}
+			\hline
+			Dataset                   & Density & Fast--CText    & Gcreduct         & Fast--BR       \\
+			\hline
+			Chess (kr-vs-kp)          & 0.03    & 7.45          & \textbf{$<$0.01} & 0.02            \\
+			Keyword-activity          & 0.04    & 1.22          & \textbf{0.42}    & 0.90            \\
+			Connect-4                 & 0.05    & 12876.67      & \textbf{44.23}   & 160.61          \\
+			QSAR-biodeg               & 0.12    & 0.75          & \textbf{0.19}    & 0.33            \\
+			Landsat (train)           & 0.33    & 23797.99      & \textbf{9949.31} & 17732.49        \\
+			Dermatology               & 0.34    & 16.02         & 12.25            & \textbf{4.62}   \\
+			Credit-g                  & 0.35    & \textbf{0.05} & 0.06             & 0.12            \\
+			Flags                     & 0.35    & 1.00          & \textbf{0.74}    & 1.06            \\
+			Diabetes                  & 0.38    & 86.99         & \textbf{19.48}   & 23.37           \\
+			Student-performance (por) & 0.41    & 1874.57       & 1657.90          & \textbf{161.35} \\
+			Sponge                    & 0.42    & 0.63          & 0.58             & \textbf{0.14}   \\
+			Student-performance (mat) & 0.43    & 1003.87       & 929.46           & \textbf{81.82}  \\
+			Lung-cancer               & 0.47    & 188.20        & 133.43           & \textbf{7.34}   \\
+			Waveform                  & 0.50    & 2.11          & 1.88             & \textbf{1.64}   \\
+			Cylinder-bands            & 0.55    & 5.03          & 4.59             & \textbf{0.53}   \\
+			\hline
+		\end{tabular}
+	\end{table}
+	
 \subsection{Evaluation Over Standard Information Systems}\label{sub:eval}
 	In this experiment, we run fast--BR and GCreduct over 10 information systems in Table~\ref{tab:matlab} with  densities of 1's under 0.65. Table~\ref{tab:java} shows the runtime for each algorithm, including the density of \textit{SBDMs}. Information systems in Table~\ref{tab:java} are sorted in ascending order of their density, for clarity purposes. 
-
+	
 	\begin{table}[!htb]
-		\caption{Fast--BR and GCreduct runtimes for standard information systems.}\label{tab:java}
-		\centering \scriptsize
-		\begin{tabular}{|l|c|R {1.2cm}|R {1.2cm}|}
+		\centering
+		\caption{Fast--CText, GCreduct and Fast--BR runtimes in seconds for standard information systems.}
+		\label{tab:java}
+		\begin{tabular}{|l|r|r|r|}
 			\hline
-			Dataset & Density &  \multicolumn{1}{C{1.2cm}|}{fast--BR runtime(s)} &  \multicolumn{1}{C{1.2cm}|}{GCreduct runtime(s)}\\
+			Dataset                   & Fast--CText   & Gcreduct         & Fast--BR        \\
 			\hline
-			chessKingRookVKingPawn & 0.03 & 0.02 & \textbf{$<$0.01} \\
-			SPECT (train)	& 0.11 & 0.05 & \textbf{0.02} \\
-			anneal	& 0.21 & 0.13 & \textbf{0.06} \\ 
-			Mushroom & 0.34 & \textbf{0.02} & 0.03 \\ 
-			credit--g & 0.34 & 0.13 & \textbf{0.07}\\
-			dermatology & 0.34 & \textbf{4.72} & 11.51\\
-			flags & 0.35 & 1.24 & \textbf{0.72}\\
-			sponge & 0.42 & \textbf{0.18} & 0.92\\
-			student-por & 0.42 & \textbf{201,66} & 1716,47\\
-			student-mat & 0.44 & \textbf{62,41} & 727,93\\
-%			lungCancer & 0.47 & \textbf{7,41} & 133,62\\
-%			heart--c & 0.49 & 0.01 & \textbf{$<$0.01}\\
-%			cylinder-bands & 0.55 & \textbf{0.66} & 4,45\\
-%			chronic--kidney--disease & 0.59 & 0.02 & \textbf{0.02}\\
-%			ionosphere & 0.74 & \textbf{0.09} & 0.14\\
-%			molecular--biology--promoters & 0.76 & \textbf{14,75} & 139,71\\ 
-%			ozone & 0.93 & 0.62 & \textbf{0.51}\\ 
-%			movement--libras & 0.97 & 0.23 & \textbf{0.07}\\	
-    		\hline
-    	\end{tabular}
-    \end{table}
+			Chess (kr-vs-kp)          & 7.45          & \textbf{$<$0.01} & 0.02            \\
+			Connect-4                 & 12876.67      & \textbf{44.23}   & 160.61          \\
+			Credit-g                  & \textbf{0.05} & 0.06             & 0.12            \\
+			Cylinder-bands            & 5.03          & 4.59             & \textbf{0.53}   \\
+			Dermatology               & 16.02         & 12.25            & \textbf{4.62}   \\
+			Diabetes                  & 86.99         & \textbf{19.48}   & 23.37           \\
+			Flags                     & 1.00          & \textbf{0.74}    & 1.06            \\
+			Keyword-activity          & 1.22          & \textbf{0.42}    & 0.90            \\
+			Landsat (train)           & 23797.99      & \textbf{9949.31} & 17732.49        \\
+			Lung-cancer               & 188.20        & 133.43           & \textbf{7.34}   \\
+			QSAR-biodeg               & 0.75          & \textbf{0.19}    & 0.33            \\
+			Sponge                    & 0.63          & 0.58             & \textbf{0.14}   \\
+			Student-performance (mat) & 1003.87       & 929.46           & \textbf{81.82}  \\
+			Student-performance (por) & 1874.57       & 1657.90          & \textbf{161.35} \\
+			Waveform                  & 2.11          & 1.88             & \textbf{1.64}   \\
+			\hline
+		\end{tabular}
+	\end{table}
+	
+%	\begin{table}[!htb]
+%		\caption{Fast--BR and GCreduct runtimes for standard information systems.}\label{tab:java}
+%		\centering \scriptsize
+%		\begin{tabular}{|l|c|R {1.2cm}|R {1.2cm}|}
+%			\hline
+%			Dataset & Density &  \multicolumn{1}{C{1.2cm}|}{fast--BR runtime(s)} &  \multicolumn{1}{C{1.2cm}|}{GCreduct runtime(s)}\\
+%			\hline
+%			chessKingRookVKingPawn & 0.03 & 0.02 & \textbf{$<$0.01} \\
+%			SPECT (train)	& 0.11 & 0.05 & \textbf{0.02} \\
+%			anneal	& 0.21 & 0.13 & \textbf{0.06} \\ 
+%			Mushroom & 0.34 & \textbf{0.02} & 0.03 \\ 
+%			credit--g & 0.34 & 0.13 & \textbf{0.07}\\
+%			dermatology & 0.34 & \textbf{4.72} & 11.51\\
+%			flags & 0.35 & 1.24 & \textbf{0.72}\\
+%			sponge & 0.42 & \textbf{0.18} & 0.92\\
+%			student-por & 0.42 & \textbf{201,66} & 1716,47\\
+%			student-mat & 0.44 & \textbf{62,41} & 727,93\\
+%%			lungCancer & 0.47 & \textbf{7,41} & 133,62\\
+%%			heart--c & 0.49 & 0.01 & \textbf{$<$0.01}\\
+%%			cylinder-bands & 0.55 & \textbf{0.66} & 4,45\\
+%%			chronic--kidney--disease & 0.59 & 0.02 & \textbf{0.02}\\
+%%			ionosphere & 0.74 & \textbf{0.09} & 0.14\\
+%%			molecular--biology--promoters & 0.76 & \textbf{14,75} & 139,71\\ 
+%%			ozone & 0.93 & 0.62 & \textbf{0.51}\\ 
+%%			movement--libras & 0.97 & 0.23 & \textbf{0.07}\\	
+%    		\hline
+%    	\end{tabular}
+%    \end{table}
     
     Although this is a small heterogeneous sample, the rule obtained in the subsection~\ref{sub:synth} can be verified in this experiment. Notice that from the fourth to the seventh information system in Table~\ref{tab:java} densities are close to the boundary of 0.35. For these information systems we cannot conclude a fastest algorithm as it is shown in Table~\ref{tab:java}. However, for those information systems which have a \textit{SBDM} with density clearly under 0.35, GCreduct performed faster. This is the case of the first three information systems in Table~\ref{tab:java}. For those information systems clearly above 0.35, fast-BR performed faster, as it can be seen in the last three cases.
 
