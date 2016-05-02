@@ -34,8 +34,8 @@
 		   and Attribute Contribution}
 		
 	
-	\address{Computer Science Department\\National Institute of
-	Astrophysics, Optics and Electronics\\
+	\address{Computer Science Department\\
+	Instituto Nacional de Astrof\'{\i}sica, \'{O}ptica y Electr\'{o}nica\\
 	Luis Enrique Erro \# 1, Santa Mar\'{\i}a Tonantzintla, Puebla,
 	72840, M\'{e}xico} 
 	
@@ -89,8 +89,7 @@
   this procedure improves the performance of dynamic reduct computation algorithms.	
   From Testor Theory, \cite{Torres2014} used the informational weight, computed through typical testors 
   (reducts), to identify risk factors on transfusion related to acute lung injury; and to establish an assessment
-  for each attribute.  In \citep{Torres2014}, the informational weight is a percentage value, which accounts 
-  for the presence of each attribute in the whole set of typical testors. 
+  for each attribute.  In \citep{Torres2014}, the informational weight is a percentage value that indicates the presence of each attribute in the whole set of typical testors. 
 %  These are real life applications for algorithms that compute the complete set of reducts or typical testors.	
 	
 % Relación con otros problemas de grafos
@@ -115,12 +114,12 @@
 \section{Basic Concepts}\label{basicConcepts}
   RST is based on the assumption that every object in the universe of discourse is described, through a set of attributes, by some information associated to it. This information constitutes the basis for the classification of unseen objects. RST motto is \textit{Let the data speak for themselves} \citep{Tiwari14}.
 
-  From the RST point of view, two objects are indistinguishable (indiscernible) if they have the same value for each attribute in their description. Indiscernibility relations arising in this way, constitute the mathematical foundations of RST. Some basic concepts of RST are presented bellow.
+  From the RST point of view, two objects are indistinguishable (indiscernible) if they have the same value for each attribute in their description. Indiscernibility relations arising in this way constitute the mathematical foundations of RST. Some basic concepts of RST are presented bellow.
   
 \subsection{Information System}
   The basic representation of data in RST is an \emph{Information System} (IS). An IS is a table with rows
   representing objects while columns specify attributes or features. Formally, an IS is defined as a pair
-  $IS=(U,A)$ where $U$ is a finite non-empty set of objects $U=\lbrace x_1,x_2,...,x_n\rbrace$, and $A$ is a 
+  $IS=(U,A)$ where $U$ is a finite non-empty set of objects $U=\lbrace x_1,x_2,...,x_n\rbrace$ and $A$ is a 
   finite non-empty set
   of attributes (features, variables). Every attribute in $A$ is a map: $a: U \rightarrow V_a$. The set $V_a$ is
   called the \textit{value set} of $a$. Attributes in $A$ are further divided into condition attributes $C$ and 
@@ -166,8 +165,8 @@
   	\item $B$ is a minimal subset (with respect to inclusion) satisfying condition~\ref{cond_1}.\label{cond_2}
   \end{enumerate}
 
-  We call super--reduct to any subset $B \subseteq C$ satisfying condition~\ref{cond_1} whether it satisfies
-  condition~\ref{cond_2} or not.
+  We call super--reduct to any subset $B \subseteq C$ satisfying condition~\ref{cond_1} whether or not it satisfies
+  condition~\ref{cond_2}.
   
 %\subsection{Discernibility Matrix}
 %  The discernibility knowledge of an information system is commonly stored in a symmetric $|U| \times |U|$
@@ -238,7 +237,7 @@
   
   \begin{equation}
   	m(i, j, c)=\left\lbrace\begin{array}{cl}
-  			1 & \mathrm{if~~}c(x_i) \neq c(x_j) \mathrm{~and~} D(x_i) \neq D(x_j)\\
+  			1 & \mathrm{if~~}c(x_i) \neq c(x_j) \\% \mathrm{~and~} D(x_i) \neq D(x_j)\\
   			0 								   & \mathrm{otherwise} 
   	\end{array}\right.
   \end{equation} 
@@ -626,7 +625,7 @@
 	In the subsection~\ref{sub:matlab}, GCreduct is compared against RGonCRS over standard information systems, using a Matlab implementation. Then, in the subsection~\ref{sub:synth} we show a comparative study with fast--CT\_EXT and fast--BR over synthetic \textit{SBDMs}, using a Java implementation. From this second experiment, we obtained an empirical rule for selecting the fastest algorithm for a given problem. Finally, in the  subsection~\ref{sub:eval}, we evaluate the found rule over standard information systems.
 	
 \subsection{GCreduct vs. RGonCRS}\label{sub:matlab}
-	In order to make a fair comparison against RGonCRS, we used its author's implementation in Matlab and we implemented GCreduct in Matlab as well. For this experiment we selected the 6 information systems from the UCI machine learning repository \citep{Bache13} used in \citep{Lias13,Sanchez10,WangP07} which have more than 20 attributes. In addition, we included other 11 datasets from the UCI machine learning repository, which also have more than 20 attributes. Objects with missing data are removed as in \citep{WangP07}. This experiment was run using MATLAB R2015a.
+	In order to make a fair comparison against RGonCRS, we used its author's implementation in Matlab and we implemented GCreduct in Matlab as well. For this experiment we selected the 6 information systems from the UCI machine learning repository \citep{Bache13} used in \citep{Lias13,Sanchez10,WangP07} which have more than 20 attributes. In addition, we included other 11 information systems from the UCI machine learning repository, which also have more than 20 attributes. Objects with missing data are removed as in \citep{WangP07}. This experiment was run using MATLAB R2015a.
 	
 	Table~\ref{tab:matlab} shows the runtime of both algorithms for each information system. The total runtime for GCreduct, shown in the last column of Table~\ref{tab:matlab}, includes the time taken for computing the \textit{SBDM}. Since GCreduct performed better than RGonCRS in most information systems, we made a one sided paired Wilcoxon signed rank test, as suggested by \cite{Demsar2006}. This test shows a statistically significant difference (\textit{p--value} = 0.02) in favor of GCreduct.
 	
@@ -635,12 +634,12 @@
 	\begin{table}[!htb]
 		\setlength{\tabcolsep}{3pt}
 		\caption{RGonCRS and GCreduct runtimes for standard information systems.}\label{tab:matlab}
-		\centering \scriptsize
+		\centering \footnotesize
 		\begin{tabular}{|l|c|c|c|r|c|r|r|}
 			\hline
-			&&&& RGonCRS & \multicolumn{2}{c|}{\textit{SBDM}} & GCreduct\\ %fast--CT\_EXT & fast--BR\\
+			\multicolumn{1}{|c|}{Information}&&&& RGonCRS & \multicolumn{2}{c|}{\textit{SBDM}} & GCreduct\\ %fast--CT\_EXT & fast--BR\\
 			\cline{6-7}
-			Dataset & Attributes & Instances & Reducts & \multicolumn{1}{c|}{runtime(s)} & rows & runtime(s) & \multicolumn{1}{c|}{runtime(s)}\\ %& \multicolumn{1}{c|}{runtime}\\
+			\multicolumn{1}{|c|}{system} & Attributes & Instances & Reducts & \multicolumn{1}{c|}{runtime(s)} & rows & runtime(s) & \multicolumn{1}{c|}{runtime(s)}\\ %& \multicolumn{1}{c|}{runtime}\\
 			\hline
 			Chess (kr-vs-kp)          & 37         & 3196      & 4        & 124.31            & 29    & 4.77        & \textbf{4.79}      \\
 			Connect-4                 & 43         & 6756      & 35       & \textbf{5245.23}  & 406   & 25.19       & 8825.34            \\
@@ -654,9 +653,9 @@
 			Lung-cancer               & 57         & 32        & 4183355  & \textbf{31548.48} & 237   & 0.02        & 47239.18           \\
 			QSAR-biodeg               & 42         & 1055      & 256      &  884.79           & 40    & 0.31        & \textbf{57.00}     \\
 			Sponge                    & 46         & 76        & 10992    & \textbf{68.23}    & 68    & 0.01        & 144.36             \\
-			Student-performance (mat) & 32         & 395       & 679121   & 21632.40          & 6904  & 2.55        & \textbf{5153.27}   \\
-			Student-performance (por) & 32         & 649       & 851584   & 27568.81          & 8158  & 8.91        & \textbf{11852.47}  \\
-			Waveform                  & 22         & 5000      & 86977    & 8739.26           & 14172 & 73.12       & \textbf{5324.35}   \\				
+			Student-mat & 32          & 395        & 679121    & 21632.40 & 6904  & 2.55      & \textbf{5153.27}   \\
+			Student-por & 32         & 649         & 851584    & 27568.81 & 8158  & 8.91      & \textbf{11852.47}  \\
+			Waveform    & 22         & 5000        & 86977     & 8739.26  & 14172 & 73.12     & \textbf{5324.35}   \\				
 			\hline
     	\end{tabular}
     \end{table}
@@ -670,7 +669,7 @@
 				
 	\begin{figure}[htb]
 		\begin{center}
-		%	\includegraphics[height=8cm]{overal.eps}
+			\includegraphics[height=8cm]{overal.eps}
 		\end{center}
 		\caption{Average algorithms' runtime vs. density of 1's for all synthetic \textit{SBDMs}.}
 		\label{fig:scattDensity}
@@ -708,7 +707,7 @@
 		\label{tab:density}
 		\begin{tabular}{|l|c|r|r|r|}
 			\hline
-			Dataset                   & Density & Fast--CText    & Gcreduct         & Fast--BR       \\
+			Information system        & Density & Fast--CText    & Gcreduct         & Fast--BR       \\
 			\hline
 			Chess (kr-vs-kp)          & 0.03    & 7.45          & \textbf{$<$0.01} & 0.02            \\
 			Keyword-activity          & 0.04    & 1.22          & \textbf{0.42}    & 0.90            \\
@@ -719,9 +718,9 @@
 			Credit-g                  & 0.35    & \textbf{0.05} & 0.06             & 0.12            \\
 			Flags                     & 0.35    & 1.00          & \textbf{0.74}    & 1.06            \\
 			Diabetes                  & 0.38    & 86.99         & \textbf{19.48}   & 23.37           \\
-			Student-performance (por) & 0.41    & 1874.57       & 1657.90          & \textbf{161.35} \\
+			Student-por               & 0.41    & 1874.57       & 1657.90          & \textbf{161.35} \\
 			Sponge                    & 0.42    & 0.63          & 0.58             & \textbf{0.14}   \\
-			Student-performance (mat) & 0.43    & 1003.87       & 929.46           & \textbf{81.82}  \\
+			Student-mat               & 0.43    & 1003.87       & 929.46           & \textbf{81.82}  \\
 			Lung-cancer               & 0.47    & 188.20        & 133.43           & \textbf{7.34}   \\
 			Waveform                  & 0.50    & 2.11          & 1.88             & \textbf{1.64}   \\
 			Cylinder-bands            & 0.55    & 5.03          & 4.59             & \textbf{0.53}   \\
@@ -738,7 +737,7 @@
 		\label{tab:java}
 		\begin{tabular}{|l|r|r|r|}
 			\hline
-			Dataset                   & Fast--CText   & Gcreduct         & Fast--BR        \\
+			Information system        & Fast--CText   & Gcreduct         & Fast--BR        \\
 			\hline
 			Chess (kr-vs-kp)          & 7.45          & \textbf{$<$0.01} & 0.02            \\
 			Connect-4                 & 12876.67      & \textbf{44.23}   & 160.61          \\
@@ -752,8 +751,8 @@
 			Lung-cancer               & 188.20        & 133.43           & \textbf{7.34}   \\
 			QSAR-biodeg               & 0.75          & \textbf{0.19}    & 0.33            \\
 			Sponge                    & 0.63          & 0.58             & \textbf{0.14}   \\
-			Student-performance (mat) & 1003.87       & 929.46           & \textbf{81.82}  \\
-			Student-performance (por) & 1874.57       & 1657.90          & \textbf{161.35} \\
+ 			Student-mat               & 1003.87       & 929.46           & \textbf{81.82}  \\
+			Student-por               & 1874.57       & 1657.90          & \textbf{161.35} \\
 			Waveform                  & 2.11          & 1.88             & \textbf{1.64}   \\
 			\hline
 		\end{tabular}
