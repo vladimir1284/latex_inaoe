@@ -79,7 +79,7 @@
   RST reducts have been related to Typical Testors (TT) from the logical combinatorial approach 
   to pattern recognition \citep{Chikalov2013}. Testor Theory was originally created by \cite{Cheguis55} as a tool
   for analysis of problems connected with control and diagnosis of faults in circuits. 
-  However, Testor Theory has been extended in order to be used for feature selection as shown in \citep{Dmitriev1966}, \citep{Martinez01} and \citep{Ruiz08}. Algorithms for typical testor computation can be applied to reduct computation due to the similarity between these two concepts \citep{Lazo15}. There have been developed two kinds of algorithms for computing typical testors: \emph{internal scale} algorithms, such as CT \citep{Bravo83}, CC \citep{Aguila84} and YYC \citep{Alba14}; and \emph{external scale} algorithms, such as BT and TB \citep{Ruiz85}, LEX \citep{Santiesteban03}, CT\_EXT \citep{Sanchez07} and BR \citep{Lias09}. The former approach analyzes the discernibility matrix to find out some conditions to guarantee that a subset of attributes is a typical testor. The latter, searches for typical testors over the power set of attributes, avoiding unnecessary evaluations by pruning some attribute subsets. Internal scale algorithms usually evaluate less candidates than external scale algorithms but each candidate evaluation has a higher computational cost. Therefore, the search for fast algorithms for computing typical testors has been biased to external scale algorithms \citep{Alba14}.
+  However, Testor Theory has been extended in order to be used for feature selection as shown in \citep{Dmitriev1966}, \citep{Martinez01} and \citep{Ruiz08}. Algorithms for typical testor computation can be applied to reduct computation due to the similarity between these two concepts \citep{Lazo15}. There have been developed two kinds of algorithms for computing typical testors: \emph{internal scale} algorithms, such as CT \citep{Bravo83}, CC \citep{Aguila84} and YYC \citep{Alba14}; and \emph{external scale} algorithms, such as BT and TB \citep{Ruiz85}, LEX \citep{Santiesteban03}, CT\_EXT \citep{Sanchez07} and BR \citep{Lias09}. The former approach analyzes the discernibility matrix to find out some conditions to guarantee that a subset of attributes is a typical testor. The latter, searches for typical testors by evaluating subsets of attributes over the power set, avoiding unnecessary evaluations by pruning some attribute subsets. Internal scale algorithms usually evaluate less candidates than external scale algorithms but each candidate evaluation has a higher computational cost. Therefore, the search for fast algorithms for computing typical testors has been biased to external scale algorithms \citep{Alba14}.
     
 % Utilidad de todos los reductos
 %  Although most algorithms for reduct computation search for a single reduct or a small subset of reducts, 
@@ -89,7 +89,7 @@
   this procedure improves the performance of dynamic reduct computation algorithms.	
   From Testor Theory, \cite{Torres2014} used the informational weight, computed through typical testors 
   (reducts), to identify risk factors on transfusion related to acute lung injury; and to establish an assessment
-  for each attribute.  In \citep{Torres2014}, the informational weight is a percentage value that indicates the presence of each attribute in the whole set of typical testors. 
+  for each attribute.  In \citep{Torres2014}, the informational weight for an attribute is computed as the percentage of times the attribute appears in the whole set of typical testors. 
 %  These are real life applications for algorithms that compute the complete set of reducts or typical testors.	
 	
 % Relación con otros problemas de grafos
@@ -104,7 +104,7 @@
 %  \citep{Sanchez10,Lias13}.
 
 
-  In this work, we propose a new algorithm, GCreduct, for computing all reducts based on the pruning properties of gap elimination and attribute contribution. Additionally, we show the advantages of fast binary cumulative operations \citep{Sanchez10,Lias13} over other approaches from rough set theory \citep{WangP07,Jensen14}. In relation to fast--BR \citep{Lias13}, which is one of the latest and fastest reported algorithms; our proposed algorithm evaluates more candidates in most cases, but the evaluation cost is lower. Then, we show that our algorithm performs faster than all other recent reported alternatives in a specific kind of information systems. 
+  In this work, we propose a new algorithm, GCreduct, for computing all reducts based on the pruning properties of Gap elimination and attribute Contribution. Additionally, we show the advantages of fast binary cumulative operations \citep{Sanchez10,Lias13} over other approaches from rough set theory \citep{WangP07,Jensen14}. In relation to fast--BR \citep{Lias13}, which is one of the latest and fastest reported algorithms; our proposed algorithm evaluates more candidates in most cases, but the evaluation cost is lower. Then, we show that our algorithm performs faster than all other recent reported alternatives in a specific kind of information systems. 
 %  The main contribution of this work is the design and evaluation of a new algorithm for reduct computation,
 %  based on  the pruning properties of gap elimination and attribute contribution. 
   
@@ -310,7 +310,7 @@
   concept of \emph{gap}. In LEX, the typical (irreducible) condition is verified first and the testor condition 
   is checked only for those potentially TT. Given a TT (or a non testor) that includes the last attribute in the
   information system, the \emph{gap} elimination avoids the evaluation of any subset of this candidate. \cite{Sanchez07}
-  proposed the CT\_EXT algorithm for computing all TT. Following a traversing order similar to that in LEX, this
+  proposed the CT\_EXT algorithm for computing all TT. Following a traversing order similar to that one used in LEX, CT\_EXT
   algorithm searches for testors without verifying the typical condition. In this way, a larger number of 
   candidates are evaluated, in comparison to LEX; but the cost of each evaluation is lower. Results from their
   experiments show that CT\_EXT is faster than the previous existing algorithms for most information systems. Then,
@@ -320,9 +320,9 @@
   
   \cite{Sanchez10} presented a cumulative procedure for the CT\_EXT algorithm. This fast--CT\_EXT implementation
   drastically reduces the runtime for most information systems at no extra cost. In \citep{Lias13} the pruning property of
-  gap elimination and column reduction are added to BR. This fast--BR algorithm is, no doubt, the one 
-  evaluating the minimum number of candidates in the state of the art. The main drawback of fast--BR and 
-  BR is, as in LEX, the high cost of evaluating the typical condition for each candidate.
+  gap elimination and column reduction are added to BR. 
+%  This fast--BR algorithm is, no doubt, the one evaluating the minimum number of candidates in the state of the art. 
+  The main drawback of fast--BR and BR is, as in LEX, the high cost of evaluating the typical condition for each candidate.
   
   Recently, a new internal scale typical testor--finding algorithm (YYC) was proposed by \cite{Alba14}. 
   Although they claim that this algorithm verifies less candidates than previous alternatives, two weak points
@@ -369,7 +369,7 @@
 		Let DM be a SBDM, $B \subseteq C$,  $c_i \in C$ such that $c_i \notin B$, and $c_{i+1} \in C$ such that $c_{i+1} \notin B$. Given that $c_{i+1}$ is the consecutive attribute of $c_i$ in DM, if $c_i$ does not contribute to $B$; then, there is not any attribute subset between $B\cup\{c_i\}$ and $B\cup\{c_{i+1}\}$ (following the lexicographical order) being a reduct.
 	\end{corollary}
 		
-	For a fast implementation of these algorithms \citep{Sanchez10,Lias13}, columns in a simplified discernibility matrix \textit{DM} are coded as binary words with as many bits as rows in \textit{DM}. The cumulative mask for an attribute $c_i$, denoted as $cm_{c_i}$, is defined as the binary word representing the $i$th column in \textit{DM}. The cumulative mask for a subset of attributes $B=\lbrace c_{i1},c_{i2},...,c_{ik} \rbrace$ is defined	as $cm_B = cm_{c_{i1}} \vee cm_{c_{i2}} \vee ... \vee cm_{c_{ik}}$ where $\vee$ represents the binary OR operator. It is not hard to see that the number of 0's in $cm_B$ is the same as the number of zero rows in the sub-matrix of the \textit{SBDM}, considering only the attributes in $B$. According to the definition~\ref{def:contrib}, $c_i$ contributes to $B$ iff $cm_{B\cup c_i}$ has more 1's than $cm_B$. The incremental nature of these algorithms, also included in GCreduct, is given by the associative property of the OR operation, such that  $cm_{B\cup c_i}=cm_B\vee cm_{c_i}$. Notice that, from this last formulation, $c_i$ contributes to $B$ iff $cm_{B\cup c_i}\neq cm_B$ since $cm_{B\cup c_i}$ cannot have less 1's than $cm_B$. It is easy to see, from the definition~\ref{def:testor} that $B \subseteq C$ is a super--reduct iff $cm_B=(1,...,1)$ (has a 1 in every bit).
+	For a fast implementation of these algorithms \citep{Sanchez10,Lias13}, columns in a simplified discernibility matrix \textit{DM} are coded as binary words with as many bits as rows in \textit{DM}. The cumulative mask for an attribute $c_i$, denoted as $cm_{c_i}$, is defined as the binary word representing the $i$th column in \textit{DM}. The cumulative mask for a subset of attributes $B=\lbrace c_{i1},c_{i2},...,c_{ik} \rbrace$ is defined	as $cm_B = cm_{c_{i1}} \vee cm_{c_{i2}} \vee ... \vee cm_{c_{ik}}$ where $\vee$ represents the binary OR operator. It is not hard to see that the number of 0's in $cm_B$ is the same as the number of zero rows in the sub-matrix of the \textit{SBDM}, considering only the attributes in $B$. According to definition~\ref{def:contrib}, $c_i$ contributes to $B$ iff $cm_{B\cup c_i}$ has more 1's than $cm_B$. The incremental nature of these algorithms, also included in  our proposed algorithm (GCreduct), is given by the associative property of the OR operation, such that  $cm_{B\cup c_i}=cm_B\vee cm_{c_i}$. Notice that, from this last formulation, $c_i$ contributes to $B$ iff $cm_{B\cup c_i}\neq cm_B$ since $cm_{B\cup c_i}$ cannot have less 1's than $cm_B$. It is easy to see, from the definition~\ref{def:testor} that $B \subseteq C$ is a super--reduct iff $cm_B=(1,...,1)$ ($cm_B$ has a 1 in every bit).
 
 	The concept of gap, that we will use in our proposal, was first introduced by \cite{Santiesteban03} for 
 	the LEX algorithm, as shown in the definition~\ref{def:gap}.
@@ -401,7 +401,7 @@
 		Let DM be a SBDM and $B \subseteq C$ be a reduct, such that $B = \lbrace c_{j_0},...,c_{j_s}\rbrace$, $c_{j_0}<\cdots	<c_{j_s}$ and $c_{j_s}$ is the last attribute in DM. If there is a gap $c_p$ in $B$, and $B' = \lbrace c_{j_0},...,c_{j_k},c_{p+1}\rbrace$, $j_0<\cdots <j_k<=p-1$; then, there is not an attribute subset between $B$ and $B'$ (following the lexicographical order) being a reduct.
 	\end{proposition}	
 	
-	From the proposition~\ref{prop:gap} we have the following corollary \citep{Santiesteban03}; which is relevant to GCreduct in order to avoid other unnecessary evaluations.
+	From the proposition~\ref{prop:gap} we have the following corollary \citep{Santiesteban03}; which is relevant for our proposed algorithm in order to avoid other unnecessary evaluations.
 	
 	\begin{corollary}\label{coro:gap} 
 		Let DM be a SBDM and $B \subseteq C$ be a non super--reduct, such that $B = \lbrace c_{j_0},...,c_{j_s}\rbrace$, $c_{j_0}<...<c_{j_s}$ and $c_{j_s}$ is the last attribute in DM. If there is a gap $c_p$ in $B$, and $B' = \lbrace c_{j_0},...,c_{j_k},c_{p+1}\rbrace$, $j_0<...<j_k<=p-1$; then, there is not an attribute subset between $B$ and $B'$ (following the lexicographical order) being a reduct.
@@ -433,11 +433,13 @@
 		Let DM be a SBDM and $B \subseteq R$ be a subset of attributes from an information system and $c_i \notin B$ an attribute of DM.
 		If $\exists c_x \in B$ such that $em_{B \cup \lbrace c_i\rbrace} \wedge cm_{c_x}=(0,...,0)$. Then, $B \cup \lbrace c_i\rbrace$	is not a reduct.
 	\end{proposition}
+	
+	In the next subsection we will use these propositions to support the pruning of the search space in our proposed algorithm.
 
 \subsection{The algorithm GCreduct}\label{description}
 	GCreduct finds reducts in the \textit{SBDM} computed from an information system. This algorithm explores the search space evaluating some candidates and avoiding others, based on previous evaluations. Unlike other works such as \citep{WangP07,Lias13} where candidate evaluation is performed through operations with a high cost, GCreduct uses a simpler candidate evaluation, based on attribute contribution and gap elimination, to reduce the algorithm runtime. 
 
-	In order to reduce the search space, as in other works \citep{Sanchez07,Lias13}, GCreduct sorts the \textit{SBDM} as follows: first, it randomly selects one of the rows of the \textit{SBDM} with the fewest number of 1's. Then, the selected row is moved to the top, and all columns in which it has a 1 are moved to the left. Table~\ref{tab:SSBDM1} shows the \textit{SBDM} from Table~\ref{tab:SBDM1}, sorted in this way. Herein after, the order of attributes in the information system is the resulting order of this sorting process.
+	In order to reduce the search space, as in other works \citep{Sanchez07,Lias13}, GCreduct sorts the \textit{SBDM}. First of all, one of the rows of the \textit{SBDM} with the fewest number of 1's is selected randomly. Then, the selected row is moved to the top, and all columns in which it has a 1 are moved to the left. Table~\ref{tab:SSBDM1} shows the \textit{SBDM} from Table~\ref{tab:SBDM1}, sorted in this way. Herein after, the order of attributes in the information system is the resulting order of this sorting process.
 		
 	\begin{table}[htb]
 		\caption{Sorted Simplified Binary Discernibility Matrix computed from Table~\ref{tab:SBDM1}.}
@@ -622,14 +624,12 @@
 \section{Evaluation and Discussion}\label{evaluation}
 	In this section, we evaluate our proposed algorithm over standard information systems \citep{Bache13} and synthetic \textit{SBDMs}. We make a comparative analysis versus RGonCRS, fast--CT\_EXT, and fast--BR; which are the most recent and fastest algorithms for reduct computation. We used in all cases the author's implementation of the algorithms. All experiments were run on a Core i7-5820K Intel processor at 3.30GHz, with 32GB in RAM, running GNU/Linux.
 	
-	In the subsection~\ref{sub:matlab}, GCreduct is compared against RGonCRS over standard information systems, using a Matlab implementation. Then, in the subsection~\ref{sub:synth} we show a comparative study with fast--CT\_EXT and fast--BR over synthetic \textit{SBDMs}, using a Java implementation. From this second experiment, we obtained an empirical rule for selecting the fastest algorithm for a given problem. Finally, in the  subsection~\ref{sub:eval}, we evaluate the found rule over standard information systems.
+	In the subsection~\ref{sub:matlab}, GCreduct is compared against RGonCRS over standard information systems, using a Matlab implementation. Then, in the subsection~\ref{sub:java} we show a comparative study with fast--CT\_EXT and fast--BR over standard information systems, using a Java implementation. We conducted two different experiments because RGonCRS is implemented in Matlab and it operates directly over the information system while fast--CT\_EXT and fast--BR are implemented in Java and they operate over the \textit{SBDM}. Finally, in the subsection~\ref{sub:synth} we present a comparative study between fast--CT\_EXT, GCreduct and fast--BR over \textit{SBDMs}. In this final experiment we explore the algorithms performance in relation to the density of 1's of the \textit{SBDM}, and we obtained an empirical rule for selecting the fastest algorithm for a given problem.
 	
 \subsection{GCreduct vs. RGonCRS}\label{sub:matlab}
-	In order to make a fair comparison against RGonCRS, we used its author's implementation in Matlab and we implemented GCreduct in Matlab as well. For this experiment we selected the 6 information systems from the UCI machine learning repository \citep{Bache13} used in \citep{Lias13,Sanchez10,WangP07} which have more than 20 attributes. In addition, we included other 11 information systems from the UCI machine learning repository, which also have more than 20 attributes. Objects with missing data are removed as in \citep{WangP07}. This experiment was run using MATLAB R2015a.
+	In order to make a fair comparison against RGonCRS, we used its author's implementation in Matlab and we implemented GCreduct in Matlab as well. For this experiment we selected 15 information systems from the UCI machine learning repository \citep{Bache13}. Objects with missing data are removed as in \citep{WangP07}. For numerical attributes we used the Weka's equal width discretization filter with 10 bins, as describe by \cite{Flores2010}. This experiment was run using MATLAB R2015a.
 	
-	Table~\ref{tab:matlab} shows the runtime of both algorithms for each information system. The total runtime for GCreduct, shown in the last column of Table~\ref{tab:matlab}, includes the time taken for computing the \textit{SBDM}. Since GCreduct performed better than RGonCRS in most information systems, we made a one sided paired Wilcoxon signed rank test, as suggested by \cite{Demsar2006}. This test shows a statistically significant difference (\textit{p--value} = 0.02) in favor of GCreduct.
-	
-	Notice that for the SPECT (train) information system, RGonCRS was not able to find a result and it was excluded from the statistical test. We suppose that \cite{WangP07} used a different version of SPECT (train), since we computed 26 reducts instead of the 70 reported by him.
+	Table~\ref{tab:matlab} shows the runtime of both algorithms for each information system. The total runtime for GCreduct, shown in the last column of Table~\ref{tab:matlab}, includes the time taken for computing the \textit{SBDM}. Since GCreduct performed better than RGonCRS in most information systems, we made a one sided paired Wilcoxon signed rank test, as suggested by \cite{Demsar2006}. This test shows a statistically significant difference (\textit{p--value} = \textbf{0.02}) in favor of GCreduct.
 	
 	\begin{table}[!htb]
 		\setlength{\tabcolsep}{3pt}
@@ -661,11 +661,44 @@
     \end{table}
     
 
-\subsection{Comparison against fast--CT\_EXT and fast--BR}\label{sub:synth}
-	In order to evaluate the performance of GCreduct versus fast--CT\_EXT and fast--BR, we present a comparative analysis over synthetically generated \textit{SBDMs}. For this experiment, we implemented our proposed algorithm in Java to make a fair comparison against the Java implementations of fast--CT\_EXT and fast--BR, provided by their authors. 
-%	This implementation of GCreduct performs, at least, one order of magnitude faster than the Matlab implementation; as can be seen by comparing Table~\ref{tab:matlab} and Table~\ref{tab:java}.
+\subsection{GCreduct vs. fast--CT\_EXT and fast--BR}\label{sub:java}
 	
-	This experiment was done over 500 randomly generated \textit{SBDMs} with 2000 rows and 30 columns; this size was selected in order to keep reasonable runtime for the three algorithms. Previous studies \citep{Rojas12,Lias13,Rodriguez15}, categorize the \textit{SBDMs} depending on the \emph{density of 1's} they have; i.e. the number of ones divided by the number of cells of the \textit{SBDM}. For this reason, our 500 \textit{SBDMs} were generated with densities of 1's uniformly distributed in the range (0.20--0.80) using a step of 0.04. For each value of density, several different matrices were generated. Due to the selected size, there is a reduced number of different \textit{SBDMs} for densities under 0.20. On the other hand, reduct computation on \textit{SBDMs} with densities above 0.8 has a lower computational cost \citep{Rojas12}.
+	For this experiment, we implemented our proposed algorithm in Java to make a fair comparison against the Java implementations of fast--CT\_EXT and fast--BR, provided by their authors. This time we used the same 15 information systems from our previous experiment. The runtimes in seconds for the three algorithms are shown in Table~\ref{tab:java}. 
+	
+	\begin{table}[!htb]
+		\centering
+		\caption{Fast--CText, GCreduct and Fast--BR runtimes for standard information systems.}
+		\label{tab:java}
+		\begin{tabular}{|l|r|r|r|}
+			\hline
+			\multicolumn{1}{|c|}{Information}  & Fast--CText & \multicolumn{1}{c|}{Gcreduct} & \multicolumn{1}{c|}{Fast--BR}  \\
+			\multicolumn{1}{|c|}{system}       & runtime (s) & runtime (s)  & runtime (s)  \\
+			\hline
+			Chess (kr-vs-kp)          & 7.45          & \textbf{$<$0.01} & 0.02            \\
+			Connect-4                 & 12876.67      & \textbf{44.23}   & 160.61          \\
+			Credit-g                  & \textbf{0.05} & 0.06             & 0.12            \\
+			Cylinder-bands            & 5.03          & 4.59             & \textbf{0.53}   \\
+			Dermatology               & 16.02         & 12.25            & \textbf{4.62}   \\
+			Diabetes                  & 86.99         & \textbf{19.48}   & 23.37           \\
+			Flags                     & 1.00          & \textbf{0.74}    & 1.06            \\
+			Keyword-activity          & 1.22          & \textbf{0.42}    & 0.90            \\
+			Landsat (train)           & 23797.99      & \textbf{9949.31} & 17732.49        \\
+			Lung-cancer               & 188.20        & 133.43           & \textbf{7.34}   \\
+			QSAR-biodeg               & 0.75          & \textbf{0.19}    & 0.33            \\
+			Sponge                    & 0.63          & 0.58             & \textbf{0.14}   \\
+ 			Student-mat               & 1003.87       & 929.46           & \textbf{81.82}  \\
+			Student-por               & 1874.57       & 1657.90          & \textbf{161.35} \\
+			Waveform                  & 2.11          & 1.88             & \textbf{1.64}   \\
+			\hline
+		\end{tabular}
+	\end{table}
+
+    The main conclusion that can be extracted from results in Table~\ref{tab:java} is that fast--CText has a lowest performance in comparison with fast--BR and GCreduct. Even in the only case that it was the fastest, the runtime difference with GCreduct was insignificant. Fast--BR and GCreduct have 7 wins each one, so we cannot conclude a definite better algorithm. In the next subsection we propose a new experiment to provide an explanation to this behaviour.	
+	
+\subsection{Evaluation Over Synthetic \textit{SBDMs}}\label{sub:synth}
+
+	Previous studies \citep{Rojas12,Lias13,Rodriguez15}, categorize the \textit{SBDMs} depending on the \emph{density of 1's} they have; i.e. the number of ones divided by the number of cells of the \textit{SBDM}. In order to explore the performance of GCreduct, fast--CT\_EXT and fast--BR regarding the density of 1's of the \textit{SBDM}; we conduct this experiment over 500 randomly generated \textit{SBDMs} with 2000 rows and 30 columns. The size of these matrices was selected in order to keep reasonable runtime for the three algorithms. Our 500 \textit{SBDMs} were generated with densities of 1's uniformly distributed in the range (0.20--0.80) using a step of 0.04. 
+%	For each value of density, several different matrices were generated. Due to the selected size, there is a reduced number of different \textit{SBDMs} for densities under 0.20. On the other hand, reduct computation on \textit{SBDMs} with densities above 0.8 has a lower computational cost \citep{Rojas12}.
 				
 	\begin{figure}[htb]
 		\begin{center}
@@ -676,20 +709,8 @@
 	\end{figure}	
 
 	For clarity purposes, the 500 matrices were split into 15 groups discretizing the range of densities, each group having approximately 33 \textit{SBDMs}. Figure~\ref{fig:scattDensity} shows the average runtime of all  matrices in each group for the three algorithms, as a function of the density of 1's in the synthetic \textit{SBDMs}. In this figure, the vertical bars show the standard deviation of each bin. 
-	
-%	{	
-%	Looking at the fastest algorithm in this figure, we identify three distinct groups of matrices by their density:
-%	\begin{itemize}
-%		\item Low density matrices: density $\leq$ 0.35.
-%		\item Medium density matrices: 0.35 $<$ density $\leq$ 0.65.
-%		\item High density matrices: density $>$ 0.65.
-%	\end{itemize}}
 		
 	From Figure~\ref{fig:scattDensity}, we can see that the fastest algorithm for matrices with density under or equal 0.35 was GCreduct, fast--BR was the fastest for matrices with density between 0.35 and 0.65, and the three algorithms presented similar performance for matrices with density above 0.65. The fact that high density \textit{SBDMs} do not constitute a complex computational task for reduct computation \citep{Rojas12} is clearly visible in Figure~\ref{fig:scattDensity}. For this reason, a detailed analysis in this region lacks of relevance.
-	
-%	Since all matrices for this experiment have the same dimensions, we can say that low density
-%	matrices showed a relatively high complexity. Thus, the apparent fact that GCreduct outperforms 
-%	the other algorithms for this kind of matrices, deserves special attention. 
 		
 	In order to explain the line delimiting those \textit{SBDMs} for which GCreduct is faster than fast--BR (densities under 0.35), we must go deeply into the main difference between these algorithms. In GCreduct, we compute the exclusion mask and evaluate the attribute exclusion, using proposition~\ref{prop:exclude}, for those candidates detected as super-reducts; in order to verify whether they are reducts. In fast--BR, on the other hand, the proposition~\ref{prop:exclude} is evaluated for each candidate with a contributing attribute. The evaluation of the attribute exclusion has the highest computational complexity in the algorithm ($\Theta (nm)$). The attribute exclusion occurs when there is at least one column in the sub-matrix of the \textit{SBDM}, considering only the attributes in the current candidate, that can be removed without increasing the number of zero rows in this sub-matrix. The exclusion is more frequent in matrices with a higher density of 1's, since it is given by cumulative OR operations. The higher cost of candidate evaluation in fast--BR pays off for \textit{SBDMs} with higher densities (the limit identified from our experiment is 0.35), because supersets of candidates with attribute exclusion are excluded from subsequent evaluations. Take for instance the extreme case of the identity matrix, where there is no exclusion at all, since every attribute is indispensable to form a reduct. For this kind of \textit{SBDMs}, GCreduct needs to evaluate as many candidates as fast--BR but the former makes a single verification for exclusion with the set of all attributes. On the other hand, fast--BR verifies the exclusion for each candidate, which leads to a higher computational cost.
 	
@@ -698,16 +719,15 @@
 	In relation to fast--BR, GCreduct showed a significant runtime reduction (\textit{p--value} $< 10^{-16}$) for low density matrices while it was significantly slower (\textit{p--value} $< 10^{-16}$) for medium density matrices. 
 %	GCreduct presented a significant improvement (\textit{p--value} = 0.0068) over fast--BR in the overall analysis, due to the higher runtime taken by low density matrices. 
 	From this analysis, we conclude that GCreduct is the best algorithm for low density matrices; while fast--BR is the best for medium density matrices. For high (over 0.65) density matrices any algorithm can be used since, as we already commented, computing reducts of this kind of matrices does not constitute a complex computational task. Moreover, from these conclusions, a great advantage can be taken of selecting the appropriate algorithm for each information system, as it will be shown in the next subsection. 
-	
-	
-	
-	\begin{table}[]
+		
+	\begin{table}[htb]
 		\centering
 		\caption{Fast--CText, GCreduct and Fast--BR runtimes in seconds for standard information systems. Sorted by \textit{SBDM} density.}
 		\label{tab:density}
 		\begin{tabular}{|l|c|r|r|r|}
 			\hline
-			Information system        & Density & Fast--CText    & Gcreduct         & Fast--BR       \\
+			\multicolumn{1}{|c|}{Information}  && Fast--CText & \multicolumn{1}{c|}{Gcreduct} & \multicolumn{1}{c|}{Fast--BR}  \\
+			\multicolumn{1}{|c|}{system}       & Density & runtime (s) & runtime (s)  & runtime (s)  \\
 			\hline
 			Chess (kr-vs-kp)          & 0.03    & 7.45          & \textbf{$<$0.01} & 0.02            \\
 			Keyword-activity          & 0.04    & 1.22          & \textbf{0.42}    & 0.90            \\
@@ -728,68 +748,7 @@
 		\end{tabular}
 	\end{table}
 	
-\subsection{Evaluation Over Standard Information Systems}\label{sub:eval}
-	In this experiment, we run fast--BR and GCreduct over 10 information systems in Table~\ref{tab:matlab} with  densities of 1's under 0.65. Table~\ref{tab:java} shows the runtime for each algorithm, including the density of \textit{SBDMs}. Information systems in Table~\ref{tab:java} are sorted in ascending order of their density, for clarity purposes. 
-	
-	\begin{table}[!htb]
-		\centering
-		\caption{Fast--CText, GCreduct and Fast--BR runtimes in seconds for standard information systems.}
-		\label{tab:java}
-		\begin{tabular}{|l|r|r|r|}
-			\hline
-			Information system        & Fast--CText   & Gcreduct         & Fast--BR        \\
-			\hline
-			Chess (kr-vs-kp)          & 7.45          & \textbf{$<$0.01} & 0.02            \\
-			Connect-4                 & 12876.67      & \textbf{44.23}   & 160.61          \\
-			Credit-g                  & \textbf{0.05} & 0.06             & 0.12            \\
-			Cylinder-bands            & 5.03          & 4.59             & \textbf{0.53}   \\
-			Dermatology               & 16.02         & 12.25            & \textbf{4.62}   \\
-			Diabetes                  & 86.99         & \textbf{19.48}   & 23.37           \\
-			Flags                     & 1.00          & \textbf{0.74}    & 1.06            \\
-			Keyword-activity          & 1.22          & \textbf{0.42}    & 0.90            \\
-			Landsat (train)           & 23797.99      & \textbf{9949.31} & 17732.49        \\
-			Lung-cancer               & 188.20        & 133.43           & \textbf{7.34}   \\
-			QSAR-biodeg               & 0.75          & \textbf{0.19}    & 0.33            \\
-			Sponge                    & 0.63          & 0.58             & \textbf{0.14}   \\
- 			Student-mat               & 1003.87       & 929.46           & \textbf{81.82}  \\
-			Student-por               & 1874.57       & 1657.90          & \textbf{161.35} \\
-			Waveform                  & 2.11          & 1.88             & \textbf{1.64}   \\
-			\hline
-		\end{tabular}
-	\end{table}
-	
-%	\begin{table}[!htb]
-%		\caption{Fast--BR and GCreduct runtimes for standard information systems.}\label{tab:java}
-%		\centering \scriptsize
-%		\begin{tabular}{|l|c|R {1.2cm}|R {1.2cm}|}
-%			\hline
-%			Dataset & Density &  \multicolumn{1}{C{1.2cm}|}{fast--BR runtime(s)} &  \multicolumn{1}{C{1.2cm}|}{GCreduct runtime(s)}\\
-%			\hline
-%			chessKingRookVKingPawn & 0.03 & 0.02 & \textbf{$<$0.01} \\
-%			SPECT (train)	& 0.11 & 0.05 & \textbf{0.02} \\
-%			anneal	& 0.21 & 0.13 & \textbf{0.06} \\ 
-%			Mushroom & 0.34 & \textbf{0.02} & 0.03 \\ 
-%			credit--g & 0.34 & 0.13 & \textbf{0.07}\\
-%			dermatology & 0.34 & \textbf{4.72} & 11.51\\
-%			flags & 0.35 & 1.24 & \textbf{0.72}\\
-%			sponge & 0.42 & \textbf{0.18} & 0.92\\
-%			student-por & 0.42 & \textbf{201,66} & 1716,47\\
-%			student-mat & 0.44 & \textbf{62,41} & 727,93\\
-%%			lungCancer & 0.47 & \textbf{7,41} & 133,62\\
-%%			heart--c & 0.49 & 0.01 & \textbf{$<$0.01}\\
-%%			cylinder-bands & 0.55 & \textbf{0.66} & 4,45\\
-%%			chronic--kidney--disease & 0.59 & 0.02 & \textbf{0.02}\\
-%%			ionosphere & 0.74 & \textbf{0.09} & 0.14\\
-%%			molecular--biology--promoters & 0.76 & \textbf{14,75} & 139,71\\ 
-%%			ozone & 0.93 & 0.62 & \textbf{0.51}\\ 
-%%			movement--libras & 0.97 & 0.23 & \textbf{0.07}\\	
-%    		\hline
-%    	\end{tabular}
-%    \end{table}
-    
-    Although this is a small heterogeneous sample, the rule obtained in the subsection~\ref{sub:synth} can be verified in this experiment. Notice that from the fourth to the seventh information system in Table~\ref{tab:java} densities are close to the boundary of 0.35. For these information systems we cannot conclude a fastest algorithm as it is shown in Table~\ref{tab:java}. However, for those information systems which have a \textit{SBDM} with density clearly under 0.35, GCreduct performed faster. This is the case of the first three information systems in Table~\ref{tab:java}. For those information systems clearly above 0.35, fast-BR performed faster, as it can be seen in the last three cases.
-
-%	In Table~\ref{tab:java}, the four information systems with a low density \textit{SBDM} lead to simple reduct computations. In order to show the advantage of our proposed algorithm and the rule obtained for selecting the fastest algorithm for each information system; we present another experiment. We selected for this experiment the \textit{audiology} information system from the UCI machine learning repository. \textit{Audiology} has 226 objects and 69 attributes, and its \textit{SBDM} has 174 rows with 11 null and 2 repeated columns with a density of 0.084. Due to the high number of objects with missing data, we treated missing values as a special value \citep{Li2007} for computing the \textit{SBDM}.  
+	In Table~\ref{tab:density} we included the density of 1's of \textit{SBDMs} to the results from Table~\ref{tab:java}. We also sorted the information systems in Table~\ref{tab:density} in ascending order of the density of 1's in their associated \textit{SBDM}. Although this is a small heterogeneous sample, the rule obtained from synthetic data can be verified in this table. For information systems with densities close to the boundary of 0.35 we cannot conclude a fastest algorithm as it can be seen in Table~\ref{tab:java}. However, for those information systems which have a \textit{SBDM} with density clearly under 0.35, GCreduct performed faster. In the same way, fast-BR performed faster for those information systems with density clearly above 0.35.
 
 \section{Conclusions}\label{conclusions}
 	In this work, we presented a new algorithm, GCreduct, for reduct computation. In our proposed algorithm, the search space is traversed evaluating some candidate subsets and discarding others, based on previous evaluations. Algorithms reported in the literature use operations with a high cost for candidate evaluation in order to reduce the number of evaluated candidates. The main contribution of our proposal, on the other hand, is the use of simpler operations for candidate evaluation, based on the pruning properties of gap elimination and attribute contribution, which allows to reduce the required runtime. 
