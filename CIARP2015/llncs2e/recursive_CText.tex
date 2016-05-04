@@ -9,12 +9,12 @@
 %
 \usepackage{algorithm,algorithmic}
 \usepackage{multicol}
+\usepackage[utf8]{inputenc}
 
 \begin{document}
 \mainmatter              % start of the contributions
 %
-\title{A Recursive Implementation of the CT\_EXT Algorithm 
-	   for the Testor Property Identification}
+\title{Fast--BR and fast--CT\_EXT performance regarding basic matrix properties: an empirical study.}
 %
 \titlerunning{Recursive CT_EXT}  % abbreviated title (for running head)
 %                                     also used for the TOC unless
@@ -40,83 +40,25 @@
 \maketitle              % typeset the title of the contribution
 
 \begin{abstract}
-	The Testors Theory is an important approach to feature selection 
-	in supervised classification. Typical testors are irreducible subsets 
-	of features preserving the discernibility between objects in the 
-	original dataset. A new dataset using only those features in a 
-	typical testor is a reduced representation of the original one,
-	which improves the efficiency of machine learning tools without 
-	degrading their performance. Finding the complete set of typical 
-	testors for 	a dataset requires a high computational effort. Here, 
-	we propose a recursive implementation of the CT\_EXT algorithm 
-	(one of the fastest reported in the literature) which avoids some 
-	unnecessary verifications, reducing that way its runtime execution. 
-	An experimental comparison between our proposal and other state of 
-	the art algorithms, over publicly available datasets, is presented.
-\keywords{Testors Theory, features selection, CT\_EXT algorithm}
+	The Testors Theory is an important approach to feature selection in supervised classification. Typical testors are irreducible subsets of features preserving the discernibility between objects in the original dataset. A new dataset using only those features in a typical testor is a reduced representation of the original one, which improves the efficiency of machine learning tools without degrading their performance. Finding the complete set of typical testors for a dataset requires a high computational effort. Resent research has unveiled the relation of typical testors finding algorithms' performance with some properties of the basic matrix. In this paper we make an empirical study involving two of the most recent and faster algorithms in the state of the art: fast--BR and fast--CT\_EXT. Our study is carried out on synthetically generated basic matrices, and results in a simple rule for selecting a priori the fastest algorithm for a given problem. Finally our empirical rule is evaluated on standard datasets.
+
+\keywords{Testors Theory, Algorithms, Basic matrix properties}
 \end{abstract}
 %
 \section{Introduction}
 %
-	Feature selection is an important task in supervised classification. An 
-	information system is a dataset (table) containing objects (rows) which are
-	characterized by the value of some features (columns). A reduced 
-	representation of an information system, with the same discernibility
-	between objects than that of the original dataset, reduces the computational
-	cost of the classification process. In the Logical Combinatorial Pattern 
-	Recognition (Ruiz-Shulcloper et al.~\cite{Shulcloper1995}), Testors Theory 
-	emerges as a solution to feature selection (Ruiz-Shulcloper~\cite{Shulcloper2008};
-	Mart\'inez-Trinidad and	Guzm\'an-Arenas~\cite{Martinez2001}). A testor is subset of 
-	features which allows us to discern between objects in different classes by 
-	using only values of its features. A Typical Testor (TT) is defined as a testor which 
-	is minimal with respect to inclusion. The main limitation to the application of
-	the Testors Theory is that finding all the TT from a dataset has been proven
-	as an NP-hard problem (Skowron et al.~\cite{Skowron1992}).
+	Feature selection is an important task in supervised classification. An information system is a dataset (table) containing objects (rows) which are	characterized by the value of some features (columns). A reduced representation of an information system, with the same discernibility between objects than that of the original dataset, reduces the computational	cost of the classification process. In the Logical Combinatorial Pattern Recognition (Ruiz-Shulcloper et al.~\cite{Shulcloper1995}), Testors Theory emerges as a solution to feature selection (Ruiz-Shulcloper~\cite{Shulcloper2008};	Mart\'inez-Trinidad and	Guzm\'an-Arenas~\cite{Martinez2001}). A testor is subset of features which allows us to discern between objects in different classes by using only values of its features. A Typical Testor (TT) is defined as a testor which is minimal with respect to inclusion. The main limitation to the application of the Testors Theory is that finding all the TT from a dataset has been proven as an NP-hard problem (Skowron et al.~\cite{Skowron1992}).
 	
-	One of the first algorithm designed to overcome the exponential complexity (regarding
-	the number of features) of the problem of finding all the TT, was 
-	proposed by Ruiz-Shulcloper et al.~(\cite{Shulcloper1985}). This algorithm, called BT,
-	codified a subset of features as a binary word with as many bits as features in the 
-	dataset. A 0 represents the absence of the corresponding feature in the current
-	subset while a 1 represents its inclusion. This way, candidates subsets are evaluated
-	in the natural order of binary numbers. The pruning process in the
-	search space is based on the minimal condition of TT and a convenient sorting
-	of the basic matrix (see definition~\ref{def:BM}) associated to the dataset. Finally, 
-	testors found by BT algorithm must by compared with each other in order to remove
-	any superset (not a TT by definition).
-	In (Ruiz-Shulcloper et al.~\cite{Shulcloper1995b}) a new algorithm (REC) is presented.
-	The main drawback of REC was that it operated directly over the dataset (instead of the
-	basic matrix), handling a huge amount of superfluous information. Ayaquica~(\cite{Ayaquica1997})
-	presented the algorithm CER directed to solve this problem by using a different traversing
-	order. 
+	One of the first algorithm designed to overcome the exponential complexity (regarding the number of features) of the problem of finding all the TT, was 
+	proposed by Ruiz-Shulcloper et al.~(\cite{Shulcloper1985}). This algorithm, called BT, codified a subset of features as a binary word with as many bits as features in the dataset. A 0 represents the absence of the corresponding feature in the current	subset while a 1 represents its inclusion. This way, candidates subsets are evaluated in the natural order of binary numbers. The pruning process in the	search space is based on the minimal condition of TT and a convenient sorting of the basic matrix (see definition~\ref{def:BM}) associated to the dataset. Finally, testors found by BT algorithm must by compared with each other in order to remove	any superset (not a TT by definition). In (Ruiz-Shulcloper et al.~\cite{Shulcloper1995b}) a new algorithm (REC) is presented.	The main drawback of REC was that it operated directly over the dataset (instead of the	basic matrix), handling a huge amount of superfluous information. Ayaquica~(\cite{Ayaquica1997})	presented the algorithm CER directed to solve this problem by using a different traversing	order. 
 	
-	Then, Santiesteban and Pons-Porrata~(\cite{Santiesteban2003}) proposed a revolutionary algorithm
-	called LEX. Main ideas behind LEX are a new traversing order of candidates (which resembles the
-	lexicographical order in which string characters are compared) and the concept of gap. In LEX
-	the typical condition is verified first and only for those potentially TT, the testor 
-	condition is checked. This way, the out-coming testors from this algorithm are always typical.
-	The concept of gap allows us; once obtained a TT (or a not testor) candidate, including 
-	the last feature in the dataset, avoid the evaluation of any subset of this candidate.
+	Then, Santiesteban and Pons-Porrata~(\cite{Santiesteban2003}) proposed a new algorithm called LEX. The main ideas behind LEX are a new traversing order of candidates (which resembles the	lexicographical order in which string characters are compared) and the concept of gap. In LEX the typical condition is verified first and only for those potentially TT, the testor condition is checked. This way, the out-coming testors from this algorithm are always typical. The concept of gap allows us; once obtained a TT (or a not testor) candidate, including the last feature in the dataset, avoid the evaluation of any subset of this candidate.
 	
-	Sanchez-D\'iaz and Lazo-Cort\'es~(\cite{Sanchez2007}) proposed the CT\_EXT algorithm for computing all
-	TT. Following a traversing order similar to that in LEX, this algorithm search for
-	testors without verifying the typical condition. This way, a larger number of candidates are 
-	evaluated, in comparison to LEX; but the cost of each evaluation is lower. Results from experiments
-	show that CT\_EXT is faster than the previous existing algorithm for most datasets. Then, Lias-Rodr\'iguez
-	and Pons-Porrata~(\cite{Lias2009}) presented the BR algorithm, a Recursive algorithm based on 
-	Binary operations. BR is very similar to LEX in its bones but its recursive nature encloses a great
-	gain. Given a candidate subset, the remaining features are tested a priori and those being rejected are
-	excluded from subsequent evaluations. Sanchez-D\'iaz et al.~(\cite{Sanchez2010}) presented a cumulative
-	procedure for the CT\_EXT algorithm. This fast-CT\_EXT implementation reduces drastically the runtime
-	for most datasets at no extra cost. In (Lias-Rodr\'iguez and Sanchez-D\'iaz~\cite{Lias2013}) the
-	gap elimination and column reduction are added to BR. This fast-BR algorithm is, no doubt the one 
-	evaluating the minimum number of candidates in the state of the art. The main drawback of fast-BR and 
-	BR is, as in LEX, the high cost of evaluating the typical condition for every candidate. 
+	Sanchez-D\'iaz and Lazo-Cort\'es~(\cite{Sanchez2007}) proposed the CT\_EXT algorithm for computing all TT. Following a traversing order similar to that in LEX, this algorithm search for testors without verifying the typical condition. In this way, a larger number of candidates are evaluated, in comparison to LEX; but the cost of each evaluation is lower. Results from experiments	show that CT\_EXT is faster than the previous existing algorithm for most datasets. Then, Lias-Rodr\'iguez and Pons-Porrata~(\cite{Lias2009}) presented the BR algorithm, a Recursive algorithm based on Binary operations. BR is very similar to LEX in its bones but its recursive nature encloses a reduction in the number of evaluated candidates. Given a candidate subset, the remaining features are tested a priori and those being rejected are excluded from subsequent evaluations. Sanchez-D\'iaz et al.~(\cite{Sanchez2010}) presented a cumulative procedure for the CT\_EXT algorithm. This fast-CT\_EXT implementation reduces drastically the runtime for most datasets at no extra cost. In (Lias-Rodr\'iguez and Sanchez-D\'iaz~\cite{Lias2013}) the gap elimination and column reduction are added to BR. The main drawback of fast-BR and BR is, as in LEX, the high cost of evaluating the typical condition for every contributing candidate. 
 	
-	We present in this paper recursive implementation of the fast-CT\_EXT algorithm. We show that, as 
-	in BR, the a priori verification of features reduces the number of evaluated candidates. The main
-	advantage of our proposed algorithm over BR is that CT\_EXT does not evaluate the typical condition,
-	which leads to a runtime reduction in most cases.	
+	We have described above the evolution of the so called \emph{external scale} algorithms for typical testor computation. In addition, a different line of algorithms such as CT (Bravo-Martínez~\cite{Bravo83}), CC (Águila and Ruíz-Shulcloper~\cite{Aguila84}) and YYC (Alba-Cabrera et al.~\cite{Alba14}) have being developed. These are called \emph{internal scale} algorithms, and they analyse the basic matrix to find out some conditions to guarantee that a subset of attributes is a typical testor. Internal scale algorithms usually evaluate less candidates than external scale algorithms but each candidate evaluation has a higher computational cost. Therefore, the search for fast algorithms for computing typical testors has been biased to external scale algorithms (Alba-Cabrera et al.~\cite{Alba14}).
+	
+	Recently, a thorough study presented by Alba-Cabrera et al.~(\cite{Alba13}) concluded that no single typical testor finding algorithm have the best performance for any given problem. Other studies (\cite{Lias2013},\cite{Rodriguez15}), categorize basic matrices by their density of 1's they have; i.e. the number of ones divided by the number of cells of the matrix. 
 %
 \section{Basic Concepts}
 %
@@ -131,7 +73,7 @@
 	by their attributes values. These rows are called inconsistencies of $DS$ and are not included in $DM$.
 	
 	\begin{definition}\label{def:testor}
-		Let $T \subseteq R$ be a subset of attributes form DS. We say that T is a testor if in the sub-matrix
+		Let $T \subseteq R$ be a subset of attributes form $DS$. We say that T is a testor if in the sub-matrix
 		of DM formed by the columns corresponding to attributes in T, there is not any empty row.
 	\end{definition}
 	
@@ -338,14 +280,44 @@
 %
 
 
+\bibitem[1984]{Aguila84}	
+	Águila, L., Ruíz-Shulcloper, J.  
+	Algoritmo CC para la elaboración de la información k-valente en problemas de Reconocimiento de Patrones. 
+	Mathematics Sciences Journal (In Spanish), 
+	5(3) (1984)
+	
+\bibitem[2013]{Alba13}
+	Alba-Cabrera, E., Ibarra-Fiallo, J.,Godoy-Calderon, S.:
+	A Theoretical and Practical Framework for Assessing the Computational Behavior of Typical Testor-Finding Algorithms.
+	In CIARP 2013, Part I. LNCS,
+	8258, 351--358, (2013)
+	
+\bibitem[2014]{Alba14}
+	Alba-Cabrera, E., Ibarra-Fiallo, J., Godoy-Calderon, S., Cervantes-Alonso, F.:
+	YYC: A Fast Performance Incremental Algorithm for Finding Typical Testors.
+	Progress in Pattern Recognition, Image Analysis, Computer Vision, and Applications.
+	416--423 (2014)
+	
 \bibitem[1997]{Ayaquica1997}
 	Ayaquica, I. O.:
 	Un nuevo algoritmo de escala exterior para el c\'alculo de testores t\'ipicos.
 	Memorias del II Taller Iberoamericano de Reconocimiento de Patrones , La
 	Habana. 141--148 (1997)
-
+	
+\bibitem[1983]{Bravo83}	
+	Bravo-Martínez, A.:
+	Algorithm CT for Calculating the Typical Testors of k-valued Matrix. 
+	Mathematics Sciences Journal (In Spanish), 
+	4(2), 123--144 (1983)
+	
+\bibitem[2015]{Gonzalez15}		
+	González-Guevara, V., Godoy-Calderón, S., Alba-Cabrera, E.,  Ibarra-Fiallo, J.:
+	A Mixed Learning Strategy for Finding Typical Testors in Large Datasets. 
+	In CIARP 2015. LNCS,
+	5197, 716--723 (2008)
+		
 \bibitem[2001]{Lazo2001}	
-	Lazo-Cort\'es, M., Ruiz-shulcloper, J., Alba-Cabrera, E.:
+	Lazo-Cort\'es, M., Ruíz-Shulcloper, J., Alba-Cabrera, E.:
 	An Overview of the Evolution of the Concept of Testor. 
 	Pattern Recognition. 34, 753--762 (2001)
 
@@ -366,6 +338,12 @@
 	The Logical Combinatorial Approach to Pattern Recognition an Overview through Selected Works. 
 	Pattern Recognition. 34, 741--751 (2001)
 
+\bibitem[2015]{Rodriguez15}	
+	Rodríguez-Diez, V., Martínez-Trinidad, J. F., Carrasco-Ochoa, J. A., Lazo-Cortés, M., Feregrino-Uribe, C., Cumplido, R.:
+	A fast hardware software platform for computing irreducible testors. 
+	Expert Systems with Applications, 
+	42(24), 9612–9619 (2015)
+
 \bibitem[2007]{Sanchez2007}
 	Sanchez-D\'iaz, G., Lazo-Cort\'es, M.:
 	CT-EXT: an algorithm for computing typical testor set. 
@@ -383,22 +361,22 @@
 	Mathematics Sciences Journal, 21(1), 85--95 (2003)
 
 \bibitem[1995a]{Shulcloper1995}
-	Ruiz-Shulcloper, J., Alba-Cabrera, E., Lazo-Cort\'es, M.:
+	Ruíz-Shulcloper, J., Alba-Cabrera, E., Lazo-Cort\'es, M.:
 	Introducci\'{o}n al Reconocimiento de Patrones (Enfoque L\'{o}gico--Combinatorio). 
 	Serie Verde No. 51. CINVESTAV-IPN, México, (1995)
 
 \bibitem[1995b]{Shulcloper1995b}
-	Ruiz-Shulcloper, J., Alba-Cabrera, E., Lazo-Cort\'es, M.:
+	Ruíz-Shulcloper, J., Alba-Cabrera, E., Lazo-Cort\'es, M.:
 	Introducci\'{o}n a la teor\'ia de Testotes T\'ipicos. 
 	Serie Verde No. 50. CINVESTAV-IPN, México, (1995)
 	
 \bibitem[1985]{Shulcloper1985}	
-	Ruiz-Shulcloper, J., Aguila, L., Bravo, A.:
+	Ruíz-Shulcloper, J., Aguila, L., Bravo, A.:
 	BT and TB algorithms for computing all irreducible testors. 
 	Revista Ciencias Matem\'{a}ticas, 2, 11--18 (1985)
 
 \bibitem[2008]{Shulcloper2008}
-	Ruiz-Shulcloper, J.:
+	Ruíz-Shulcloper, J.:
 	Pattern recognition with mixed and incomplete data. 
 	Pattern Recognition and Image Analysis. 18(4), 563--576 (2008)
 
