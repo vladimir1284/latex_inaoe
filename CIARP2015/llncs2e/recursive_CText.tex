@@ -8,7 +8,10 @@
 %\usepackage{makeidx}  % allows for indexgeneration
 %
 \usepackage{algorithm,algorithmic}
+%\usepackage{hyperref}
+%\hypersetup{colorlinks=true}	    % colores en vez de cajas en los enlaces
 \usepackage{multicol}
+\usepackage{graphicx}           	% para manejar imagenes
 \usepackage[utf8]{inputenc}
 
 \begin{document}
@@ -47,10 +50,9 @@
 %
 \section{Introduction}
 %
-	Feature selection is an important task in supervised classification. An information system is a dataset (table) containing objects (rows) which are	characterized by the value of some features (columns). A reduced representation of an information system, with the same discernibility between objects than that of the original dataset, reduces the computational	cost of the classification process. In the Logical Combinatorial Pattern Recognition (Ruiz-Shulcloper et al.~\cite{Shulcloper1995}), Testors Theory emerges as a solution to feature selection (Ruiz-Shulcloper~\cite{Shulcloper2008};	Mart\'inez-Trinidad and	Guzm\'an-Arenas~\cite{Martinez2001}). A testor is subset of features which allows us to discern between objects in different classes by using only values of its features. A Typical Testor (TT) is defined as a testor which is minimal with respect to inclusion. The main limitation to the application of the Testors Theory is that finding all the TT from a dataset has been proven as an NP-hard problem (Skowron et al.~\cite{Skowron1992}).
+	Feature selection is an important task in supervised classification. An information system is a dataset (table) containing objects (rows) which are	characterized by the value of some features (columns). A reduced representation of an information system, with the same discernibility between objects than that of the original dataset, reduces the computational	cost of the classification process. In the Logical Combinatorial Pattern Recognition (Ruiz-Shulcloper et al.~\cite{Shulcloper1995}), Testors Theory emerges as a solution to feature selection (Ruiz-Shulcloper~\cite{Shulcloper2008};	Mart\'inez-Trinidad and	Guzm\'an-Arenas~\cite{Martinez2001}). A testor is subset of features which allows us to discern between objects in different classes by using only values of its features. A Typical Testor (TT) is defined as a testor which is minimal with respect to inclusion. The main limitation to the application of the Testors Theory is that finding all the TT has exponential complexity regarding the number of attributes in the dataset (González-Guevara et al.~\cite{Gonzalez15}).
 	
-	One of the first algorithm designed to overcome the exponential complexity (regarding the number of features) of the problem of finding all the TT, was 
-	proposed by Ruiz-Shulcloper et al.~(\cite{Shulcloper1985}). This algorithm, called BT, codified a subset of features as a binary word with as many bits as features in the dataset. A 0 represents the absence of the corresponding feature in the current	subset while a 1 represents its inclusion. This way, candidates subsets are evaluated in the natural order of binary numbers. The pruning process in the	search space is based on the minimal condition of TT and a convenient sorting of the basic matrix (see definition~\ref{def:BM}) associated to the dataset. Finally, testors found by BT algorithm must by compared with each other in order to remove	any superset (not a TT by definition). In (Ruiz-Shulcloper et al.~\cite{Shulcloper1995b}) a new algorithm (REC) is presented.	The main drawback of REC was that it operated directly over the dataset (instead of the	basic matrix), handling a huge amount of superfluous information. Ayaquica~(\cite{Ayaquica1997})	presented the algorithm CER directed to solve this problem by using a different traversing	order. 
+	One of the first algorithm designed to overcome the exponential complexity (regarding the number of features) of the problem of finding all the TT, was proposed by Ruiz-Shulcloper et al.~(\cite{Shulcloper1985}). This algorithm, called BT, codified a subset of features as a binary word with as many bits as features in the dataset. A 0 represents the absence of the corresponding feature in the current	subset while a 1 represents its inclusion. This way, candidates subsets are evaluated in the natural order of binary numbers. The pruning process in the	search space is based on the minimal condition of TT and a convenient sorting of the basic matrix (see definition~\ref{def:BM}) associated to the dataset. Finally, testors found by BT algorithm must by compared with each other in order to remove	any superset (not a TT by definition). In (Ruiz-Shulcloper et al.~\cite{Shulcloper1995b}) a new algorithm (REC) is presented.	The main drawback of REC was that it operated directly over the dataset (instead of the	basic matrix), handling a huge amount of superfluous information. Ayaquica~(\cite{Ayaquica1997})	presented the algorithm CER directed to solve this problem by using a different traversing	order. 
 	
 	Then, Santiesteban and Pons-Porrata~(\cite{Santiesteban2003}) proposed a new algorithm called LEX. The main ideas behind LEX are a new traversing order of candidates (which resembles the	lexicographical order in which string characters are compared) and the concept of gap. In LEX the typical condition is verified first and only for those potentially TT, the testor condition is checked. This way, the out-coming testors from this algorithm are always typical. The concept of gap allows us; once obtained a TT (or a not testor) candidate, including the last feature in the dataset, avoid the evaluation of any subset of this candidate.
 	
@@ -58,218 +60,147 @@
 	
 	We have described above the evolution of the so called \emph{external scale} algorithms for typical testor computation. In addition, a different line of algorithms such as CT (Bravo-Martínez~\cite{Bravo83}), CC (Águila and Ruíz-Shulcloper~\cite{Aguila84}) and YYC (Alba-Cabrera et al.~\cite{Alba14}) have being developed. These are called \emph{internal scale} algorithms, and they analyse the basic matrix to find out some conditions to guarantee that a subset of attributes is a typical testor. Internal scale algorithms usually evaluate less candidates than external scale algorithms but each candidate evaluation has a higher computational cost. Therefore, the search for fast algorithms for computing typical testors has been biased to external scale algorithms (Alba-Cabrera et al.~\cite{Alba14}).
 	
-	Recently, a thorough study presented by Alba-Cabrera et al.~(\cite{Alba13}) concluded that no single typical testor finding algorithm have the best performance for any given problem. Other studies (\cite{Lias2013},\cite{Rodriguez15}), categorize basic matrices by their density of 1's they have; i.e. the number of ones divided by the number of cells of the matrix. 
+	Recently, a thorough study presented by Alba-Cabrera et al.~(\cite{Alba13}) concluded that no single typical testor finding algorithm have the best performance for any given problem. Other studies (Lias-Rodr\'iguez and Sanchez-D\'iaz~\cite{Lias2013}, Rodríguez-Diez et al.~\cite{Rodriguez15}), categorize basic matrices by the density of 1's they have; i.e. the number of ones divided by the total number of cells of the matrix. Furthermore, González-Guevara et al.~(\cite{Gonzalez15}) referred a series of elements that influence the algorithms' performance, such as the number of rows, the density of 1's and the number of typical testor of the basic matrix. With this precedents, we present in this paper a empirical study to identify a relationship between some of these properties of the basic matrix and the relative performance of algorithms. For this purpose, we selected fast--CT\_EXT (Sanchez-D\'iaz et al.~\cite{Sanchez2010}) and fast--BR (Lias-Rodr\'iguez and Sanchez-D\'iaz~\cite{Lias2013}) which are two of the most recent and faster algorithms in the state of the art. From this empirical study we obtained a simple rule to determine a priory the fastest algorithm for a determined problem. Finally we evaluated our rule on standard datasets from UCI (Bache and Lichman~\cite{Bache13}). 
+	
 %
 \section{Basic Concepts}
 %
-	Let $DS$ be a dataset with $k$ objects described by $n$ condition attributes (features) and groped in
-	in $r$ classes by a decision attribute. Every attribute in the set of condition attributes 
-	$R=\lbrace x_1,...,x_n \rbrace$, hereinafter referred to as attributes, may be of any type and must
-	have a defined comparison criterion (usually the simple equality). Let $DM$ be the binary discernibility
-	matrix obtained from comparing every pair of objects in $DS$ belonging to different classes. Every 
-	comparison of a pair of objects adds a row to $DM$ with (0=indiscernible,1=discernible) in the corresponding 
-	attribute position (column). $DM$ has $m$ rows and $n$ columns. Comparisons generating a row with only 
-	0's, hereinafter referred to as empty row, imply that two objects from different classes are indistinguishable 
-	by their attributes values. These rows are called inconsistencies of $DS$ and are not included in $DM$.
+	In this section we introduce the main propositions and definitions supporting the pruning strategies of fast--CT\_EXT and fast--BR. Here, we aim to provide the key elements to understand the differences between these two algorithms. Also, we introduced the necessary concepts to make this section self-contained.	
+	
+	Let $DS$ be a dataset with $k$ objects described by $n$ condition attributes (features) and groped in $r$ classes by a decision attribute. Every attribute in the set of condition attributes $R=\lbrace x_1,...,x_n \rbrace$, hereinafter referred to as attributes, may be of any type and must have a defined comparison criterion (usually the simple equality). Let $DM$ be the binary discernibility matrix obtained from comparing every pair of objects in $DS$ belonging to different classes. Every comparison of a pair of objects adds a row to $DM$ with (0=indiscernible,1=discernible) in the corresponding attribute position (column). $DM$ has $m$ rows and $n$ columns. Comparisons generating a row with only 0's, hereinafter referred to as empty row, imply that two objects from different classes are indistinguishable by their attributes values. These rows are called inconsistencies of $DS$ and are not included in $DM$.
 	
 	\begin{definition}\label{def:testor}
 		Let $T \subseteq R$ be a subset of attributes form $DS$. We say that T is a testor if in the sub-matrix
 		of DM formed by the columns corresponding to attributes in T, there is not any empty row.
 	\end{definition}
 	
-	An empty row in this sub-matrix of $DM$ imply that a reduced dataset obtained from $DS$, using only those 
-	attributes in $T$, has more inconsistencies than $DS$. 	
+	An empty row in this sub-matrix of $DM$ imply that a reduced dataset obtained from $DS$, using only those attributes in $T$, has more inconsistencies than $DS$. 	
 	
-	Usually the number of rows in $DM$ ($m$) is large. Lazo-Cort\'es et al.~(\cite{Lazo2001}) proposed a reduction
-	of $DM$ without loosing relevant information. They proved that this reduced matrix, called basic matrix, and
-	$DM$; has the same set of testors. 
+	Usually the number of rows in $DM$ ($m$) is large. Lazo-Cort\'es et al.~(\cite{Lazo2001}) proposed a reduction of $DM$ without loosing relevant information. They proved that this reduced matrix, called \textit{basic matrix}, and $DM$; has the same set of testors. 
 	
 	\begin{definition} \label{def:BM}
-		Let $S_{j} \subseteq R$ be a subset of attributes associated to the row j of DM, such that $x_i \in S_{j}$
-		iff the row j has a 1 in the column i. And let $SS=\lbrace S_1, S_2,...,S_m  \rbrace$ be the set of
-		possible subsets $S_{j}$ in DM. The Basic Matrix BM of DS is formed by all the rows in DM (without
-		repetitions) for which its associated $S_{j}$ has not any proper subset in SS.
+		Let $S_{j} \subseteq R$ be a subset of attributes associated to the row j of DM, such that $x_i \in S_{j}$ iff the row j has a 1 in the column i. And let $SS=\lbrace S_1, S_2,...,S_m  \rbrace$ be the set of possible subsets $S_{j}$ in DM. The Basic Matrix BM of DS is formed by all the rows in DM (without repetitions) for which its associated $S_{j}$ has not any proper subset in SS.
 	\end{definition}
 	
-	\begin{table}[!htb]
-    \begin{minipage}{.5\linewidth}
-      \caption{Discernibility Matrix}
-      \centering
-        \begin{tabular}{ccccc}\label{tab:DM}
-            $x_0$ & $x_1$ & $x_2$ & $x_3$ & $x_4$\\
-        		\hline
-        		1&1&0&0&0\\
-        		0&1&0&0&1\\
-        		1&0&0&1&0\\
-        		0&0&1&0&1\\
-        		0&1&1&0&1\\
-        \end{tabular}
-    \end{minipage}%
-    \begin{minipage}{.5\linewidth}
-      \centering
-        \caption{Basic Matrix}
-        \begin{tabular}{ccccc}\label{tab:BM}
-            $x_0$ & $x_1$ & $x_2$ & $x_3$ & $x_4$\\
-        		\hline
-        		1&1&0&0&0\\
-        		0&1&0&0&1\\
-        		1&0&0&1&0\\
-        		0&0&1&0&1\\
-        		\\
-        \end{tabular}
-    	\end{minipage} 
-	\end{table}
 	
-	We can then, substitute $DM$ by $BM$ in definition~\ref{def:testor} without 
-	any loose of generality. An example $DM$ is shown in table~\ref{tab:DM} and
-	its corresponding $BM$ can be seen in table~\ref{tab:BM}.
+	We can then, substitute $DM$ by $BM$ in definition~\ref{def:testor} without any loose of generality. 
 	
 	\begin{definition}\label{def:TT}
-		A subset of attributes $T \subseteq R$ is a typical testor iff T is a testor and
-		$\forall x_i \in T, T \setminus x_i$ is not a testor. 
-	\end{definition}	
+		A subset of attributes $T \subseteq R$ is a typical testor iff T is a testor and $\forall x_i \in T, T \setminus x_i$ is not a testor. 
+	\end{definition}
+		
 %	
-\subsection{Concepts for CT\_EXT}
+\subsection{Concepts for fast--CT\_EXT}
 %
-	%An important concept in the CT\_EXT algorithm is the contribution.
 		
 	\begin{definition}\label{def:contrib}
-		Given $T \subseteq R$ and $x_i \in R$ such that $x_i \notin T$. We say that $x_i$ contributes to T iff 
-		the sub-matrix of BM formed with only those attributes in T has more empty rows than that formed with attributes
-		in $T \cup \lbrace x_i \rbrace$.
+		Given $T \subseteq R$ and $x_i \in R$ such that $x_i \notin T$. We say that $x_i$ contributes to T iff the sub-matrix of BM formed with only those attributes in T has more empty rows than that formed with attributes in $T \cup \lbrace x_i \rbrace$.
 	\end{definition}	
 	
-	The core of the CT\_EXT algorithm is supported by propositions~\ref{prop1} and~\ref{prop2}; which are stated in
-	(Sanchez-D\'iaz et al.~\cite{Sanchez2010}, Theorems 1 and 2) respectively.
+	The core of the CT\_EXT algorithm is supported by propositions~\ref{prop:contrib} and~\ref{prop:superset}; which are stated in	(Sanchez-D\'iaz et al.~\cite{Sanchez2010}, Theorems 1 and 2) respectively.
 	
-	\begin{proposition}\label{prop1} 
-		Given $T \subseteq R$ and  $x_i \in R$ such that $x_i \notin T$. If $x_i$ does not contribute to T, then 
-		$T\cup\{x_i\}$ cannot be a subset of any typical testor.
+	\begin{proposition}\label{prop:contrib} 
+		Given $T \subseteq R$ and  $x_i \in R$ such that $x_i \notin T$. If $x_i$ does not contribute to T, then 		$T\cup\{x_i\}$ cannot be a subset of any typical testor.
 	\end{proposition}
 
-	\begin{proposition}\label{prop2} 
-		Given $T \subseteq R$ and $Z \subseteq R$ such that $Z \cap T = \emptyset$. If T is a testor, then $T \cup
-		Z$ is a 	testor too, but it is not a typical testor.
+	\begin{proposition}\label{prop:superset} 
+		Given $T \subseteq R$ and $Z \subseteq R$ such that $Z \cap T = \emptyset$. If T is a testor, then $T \cup Z$ is a 	testor too, but it is not a typical testor.
 	\end{proposition}
-	
-	For a fast implementation of the CT\_EXT algorithm, columns in $BM$ are coded as binary words with as many 
-	bits as 	rows has $BM$. The cumulative mask for an attribute $x_i$ is denoted as $cm_{x_i}$ and is the binary
-	word representing the ith column in $BM$. The cumulative mask for a subset of attributes $T=\lbrace
-	x_{i1},x_{i2},...,x_{ik} \rbrace$ is defined	as $cm_T = cm_{x_{i1}} \vee cm_{x_{i2}} \vee ... \vee cm_{x_{ik}}$
-	where $\vee$ stands for the binary OR operator. It is not hard to see that the number of 0's in $cm_T$ equals
-	the number of empty rows in $BM$. According to definition~\ref{def:contrib}, $x_i$ contributes to $T$ iff
-	$cm_{T\cup x_i}$ has more 1's than $cm_T$. The incremental nature of fast-CT\_EXT is given by the associative
-	property of the OR operation, such that $cm_{T\cup x_i}=cm_T\vee cm_{x_i}$. Notice from this last formulation,
-	that $x_i$ contributes to $T$ iff $cm_{T\cup x_i}\neq cm_T$ since $cm_{T\cup x_i}$ cannot have less 1's than
-	$cm_T$. Finally, substituting $DM$ by $BM$ in definition~\ref{def:testor}, it is easy to see that $T \subseteq
-	R$ is a testor iff $cm_T=(1,...,1)$ (has a 1 in every bit).
 
-
-\section{The Recursive Implementation of CT\_EXT}
 %
-	The first step in the CT\_EXT algorithm is the sorting of the BM in order to reduce the search space. One of 
-	the rows of $BM$ having the minimum number of 1's is moved up to the first row. Then, columns are rearranged 
-	so that those columns having a 1 in the first row, stay in the leftmost side of the $BM$.  A pseudocode for
-	the recursive implementation of CT\_EXT is shown in algorithm~\ref{alg1}. 
-%	A problem with this recursive implementation is that we must store cumulative masks while the recursive
-%	functions walks down to the base case. A worst case requires $\frac{n(n-1)m}{2}$ bits which, for a $BM$
-%	with $n=1000$ attributes and $m=100000$ rows, rises to 5.8GB. 
+\subsection{Concepts for fast--BR}
+%
+	In addition to the propositions exposed above, fast--BR is supported by the following propositions; which are stated and proved in (Lias-Rodr\'iguez and Sanchez-D\'iaz~\cite{Lias2013}).
 
-	The algorithm execution starts with the first element (column) in the sorted $BM$ and repeats until an 
-	attribute with a 0 in the first row is reached (line~\ref{line:firstrow}). Notice that for the rest of the
-	candidates the first row will always be an empty row. If this single attribute is a testor (line~\ref{line:singleT})
-	then it is saved in the testors set $TS$; else, the recursive evaluator is called with the current attribute
-	as the base set $B$ and the remaining attributes to its right as the tail set $C$ (line~\ref{line:eval}).
-	In the recursive function, every attribute in the tail is tested for contribution to the base set 
-	(line~\ref{line:contrib}). The attributes are removed from the tail set for furthers evaluations, given
-	that they are testors (line~\ref{line:remT}) or do not contribute to $B$ (line~\ref{line:remNoContrib}).
-	This a priori evaluation and rejection of non-contributing and testor-forming attributes constitutes the key
-	gain of our proposed implementation, and is supported by proposition~\ref{prop3}.
-	Finally, the remaining attributes in the tail set, are concatenated with $B$ and used as base set for
-	subsequent recursive evaluations with the remaining $C$ as tail (line~\ref{line:recursive}).
+%	\begin{proposition}\label{prop:recursive} 
+%		Given $T \subseteq R$, $Z \subseteq R$ and  $x_i \in R$ such that $x_i \notin Z$ and $T \subseteq Z$. If $x_i$ does not contribute to T or form a testor with T, then $Z\cup\{x_i\}$ cannot be a subset of any typical testor.
+%	\end{proposition}	
+%	
+%	Proposition~\ref{prop:recursive} constitutes the basis for the recursive implementation of the algorithm. Fast--BR introduces a kind of look ahead variant to the lexicographical order to take advantage of this proposition. This procedure avoids subsequent evaluations of a non contributing attribute.
+	
+	\begin{definition}\label{def:exclusion}
+		Given $T \subseteq R$ we call compatibility mask of $T$, denoted as $cm_T$, to the binary word in which the $j^{\mathit{th}}$ bit is 1 if the $j^{\mathit{th}}$ row of $BM$ has a 1 in only one column of those columns corresponding to attributes in $T$, and it is 0 otherwise.
+	\end{definition}
+	
+	\begin{proposition}\label{prop:exclude} 
+		Given $T \subseteq R$ and $x_i \in R$ such that $x_i \notin T$.	We denote $c_{x_k}$ to the binary word in which the $j^{\mathit{th}}$ bit is 1 if the $j^{\mathit{th}}$ row of $BM$ has a 1 in the column corresponding to $x_k$. If $\exists x_k \in T$ such that $cm_{T \cup \lbrace x_i\rbrace} \wedge c_{x_k}=(0,...,0)$. Then, $T \cup \lbrace x_i\rbrace$ do not form a typical testor. And we will say that $x_i$ is exclusionary with $T$.
+	\end{proposition}
+	
+	We will refer to Proposition~\ref{prop:exclude} as exclusion evaluation. The application of exclusion evaluation for typical testor property identification is given in the form of Proposition~\ref{prop:TT}.
+	
+	\begin{proposition}\label{prop:TT} 
+			Given $T \subseteq R$ and $x_i \in R$ such that $x_i \notin T$. The subset $T \cup \lbrace x_i\rbrace$ is a typical testor iff it is a testor and $x_i$ is not exclusionary with $T$.
+	\end{proposition}
+		
+%
+\section{Comparative Study}
+%
+	We include in our comparative study the main exponents of the two families of external scale algorithms: Those evaluating first the testor condition and then verify the typical condition (exclusion evaluation) of testors, and those evaluating the exclusion first and then the testor condition over non exclusionary subsets. This can be seen in the candidate evaluation process of fast--CT\_EXT and fast--BR illustrated in Figure~\ref{fig:candeval}.
+	
+		%TODO hacer más gruesas las líneas de la figura
+	\begin{figure}[htb]
+		\label{fig:candeval}
+	    \centering
+	    \begin{minipage}{.5\textwidth}
+	        \centering
+	        \includegraphics[height=5cm]{fastct_ext.eps}
+	    \end{minipage}%
+	    \begin{minipage}{0.5\textwidth}
+	        \centering
+	        \includegraphics[height=5cm]{fastBR.eps}	        
+	    \end{minipage}
+		\caption{Candidate evaluation flowchart for fast--CT\_EXT (left) and fast--BR (right).}
+	\end{figure}
+		
+	For our experiments in the next section we will use the implementation of fast--BR provided by their authors. This algorithm takes advantage of two procedures that we consider general: gap elimination and columns reduction (Lias-Rodr\'iguez and Sanchez-D\'iaz~\cite{Lias2013}). In order to provide leverage to the comparative study, we included these procedures in the fast--CT\_EXT implementation that we will use in our experiments\footnote{The source code as well as all the basic matrices and datasets used in our experiments can be downloaded from \url{http://ccc.inaoep.mx/$\sim$ariel/CTBRES}}. In this way we can unveil the effects of the main difference between these two algorithm in their relative performance.
+	
+%
+\subsection{Comparison over synthetic basic matrices}
+%
+In order to explore the influence of the basic matrix density on the relative performance of fast--CT\_EXT and fast--BR; we conducted this first experiment over 500 randomly generated basic matrices with 2000 rows and 30 columns. The size of these matrices was selected in order to keep reasonable runtime for the three algorithms. Our 500 \textit{SBDMs} were generated with densities of 1's uniformly distributed in the range (0.20--0.80) using a step of 0.04. 
 
-	\begin{proposition}\label{prop3} 
-		Given $T \subseteq R$, $Z \subseteq R$ and  $x_i \in R$ such that $x_i \notin Z$ and $T \subseteq Z$. If 
-		$x_i$ does not contribute to T or form a testor with T, then 	$Z\cup\{x_i\}$ cannot be a subset of any 
-		typical testor.
-	\end{proposition}	
+	\begin{figure}[htb]
+	    \centering
+	    \begin{minipage}{.48\textwidth}
+	        \centering
+	        \includegraphics[height=4cm]{2000x30.eps}
+	        \label{fig:density}
+	        \caption{Runtime vs. density for basic matrices with 2000 rows.}
+	    \end{minipage}%
+	    {~~}
+	    \begin{minipage}{0.48\textwidth}
+	        \centering
+	        \includegraphics[height=4cm]{runtime_vs_reducts.eps}
+	        \label{fig:reducts}
+	        \caption{Runtime vs. number of reducts for basic matrices with 2000 rows.}	        
+	    \end{minipage}
+	\end{figure}
+%
+\subsection{Evaluation on standard datasets}
+%
+	In order to evaluate the rule obtained over synthetic matrices, we selected 10 datasets from UCI (Bache and Lichman~\cite{Bache13}). Table~\ref{tab:density} shows the runtime for fast--CText and fast--BR over our selected datasets. Notice that we chose 5 datasets with basic matrix densities lower or equal 0.35 and 5 datasets above. Although this experiment was carried out on a small heterogeneous sample, it provides evidence on the applicability of the rule for selecting the appropriated algorithm for a given problem.
 	
-	\begin{proof}
-		As $T \subseteq Z$, $cm_T$ cannot have more 1's than $cm_Z$ by the definition of the cumulative mask.
-		If $x_i$ does not contribute to $T$ then, $cm_{T \cup \lbrace x_i \rbrace}$ does not have more 1's than
-		$cm_T$; and, by transitivity, $cm_{Z \cup \lbrace x_i \rbrace}$ cannot have more 1's than $cm_Z$. 
-		Notice that  $\lbrace T \cup \lbrace x_i \rbrace\rbrace \subseteq \lbrace Z \cup \lbrace x_i \rbrace\rbrace$.
-		If $T \cup \lbrace x_i \rbrace$ is a testor, $\lbrace Z \cup \lbrace x_i \rbrace\rbrace$ by 
-		definition~\ref{def:TT} 	cannot be a typical testor, given that it is a superset of a testor.
-	\qed
-	\end{proof}
-	
-	\renewcommand{\algorithmicrequire}{\textbf{Input:}}
-	\renewcommand{\algorithmicensure}{\textbf{Output:}}
-	%\begin{multicols}{2}
-	\begin{algorithm}
-	\caption{Recursively calculate testors in $DM$}
-	\label{alg1}
-	\begin{multicols}{2}
-	\begin{algorithmic}[1]
-	  \REQUIRE Sorted $BM$
-	  \ENSURE $TS$ - the complete set of testors
-	  \STATE $i \Leftarrow 0$, $TS \Leftarrow \emptyset$
-	  \WHILE {$BM(0,i) \neq 0$}\label{line:firstrow}
-	  	\IF {$cm_{x_i} = (1,...,1)$}\label{line:singleT}
-	  		\STATE $TS \Leftarrow TS\cup \lbrace x_i \rbrace$
-	  	\ELSE
-	  		\STATE eval($\lbrace x_i \rbrace$, $cm_{x_i}$, $\lbrace x_{i+1},..., x_m\rbrace$)\label{line:eval}
-	  	\ENDIF
-	  	\STATE $i \Leftarrow i+1$
-	  \ENDWHILE
-	  \item[] \item[] \item[] \item[] \item[]
-	  \STATE eval($B$,$cm_B$,$C$)
-	  \FORALL{$x \in C$} 
-	  	\STATE $cm_{B\cup x}=cm_B \vee cm_x$
-	  	\IF {$cm_{B\cup x}\neq cm_B$}\label{line:contrib}
-	  		\IF {$cm_{B\cup \lbrace x\rbrace}=(1,...,1)$}
-	  			\STATE $C \Leftarrow C\setminus x$\label{line:remT} 
-	  			\STATE $TS \Leftarrow TS\cup\lbrace B\cup \lbrace x\rbrace \rbrace$
-	  		\ENDIF
-	  	\ELSE
-	  		\STATE $C \Leftarrow C\setminus x$\label{line:remNoContrib} 
-	  	\ENDIF
-	  \ENDFOR
-	  \FORALL{$x \in C$} 
-	  	\STATE $C \Leftarrow C\setminus x$
-	  	\STATE eval($B\cup \lbrace x\rbrace$,$cm_{B\cup \lbrace x\rbrace}$,$C$)\label{line:recursive} 
-	  \ENDFOR
-	\end{algorithmic}
-	\end{multicols}
-	\end{algorithm}
-	
-	
-	The evaluated candidates by the CT\_EXT algorithm and our proposed implementation, on the basic matrix from
-	table~\ref{tab:BM} are shown in table~\ref{tab:run}. Notice that while CT\_EXT evaluates 17 candidates,
-	in our recursive implementation, only 13 candidates are evaluated.
-	
-	\begin{table}[!htb]\label{tab:run}\scriptsize
-		\setlength{\tabcolsep}{.05em}
-		\caption{Example execution}
-      	\centering
-    		\begin{tabular}{|lllll|lllll|}
-    		\hline
-    		\multicolumn{5}{|c|}{CT\_EXT} & \multicolumn{5}{c|}{Recursive CT\_EXT}\\
-    		\hline
-    		\{$ x_0$\} 	 		& \{$x_0,x_1,x_4$\}	& \{$x_0,x_3$\}		& \{$x_1,x_2,x_3$\}	& \{$x_1,x_4$\}	
-    		& \{$x_0$\}			& \{$x_0,x_4$\} 		& \{$x_1,x_3$\} 		& \{$x_1,x_3,x_4$\}	&\\
-    		\{$x_0,x_1$\} 		& \{$x_0,x_2$\}  	& \{$x_0,x_4$\}		& \{$x_1,x_2,x_4$\}	& 
-    		& \{$x_0,x_1$\}		& \{$x_0,x_1,x_2$\} 	& \{$x_1,x_4$\}		&&\\
-    		\{$x_0,x_1,x_2$\}	& \{$x_0,x_2,x_3$\}	& \{$x_1$\}			& \{$x_1,x_3$\}	  	&			
-    		& \{$x_0,x_2$\} 		& \{$x_1$\}		 	& \{$x_1,x_2,x_3$\}	&&\\
-    		\{$x_0,x_1,x_3$\} 	& \{$x_0,x_2,x_4$\}	& \{$x_1,x_2$\} 		& \{$x_1,x_3,x_4$\}	&			
-    		& \{$x_0,x_3$\} 		& \{$x_1,x_2$\}	 	& \{$x_1,x_2,x_4$\}	&&\\
-    		\hline
+	\begin{table}[htb]
+		\centering \footnotesize
+		\caption{Fast--CText and fast--BR runtimes in seconds for standard datasets. Sorted by basic matrix density.}
+		\label{tab:density}
+		\begin{tabular}{lccccrr}
+			\hline
+			Dataset   		 & Attributes & Instances & Reducts  & Density & Fast--CText      & Fast--BR        \\
+			\hline
+			Keyword-activity & 37         & 1530      & 3        & 0.04    & \textbf{0.42}    & 0.90            \\
+			Connect-4        & 43         & 6756      & 35       & 0.05    & \textbf{44.23}   & 160.61          \\
+			QSAR-biodeg      & 42         & 1055      & 256      & 0.12    & \textbf{0.19}    & 0.33            \\
+			Credit-g         & 21         & 1000      & 846      & 0.35    & \textbf{0.06}    & 0.12            \\
+			Flags            & 30         & 194       & 23543    & 0.35    & \textbf{0.74}    & 1.06            \\
+			Student-por      & 32         & 649       & 851584   & 0.41    & 1657.90          & \textbf{161.35} \\
+			Sponge           & 46         & 76        & 10992    & 0.42    & 0.58             & \textbf{0.14}   \\
+			Student-mat      & 32         & 395       & 679121   & 0.43    & 929.46           & \textbf{81.82}  \\
+			Lung-cancer      & 57         & 32        & 4183355  & 0.47    & 133.43           & \textbf{7.34}   \\
+			Cylinder-bands   & 40         & 512       & 23534    & 0.55    & 4.59             & \textbf{0.53}   \\
+			\hline
 		\end{tabular}
 	\end{table}
-%
-\section{Experiments}
 %
 %
 \section{Conclusions}
@@ -303,6 +234,11 @@
 	Un nuevo algoritmo de escala exterior para el c\'alculo de testores t\'ipicos.
 	Memorias del II Taller Iberoamericano de Reconocimiento de Patrones , La
 	Habana. 141--148 (1997)
+	
+\bibitem[2013]{Bache13}	
+	Bache, K., Lichman, M.:
+	UCI machine learning repository.
+	(2013)
 	
 \bibitem[1983]{Bravo83}	
 	Bravo-Martínez, A.:
@@ -344,22 +280,6 @@
 	Expert Systems with Applications, 
 	42(24), 9612–9619 (2015)
 
-\bibitem[2007]{Sanchez2007}
-	Sanchez-D\'iaz, G., Lazo-Cort\'es, M.:
-	CT-EXT: an algorithm for computing typical testor set. 
-	In Progress in Pattern Recognition, Image Analysis and Applications. Springer. 506--514 (2007)
-
-\bibitem[2010]{Sanchez2010}
-	Sanchez-D\'iaz, G., Piza-Davila, I., Lazo-Cort\'es, M., Mora-Gonz\'alez, M., Salinas-Luna, J.:
-	A fast implementation of the CT-EXT algorithm for the testor property identification. 
-	Lecture Notes in Computer Science (including Subseries Lecture Notes in Artificial Intelligence and 
-	Lecture	Notes in Bioinformatics), 6438 LNAI(PART 2), 92--103 (2010)
-
-\bibitem[2003]{Santiesteban2003}	
-	Santiesteban, Y., Pons-Porrata, A.:
-	LEX: a new algorithm for the calculus of typical testors. 
-	Mathematics Sciences Journal, 21(1), 85--95 (2003)
-
 \bibitem[1995a]{Shulcloper1995}
 	Ruíz-Shulcloper, J., Alba-Cabrera, E., Lazo-Cort\'es, M.:
 	Introducci\'{o}n al Reconocimiento de Patrones (Enfoque L\'{o}gico--Combinatorio). 
@@ -379,11 +299,27 @@
 	Ruíz-Shulcloper, J.:
 	Pattern recognition with mixed and incomplete data. 
 	Pattern Recognition and Image Analysis. 18(4), 563--576 (2008)
+	
+\bibitem[2007]{Sanchez2007}
+	Sanchez-D\'iaz, G., Lazo-Cort\'es, M.:
+	CT-EXT: an algorithm for computing typical testor set. 
+	In Progress in Pattern Recognition, Image Analysis and Applications. Springer. 506--514 (2007)
 
-\bibitem[1992]{Skowron1992}
-	Skowron, A., Rauszer, C.:
-	The discernibility matrices and functions in information systems. 
-	Handbook of Applications and Advances of the Rough Sets Theory. 331--362  (1992)
+\bibitem[2010]{Sanchez2010}
+	Sanchez-D\'iaz, G., Piza-Davila, I., Lazo-Cort\'es, M., Mora-Gonz\'alez, M., Salinas-Luna, J.:
+	A fast implementation of the CT-EXT algorithm for the testor property identification. 
+	Lecture Notes in Computer Science (including Subseries Lecture Notes in Artificial Intelligence and 
+	Lecture	Notes in Bioinformatics), 6438 LNAI(PART 2), 92--103 (2010)
+
+\bibitem[2003]{Santiesteban2003}	
+	Santiesteban, Y., Pons-Porrata, A.:
+	LEX: a new algorithm for the calculus of typical testors. 
+	Mathematics Sciences Journal, 21(1), 85--95 (2003)
+
+%\bibitem[1992]{Skowron1992}
+%	Skowron, A., Rauszer, C.:
+%	The discernibility matrices and functions in information systems. 
+%	Handbook of Applications and Advances of the Rough Sets Theory. 331--362  (1992)
 	
 	
 \end{thebibliography}
