@@ -53,9 +53,9 @@
 %
 	Feature selection is an important task in supervised classification. It consists in identifying those features that provide relevant information for the classification process. This process may improve the efficiency of machine learning tools without degrading significantly their efficacy.
 %	An information system is a dataset (table) containing objects (rows) which are	characterized by the value of some features (columns). A reduced representation of an information system, with the same discernibility between objects than that of the original dataset, reduces the computational	cost of the classification process. 
-	In the Logical Combinatorial Pattern Recognition (Ruiz-Shulcloper et al.~\cite{Shulcloper1995}), Testor Theory emerges as a solution to feature selection (Ruiz-Shulcloper~\cite{Shulcloper2008};	Mart\'inez-Trinidad and	Guzm\'an-Arenas~\cite{Martinez2001}). A testor is a subset of features which allows discerning between objects in different classes by using only its features. A Typical Testor (TT) is defined as a testor which is minimal with respect to inclusion. The main limitation to the application of the Testor Theory is that finding all the TTs has exponential complexity regarding the number of attributes in the dataset (González-Guevara et al.~\cite{Gonzalez15}).
+	In the Logical Combinatorial Pattern Recognition (Mart\'inez-Trinidad and Guzm\'an-Arenas~\cite{Martinez2001}), Testor Theory emerges as a solution to feature selection (Ruiz-Shulcloper~\cite{Shulcloper2008}). A testor is a subset of features which allows discerning between objects in different classes by using only its features. A Typical Testor (TT) is defined as a testor which is minimal with respect to inclusion. The main limitation to the application of the Testor Theory is that finding all the TTs has exponential complexity regarding the number of attributes in the dataset (Chikalov et al.~\cite{Chikalov13}).
 	
-	One of the first algorithms for finding all the TT, was proposed by Ruiz-Shulcloper et al.~(\cite{Shulcloper1985}). This algorithm, called BT, codified a subset of features as a binary word with as many bits as features in the dataset. A 0 represents the absence of the corresponding feature in the current	subset while a 1 represents its inclusion. This way, candidate subsets are evaluated in the natural order of binary numbers. The pruning process in the	search space is based on the minimal condition of TT and a convenient sorting of the basic matrix (see definition~\ref{def:BM}) associated to the dataset. In (Ruiz-Shulcloper et al.~\cite{Shulcloper1995b}) a new algorithm (REC) is presented.	The main drawback of REC is that it operates directly over the dataset (instead of the	basic matrix), handling a huge amount of superfluous information. Ayaquica~(\cite{Ayaquica1997})	presented the algorithm CER directed to solve this problem by using a different traversing	order. 
+	One of the first algorithms for finding all the TT, called BT (Ruiz-Shulcloper et al.~\cite{Shulcloper1982}), codified a subset of features as a binary word with as many bits as features in the dataset. A 0 represents the absence of the corresponding feature in the current	subset while a 1 represents its inclusion. In this way, candidate subsets are evaluated in the natural order of binary numbers. The pruning process in the	search space is based on the minimal condition of TT and a convenient sorting of the basic matrix associated to the dataset. In (Ruiz-Shulcloper et al.~\cite{Shulcloper1995b}) a new algorithm (REC) is presented.	The main drawback of REC is that it operates directly over the dataset (instead of the	basic matrix), handling a huge amount of superfluous information. Ayaquica~(\cite{Ayaquica1997})	presented the algorithm CER directed to solve this problem by using a different traversing	order. 
 	
 	Then, Santiesteban and Pons-Porrata~(\cite{Santiesteban2003}) proposed a new algorithm called LEX. The main ideas behind LEX are a new traversing order of candidates (which resembles the	lexicographical order in which string characters are compared) and the concept of gap. In LEX the typical condition is verified first and only for those potentially TTs, the testor condition is checked. This way, the out-coming testors from this algorithm are always typical. Once obtained a TT (or a not testor) candidate which includes the last feature in the dataset, the concept of gap allows us avoiding any subset of this candidate.
 	
@@ -174,14 +174,14 @@ From Fig.~\ref{fig:density}, it can be seen that fast--CT\_EXT was faster for ba
 
 	\begin{table}[htb]
 		\centering 
-		\setlength{\tabcolsep}{12pt}
+		%\setlength{\tabcolsep}{12pt}
 		\caption{Boundary density for different number of rows in the basic matrix.}
 		\label{tab:boundary}
-		\begin{tabular}{lccccc}
+		\begin{tabular}{lcccccccc}
 			\hline
-			$BM$ size & 2000 & 1000 & 500 & 250 & 125 \\
+			$BM$ size & 125 & 250 & 375 & 500 & 750 & 1000 & 1500 & 2000 \\
 			\hline
-			Boundary  & 0.35 & 0.31 & 0.28 & 0.24 & $<$0.20 \\		
+			Boundary  & $<$0.20 & 0.31 & 0.28 & 0.24 & &&& \\		
 			\hline
 		\end{tabular}
 	\end{table}
@@ -229,7 +229,7 @@ From Fig.~\ref{fig:density}, it can be seen that fast--CT\_EXT was faster for ba
 %
 \begin{thebibliography}{}
 %
-
+% TODO poner los títulos en inglés
 
 \bibitem[1984]{Aguila84}	
 	Águila, L., Ruíz-Shulcloper, J.  
@@ -266,6 +266,12 @@ From Fig.~\ref{fig:density}, it can be seen that fast--CT\_EXT was faster for ba
 	Mathematics Sciences Journal (In Spanish), 
 	4(2), 123--144 (1983)
 	
+\bibitem[2013]{Chikalov13}	
+	Chikalov, I., Lozin, V. V., Lozina, I., Moshkov, M., Nguyen, H. S., Slowron, A., Zielosko, B.:
+ 	Three approaches to data analysis. 
+ 	Springer Science \& Business Media, 
+ 	(2013)
+
 \bibitem[2015]{Gonzalez15}		
 	González-Guevara, V., Godoy-Calderón, S., Alba-Cabrera, E.,  Ibarra-Fiallo, J.:
 	A Mixed Learning Strategy for Finding Typical Testors in Large Datasets. 
@@ -300,20 +306,15 @@ From Fig.~\ref{fig:density}, it can be seen that fast--CT\_EXT was faster for ba
 	Expert Systems with Applications, 
 	42(24), 9612–9619 (2015)
 
-\bibitem[1995a]{Shulcloper1995}
-	Ruíz-Shulcloper, J., Alba-Cabrera, E., Lazo-Cort\'es, M.:
-	Introducci\'{o}n al Reconocimiento de Patrones (Enfoque L\'{o}gico--Combinatorio). 
-	Serie Verde No. 51. CINVESTAV-IPN, México, (1995)
-
 \bibitem[1995b]{Shulcloper1995b}
 	Ruíz-Shulcloper, J., Alba-Cabrera, E., Lazo-Cort\'es, M.:
 	Introducci\'{o}n a la teor\'ia de Testotes T\'ipicos. 
 	Serie Verde No. 50. CINVESTAV-IPN, México, (1995)
 	
-\bibitem[1985]{Shulcloper1985}	
+\bibitem[1982]{Shulcloper1982}	
 	Ruíz-Shulcloper, J., Aguila, L., Bravo, A.:
 	BT and TB algorithms for computing all irreducible testors. 
-	Revista Ciencias Matem\'{a}ticas, 2, 11--18 (1985)
+	Revista Ciencias Matem\'{a}ticas, 2, 11--18 (1982)
 
 \bibitem[2008]{Shulcloper2008}
 	Ruíz-Shulcloper, J.:
