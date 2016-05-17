@@ -99,7 +99,7 @@
 		Given $T \subseteq R$ and $x_i \in R$ such that $x_i \notin T$. We say that $x_i$ contributes to T iff the sub-matrix of BM formed with only those attributes in T has more empty rows than that formed with attributes in $T \cup \lbrace x_i \rbrace$.
 	\end{definition}	
 	
-	The core of the CT\_EXT algorithm is supported by propositions~\ref{prop:contrib} and~\ref{prop:superset}; which are stated in (Sanchez-D\'iaz et al.~\cite{Sanchez2010}) (Theorems 1 and 2 respectively).
+	The core of the CT\_EXT algorithm is supported by propositions~\ref{prop:contrib} and~\ref{prop:superset}; which are stated and proved in (Sanchez-D\'iaz et al.~\cite{Sanchez2010}) (Theorems 1 and 2 respectively).
 	
 	\begin{proposition}\label{prop:contrib} 
 		Given $T \subseteq R$ and  $x_i \in R$ such that $x_i \notin T$. If $x_i$ does not contribute to T, then 		$T\cup\{x_i\}$ cannot be a subset of any typical testor.
@@ -121,7 +121,7 @@
 %	Proposition~\ref{prop:recursive} constitutes the basis for the recursive implementation of the algorithm. Fast--BR introduces a kind of look ahead variant to the lexicographical order to take advantage of this proposition. This procedure avoids subsequent evaluations of a non contributing attribute.
 	
 	\begin{definition}\label{def:exclusion}
-		Given $T \subseteq R$ we call compatibility mask of $T$, denoted as $cm_T$, to the binary word in which the $j^{\mathit{th}}$ bit is 1 if the $j^{\mathit{th}}$ row of $BM$ has a 1 in only one column of those columns corresponding to attributes in $T$, and otherwise it is 0.
+		Given $T \subseteq R$ we call compatibility mask of $T$, denoted as $cm_T$, to the binary word in which the $j^{\mathit{th}}$ bit is 1 if the $j^{\mathit{th}}$ row of $BM$ has a 1 in only one of the columns corresponding to attributes in $T$, and otherwise it is 0.
 	\end{definition}
 	
 	\begin{proposition}\label{prop:exclude} 
@@ -137,62 +137,49 @@
 %
 \section{Comparative Study}
 %
-	  From our literature review, we found two families of external scale algorithms: those evaluating first the testor condition and then verifying the typical condition (exclusion evaluation) of testors, and those evaluating the exclusion first and then the testor condition over non exclusionary subsets. We include in our comparative study the main exponents of these two families: fast--CT\_EXT and fast--BR, respectively. Their candidate evaluation process is illustrated in Figure~\ref{fig:candeval}.  Since the number of testors is usually a small fraction of the total evaluated candidates, we can state that most of the times fast--BR makes more exclusion evaluations than fast--CT\_EXT. For our experimental study in the next section we will use the algorithms implementations provided by their authors\footnote{The source code as well as all the basic matrices and datasets used in our experiments can be downloaded from \url{http://ccc.inaoep.mx/$\sim$ariel/CTBRES}}.
-	
-		%TODO hacer más gruesas las líneas de la figura
+	  From our literature review, we found two families of external scale algorithms: those evaluating first the testor condition and then verifying the typical condition (exclusion evaluation), and those evaluating the exclusion first and then the testor condition. We include in our comparative study the main exponents of these two families: fast--CT\_EXT and fast--BR, respectively. Their candidate evaluation process is illustrated in Figure~\ref{fig:candeval}.  Since the number of testors is usually a small fraction of the total evaluated candidates, we can state that most of the times fast--BR makes more exclusion evaluations than fast--CT\_EXT. For our experimental study in the next section we will use the algorithms implementations provided by their authors\footnote{The source code as well as all the basic matrices and datasets used in our experiments can be downloaded from \url{http://ccc.inaoep.mx/$\sim$ariel/CTBRES}}.
+
 	\begin{figure}[htb]
 	    \centering
 	    \begin{minipage}{.5\textwidth}
 	        \centering
-	        \includegraphics[height=5cm]{fastct_ext.eps}
+	        \includegraphics[height=4cm]{ct_ext.eps}
 	    \end{minipage}%
 	    \begin{minipage}{0.5\textwidth}
 	        \centering
-	        \includegraphics[height=5cm]{fastBR.eps}	        
+	        \includegraphics[height=4cm]{BR.eps}	        
 	    \end{minipage}
 		\caption{Candidate evaluation flowchart for fast--CT\_EXT (left) and fast--BR (right).}
 		\label{fig:candeval}
 	\end{figure}
-
-%	For our experimental study in the next section we will use the implementation of fast--BR provided by their authors. This algorithm takes advantage of two procedures that we consider general: gap elimination and columns reduction (Lias-Rodr\'iguez and Sanchez-D\'iaz~\cite{Lias2013}). In order to provide leverage to the comparative study, we included these procedures in the fast--CT\_EXT implementation that we will use in our experiments\footnote{The source code as well as all the basic matrices and datasets used in our experiments can be downloaded from \url{http://ccc.inaoep.mx/$\sim$ariel/CTBRES}}. In this way we can unveil the effects of the main difference between these two algorithm in their relative performance.
 	
 %
 \subsection{Comparison over synthetic basic matrices}
 %
-In order to explore the influence of the basic matrix density on the relative performance of fast--CT\_EXT and fast--BR; we conducted this first experiment over 500 randomly generated basic matrices with 2000 rows and 30 columns. The size of these matrices was selected in order to keep reasonable runtime for the three algorithms. Our 500 matrices were generated with densities of 1's uniformly distributed in the range (0.20--0.80) using a step of 0.04. 
+In order to explore the influence of the basic matrix density on the relative performance of fast--CT\_EXT and fast--BR; we conducted this first experiment over 500 randomly generated basic matrices with 2000 rows and 30 columns. The size of these matrices was selected in order to keep reasonable runtime for the three algorithms. Our 500 matrices were generated with densities of 1's uniformly distributed in the range (0.16--0.80) using a step of 0.04. 
 
 	\begin{figure}[htb]
 	    \centering
+	    \begin{minipage}[b]{0.48\textwidth}
 	        \centering
-	        \includegraphics[height=4cm]{2000x30.eps}	        
+	        \includegraphics[height=4cm]{2000rows.eps}	        
 	        \caption{Runtime vs. density for basic matrices with 2000 rows.}
 	        \label{fig:density}
+	    \end{minipage}
+	    \begin{minipage}[b]{0.48\textwidth}
+	    	\centering
+	    	\includegraphics[height=4cm]{fitting.eps}	        
+	    	\caption{Boundary density regarding the number of rows in BM.}
+	    	\label{fig:fitting}
+	    \end{minipage}
 	\end{figure}
 
-% TODO corregir las fronteras
-From Fig.~\ref{fig:density}, it can be seen that fast--CT\_EXT was faster for basic matrices with density under or equal 0.35, while fast--BR was faster for matrices with density above 0.35. In order to explain this behavior, we must look back to Fig.~\ref{fig:candeval}. The exclusion evaluation has the higher computational complexity in the algorithm ($\Theta (nm)$). Exclusionary attributes are found when there is at least one column in the basic matrix, considering only those attributes in the current candidate, that can be removed without increasing the number of zero rows. This condition is more frequent in matrices with higher density, where overlapping of 1's is most likely. For matrices with a relative high density, the heavier candidate evaluation process of fast--BR pays off, because exclusionary attributes are avoided from subsequent evaluations. For matrices with lower density, the simpler approach of fast--CT\_EXT results in a faster execution. Take for instance the extreme case of the identity matrix, where there is not any exclusionary attribute, since they are all indispensable to form a typical testor. For this kind of basic matrices, fast--CT\_EXT needs to evaluate as many candidates as fast--BR but the former makes a single exclusion evaluation with the set of all attributes. On the other hand, fast--BR evaluates the exclusion for each candidate, which leads to a higher computational cost.
-
-	\begin{table}[htb]
-		\centering 
-		%\setlength{\tabcolsep}{12pt}
-		\caption{Boundary density for different number of rows in the basic matrix.}
-		\label{tab:boundary}
-		\begin{tabular}{lcccccccc}
-			\hline
-			$BM$ size & 125 & 250 & 375 & 500 & 750 & 1000 & 1500 & 2000 \\
-			\hline
-			Boundary  & $<$0.20 & 0.31 & 0.28 & 0.24 & &&& \\		
-			\hline
-		\end{tabular}
-	\end{table}
+	From Fig.~\ref{fig:density}, it can be seen that fast--CT\_EXT was faster for basic matrices with density under 0.31, while fast--BR was faster for matrices with density above 0.31. To understand this behavior, we must look back to Fig.~\ref{fig:candeval}. The exclusion evaluation has the higher computational complexity in both algorithms ($\Theta (nm)$). Exclusionary attributes are found when there is at least one column in the basic matrix, considering only those attributes in the current candidate, that can be removed without increasing the number of zero rows. This condition is more frequent in matrices with higher density, where overlapping of 1's is most likely. For matrices with a relative high density, the heavier candidate evaluation process of fast--BR pays off, because exclusionary attributes are avoided from subsequent evaluations. For matrices with lower density, the simpler approach of fast--CT\_EXT results in a faster execution. Take for instance the extreme case of the identity matrix, where there is not any exclusionary attribute, since they are all indispensable to form a typical testor. For this kind of basic matrices, fast--CT\_EXT needs to evaluate as many candidates as fast--BR but the former makes a single exclusion evaluation with the set of all attributes. On the other hand, fast--BR evaluates the exclusion for each candidate, which leads to a higher computational cost.
 	
-	In order to evaluate the influence of the number of rows in the basic matrix over the relative performance of the two algorithms, we repeated this first experiment for matrices with different number of rows. Each time, 500 basic matrices with the same number of rows and 30 columns was generated following a density distribution similar to that of our first experiment. The number of rows and the obtained density boundary for each experiment, are summarized in Table~\ref{tab:boundary}. 
-	
-	From these last experiments, we can estimate by a log-linear least-squares fitting that the boundary density $d_\beta$ is related to the number of rows in the basic matrix $m$ by $d_\beta=0.041\log_2(m)-0.095$.
+	In order to evaluate the influence of the number of rows in the basic matrix over the relative performance of the two algorithms, we repeated this first experiment for matrices with different number of rows. Each time, 500 basic matrices with the same number of rows and 30 columns was generated following a density distribution similar to that of our first experiment. The number of rows and the obtained density boundary for each experiment are shown in Fig.~\ref{fig:fitting}. The boundary density for each point was estimated by fitting the runtime for each algorithm by a third degree polynomial and finding their interception. The continuous line in Fig.~\ref{fig:fitting} corresponds to a least-squares fitting. We used an arctangent function to model the apparent saturation of the boundary density ($d_\beta$) with the increase of the number of rows ($m$), as suggested in (Durmiak~\cite{Durmiak}). In addition, we found that for matrices with 125 rows fast--BR was always faster. We can say then, that for those datasets which have a basic matrix with a density of ones lower than $d_\beta=-0.21\tan^{-1}(-0.0128m+0.57)$ which have $m\geq250$, fast--CT\_EXT is faster and otherwise fast--BR is faster. For values close to this boundary, the rule should be interpreted carefully due to the random behavior of these algorithms. What we can expect from these basic matrices, with a density close to the boundary, is an insignificant runtime difference between the two algorithms, as it can be seen in Fig.~\ref{fig:density}.
 %
 \subsection{Evaluation on standard datasets}
-% TODO correct the boundary value
-	In order to evaluate the rule obtained over synthetic matrices, we selected 10 datasets from the UCI database repository (Bache and Lichman~\cite{Bache13}). Table~\ref{tab:density} shows the runtime for fast--CText and fast--BR over our selected datasets. Notice that we chose 5 datasets with basic matrix densities lower or equal 0.35 and 5 datasets above this boundary. The first three datasets from Table~\ref{tab:density} are in the comfort zone of fast--CText (according to our previous study); however, fast--BR was faster. Contrary to that of the fourth and fifth datasets from Table~\ref{tab:density}, the basic matrices associated to these tree datasets has null and duplicated columns. Fast--BR takes advantage of this issue (which is not present in our synthetic matrices) by means of the column reduction (Lias-Rodr\'iguez and Sanchez-D\'iaz~\cite{Lias2013}). We believe that this capability can be easily introduced into fast--CText without modifying the algorithm essence.
+	In order to evaluate the rule obtained from synthetic basic matrices, we selected 10 datasets from the UCI database repository (Bache and Lichman~\cite{Bache13}). Table~\ref{tab:density} shows the runtime for fast--CText and fast--BR over our selected datasets.
 	
 	\begin{table}[htb]
 		\centering \footnotesize
@@ -217,11 +204,13 @@ From Fig.~\ref{fig:density}, it can be seen that fast--CT\_EXT was faster for ba
 			\hline
 		\end{tabular}
 	\end{table}
-%
+	
+ Notice that according to our previous study, the only dataset for which fast--CText should be clearly faster is Connect-4. Nevertheless, fast--BR was two orders of magnitude faster for this dataset. This can be explained because the basic matrix associated to this dataset has several null and duplicated columns. Fast--BR takes advantage of this issue (which is not present in our synthetic matrices) by means of the column reduction (Lias-Rodr\'iguez and Sanchez-D\'iaz~\cite{Lias2013}) and avoids a huge amount of meaningless candidate verifications. We believe, however, that this capability can be easily introduced into fast--CText without modifying the algorithm essence. For Credit-g and Flags datasets, fast--CText was faster but the runtime difference is insignificant because their basic matrices have densities close to our predicted boundary.
+ 
 %
 \section{Conclusions}
 %
- This paper presents an empirical study on the relation of two typical testors finding algorithm with some properties of the basic matrices. We selected for this study the main exponents of the two ways of doing of external scale algorithms: fast--CText and fast--BR. A set of synthetically generated matrices were used to explore their performance regarding the density of 1's and the number of row of the basic matrix. From our experimental results, we obtained a simple rule for selecting a priori the fastest algorithm for a given dataset. We think; however, that the main contribution of this paper is the introduction of a new approach to the assessment typical testors finding algorithm's performance. This approach provides more substantial information than the traditional evaluation over a random sample of datasets.
+ This paper presents an empirical study on the relation of two typical testors finding algorithm's performance with some properties of the basic matrices. We selected for this study the main exponents of the two ways of doing of external scale algorithms: fast--CText and fast--BR. A set of synthetically generated matrices were used to explore their performance regarding the density of 1's and the number of row of the basic matrix. From our experimental results, we obtained a simple rule for selecting a priori the fastest algorithm for a given dataset. We think; however, that the main contribution of this paper is the introduction of a new approach to the assessment of typical testors finding algorithm's performance. This approach provides more substantial information than the traditional evaluation over a random sample of datasets.
  
  The evaluation over standard datasets from the UCI database repository, reflected the advantages of the column reduction process included in fast--BR. Thus, future work can be directed to introduce this capability into fast--CT\_EXT. Furthermore, the relation of algorithm's performance with the number of columns in the basic matrix should be also studied.
 
@@ -233,7 +222,7 @@ From Fig.~\ref{fig:density}, it can be seen that fast--CT\_EXT was faster for ba
 
 \bibitem[1984]{Aguila84}	
 	Águila, L., Ruíz-Shulcloper, J.  
-	Algoritmo CC para la elaboración de la información k-valente en problemas de Reconocimiento de Patrones. 
+	Algorithm CC for the elaboration of k-valued information on pattern recognition problems. 
 	Mathematics Sciences Journal (In Spanish), 
 	5(3) (1984)
 	
@@ -251,9 +240,9 @@ From Fig.~\ref{fig:density}, it can be seen that fast--CT\_EXT was faster for ba
 	
 \bibitem[1997]{Ayaquica1997}
 	Ayaquica, I. O.:
-	Un nuevo algoritmo de escala exterior para el c\'alculo de testores t\'ipicos.
-	Memorias del II Taller Iberoamericano de Reconocimiento de Patrones , La
-	Habana. 141--148 (1997)
+	A new external scale algorithm for typical testor computation.
+	Memories of the Second International Workshop on Pattern Recognition (In Spanish), 
+	Havana, 141--148 (1997)
 	
 \bibitem[2013]{Bache13}	
 	Bache, K., Lichman, M.:
@@ -271,6 +260,12 @@ From Fig.~\ref{fig:density}, it can be seen that fast--CT\_EXT was faster for ba
  	Three approaches to data analysis. 
  	Springer Science \& Business Media, 
  	(2013)
+	
+\bibitem[2000]{Durmiak}	
+	Durmiak, A.:
+	Fitting saturation and hysteresis via arctangent functions. 
+	IEEE Power Engineering Review,
+	20(11), 55--57 (2000)
 
 \bibitem[2015]{Gonzalez15}		
 	González-Guevara, V., Godoy-Calderón, S., Alba-Cabrera, E.,  Ibarra-Fiallo, J.:
@@ -286,8 +281,7 @@ From Fig.~\ref{fig:density}, it can be seen that fast--CT\_EXT was faster for ba
 \bibitem[2009]{Lias2009}
 	Lias-Rodr\'iguez, A., Pons-Porrata, A.:
 	BR: A new method for computing all typical testors. 
-	Lecture Notes in Computer Science (including Subseries Lecture Notes 
-	in Artificial Intelligence and Lecture Notes in Bioinformatics).
+	Lecture Notes in Computer Science.
 	5856 LNCS, 433--440 (2009)
 
 \bibitem[2013]{Lias2013}	
@@ -308,13 +302,13 @@ From Fig.~\ref{fig:density}, it can be seen that fast--CT\_EXT was faster for ba
 
 \bibitem[1995b]{Shulcloper1995b}
 	Ruíz-Shulcloper, J., Alba-Cabrera, E., Lazo-Cort\'es, M.:
-	Introducci\'{o}n a la teor\'ia de Testotes T\'ipicos. 
-	Serie Verde No. 50. CINVESTAV-IPN, México, (1995)
+	Introduction to Typical Testors theory.
+	Green Series (In Spanish), No. 50 . CINVESTAV-IPN, México, (1995)
 	
 \bibitem[1982]{Shulcloper1982}	
 	Ruíz-Shulcloper, J., Aguila, L., Bravo, A.:
 	BT and TB algorithms for computing all irreducible testors. 
-	Revista Ciencias Matem\'{a}ticas, 2, 11--18 (1982)
+	Mathematics Sciences Journal (In Spanish), 2, 11--18 (1982)
 
 \bibitem[2008]{Shulcloper2008}
 	Ruíz-Shulcloper, J.:
@@ -324,23 +318,18 @@ From Fig.~\ref{fig:density}, it can be seen that fast--CT\_EXT was faster for ba
 \bibitem[2007]{Sanchez2007}
 	Sanchez-D\'iaz, G., Lazo-Cort\'es, M.:
 	CT-EXT: an algorithm for computing typical testor set. 
-	In Progress in Pattern Recognition, Image Analysis and Applications. Springer. 506--514 (2007)
+	In Progress in Pattern Recognition, Image Analysis and Applications. 
+	Springer. 506--514 (2007)
 
 \bibitem[2010]{Sanchez2010}
 	Sanchez-D\'iaz, G., Piza-Davila, I., Lazo-Cort\'es, M., Mora-Gonz\'alez, M., Salinas-Luna, J.:
 	A fast implementation of the CT-EXT algorithm for the testor property identification. 
-	Lecture Notes in Computer Science (including Subseries Lecture Notes in Artificial Intelligence and 
-	Lecture	Notes in Bioinformatics), 6438 LNAI(PART 2), 92--103 (2010)
+	Lecture Notes in Computer Science, 6438 LNAI(PART 2), 92--103 (2010)
 
 \bibitem[2003]{Santiesteban2003}	
 	Santiesteban, Y., Pons-Porrata, A.:
 	LEX: a new algorithm for the calculus of typical testors. 
-	Mathematics Sciences Journal, 21(1), 85--95 (2003)
-
-%\bibitem[1992]{Skowron1992}
-%	Skowron, A., Rauszer, C.:
-%	The discernibility matrices and functions in information systems. 
-%	Handbook of Applications and Advances of the Rough Sets Theory. 331--362  (1992)
+	Mathematics Sciences Journal (In Spanish), 21(1), 85--95 (2003)
 	
 	
 \end{thebibliography}
