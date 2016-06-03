@@ -1,0 +1,444 @@
+% This is LLNCS.DEM the demonstration file of
+% the LaTeX macro package from Springer-Verlag
+% for Lecture Notes in Computer Science,
+% version 2.4 for LaTeX2e as of 16. April 2010
+%
+\documentclass[citenumber]{llncs}
+%
+\usepackage{makeidx}  % allows for indexgeneration
+%
+\usepackage{hyperref}				% enlaces en el pdf
+\hypersetup{colorlinks=true,        % colores en vez de cajas en los enlaces
+			linkcolor=blue,         % color of internal links (change box color with linkbordercolor)
+    		citecolor=blue,         % color of links to bibliography
+    		filecolor=blue,         % color of file links
+    		urlcolor=blue}          % color of external links	    
+
+\usepackage{algorithm,algorithmic}
+\usepackage{multicol}
+\usepackage{graphicx}           	% para manejar imagenes
+\usepackage[utf8]{inputenc}
+\usepackage{pstricks,pst-node,pst-tree} % Para la taxonomía
+\usepackage{stackengine}				% Para listar los articulos en el nodo de la taxonomía
+%\usepackage[table]{xcolor}			% Colores en el cronograma
+
+\renewcommand{\refname}{Bibliography}
+   
+%-------------------------------------------------------------------------
+% Configuring Taxonomy
+%-------------------------------------------------------------------------
+\setstackEOL{\\}
+\def\psedge{\ncangles[angleA=-90,angleB=90]}
+\psset{levelsep=20mm,treesep=1cm,nodesep=3pt, arrows=->}
+\def\PSBL#1{\small\pspicture(7,0.5)\psTextFrame[shadow,
+  fillstyle=solid,linecolor=blue,framearc=0.3](0,0)(7,0.5){%
+    \shortstack{#1}}\endpspicture}
+\def\PSBS#1{\pspicture(2.2,.5)\psTextFrame[shadow,
+  fillstyle=solid,linecolor=blue,framearc=0.3](0,0)(2.2,0.5){%
+    \shortstack{#1}}\endpspicture}
+
+%-------------------------------------------------------------------------
+% Referencias a una palabra
+%-------------------------------------------------------------------------
+\newcommand{\setword}[2]{%
+  \phantomsection
+  #1\def\@currentlabel{\unexpanded{#1}}\label{#2}%
+}
+
+
+
+\begin{document}
+\mainmatter              % start of the contributions
+%
+\title{Algorithms for Computing Rough Set Reducts}
+%
+%\titlerunning{Reduct Computation}  % abbreviated title (for running head)
+%                                     also used for the TOC unless
+%                                     \toctitle is used
+
+\author{Vlad\'{i}mir Rodr\'{i}guez-Diez\inst{1,2} \and Jos\'{e}~Fco. Mart\'{i}nez-Trinidad\inst{1}
+		 \and J.~Ariel Carrasco-Ochoa\inst{1} \and Manuel~S.~Lazo-Cortés\inst{1}}
+%
+\authorrunning{Vlad\'{i}mir Rodr\'{i}guez et al.} % abbreviated author list (for running head)
+%
+%%%% list of authors for the TOC (use if author list has to be modified)
+
+\institute{Instituto Nacional de Astrof\'{i}sica, \'{O}ptica y Electr\'{o}nica,\\
+		   Luis Enrique Erro \# 1, Tonantzintla, Puebla, M\'{e}xico,\\
+		   Coordinaci\'{o}n de Ciencias Computacionales,\\
+\email{vladimir.rodriguez@inaoep.mx}
+\and Universidad de Camag\"{u}ey,\\
+	 Circunvalaci\'{o}n Nte. km 5$\frac{1}{2}$, Camag\"{u}ey, Cuba}
+
+
+\maketitle              % typeset the title of the contribution
+
+%
+\begin{abstract}
+%
+	Rough set theory is a relatively new mathematical theory to deal with imperfect knowledge, in particular with vague concepts. One of the key concepts within rough set theory is the concept of reduct. A reduct is a reduced set of attributes for the description of an information system without changing its discernibility relations. Reducts may be used to improve the efficiency of machine learning tools, without significantly degrading their performance. However, computing all reducts of an information system has exponential complexity regarding the number of attributes in the information system. In this paper, we make a review of the main algorithms reported for reduct computation, and the ideas behind them.
+%
+\end{abstract}
+%
+
+%
+\section{Introduction}
+%
+	Rough set theory (RST), proposed by Z. Pawlak in 1982 \cite{Pawlak81,Pawlak81-2,Pawlak82,Pawlak91}, is a relatively new mathematical theory to deal with imperfect knowledge, in particular with vague concepts. Into RST, information systems are tables of objects (rows) described by a set of attributes (columns). When data is collected or recorded, every single aspect (attribute) of the object under study is considered to have a complete representation and to ensure that no potentially useful information is lost. As a result, information systems are usually characterized by a large number of attributes,  degrading the performance of machine learning tools \cite{Parthalain08}. One of the main concepts in RST is the notion of reduct, which is a minimal subset of attributes preserving the discernibility capacity of the whole set of attributes \cite{Pawlak91}. However, the main restriction of RST is that computing all reducts of an information system has an exponential complexity \cite{Skowron92}. Therefore, the development of fast algorithms for reduct computation is an active research line.
+  
+	Several attempts to speed up the reduct computation have been reported. Many of these algorithms are based on some heuristics. The main drawback of this approach is that these algorithms do not necessarily return the complete set of reducts of an information system, and sometimes they may obtain super-reducts (non minimal subsets). Another explored way to speed up reduct computation is parallelization \cite{Strakowski08}. There are also interesting alternatives such as the use of a parallel version of genetic algorithms \cite{Wroblewski98} and the transformation of the reduct computation problem to the well known SAT problem \cite{Jensen14}.
+	
+	In this paper we introduce the basic concepts of rough set theory. Then, this background is used to explain the main reduct computation algorithms reported in the literature. The paper is organized as follows: the section~\ref{basicConcepts} introduces the basic concepts of rough set theory. In the section~\ref{relatedWork}, we make a review of main algorithms for reduct computation in three categories: algorithms for computing a single reduct, algorithms for computing all reducts and parallel accelerations. Finally, in the section~\ref{conclusions}, we present our conclusions.
+
+\section{Basic Concepts}\label{basicConcepts}
+  RST is based on the assumption that every object in the universe of discourse is described, through a 
+  set of attributes, by some information associated to it. This information constitutes the basis for the
+  classification of unseen objects. RST motto is \textit{Let the data speak for themselves} \cite{Tiwari14}.
+  
+  From the RST point of view, two objects are indistinguishable (indiscernible) if they have an equivalent 
+  value for each attribute in their description. Indiscernibility relations arising this way constitute the
+  mathematical foundations of RST. 
+  Some basic concepts of RST are presented bellow. Although we will be following the explanation 
+  in \cite{Polkowski00}, some modifications in the notation are introduced to provide clarity in the rest 
+  of the document.
+  
+\subsection{Information System}
+  The basic representation of data in RST is an \emph{Information System} (IS). An IS is a table with rows
+  representing objects while columns specify attributes or features. Formally, an IS is defined as a pair
+  $IS=(U,A)$ where $U$ is a finite non-empty set of objects $U=\lbrace x_1,x_2,...,x_n\rbrace$, and $A$ is a 
+  finite non-empty set
+  of attributes (features, variables). Every attribute in $A$ is a map: $a: U \rightarrow V_a$. The set $V_a$ is
+  called the \textit{value set} of $A$. Attributes in $A$ are further divided into condition attributes $C$ and 
+  decision attributes $D$ such that $A=C \cup D$ and $C \cap D =\emptyset$. 
+  Table~\ref{tab_IS} shows an example of an IS.
+  
+  
+ \begin{table}[htb]
+		\caption{An Information System.} \label{tab_IS}
+		\centering
+ 	\begin{tabular}{c||c|c|c||c}
+ 			  & $c_1$ & $c_2$ &  $c_3$ & $d$ \\
+ 		\hline \hline
+		$x_1$ &   1   &    3  &  0  &   0   \\
+		$x_2$ &   1   &    0  &  0  &   0   \\
+		$x_3$ &   3   &    1  &  1  &   1   \\
+		$x_4$ &   3   &    3  &  2  &   1   \\
+		$x_5$ &   4   &    2  &  3  &   1   \\
+		$x_6$ &   4   &    3  &  1  &   0   \\
+		$x_7$ &   4   &    2  &  5  &   1   \\
+ 	\end{tabular}             
+ \end{table}
+ 
+   
+  \textit{Decision attributes} determine to which class an object belongs. In the IS of
+  table~\ref{tab_IS}, $d$ is the decision attribute; this is a two-class system. \textit{Condition attributes} 
+  do not absolutely determine the class but help to decide to which class an object belongs to. In supervised 
+  classification, condition attributes are the only information available for classifying new objects; while, 
+  decision attributes are only available for objects in the training set. An IS with decision and 
+  condition attributes is called a decision table. In table~\ref{tab_IS}, $c_1$, $c_2$ and $c_3$ are condition 
+  attributes.
+  
+\subsection{Positive Region}\label{subsect_Pos}
+  Decision attributes induce a partition of the universe $U$ into equivalence classes 
+  (\textit{decision classes}). Since we will be trying to associate a decision class to an object, 
+  based on the attributes belonging to $B \subseteq C$, we are interested in those 
+  $B-classes$ (classes induced by $B$) which correspond to classes induced by $d$. 
+  This idea leads to the notion of the  \textit{positive region of the decision}. The set $POS_B(d)$, 
+  called the \textit{B-positive region of d}, is defined as the set of all objects in $U$ such 
+  that all their indistinguishable objects (under the knowledge in $B$) belong to its same class induced 
+  by $d$.
+  
+  Taking for example the IS in table~\ref{tab_IS}, we can see that
+  
+  $$\begin{array}{lcc}
+  POS_{\lbrace c_1 \rbrace}(d)     &=& \lbrace x_1,x_2,x_3,x_4 \rbrace\\
+  POS_{\lbrace c_2 \rbrace}(d)     &=& \lbrace x_2,x_3,x_5,x_7 \rbrace\\
+  POS_{\lbrace c_1, c_2 \rbrace}(d)&=& U
+  \end{array}$$
+ 
+\subsection{Reducts and Core}\label{def_reduct}
+  Given an information system $IS=(U,A)$ with condition attribute set $C$ and decision attribute set
+  $D$ such that $A=C \cup D$ and $C \cap D =\emptyset$. A subset $B \subseteq C$ is a \textit{reduct} 
+  of $IS$ relative to $D$ if
+  \begin{enumerate}
+  	\item $POS_B(D)=POS_C(D)$. \label{cond_1}
+  	\item $B$ is a minimal subset (with respect to inclusion) satisfying condition~\ref{cond_1}.\label{cond_2}
+  \end{enumerate}
+
+  We call super-reduct to any subset $B \subseteq C$ satisfying condition~\ref{cond_1} whether it satisfies
+  condition~\ref{cond_2} or not.
+  
+  The intersection of all reducts of an IS is called the \textit{core}.
+  
+\subsection{Discernibility Matrix and Discernibility Function}
+  The discernibility knowledge of an information system is commonly stored in a symmetric $|U| \times |U|$
+  matrix called the \textit{discernibility matrix}. Each element $m_{ij}$ in the discernibility matrix 
+  $M_{IS}$ is defined as   
+  \begin{equation}
+  	m_{ij}=\left\lbrace\begin{array}{cl}
+  			\lbrace c \in C: c(x_i) \neq c(x_j) \rbrace & \mathrm{for~~}D(x_i) \neq D(x_j)\\
+  			\emptyset 								   & \mathrm{otherwise} 
+  	\end{array}\right.
+  \end{equation}  
+  Here, $c(x_i)$ represents the value of the condition attribute $c$ in the object $x_i$, and 
+  $$D(x_i) \neq D(x_j) \Rightarrow \exists d \in D~ |~ d(x_i) \neq d(x_j)$$ 
+  where $d(x_i)$ represents the value  of the decision attribute $d$ in the object $x_i$.
+  
+  Table~\ref{tab_DM} shows the discernibility matrix for the IS in table~\ref{tab_IS} as a lower triangular 
+  matrix ($\emptyset$'s are omitted for clarity).
+  
+   \begin{table}[htb]
+		\caption{Discernibility Matrix Example.} \label{tab_DM}
+		\centering
+ 	\begin{tabular}{c|ccccccc}
+ 		$x \in U$ & 1 & 2 &  3 & 4 & 5 &  6 & 7\\
+ 		\hline
+		1 &&&&&&&\\
+		2 &&&&&&&\\
+		3 & $\lbrace c_1,c_2,c_3\rbrace$ & $\lbrace c_1,c_2,c_3\rbrace$ &&&&&\\
+		4 & $\lbrace c_1,c_3\rbrace$ & $\lbrace c_1,c_2,c_3\rbrace$ &&&&&\\
+		5 & $\lbrace c_1,c_2,c_3\rbrace$ & $\lbrace c_1,c_2,c_3\rbrace$ &&&&&\\
+		6 &&& $\lbrace c_1,c_2\rbrace$ & $\lbrace c_1,c_3\rbrace$ & $\lbrace c_2,c_3\rbrace$ &&\\
+		7 & $\lbrace c_1,c_2,c_3\rbrace$ & $\lbrace c_1,c_2,c_3\rbrace$ &&&& $\lbrace c_2,c_3\rbrace$ &\\
+ 	\end{tabular}             
+ \end{table}
+  
+  Once the discernibility matrix $M_{IS}$ is found, we can define the \textit{discernibility function} $f_{IS}$.
+  This is a Boolean function of $n$ Boolean variables $c_1^*, c_2^*,...,c_n^*$, representing the presence of
+  the corresponding attribute (True) or its absence (False) in $M_{IS}$. Here, the disjunction ($\vee$) and 
+  conjunction ($\wedge$) operators have their common meaning. Their evaluation over a set of Boolean variables
+  $X=\lbrace x_1^*, x_2^*, ..., x_n^* \rbrace$ should be denoted as 
+  $\wedge X= x_1^* \wedge x_2^* \wedge ... \wedge x_n^* $.
+
+  \begin{equation}
+  	f_{IS}(c_1^*, c_2^*,...,c_n^*)=\wedge \lbrace \vee c_{ij}^* : 1 \leq j \leq i \leq |U|, 
+  									m_{ij} \neq \emptyset \rbrace
+  \end{equation}
+
+  where $c_{ij}^*=\lbrace c^* : c \in m_{ij} \rbrace$. Only the lower triangular matrix from $M_{IS}$ is
+  taken into consideration since $M_{IS}$ is symmetric. An equivalence between the prime implicants of
+  $f_{IS}$ and all reducts of $IS$ has been found and reported in \cite{Pawlak07}.
+  
+  The discernibility function for the discernibility matrix in table~\ref{tab_DM}, after simplifying by 
+  deleting repeated clauses, is  
+  $$f_{IS}(c_1^*,c_2^*,c_3^*)=(c_1^* \vee c_2^* \vee c_3^*) \wedge (c_1^* \vee c_2^*) 
+   \wedge (c_1^* \vee c_3^*) \wedge (c_2^* \vee c_3^*) $$
+  
+  
+\subsection{Binary Discernibility Matrix}
+  The \textit{Binary Discernibility Matrix} is a binary table representing the discernibility sets between pairs 
+  of objects. This is another representation of the information in $M_{IS}$. In the binary discernibility
+  matrix, columns are single condition attributes and rows represent pairs of objects belonging to different 
+  classes. The discernibility element $m(i, j, c)$ for two objects $x_i$ and $x_j$ and a single condition 
+  attribute $c \in C$ is given in a binary representation, such that:
+  
+  \begin{equation}
+  	m(i, j, c)=\left\lbrace\begin{array}{cl}
+  			1 & \mathrm{for~~}c(x_i) \neq c(x_j),D(x_i) \neq D(x_j)\\
+  			0 								   & \mathrm{otherwise} 
+  	\end{array}\right.
+  \end{equation} 
+  
+  Table~\ref{tab_BDM} shows the binary discernibility matrix for the information system of Table~\ref{tab_IS}.  
+  
+  
+\subsection{Simplified Binary Discernibility Matrix}
+  The \textit{Simplified Binary Discernibility Matrix} is a reduced version of the discernibility matrix after
+  eliminating supersets and repeated rows in $M_{IS}$. This new discernibility matrix has the same reducts
+  as the original one \cite{Yao09}. Table~\ref{tab_SDM} shows the simplified binary discernibility matrix for the
+  discernibility matrix from Table~\ref{tab_BDM}.
+  
+    \begin{table}[htb]
+    \centering
+        \begin{minipage}[b]{0.49\hsize}\centering
+  		\caption{Binary Discernibility Matrix.} \label{tab_BDM}
+   		\begin{tabular}{cccc}
+	   		& $c_1$ & $c_2$ & $c_3$\\
+	   		\hline
+	  		$x_1,x_3$ & 1 & 1 & 1 \\
+	  		$x_1,x_4$ & 1 & 0 & 1 \\
+	  		$x_1,x_5$ & 1 & 1 & 1 \\
+	  		$x_1,x_7$ & 1 & 1 & 1 \\
+	  		$x_2,x_3$ & 1 & 1 & 1 \\
+	  		$x_2,x_4$ & 1 & 1 & 1 \\
+	  		$x_2,x_5$ & 1 & 1 & 1 \\
+	  		$x_2,x_7$ & 1 & 1 & 1 \\
+	  		$x_3,x_6$ & 1 & 1 & 0 \\
+	  		$x_4,x_6$ & 1 & 0 & 1 \\
+	  		$x_5,x_6$ & 0 & 1 & 1 \\
+	  		$x_6,x_7$ & 0 & 1 & 1 
+	   	\end{tabular}             
+    	\end{minipage}
+ 		\hfill
+ 		\begin{minipage}[b]{0.49\hsize}\centering
+		\caption{Simplified Binary Discernibility Matrix.} \label{tab_SDM}
+		\centering
+	 	\begin{tabular}{ccc}
+	 		$c_1$ & $c_2$ & $c_3$\\
+	 		\hline
+			1 & 0 & 1 \\
+			1 & 1 & 0 \\
+			0 & 1 & 1
+	 	\end{tabular}   
+	 	\bigskip \medskip \\~\\
+	 	\end{minipage}  
+ \end{table}
+ 
+\section{Algorithms for computing reducts}\label{relatedWork}
+  In this section, we will be first discussing heuristic algorithms for reduct computation. Some of these 
+  algorithms are capable of finding several reducts and others are intended to obtain a single \textit{shortest} 
+  reduct. Then, we will see those algorithms reported for computing all reducts. Finally, we will make a review of parallel accelerations reported in 
+  the literature.  
+  
+  In Figure~\ref{fig_Tax1}, we propose a taxonomy of the reported algorithms for computing reducts.
+  This classification corresponds to the sequence that we will be following throughout the next discussion.
+   
+  \begin{figure}[htb] 
+  \center
+  \pstree[treesep=0.05cm,levelsep=4.5em]{\Tr{\PSBL{Agorithms for Reduct Computation}}}{
+    \pstree[treesep=1cm,levelsep=9em]{\Tr{\PSBS{Single Reduct}}}{
+       \pstree[levelsep=3.2em]{\Tr{\PSBS{Shortest}}}{
+           		\scriptsize \Shortstack[l]{
+           			Lin \& Yin \cite{Lin04}\\
+           			\hyperref[RSARSAT]{RSAR-SAT} \cite{Jensen14}	
+           		}
+       }
+       \pstree[treesep=2.1cm,levelsep=4.5em]{\Tr{\PSBS{Short}}}{
+       		\pstree[levelsep=7.5em,treesep=.3cm]{\Tr{\PSBS{Heuristic}}}{
+       			\pstree[levelsep=3.2em]{\Tr{\PSBS{FPGA}}}{
+       				\scriptsize \Shortstack[l]{
+       					Tiwari et al. \cite{Tiwari11}\\
+       					Tiwari et al. \cite{Tiwari13}
+       				}
+       			}
+       			\pstree[levelsep=3.2em]{\Tr{\PSBS{Sequential}}}{
+       				\scriptsize \Shortstack[c]{
+       					Chouchoulas \& Shen \cite{Chouchoulas01}\\
+       					Yang et al. \cite{Yang08}
+       				}
+       			}
+       			\pstree[levelsep=3.2em]{\Tr{\PSBS{Subdivision}}}{
+       				\scriptsize \Shortstack[r]{
+       					\hyperref[FSDCRS]{FSDC-RS} \cite{Jiao10}\\
+       					\hyperref[FSDCRS]{FSDC-HS} \cite{Jiao10}	
+       				}
+       			}
+       		}
+       		\pstree[levelsep=6.5em]{\Tr{\PSBS{Stochastic}}}{
+       			\scriptsize \Shortstack[l]{
+       				Wroblewski \cite{Wroblewski95}\\
+       				Bjorvand \& Komorowski \cite{Bjorvand97}\\
+       				\hyperref[AntRSAR]{AntRSAR} \cite{Jensen03}\\
+       				\hyperref[GenRSAR]{GenRSAR} \cite{Jensen03}\\
+       				\hyperref[RSFSACO]{RSFSACO} \cite{Chen10}
+       			}
+       		}
+       		}
+  }
+  \pstree[treesep=.75cm,levelsep=4.5em]{\Tr{\PSBS{All Reducts}}}{
+      		\pstree[levelsep=3.5em]{\Tr{\PSBS{Subdivision}}}{
+      			\scriptsize \Shortstack[l]{
+      				\hyperref[SRGonCRS]{SRGonCRS} \cite{WangP07}\\
+      				Strakowski \& Rybiński \cite{Strakowski08}	  
+         		}
+      		}
+         	\pstree[levelsep=4.5em]{\Tr{\PSBS{Sequential}}}{
+         		\scriptsize \Shortstack[l]{
+         			Starzyk et al. \cite{Starzyk99}\\
+         			\hyperref[RGonCRS]{RGonCRS} \cite{WangP07}\\
+         			\hyperref[RSARSAT]{RSAR-SAT} \cite{Jensen14}					  
+         		}
+         	}
+    }
+    }
+  \caption{Taxonomy of algorithms for computing reducts.}
+  \label{fig_Tax1}
+  \end{figure}
+  
+  %	
+  \subsection{Algorithms Finding a Single Reduct}
+  %
+  \setword{\textsc{quickreduct}}{quickreduct} \cite{Chouchoulas01} is one of the first algorithms reported for computing a single reduct. The algorithm execution starts with an empty set of attributes and adds, one at a time, the attribute having the highest significance. This greedy algorithm evaluates the significance of an attribute as the number of objects added to the positive region after its inclusion.  A similar approach is the Johnson Reducer \cite{Johnson74}, first introduced in RST by  \O{}hrn in 2000 \cite{Ohrn00}. This simple greedy algorithm begins with an empty set of attributes evaluating each conditional attribute in the discernibility function according to a heuristic measure. In the simplest case, those attributes with highest appearance frequency within the logical clauses of the discernibility function, are considered to be more relevant. The algorithms presented in \cite{Nguyen97} and \cite{Wang01} use alternative heuristic functions for guiding the search; while \cite{Yang08} use the discernibility matrix instead of the discernibility function. The algorithm presented in \cite{Zhong01} starts from the core (since it must be contained in every reduct) and follows a similar procedure adding selected attributes. This optimization may be impractical for large information systems \cite{Jensen14} since the core must be computed a priori.
+  
+  The method presented in \cite{Jiao10} improves the efficiency of computing reducts by means of subdivisions of the information system. The original information system is broken down into a master-table and several sub-tables both, simpler and more manageable. Two algorithms are proposed (\setword{FSDC-RS}{FSDCRS} and FSDC-HS) using different decomposition strategies. Results are then joined together in order to find reducts of the original information system. 
+    
+  Special attention deserves the approaches using genetic algorithms to discover locally shortest reducts. Although 
+  these algorithms do not guarantee finding globally shortest reducts, many reducts may be found in a determined
+  time. A good point in this approach is the use of a fitness function to guide the search down to a set of 
+  reducts with the desired properties. The algorithm reported in \cite{Wroblewski95} encodes candidates as bit 
+  strings with a positional representation of attributes in candidate sets. The fitness function
+  depends on the number of attributes in the subset, penalizing strings with a large number of attributes. The 
+  second optimization parameter is the number of objects that can be distinguished by the given candidate. The 
+  reduct should discern as many objects as possible. Another simple algorithm is introduced in \cite{Jensen03}  
+  (\setword{GenRSAR}{GenRSAR}), which uses a genetic search strategy in order to find reducts.
+  
+  Other bio-inspired approaches to reduct computation include Ant Colony Optimization (\setword{AntRSAR}{AntRSAR}) \cite{Jensen03} and (\setword{RSFSACO}{RSFSACO}) \cite{Chen10}; and Particle Swarm Optimization \cite{Wang07}.
+    
+  In \cite{Lin04}, a heuristic is followed to find a short reduct. This first reduct is used to limit the search
+  space, in order to only consider those attribute combinations with lower cardinality. 
+  The main drawback of this algorithm is that the second step searches for reducts by checking all possible 
+  $s$-subtables of the whole database. An $s$-subtable means a subtable whose conditional attribute set have 
+  size $s$. In other words, it is a decision table with a conditional attribute subset of size $s$ plus the decision
+  attributes of the original table. This final process uses no pruning strategy and explores all combinatorial
+  possibilities of attribute combinations, which is unfeasible in most cases.
+  
+  Although originally intended for computing a single minimal reduct, the algorithm proposed in \cite{Jensen14}  (\setword{RSAR-SAT}{RSARSAT}) may be modified in order to obtain all reducts of an Information System. The method introduced in this work reduces the problem of finding a reduct from the discernibility function to the SAT problem \cite{Davis62}. The boolean function generated in this way is always satisfied since the complete set of attributes is a trivial solution.
+  
+  \subsection{Algorithms for Computing all Reducts}
+    A method for the computation of all reducts of an Information System is proposed in \cite{Starzyk99,Starzyk00}. This is a divide and conquer approach. On each step, the absorption laws are applied over the incoming discernibility matrix to obtain a simplified discernibility matrix. Then, the strong equivalent attributes are compressed (which is a local reduction of columns). The most discerning attribute is selected (in the same way as Johnson's reducer does) and the problem is divided into two sub-problems: 
+    \begin{itemize}
+    \item Finding reducts containing the selected attribute. Thus a recursive function is called with a new simplified discernibility matrix, having only those rows where the selected attribute does not appear.
+    \item Finding reducts that do not contain the selected attribute. Thus a recursive function is called with a new 
+    discernibility matrix, removing the column corresponding to the selected attribute.
+    \end{itemize}
+    The base case in the recursion is reached when each attribute in the incoming discernibility matrix appears in a single clause. In this way, a set of super-reducts is obtained and supersets must be removed in order to obtain the final reduct set.
+    Notice that this algorithm is oriented to the binary discernibility function, then terms such as discernibility and simplified discernibility matrix, rows and columns are not used in the paper. The algorithm is presented in an iterative fashion and its recursive nature is not clearly expressed.
+    
+    In \cite{WangP07}, a new algorithm for computing all reducts \setword{RGonCRS}{RGonCRS} is proposed. This algorithm works directly over the information system instead of the simplified binary discernibility matrix. It starts searching the core and looks for reducts as supersets of the core using  a recursive strategy. During the algorithm execution, contributing attributes are sorted as in the Johson reducer. A second algorithm \setword{SRGonCRS}{SRGonCRS} was proposed for subdividing the information system and the reducts are incrementally found.
+    
+    Finally, different variants for decomposition of the reduct computation problem  (\setword{DT}{DT}, DISC FUNCTION and CANDIDATE REDUCTS) are proposed and discussed in \cite{Strakowski08}.
+  
+  \subsection{Parallel Accelerations}
+  
+    A parallel acceleration of the algorithm presented in \cite{Yang08}, for reduct generation from a binary
+    discernibility matrix, was developed in \cite{Tiwari11,Tiwari12}. This FPGA implementation computes a 
+    single reduct. A real application for object identification into an intelligent robot is presented.
+    In \cite{Tiwari13} a \emph{quick reduct} algorithm, similar to that presented in \cite{Chouchoulas01}, 
+    is proposed and implemented in a hardware fashion. A recent work from these authors \cite{Tiwari14}, 
+    shows a thorough survey of FPGA applications in rough set reduct computation.
+ 
+    In \cite{Wroblewski98}, a parallel variant of the algorithm proposed in \cite{Wroblewski95} is presented.
+    Developments in parallel implementations of genetic algorithms are exploited to provide a speedup for the 
+    problem of finding reducts.
+    
+    In \cite{Grzes13,Kopczynski14}, an FPGA application for a single reduct computation is presented. Although
+    authors claim that a huge acceleration is achieved, some weak points have to be mentioned. Experiments presented 
+    in \cite{Kopczynski14} to validate their results are performed over a small information system which in our experience 
+    does not imply its applicability to larger cases where such acceleration is needed. On the other hand, 
+    runtime estimations for the FPGA component executions are made by means of an oscilloscope without taking into 
+    account communication overhead.
+    
+\section{Conclusions}\label{conclusions}
+   From our literature review, we highlight the following aspects. First, we found that algorithms for computing rough set reducts are mainly divided into three categories:
+    \begin{itemize}
+  	  \item Algorithms for computing a pseudo-optimal reduct according to a criterion (which is, most of the 
+  	  		time, the cardinality of the obtained reduct).
+  	  \item Algorithms for computing one shortest reduct.
+  	  \item Algorithms for computing all reducts.
+    \end{itemize}
+    The most proliferative research area in Rough Set Theory is the development of algorithms for computing a 
+    pseudo-optimal reduct. 
+    
+    We found two algorithms for finding all reducts \cite{Starzyk00,WangP07} and two algorithms for finding shortest reducts \cite{Lin04,Jensen14} from Rough Set Theory. These algorithms have several disadvantages since they do not work over the simplified discernibility matrix and use complex data representations. Notice that computing the simplified binary discernibility matrix from the original information system has Quartic complexity regarding the number of objects (rows) in the information system, while computing all reducts has exponential complexity regarding the number of attributes (columns). In most computationally expensive information systems, it is better to work over the simplified discernibility matrix. 
+    
+    Hardware accelerations of algorithms for computing reducts are focused on computing a single pseudo-optimal reduct \cite{Tiwari11,Tiwari12,Tiwari13,Grzes13,Kopczynski14,Tiwari14}. Since this problem is not an exponentially complex task, we found these hardware platforms less useful.	
+		    
+    In the search for algorithms to overcome the exponential complexity of the problem of computing all reducts or
+    shortest reducts, the last word has not been said. Two promising areas of research are the hardware acceleration of algorithms computing all reducts and the palletization of these algorithms.
+  
+% ---- Bibliography ----
+%
+\bibliographystyle{splncs03}
+\bibliography{mybib}
+
+\end{document}
