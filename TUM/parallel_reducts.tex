@@ -120,19 +120,81 @@
 	
 %
 \section{Research Proposal}  
-%        
+%    
+	\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+	\renewcommand{\algorithmicensure}{\textbf{Output:}}
+	%\begin{multicols}{2}
+	\begin{algorithm}
+		\caption{Fast--BR.}
+		\label{alg:RSDM}
+		%\begin{multicols}{2}
+		\begin{algorithmic}[1]
+			\Require $SBDM$
+			\Ensure $RS$ - set of all reducts
+			\State $i \Leftarrow 0$, $RS \Leftarrow \emptyset$
+			\While {$SBDM(0,i) \neq 0$}
+				\State reduct, accepted $\Leftarrow$ \textsc{evaluate}($\emptyset$,$x_i$)
+				\If {reduct}
+					\State $RS \Leftarrow RS\cup\lbrace x_i \rbrace$
+				\Else
+					\State \textsc{traverse}($\lbrace x_i \rbrace$, $\lbrace x_{i+1},..., x_m\rbrace$)
+				\EndIf
+				\State $i \Leftarrow i+1$
+			\EndWhile
+			\Procedure {traverse}{$B$,$C$}
+			\ForAll{$x \in C$} 
+				\State reduct, accepted $\Leftarrow$ \textsc{evaluate}($B$,$x$)
+				\If {reduct}
+					\State $C \Leftarrow C\setminus x$
+					\State $RS \Leftarrow RS\cup\lbrace B\cup \lbrace x\rbrace \rbrace$
+				\Else
+					\If {\textbf{not} accepted}
+						\State $C \Leftarrow C\setminus x$
+					\EndIf
+				\EndIf
+			\EndFor
+			\If {$x=x_m$}
+				\State ($B$,$C$) $\Leftarrow$ \textsc{elimGAP}($B$,$x$)
+			\EndIf
+			\ForAll{$x \in C$} 
+				\State $C \Leftarrow C\setminus x$
+				\State \textsc{traverse}($B\cup \lbrace x\rbrace$,$C$)
+			\EndFor
+			\EndProcedure
+		\end{algorithmic}
+		%\end{multicols}
+	\end{algorithm}    
+	
 	\begin{table}[htb]
-		\caption{Simplified Binary Discernibility Matrix.} \label{tab:SBDM}
-		\centering
-	 	\begin{tabular}{cccccc}
-	 		$x_0$ & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ \\
-	 		\hline
-			1 & 1 & 0 & 0 & 0 & 0 \\
-			0 & 0 & 0 & 1 & 0 & 0 \\
-			0 & 0 & 1 & 0 & 0 & 0 \\
-			0 & 0 & 0 & 0 & 0 & 1 \\
-			1 & 0 & 0 & 0 & 1 & 0
-	 	\end{tabular}             
+		\begin{minipage}{.4\linewidth}
+			\caption{Dataset.} \label{tab:dataset}
+			\centering
+			\setlength{\tabcolsep}{3pt}
+		 	\begin{tabular}{cccccc|c}
+		 		$x_0$ & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ & d \\
+		 		\hline
+				red   & 1 & $<$1 & bad  & 2 & 0 & F \\
+				green & 0 & $<$1 & good & 2 & 0 & F \\
+				green & 0 & $>$1 & bad  & 2 & 0 & F \\
+				green & 0 & $<$1 & bad  & 2 & 1 & F \\
+				blue  & 0 & $<$1 & bad  & 1 & 0 & F \\
+				green & 0 & $<$1 & bad  & 2 & 0 & T
+		 	\end{tabular}       
+		\end{minipage}  
+		\begin{minipage}{.59\linewidth}
+			\caption{Simplified Binary Discernibility Matrix.} \label{tab:SBDM}
+			\centering
+			\begin{tabular}{cccccc}
+				$x_0$ & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ \\
+				\hline
+				1 & 1 & 0 & 0 & 0 & 0 \\
+				0 & 0 & 0 & 1 & 0 & 0 \\
+				0 & 0 & 1 & 0 & 0 & 0 \\
+				0 & 0 & 0 & 0 & 0 & 1 \\
+				1 & 0 & 0 & 0 & 1 & 0
+			\end{tabular}       
+			\bigskip
+		\end{minipage}    
  	\end{table}
  
  \begin{table}[htb]
@@ -143,10 +205,10 @@
  	 	\begin{tabular}{cl|cl|cl|cl|cl}
  	 		n & candidate & n & candidate & n & candidate & n & candidate & n & candidate \\
  	 		\hline
-			1 & ${x_0}$     & 6  & ${x_0,x_5}$         & 11 & ${x_1}$     & 16 & ${x_1,x_2,x_3}$     & 21 & ${x_1,x_2,x_3,x_4,x_5}$  \\
+			1 & ${x_0}$     & 6  & ${x_0,x_5}$         & 11 & ${x_1}$     & 16 & ${x_1,x_2,x_3}$     & 21 & $\mathbf{{x_1,x_2,x_3,x_4,x_5}}$  \\
 			2 & ${x_0,x_1}$ & 7  & ${x_0,x_2,x_3}$     & 12 & ${x_1,x_2}$ & 17 & ${x_1,x_2,x_4}$     &   \\
 			3 & ${x_0,x_2}$ & 8  & ${x_0,x_2,x_5}$     & 13 & ${x_1,x_3}$ & 18 & ${x_1,x_2,x_5}$     &   \\
-			4 & ${x_0,x_3}$ & 9  & ${x_0,x_2,x_3,x_5}$ & 14 & ${x_1,x_4}$ & 19 & ${x_1,x_2,x_3,x_4}$ &   \\
+			4 & ${x_0,x_3}$ & 9  & $\mathbf{{x_0,x_2,x_3,x_5}}$ & 14 & ${x_1,x_4}$ & 19 & ${x_1,x_2,x_3,x_4}$ &   \\
 			5 & ${x_0,x_4}$ & 10 & ${x_0,x_3,x_5}$     & 15 & ${x_1,x_5}$ & 20 & ${x_1,x_2,x_3,x_5}$ &       
  	 	\end{tabular}             
   	\end{table}	
@@ -159,7 +221,7 @@
 		  level distance = 1cm}] 
 		\node [circ] {$x_0$}
 		    child{ node [circ] {$x_1$}   
-		    node[above right=0.4em] {\footnotesize{NC}}
+		    node[above right=0.4em] {\footnotesize{NA}}
 		    }
 		    child{ node [circ] {$x_2$} 
 		        child{ node [circ] {$x_3$} 
@@ -176,7 +238,7 @@
 				child{ node [circ] {$x_5$}}
 			}
 			child{ node [circ] {$x_4$}
-			node[above left=0.4em] {\footnotesize{NC}}
+			node[above left=0.4em] {\footnotesize{NA}}
 			}
 			child{ node [circ] {$x_5$}}
 		; 
