@@ -29,7 +29,6 @@
 %\usepackage[noend]{algpseudocode}	% Para el seudocódigo
 %\usepackage{multicol}				% Para el seudocódigo
 %\usepackage{algorithmic}
-
 \usepackage{tikz}
 \usetikzlibrary{arrows}
 
@@ -68,7 +67,7 @@
   #1\def\@currentlabel{\unexpanded{#1}}\label{#2}%
 }
 
-
+\usepackage[margin=2.5cm]{geometry}	% Change margins
 
 \begin{document}
 %\mainmatter              % start of the contributions
@@ -87,7 +86,7 @@
 %
 \begin{abstract}
 %
-	Rough set theory is a relatively new mathematical theory to deal with imperfect knowledge, in particular with vague concepts. One of the key concepts within rough set theory is the concept of reduct. A reduct is a reduced set of attributes for the description of an dataset without changing its discernibility relations. The main limitation of rough set reducts is that computing the complete set of reducts of a dataset has exponential complexity regarding the number of attributes. Several attempts have been made to speed up reduct computation but most of these solutions looks for a subset of reducts.  This research proposal aims to develop a parallel implementation of the fast--BR algorithm, which is one of the fastest algorithms reported in the literature for reduct computation.
+	Rough set theory is a relatively new mathematical theory to deal with imperfect knowledge, in particular with vague concepts. One of the key concepts within rough set theory is the concept of reduct. A reduct is a reduced set of attributes for the description of an dataset without changing its discernibility relations. The main limitation of rough set reducts is that computing the complete set of reducts of a dataset has exponential complexity regarding the number of attributes. Several attempts have been made to speed up reduct computation but most of these solutions looks for a subset of reducts.  This research proposal aims to develop a parallel implementation of the fast--BR algorithm, which is one of the fastest algorithms reported in the literature for computing all reducts of a dataset.
 %
 \end{abstract}
 %
@@ -105,29 +104,36 @@
 	  
 	Recently, the relation between reduct computation and the minimum vertex cover problem in graph theory was exposed \cite{chen2015}. Given that both of these problems can be translated into the calculation of prime implicants of a Boolean function, they applied algorithms designed for reduct computation in the solution of the minimum vertex cover problem. This unification opens a new spectrum of real-world applications for fast reduct computation algorithms. They stood that the vertex cover problem has been used in applications such as crew scheduling~\cite{Sherali1984}, VLSI design \cite{Bhattacharyya2000}, nurse rostering \cite{Caprara1998} and industrial machine assignments~\cite{Woodyatt1993}. The connection with the problem of computing the prime implicants of a Boolean function makes fast algorithms for computing all reducts relevant in other applications. For instance, in \cite{Li2015} a new technique for mining frequent patterns from the minimal disjunctive normal form was presented.
 	
-	In this research proposal, we ...
+	In this research proposal, we aim to propose and evaluate three parallel implementations of the fast--BR algorithm~\cite{Lias13} for computing all reducts of a dataset. Fast--BR algorithm is one of the fastest algorithms reported in the literature for reduct (typical testor) computation. We structured the rest of this document as follows: In the section~\ref{relatedWork} we show a review of the most recent accelerations for reduct computation. Then, in the section~\ref{Proposal}, we describe our research proposal. In the section~\ref{preliminary} we present our previous results in this research area. Finally, our conclusions are exposed in the section~\ref{conclusions}.
 %
 
 \section{Related Work}\label{relatedWork}
-  In this section, we will first discuss heuristic algorithms for reduct computation. Some of these algorithms are capable of finding several reducts and others are intended to obtain a single \textit{shortest} reduct. Afterwards, we will give an overview of those algorithms reported for computing all reducts. Finally, we will make a review of parallel accelerations of algorithms for reduct computation reported in the literature.    
+ 	In this section, we will make a review of accelerations of algorithms for reduct computation reported in the literature. The hardware approaches based on FPGA are presented in the subsection~\ref{fpga}. Then in the subsection~\ref{parallel}, we discuss parallel approaches to reduct computation.
 %	
-\subsection{FPGA accelerations}
+\subsection{FPGA accelerations}\label{fpga}  
 %
-  
+  	A hardware acceleration of the algorithm presented in \citep{Yang08}, for reduct generation from a binary discernibility matrix, was developed in \citep{Tiwari11,Tiwari12}. This FPGA implementation computes a single reduct. A real application for object identification into an intelligent robot is presented. In \citep{Tiwari13} a \emph{quick reduct} algorithm, similar to that presented in \citep{Chouchoulas01}, is proposed and implemented in a hardware fashion. A recent work from these authors \citep{Tiwari14}, shows a thorough survey of FPGA applications in rough set reduct computation. On the other hand, in \citep{Grzes13,Kopczynski14}, an FPGA application for a single reduct computation is presented. Although authors claim that a huge acceleration is achieved, the experiments presented in \citep{Kopczynski14} to validate their results are performed over a small dataset which does not imply its applicability to larger cases where such acceleration is needed. All of these hardware accelerations, are designed for computing a single reduct which is a problem with a lower complexity. 
+  	 	
+  	From the Testor Theory, several FPGA implementations of algorithms have been presented. In a first work \citep{Cumplido06}, an FPGA-based brute force approach for computing testors was proposed. This first approach did not take advantage of dataset characteristics to reduce the number of candidates to be tested; thus all $2^n$ combinations of $n$ features have to be tested. Then, in \citep{Rojas07} a hardware architecture of the BT algorithm for computing typical testors was implemented. This algorithm uses a candidate pruning process for avoiding many unnecessary candidate evaluations, reducing the number of verifications of the typical testor condition. These two previous works compute a set of testors on the FPGA device whilst the typical condition was evaluated afterwards by the software component in the hosting PC. Thus, in \citep{Rojas12} a hardware-software platform for computing typical testors that implements the BT algorithm, similar to \citep{Rojas07}, was proposed; but it also included a new module that eliminates most of the non typical testors before transferring them to a host software application for final filtering. 
+  	
+  	
 %	
-\subsection{Parallel accelerations}
+\subsection{Parallel accelerations}\label{parallel}
 %
+	In \citep{Wroblewski98}, a parallel variant of the algorithm proposed in \citep{Wroblewski95} is presented. Here, parallel implementations of genetic algorithms are exploited to provide a speedup for the problem of finding reducts. This algorithm computes a subset of reducts of the dataset.
 	
+	The parallel algorithms presented in~\cite{Susmaga1998,Susmaga2004} have the closest relation to our research proposal. In these works, the author uses a problem subdivision technique for computing reducts in a parallel fashion. He shows a considerable speed up over the sequential counterpart. The main disadvantage of these works is that they are based on very simplistic sequential algorithms \cite{Skowron92,susmaga1998effective}. 
 %
-\section{Research Proposal}  
+\section{Research Proposal}\label{Proposal} 
 %    
 	\renewcommand{\algorithmicrequire}{\textbf{Input:}}
 	\renewcommand{\algorithmicensure}{\textbf{Output:}}
 	%\begin{multicols}{2}
 	\begin{algorithm}
+		\footnotesize
 		\caption{Fast--BR.}
 		\label{alg:RSDM}
-		%\begin{multicols}{2}
+		\begin{multicols}{2}
 		\begin{algorithmic}[1]
 			\Require $SBDM$
 			\Ensure $RS$ - set of all reducts
@@ -141,6 +147,7 @@
 				\EndIf
 				\State $i \Leftarrow i+1$
 			\EndWhile
+			
 			\Procedure {traverse}{$B$,$C$}
 			\ForAll{$x \in C$} 
 				\State reduct, accepted $\Leftarrow$ \textsc{evaluate}($B$,$x$)
@@ -162,14 +169,14 @@
 			\EndFor
 			\EndProcedure
 		\end{algorithmic}
-		%\end{multicols}
+		\end{multicols}
 	\end{algorithm}    
 	
 	\begin{table}[htb]
 		\begin{minipage}{.4\linewidth}
 			\caption{Dataset.} \label{tab:dataset}
 			\centering
-			\setlength{\tabcolsep}{3pt}
+			%\setlength{\tabcolsep}{3pt}
 		 	\begin{tabular}{cccccc|c}
 		 		$x_0$ & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ & d \\
 		 		\hline
@@ -199,7 +206,7 @@
  
  \begin{table}[htb]
  		\caption{Candidates evaluated by fast--BR on the \textit{SBDM} shown in Table~\ref{tab:SBDM}.} \label{tab:cand}
- 		\footnotesize
+ 		\small
  		\centering
  		\setlength{\tabcolsep}{3pt}
  	 	\begin{tabular}{cl|cl|cl|cl|cl}
@@ -285,7 +292,9 @@
 %
 \section{Previous Research Work} \label{preliminary}
 %
-
+	Our first work in the acceleration of algorithms for computing reduct~\cite{Rodriguez14} consisted in the introduction of a new hardware module into the architecture presented in~\cite{Rojas12}. This new architecture, was capable of identifying the minimal property of typical testors (reducts) in the FPGA device. This modification resulted in a significant runtime reduction, since the platform presented in~\cite{Rojas12} transfers a huge amount of data to the hosting PC and needs a final filtering stage. Then, in~\cite{Rodriguez15}, we presented a hardware-software platform for computing typical testors based on the CT\_EXT algorithm~\cite{Sanchez10}. Even though this platform can process larger basic matrices than previous works, its resource utilization determines the maximum size of the basic matrix that can be solved (this is, indeed, its main limitation). For this reason, we present here an alternative acceleration method, based on algorithm parallelization.
+	
+	Our most recent work have been directed to the assessment of algorithms' performance regarding some properties of the \textit{SBDM}. We have found some relations that enable the selection, a priori, of the appropriated algorithm for a given dataset. These studies have been submitted for publication at the current time and their results are going to be applied in the evaluation stage of this research proposal. 
 %
 \section{Concluding Remarks}\label{conclusions}
 %
