@@ -29,7 +29,6 @@
 %\usepackage[noend]{algpseudocode}	% Para el seudocódigo
 %\usepackage{multicol}				% Para el seudocódigo
 %\usepackage{algorithmic}
-
 \usepackage{tikz}
 \usetikzlibrary{arrows}
 
@@ -68,7 +67,7 @@
   #1\def\@currentlabel{\unexpanded{#1}}\label{#2}%
 }
 
-
+\usepackage[margin=2.5cm]{geometry}	% Change margins
 
 \begin{document}
 %\mainmatter              % start of the contributions
@@ -87,7 +86,7 @@
 %
 \begin{abstract}
 %
-	Rough set theory is a relatively new mathematical theory to deal with imperfect knowledge, in particular with vague concepts. One of the key concepts within rough set theory is the concept of reduct. A reduct is a reduced set of attributes for the description of an dataset without changing its discernibility relations. The main limitation of rough set reducts is that computing the complete set of reducts of a dataset has exponential complexity regarding the number of attributes. Several attempts have been made to speed up reduct computation but most of these solutions looks for a subset of reducts.  This research proposal aims to develop a parallel implementation of the fast--BR algorithm, which is one of the fastest algorithms reported in the literature for reduct computation.
+	Rough set theory is a relatively new mathematical theory to deal with imperfect knowledge, in particular with vague concepts. One of the key concepts within rough set theory is the concept of reduct. A reduct is a reduced set of attributes for the description of an dataset without changing its discernibility relations. The main limitation of rough set reducts is that computing the complete set of reducts of a dataset has exponential complexity regarding the number of attributes. Several attempts have been made to speed up reduct computation but most of these solutions looks for a subset of reducts.  This research proposal aims to develop a parallel implementation of the fast--BR algorithm, which is one of the fastest algorithms reported in the literature for computing all reducts of a dataset.
 %
 \end{abstract}
 %
@@ -105,71 +104,35 @@
 	  
 	Recently, the relation between reduct computation and the minimum vertex cover problem in graph theory was exposed \cite{chen2015}. Given that both of these problems can be translated into the calculation of prime implicants of a Boolean function, they applied algorithms designed for reduct computation in the solution of the minimum vertex cover problem. This unification opens a new spectrum of real-world applications for fast reduct computation algorithms. They stood that the vertex cover problem has been used in applications such as crew scheduling~\cite{Sherali1984}, VLSI design \cite{Bhattacharyya2000}, nurse rostering \cite{Caprara1998} and industrial machine assignments~\cite{Woodyatt1993}. The connection with the problem of computing the prime implicants of a Boolean function makes fast algorithms for computing all reducts relevant in other applications. For instance, in \cite{Li2015} a new technique for mining frequent patterns from the minimal disjunctive normal form was presented.
 	
-	In this research proposal, we ...
+	In this research proposal, we aim to propose and evaluate three parallel implementations of the fast--BR algorithm~\cite{Lias13} for computing all reducts of a dataset. Fast--BR algorithm is one of the fastest algorithms reported in the literature for reduct (typical testor) computation. We structured the rest of this document as follows: In the section~\ref{relatedWork} we show a review of the most recent accelerations for reduct computation. Then, in the section~\ref{Proposal}, we describe our research proposal. In the section~\ref{preliminary} we present our previous results in this research area. Finally, our conclusions are exposed in the section~\ref{conclusions}.
 %
 
 \section{Related Work}\label{relatedWork}
-  In this section, we will first discuss heuristic algorithms for reduct computation. Some of these algorithms are capable of finding several reducts and others are intended to obtain a single \textit{shortest} reduct. Afterwards, we will give an overview of those algorithms reported for computing all reducts. Finally, we will make a review of parallel accelerations of algorithms for reduct computation reported in the literature.    
+ 	In this section, we will make a review of accelerations of algorithms for reduct computation reported in the literature. The hardware approaches based on FPGA are presented in the subsection~\ref{fpga}. Then in the subsection~\ref{parallel}, we discuss parallel approaches to reduct computation.
 %	
-\subsection{FPGA accelerations}
+\subsection{FPGA accelerations}\label{fpga}  
 %
-  
+  	A hardware acceleration of the algorithm presented in \citep{Yang08}, for reduct generation from a binary discernibility matrix, was developed in \citep{Tiwari11,Tiwari12}. This FPGA implementation computes a single reduct. A real application for object identification into an intelligent robot is presented. In \citep{Tiwari13} a \emph{quick reduct} algorithm, similar to that presented in \citep{Chouchoulas01}, is proposed and implemented in a hardware fashion. A recent work from these authors \citep{Tiwari14}, shows a thorough survey of FPGA applications in rough set reduct computation. On the other hand, in \citep{Grzes13,Kopczynski14}, an FPGA application for a single reduct computation is presented. Although authors claim that a huge acceleration is achieved, the experiments presented in \citep{Kopczynski14} to validate their results are performed over a small dataset which does not imply its applicability to larger cases where such acceleration is needed. All of these hardware accelerations, are designed for computing a single reduct which is a problem with a lower complexity. 
+  	 	
+  	From the Testor Theory, several FPGA implementations of algorithms have been presented. In a first work \citep{Cumplido06}, an FPGA-based brute force approach for computing testors was proposed. This first approach did not take advantage of dataset characteristics to reduce the number of candidates to be tested; thus all $2^n$ combinations of $n$ features have to be tested. Then, in \citep{Rojas07} a hardware architecture of the BT algorithm for computing typical testors was implemented. This algorithm uses a candidate pruning process for avoiding many unnecessary candidate evaluations, reducing the number of verifications of the typical testor condition. These two previous works compute a set of testors on the FPGA device whilst the typical condition was evaluated afterwards by the software component in the hosting PC. Thus, in \citep{Rojas12} a hardware-software platform for computing typical testors that implements the BT algorithm, similar to \citep{Rojas07}, was proposed; but it also included a new module that eliminates most of the non typical testors before transferring them to a host software application for final filtering. 
+  	
+  	
 %	
-\subsection{Parallel accelerations}
+\subsection{Parallel accelerations}\label{parallel}
 %
+	In \citep{Wroblewski98}, a parallel variant of the algorithm proposed in \citep{Wroblewski95} is presented. Here, parallel implementations of genetic algorithms are exploited to provide a speedup for the problem of finding reducts. This algorithm computes a subset of reducts of the dataset.
 	
+	The parallel algorithms presented in~\cite{Susmaga1998,Susmaga2004} have the closest relation to our research proposal. In these works, the author uses a problem subdivision technique for computing reducts in a parallel fashion. He shows a considerable speed up over the sequential counterpart. The main disadvantage of these works is that they are based on very simplistic sequential algorithms \cite{Skowron92,susmaga1998effective}. 
 %
-\section{Research Proposal}  
+\section{Research Proposal}\label{Proposal} 
 %    
-	\renewcommand{\algorithmicrequire}{\textbf{Input:}}
-	\renewcommand{\algorithmicensure}{\textbf{Output:}}
-	%\begin{multicols}{2}
-	\begin{algorithm}
-		\caption{Fast--BR.}
-		\label{alg:RSDM}
-		%\begin{multicols}{2}
-		\begin{algorithmic}[1]
-			\Require $SBDM$
-			\Ensure $RS$ - set of all reducts
-			\State $i \Leftarrow 0$, $RS \Leftarrow \emptyset$
-			\While {$SBDM(0,i) \neq 0$}
-				\State reduct, accepted $\Leftarrow$ \textsc{evaluate}($\emptyset$,$x_i$)
-				\If {reduct}
-					\State $RS \Leftarrow RS\cup\lbrace x_i \rbrace$
-				\Else
-					\State \textsc{traverse}($\lbrace x_i \rbrace$, $\lbrace x_{i+1},..., x_m\rbrace$)
-				\EndIf
-				\State $i \Leftarrow i+1$
-			\EndWhile
-			\Procedure {traverse}{$B$,$C$}
-			\ForAll{$x \in C$} 
-				\State reduct, accepted $\Leftarrow$ \textsc{evaluate}($B$,$x$)
-				\If {reduct}
-					\State $C \Leftarrow C\setminus x$
-					\State $RS \Leftarrow RS\cup\lbrace B\cup \lbrace x\rbrace \rbrace$
-				\Else
-					\If {\textbf{not} accepted}
-						\State $C \Leftarrow C\setminus x$
-					\EndIf
-				\EndIf
-			\EndFor
-			\If {$x=x_m$}
-				\State ($B$,$C$) $\Leftarrow$ \textsc{elimGAP}($B$,$x$)
-			\EndIf
-			\ForAll{$x \in C$} 
-				\State $C \Leftarrow C\setminus x$
-				\State \textsc{traverse}($B\cup \lbrace x\rbrace$,$C$)
-			\EndFor
-			\EndProcedure
-		\end{algorithmic}
-		%\end{multicols}
-	\end{algorithm}    
-	
+	The basic representation of data in RST is a \emph{Dataset} $DS=(U,A)$ where $U$ is a finite non-empty set of objects and $A$ is a finite non-empty set of attributes. A dataset is a table with rows representing objects while columns specify attributes or features. Attributes in a dataset are divided into condition attributes $C$ and decision attributes $D$ such that $A=C \cup D$ and $C \cap D =\emptyset$. Table~\ref{tab:dataset} shows an example of a dataset, where $C=\lbrace x_0,x_1,x_2,x_3,x_4,x_5 \rbrace$ and $D=\lbrace d \rbrace$.
+
 	\begin{table}[htb]
 		\begin{minipage}{.4\linewidth}
 			\caption{Dataset.} \label{tab:dataset}
 			\centering
-			\setlength{\tabcolsep}{3pt}
+			%\setlength{\tabcolsep}{3pt}
 		 	\begin{tabular}{cccccc|c}
 		 		$x_0$ & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ & d \\
 		 		\hline
@@ -182,7 +145,7 @@
 		 	\end{tabular}       
 		\end{minipage}  
 		\begin{minipage}{.59\linewidth}
-			\caption{Simplified Binary Discernibility Matrix.} \label{tab:SBDM}
+			\caption{Binary Discernibility Matrix.} \label{tab:SBDM}
 			\centering
 			\begin{tabular}{cccccc}
 				$x_0$ & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ \\
@@ -197,9 +160,68 @@
 		\end{minipage}    
  	\end{table}
  
+ The \textit{Binary Discernibility Matrix} is a binary table representing the discernibility sets between pairs of objects. In the binary discernibility matrix, columns are single condition attributes and rows represent pairs of objects belonging to different classes. The discernibility element $m(i, j, c)$ for two objects $u_i$ and $u_j$ and a single condition attribute $c \in C$ is given in a binary representation, such that:
+ 
+ \begin{equation}
+ m(i, j, c)=\left\lbrace\begin{array}{cl}
+ 1 & \mathrm{for~~}c(u_i) \neq c(u_j)\\
+ 0 & \mathrm{otherwise} 
+ \end{array}\right.
+ \end{equation} 
+ 
+ Table~\ref{tab:SBDM} shows the binary discernibility matrix for the dataset of Table~\ref{tab:dataset}. Most algorithms for reduct computation, operate over a simplified binary discernibility matrix (\textit{SBDM}); which can be obtained eliminating supersets and repeated rows \cite{Yao09}. In the example shown in Table~\ref{tab:SBDM}, there are not possible reductions, so it is also a \textit{SBDM}.
+ 
+ 	\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+ 	\renewcommand{\algorithmicensure}{\textbf{Output:}}
+ 	%\begin{multicols}{2}
+ 	\begin{algorithm} \label{alg:fast-BR}
+ 		\footnotesize
+ 		\caption{Fast--BR.}
+ 		\label{alg:RSDM}
+ 		\begin{multicols}{2}
+ 			\begin{algorithmic}[1]
+ 				\Require $SBDM$
+ 				\Ensure $RS$ - set of all reducts
+ 				\State $i \Leftarrow 0$, $RS \Leftarrow \emptyset$
+ 				\While {$SBDM(0,i) \neq 0$}
+ 				\State reduct, accepted $\Leftarrow$ \textsc{evaluate}($\emptyset$,$x_i$)
+ 				\If {reduct}
+ 				\State $RS \Leftarrow RS\cup\lbrace x_i \rbrace$
+ 				\Else
+ 				\State \textsc{traverse}($\lbrace x_i \rbrace$, $\lbrace x_{i+1},..., x_m\rbrace$)
+ 				\EndIf
+ 				\State $i \Leftarrow i+1$
+ 				\EndWhile
+ 				
+ 				\Procedure {traverse}{$B$,$C$}
+ 				\ForAll{$x \in C$} 
+ 				\State reduct, accepted $\Leftarrow$ \textsc{evaluate}($B$,$x$)
+ 				\If {reduct}
+ 				\State $C \Leftarrow C\setminus x$
+ 				\State $RS \Leftarrow RS\cup\lbrace B\cup \lbrace x\rbrace \rbrace$
+ 				\Else
+ 				\If {\textbf{not} accepted}
+ 				\State $C \Leftarrow C\setminus x$
+ 				\EndIf
+ 				\EndIf
+ 				\EndFor
+ 				\If {$x=x_m$}
+ 				\State ($B$,$C$) $\Leftarrow$ \textsc{elimGAP}($B$,$x$)
+ 				\EndIf
+ 				\ForAll{$x \in C$} 
+ 				\State $C \Leftarrow C\setminus x$
+ 				\State \textsc{traverse}($B\cup \lbrace x\rbrace$,$C$)
+ 				\EndFor
+ 				\EndProcedure
+ 			\end{algorithmic}
+ 		\end{multicols}
+ 	\end{algorithm}    
+ 
+ Algorithm~\ref{alg:fast-BR} shows a simplified pseudocode of fast--BR. This algorithm is based on three main concepts: contribution, exclusion and gap elimination~\cite{Lias13}. The search for reducts, starts with an empty candidate subset ($B$) and all the attributes in the remaining set ($C$). The \textsc{evaluate} procedure, uses the acceptance and exclusion properties to determine whether the current set ($B\cup \lbrace x\rbrace$) is a reduct, and whether the current attribute ($x$) is accepted as a potential element of a reduct. The recursive procedure \textsc{traverse}\footnote{The algorithm presented in~\cite{Lias13} has actually a secuential implementation.}, is called using the current candidate and all the accepted attributes. Each time the deepest level of the recursion is reached ($x=x_m$), the algorithm searches for a gap to eliminate it.
+ 
  \begin{table}[htb]
  		\caption{Candidates evaluated by fast--BR on the \textit{SBDM} shown in Table~\ref{tab:SBDM}.} \label{tab:cand}
- 		\footnotesize
+ 		\small
  		\centering
  		\setlength{\tabcolsep}{3pt}
  	 	\begin{tabular}{cl|cl|cl|cl|cl}
@@ -213,6 +235,7 @@
  	 	\end{tabular}             
   	\end{table}	
  	
+ 	In order to illustrate the operation of fast--BR, we present in Table~\ref{tab:cand} the candidates evaluated by this algorithm over the \textit{SBDM} shown in Table~\ref{tab:SBDM}. A total of 21 iterations are needed for this example, and two reducts were found on iterations 9 and 21. 
  	
 	% First Tree
 	\begin{figure}[htb]
@@ -246,6 +269,8 @@
 		\caption{Evaluation of supersets of $x_0$.}
 		\label{fig:tree1}
 	\end{figure}
+	
+	Figures~\ref{fig:tree1} (iterations 1--10) and~\ref{fig:tree2} (iterations 11--21) show a tree representation of the algorithm execution for this example. The sequence of evaluated candidates from Table~\ref{tab:cand}, can be used to understand the traversal of the tree representation shown in Figures~\ref{fig:tree1} and~\ref{fig:tree2}. For the following explanation, the nodes which have a gray background should be ignored. Lets begin with the tree shown in Figure~\ref{fig:tree1}, the first evaluation is done over $x_0$. Then, the next level of the tree is created with all the following attributes as children\footnote{The order of attribute is the one that they have in the \textit{SBDM}.}. Each child node is evaluated using the set of all the nodes in the path to its parent as candidate subset. Doing so in the second level of the tree in Figure~\ref{fig:tree1}, $x_1$ and $x_4$ are not accepted (labeled as NA). For each accepted attribute, a new level is constructed with its following accepted attributes as children.
 	
 	% Second Tree
 	\begin{figure}[htb]
@@ -285,26 +310,13 @@
 %
 \section{Previous Research Work} \label{preliminary}
 %
-
+	Our first work in the acceleration of algorithms for computing reduct~\cite{Rodriguez14} consisted in the introduction of a new hardware module into the architecture presented in~\cite{Rojas12}. This new architecture, was capable of identifying the minimal property of typical testors (reducts) in the FPGA device. This modification resulted in a significant runtime reduction, since the platform presented in~\cite{Rojas12} transfers a huge amount of data to the hosting PC and needs a final filtering stage. Then, in~\cite{Rodriguez15}, we presented a hardware-software platform for computing typical testors based on the CT\_EXT algorithm~\cite{Sanchez10}. Even though this platform can process larger basic matrices than previous works, its resource utilization determines the maximum size of the basic matrix that can be solved (this is, indeed, its main limitation). For this reason, we present here an alternative acceleration method, based on algorithm parallelization.
+	
+	Our most recent work have been directed to the assessment of algorithms' performance regarding some properties of the \textit{SBDM}. We have found some relations that enable the selection, a priori, of the appropriated algorithm for a given dataset. These studies have been submitted for publication at the current time and their results are going to be applied in the evaluation stage of this research proposal. 
 %
 \section{Concluding Remarks}\label{conclusions}
 %
-   From our literature review, we highlight the following aspects. First, we found that algorithms for computing rough set reducts are mainly divided into three categories:
-    \begin{itemize}
-  	  \item Algorithms for computing a pseudo-optimal reduct according to a criterion (which is, most of the 
-  	  		time, the cardinality of the obtained reduct).
-  	  \item Algorithms for computing one shortest reduct.
-  	  \item Algorithms for computing all reducts.
-    \end{itemize}
-    The most proliferative research area in Rough Set Theory is the development of algorithms for computing a 
-    pseudo-optimal reduct. 
-    
-    We found two algorithms for finding all reducts \cite{Starzyk00,WangP07} and two algorithms for finding shortest reducts \cite{Lin04,Jensen14}. These algorithms have several disadvantages since they do not work over the simplified discernibility matrix and use complex data representations. Notice that computing the simplified binary discernibility matrix from the original dataset has Quartic complexity regarding the number of objects (rows) in the dataset, while computing all reducts has exponential complexity regarding the number of attributes (columns). In most computationally expensive datasets, it is better to work over the simplified discernibility matrix. 
-    
-    Hardware accelerations of algorithms for computing reducts are focused on computing a single pseudo-optimal reduct \cite{Tiwari11,Tiwari12,Tiwari13,Grzes13,Kopczynski14,Tiwari14}. Since this problem is not an exponentially complexity task, we found these hardware platforms less useful.	
-		    
-    In the search for algorithms to overcome the exponential complexity of the problem of computing all reducts or
-    shortest reducts, the last word has not been said. Two promising areas of research are the hardware acceleration of algorithms computing all reducts and the palletization of these algorithms.
+
   
 % ---- Bibliography ----
 %

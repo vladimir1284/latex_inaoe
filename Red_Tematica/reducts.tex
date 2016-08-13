@@ -98,7 +98,7 @@
   From the RST point of view, two objects are indistinguishable (indiscernible) if they have the same value for each attribute in their description. Indiscernibility relations arising in this way, constitute the mathematical foundations of RST. Some basic concepts of RST are presented bellow. Although we will be following the explanation in \cite{Polkowski00}, some modifications in the notation are introduced to provide clarity in the rest of the document.
   
 \subsection{Information System}
-  The basic representation of data in RST is an \emph{Information System} (IS). An IS is a table where rows represent objects while columns specify attributes or features. Formally, an IS is defined as a pair $IS=(U,A)$ where $U$ is a finite non-empty set of objects $U=\lbrace x_1,x_2,...,x_n\rbrace$, and $A$ is a finite non-empty set of attributes (features, variables). Every attribute in $A$ is a map: $a: U \rightarrow V_a$. The set $V_a$ is called the \textit{value set} of $A$. Attributes in $A$ are further divided into condition attributes $C$ and decision attributes $D$ such that $A=C \cup D$ and $C \cap D =\emptyset$.   Table~\ref{tab_IS} shows an example of an IS.
+  The basic representation of data in RST is an \emph{Information System} (IS). An IS is a table where rows represent objects while columns specify attributes or features. Formally, an IS is defined as a pair $IS=(U,A)$ where $U$ is a finite non-empty set of objects $U=\lbrace x_1,x_2,...,x_n\rbrace$, and $A$ is a finite non-empty set of attributes (features, variables). Every attribute in $A$ is a map: $a: U \rightarrow V_a$. The set $V_a$ is called the \textit{value set} of $a$. Attributes in $A$ are further divided into condition attributes $C$ and decision attributes $D$ such that $A=C \cup D$ and $C \cap D =\emptyset$.   Table~\ref{tab_IS} shows an example of an IS.
   
   
  \begin{table}[htb]
@@ -127,7 +127,7 @@
   $B-classes$ (classes induced by $B$) which correspond to classes induced by $d$. 
   This idea leads to the notion of the  \textit{positive region of the decision}. The set $POS_B(d)$, 
   called the \textit{B-positive region of d}, is defined as the set of all objects in $U$ such 
-  that all their indistinguishable objects (under the knowledge in $B$) belong to its same class induced 
+  that all their indistinguishable objects (under the knowledge in $B$) belong to the same class induced 
   by $d$.
   
   Taking for example the IS in table~\ref{tab_IS}, we can see that
@@ -140,7 +140,7 @@
  
 \subsection{Reducts and Core}\label{def_reduct}
   Given an information system $IS=(U,A)$ with condition attribute set $C$ and decision attribute set
-  $D$ such that $A=C \cup D$ and $C \cap D =\emptyset$. A subset $B \subseteq C$ is a \textit{reduct} 
+  $D$. A subset $B \subseteq C$ is a \textit{reduct} 
   of $IS$ relative to $D$ if
   \begin{enumerate}
   	\item $POS_B(D)=POS_C(D)$. \label{cond_1}
@@ -185,12 +185,11 @@
  \end{table}
   
   Once the discernibility matrix $M_{IS}$ is found, we can define the \textit{discernibility function} $f_{IS}$. This is a Boolean function of $n$ Boolean variables $c_1^*, c_2^*,...,c_n^*$, representing the presence of the corresponding attribute (True) or its absence (False) in $M_{IS}$. Here, the disjunction ($\vee$) and conjunction ($\wedge$) operators have their common meaning, and their evaluation over a set of Boolean variables $X=\lbrace x_1^*, x_2^*, ..., x_n^* \rbrace$ will be denoted as $\wedge X= x_1^* \wedge x_2^* \wedge ... \wedge x_n^* $.
-
-  \begin{equation}
+  
+  $$
   	f_{IS}(c_1^*, c_2^*,...,c_n^*)=\wedge \lbrace \vee c_{ij}^* : 1 \leq j \leq i \leq |U|, 
   									m_{ij} \neq \emptyset \rbrace
-  \end{equation}
-
+  $$\newline
   where $c_{ij}^*=\lbrace c^* : c \in m_{ij} \rbrace$. Only the lower triangular matrix from $M_{IS}$ is
   taken into consideration since $M_{IS}$ is symmetric. An equivalence between the prime implicants of
   $f_{IS}$ and all reducts of $IS$ has been found and reported in \cite{Pawlak07}.
