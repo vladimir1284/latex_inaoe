@@ -298,22 +298,7 @@
 %
 \section{Concluding Remarks}\label{conclusions}
 %
-   From our literature review, we highlight the following aspects. First, we found that algorithms for computing rough set reducts are mainly divided into three categories:
-    \begin{itemize}
-  	  \item Algorithms for computing a pseudo-optimal reduct according to a criterion (which is, most of the 
-  	  		time, the cardinality of the obtained reduct).
-  	  \item Algorithms for computing one shortest reduct.
-  	  \item Algorithms for computing all reducts.
-    \end{itemize}
-    The most proliferative research area in Rough Set Theory is the development of algorithms for computing a 
-    pseudo-optimal reduct. 
-    
-    We found two algorithms for finding all reducts \cite{Starzyk00,WangP07} and two algorithms for finding shortest reducts \cite{Lin04,Jensen14}. These algorithms have several disadvantages since they do not work over the simplified discernibility matrix and use complex data representations. Notice that computing the simplified binary discernibility matrix from the original dataset has Quartic complexity regarding the number of objects (rows) in the dataset, while computing all reducts has exponential complexity regarding the number of attributes (columns). In most computationally expensive datasets, it is better to work over the simplified discernibility matrix. 
-    
-    Hardware accelerations of algorithms for computing reducts are focused on computing a single pseudo-optimal reduct \cite{Tiwari11,Tiwari12,Tiwari13,Grzes13,Kopczynski14,Tiwari14}. Since this problem is not an exponentially complexity task, we found these hardware platforms less useful.	
-		    
-    In the search for algorithms to overcome the exponential complexity of the problem of computing all reducts or
-    shortest reducts, the last word has not been said. Two promising areas of research are the hardware acceleration of algorithms computing all reducts and the palletization of these algorithms.
+
   
 % ---- Bibliography ----
 %
