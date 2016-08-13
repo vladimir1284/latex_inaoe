@@ -128,6 +128,52 @@
 %    
 	The basic representation of data in RST is a \emph{Dataset} $DS=(U,A)$ where $U$ is a finite non-empty set of objects and $A$ is a finite non-empty set of attributes. A dataset is a table with rows representing objects while columns specify attributes or features. Attributes in a dataset are divided into condition attributes $C$ and decision attributes $D$ such that $A=C \cup D$ and $C \cap D =\emptyset$. Table~\ref{tab:dataset} shows an example of a dataset, where $C=\lbrace x_0,x_1,x_2,x_3,x_4,x_5 \rbrace$ and $D=\lbrace d \rbrace$.
 
+%	\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+%	\renewcommand{\algorithmicensure}{\textbf{Output:}}
+%	%\begin{multicols}{2}
+%	\begin{algorithm}
+%		\footnotesize
+%		\caption{Fast--BR.}
+%		\label{alg:RSDM}
+%		\begin{multicols}{2}
+%		\begin{algorithmic}[1]
+%			\Require $SBDM$
+%			\Ensure $RS$ - set of all reducts
+%			\State $i \Leftarrow 0$, $RS \Leftarrow \emptyset$
+%			\While {$SBDM(0,i) \neq 0$}
+%				\State reduct, accepted $\Leftarrow$ \textsc{evaluate}($\emptyset$,$x_i$)
+%				\If {reduct}
+%					\State $RS \Leftarrow RS\cup\lbrace x_i \rbrace$
+%				\Else
+%					\State \textsc{traverse}($\lbrace x_i \rbrace$, $\lbrace x_{i+1},..., x_m\rbrace$)
+%				\EndIf
+%				\State $i \Leftarrow i+1$
+%			\EndWhile
+%			
+%			\Procedure {traverse}{$B$,$C$}
+%			\ForAll{$x \in C$} 
+%				\State reduct, accepted $\Leftarrow$ \textsc{evaluate}($B$,$x$)
+%				\If {reduct}
+%					\State $C \Leftarrow C\setminus x$
+%					\State $RS \Leftarrow RS\cup\lbrace B\cup \lbrace x\rbrace \rbrace$
+%				\Else
+%					\If {\textbf{not} accepted}
+%						\State $C \Leftarrow C\setminus x$
+%					\EndIf
+%				\EndIf
+%			\EndFor
+%			\If {$x=x_m$}
+%				\State ($B$,$C$) $\Leftarrow$ \textsc{elimGAP}($B$,$x$)
+%			\EndIf
+%			\ForAll{$x \in C$} 
+%				\State $C \Leftarrow C\setminus x$
+%				\State \textsc{traverse}($B\cup \lbrace x\rbrace$,$C$)
+%			\EndFor
+%			\EndProcedure
+%		\end{algorithmic}
+%		\end{multicols}
+%	\end{algorithm}    
+	
 	\begin{table}[htb]
 		\begin{minipage}{.4\linewidth}
 			\caption{Dataset.} \label{tab:dataset}
