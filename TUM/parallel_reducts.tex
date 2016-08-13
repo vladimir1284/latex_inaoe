@@ -126,51 +126,53 @@
 %
 \section{Research Proposal}\label{Proposal} 
 %    
-	\renewcommand{\algorithmicrequire}{\textbf{Input:}}
-	\renewcommand{\algorithmicensure}{\textbf{Output:}}
-	%\begin{multicols}{2}
-	\begin{algorithm}
-		\footnotesize
-		\caption{Fast--BR.}
-		\label{alg:RSDM}
-		\begin{multicols}{2}
-		\begin{algorithmic}[1]
-			\Require $SBDM$
-			\Ensure $RS$ - set of all reducts
-			\State $i \Leftarrow 0$, $RS \Leftarrow \emptyset$
-			\While {$SBDM(0,i) \neq 0$}
-				\State reduct, accepted $\Leftarrow$ \textsc{evaluate}($\emptyset$,$x_i$)
-				\If {reduct}
-					\State $RS \Leftarrow RS\cup\lbrace x_i \rbrace$
-				\Else
-					\State \textsc{traverse}($\lbrace x_i \rbrace$, $\lbrace x_{i+1},..., x_m\rbrace$)
-				\EndIf
-				\State $i \Leftarrow i+1$
-			\EndWhile
-			
-			\Procedure {traverse}{$B$,$C$}
-			\ForAll{$x \in C$} 
-				\State reduct, accepted $\Leftarrow$ \textsc{evaluate}($B$,$x$)
-				\If {reduct}
-					\State $C \Leftarrow C\setminus x$
-					\State $RS \Leftarrow RS\cup\lbrace B\cup \lbrace x\rbrace \rbrace$
-				\Else
-					\If {\textbf{not} accepted}
-						\State $C \Leftarrow C\setminus x$
-					\EndIf
-				\EndIf
-			\EndFor
-			\If {$x=x_m$}
-				\State ($B$,$C$) $\Leftarrow$ \textsc{elimGAP}($B$,$x$)
-			\EndIf
-			\ForAll{$x \in C$} 
-				\State $C \Leftarrow C\setminus x$
-				\State \textsc{traverse}($B\cup \lbrace x\rbrace$,$C$)
-			\EndFor
-			\EndProcedure
-		\end{algorithmic}
-		\end{multicols}
-	\end{algorithm}    
+	The basic representation of data in RST is a \emph{Dataset} $DS=(U,A)$ where $U$ is a finite non-empty set of objects and $A$ is a finite non-empty set of attributes. A dataset is a table with rows representing objects while columns specify attributes or features. Attributes in a dataset are divided into condition attributes $C$ and decision attributes $D$ such that $A=C \cup D$ and $C \cap D =\emptyset$. Table~\ref{tab:dataset} shows an example of a dataset, where $C=\lbrace x_0,x_1,x_2,x_3,x_4,x_5 \rbrace$ and $D=\lbrace d \rbrace$.
+
+%	\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+%	\renewcommand{\algorithmicensure}{\textbf{Output:}}
+%	%\begin{multicols}{2}
+%	\begin{algorithm}
+%		\footnotesize
+%		\caption{Fast--BR.}
+%		\label{alg:RSDM}
+%		\begin{multicols}{2}
+%		\begin{algorithmic}[1]
+%			\Require $SBDM$
+%			\Ensure $RS$ - set of all reducts
+%			\State $i \Leftarrow 0$, $RS \Leftarrow \emptyset$
+%			\While {$SBDM(0,i) \neq 0$}
+%				\State reduct, accepted $\Leftarrow$ \textsc{evaluate}($\emptyset$,$x_i$)
+%				\If {reduct}
+%					\State $RS \Leftarrow RS\cup\lbrace x_i \rbrace$
+%				\Else
+%					\State \textsc{traverse}($\lbrace x_i \rbrace$, $\lbrace x_{i+1},..., x_m\rbrace$)
+%				\EndIf
+%				\State $i \Leftarrow i+1$
+%			\EndWhile
+%			
+%			\Procedure {traverse}{$B$,$C$}
+%			\ForAll{$x \in C$} 
+%				\State reduct, accepted $\Leftarrow$ \textsc{evaluate}($B$,$x$)
+%				\If {reduct}
+%					\State $C \Leftarrow C\setminus x$
+%					\State $RS \Leftarrow RS\cup\lbrace B\cup \lbrace x\rbrace \rbrace$
+%				\Else
+%					\If {\textbf{not} accepted}
+%						\State $C \Leftarrow C\setminus x$
+%					\EndIf
+%				\EndIf
+%			\EndFor
+%			\If {$x=x_m$}
+%				\State ($B$,$C$) $\Leftarrow$ \textsc{elimGAP}($B$,$x$)
+%			\EndIf
+%			\ForAll{$x \in C$} 
+%				\State $C \Leftarrow C\setminus x$
+%				\State \textsc{traverse}($B\cup \lbrace x\rbrace$,$C$)
+%			\EndFor
+%			\EndProcedure
+%		\end{algorithmic}
+%		\end{multicols}
+%	\end{algorithm}    
 	
 	\begin{table}[htb]
 		\begin{minipage}{.4\linewidth}
@@ -189,7 +191,7 @@
 		 	\end{tabular}       
 		\end{minipage}  
 		\begin{minipage}{.59\linewidth}
-			\caption{Simplified Binary Discernibility Matrix.} \label{tab:SBDM}
+			\caption{Binary Discernibility Matrix.} \label{tab:SBDM}
 			\centering
 			\begin{tabular}{cccccc}
 				$x_0$ & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ \\
@@ -203,6 +205,65 @@
 			\bigskip
 		\end{minipage}    
  	\end{table}
+ 
+ The \textit{Binary Discernibility Matrix} is a binary table representing the discernibility sets between pairs of objects. In the binary discernibility matrix, columns are single condition attributes and rows represent pairs of objects belonging to different classes. The discernibility element $m(i, j, c)$ for two objects $u_i$ and $u_j$ and a single condition attribute $c \in C$ is given in a binary representation, such that:
+ 
+ \begin{equation}
+ m(i, j, c)=\left\lbrace\begin{array}{cl}
+ 1 & \mathrm{for~~}c(u_i) \neq c(u_j)\\
+ 0 & \mathrm{otherwise} 
+ \end{array}\right.
+ \end{equation} 
+ 
+ Table~\ref{tab:SBDM} shows the binary discernibility matrix for the dataset of Table~\ref{tab:dataset}. Most algorithms for reduct computation, operate over a simplified binary discernibility matrix (\textit{SBDM}); which can be obtained eliminating supersets and repeated rows \cite{Yao09}. In the example shown in Table~\ref{tab:SBDM}, there are not possible reductions, so it is also a \textit{SBDM}.
+ 
+ 	\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+ 	\renewcommand{\algorithmicensure}{\textbf{Output:}}
+ 	%\begin{multicols}{2}
+ 	\begin{algorithm} \label{alg:fast-BR}
+ 		\footnotesize
+ 		\caption{Fast--BR.}
+ 		\label{alg:RSDM}
+ 		\begin{multicols}{2}
+ 			\begin{algorithmic}[1]
+ 				\Require $SBDM$
+ 				\Ensure $RS$ - set of all reducts
+ 				\State $i \Leftarrow 0$, $RS \Leftarrow \emptyset$
+ 				\While {$SBDM(0,i) \neq 0$}
+ 				\State reduct, accepted $\Leftarrow$ \textsc{evaluate}($\emptyset$,$x_i$)
+ 				\If {reduct}
+ 				\State $RS \Leftarrow RS\cup\lbrace x_i \rbrace$
+ 				\Else
+ 				\State \textsc{traverse}($\lbrace x_i \rbrace$, $\lbrace x_{i+1},..., x_m\rbrace$)
+ 				\EndIf
+ 				\State $i \Leftarrow i+1$
+ 				\EndWhile
+ 				
+ 				\Procedure {traverse}{$B$,$C$}
+ 				\ForAll{$x \in C$} 
+ 				\State reduct, accepted $\Leftarrow$ \textsc{evaluate}($B$,$x$)
+ 				\If {reduct}
+ 				\State $C \Leftarrow C\setminus x$
+ 				\State $RS \Leftarrow RS\cup\lbrace B\cup \lbrace x\rbrace \rbrace$
+ 				\Else
+ 				\If {\textbf{not} accepted}
+ 				\State $C \Leftarrow C\setminus x$
+ 				\EndIf
+ 				\EndIf
+ 				\EndFor
+ 				\If {$x=x_m$}
+ 				\State ($B$,$C$) $\Leftarrow$ \textsc{elimGAP}($B$,$x$)
+ 				\EndIf
+ 				\ForAll{$x \in C$} 
+ 				\State $C \Leftarrow C\setminus x$
+ 				\State \textsc{traverse}($B\cup \lbrace x\rbrace$,$C$)
+ 				\EndFor
+ 				\EndProcedure
+ 			\end{algorithmic}
+ 		\end{multicols}
+ 	\end{algorithm}    
+ 
+ Algorithm~\ref{alg:fast-BR} shows a simplified pseudocode of fast--BR. This algorithm is based on three main concepts: contribution, exclusion and gap elimination~\cite{Lias13}. The search for reducts, starts with an empty candidate subset ($B$) and all the attributes in the remaining set ($C$). The \textsc{evaluate} procedure, uses the acceptance and exclusion properties to determine whether the current set ($B\cup \lbrace x\rbrace$) is a reduct, and whether the current attribute ($x$) is accepted as a potential element of a reduct. The recursive procedure \textsc{traverse}\footnote{The algorithm presented in~\cite{Lias13} has actually a secuential implementation.}, is called using the current candidate and all the accepted attributes. Each time the deepest level of the recursion is reached ($x=x_m$), the algorithm searches for a gap to eliminate it.
  
  \begin{table}[htb]
  		\caption{Candidates evaluated by fast--BR on the \textit{SBDM} shown in Table~\ref{tab:SBDM}.} \label{tab:cand}
@@ -220,6 +281,7 @@
  	 	\end{tabular}             
   	\end{table}	
  	
+ 	In order to illustrate the operation of fast--BR, we present in Table~\ref{tab:cand} the candidates evaluated by this algorithm over the \textit{SBDM} shown in Table~\ref{tab:SBDM}. A total of 21 iterations are needed for this example, and two reducts were found on iterations 9 and 21. 
  	
 	% First Tree
 	\begin{figure}[htb]
@@ -253,6 +315,8 @@
 		\caption{Evaluation of supersets of $x_0$.}
 		\label{fig:tree1}
 	\end{figure}
+	
+	Figures~\ref{fig:tree1} (iterations 1--10) and~\ref{fig:tree2} (iterations 11--21) show a tree representation of the algorithm execution for this example. The sequence of evaluated candidates from Table~\ref{tab:cand}, can be used to understand the traversal of the tree representation shown in Figures~\ref{fig:tree1} and~\ref{fig:tree2}. For the following explanation, the nodes which have a gray background should be ignored. Lets begin with the tree shown in Figure~\ref{fig:tree1}, the first evaluation is done over $x_0$. Then, the next level of the tree is created with all the following attributes as children\footnote{The order of attribute is the one that they have in the \textit{SBDM}.}. Each child node is evaluated using the set of all the nodes in the path to its parent as candidate subset. Doing so in the second level of the tree in Figure~\ref{fig:tree1}, $x_1$ and $x_4$ are not accepted (labeled as NA). For each accepted attribute, a new level is constructed with its following accepted attributes as children.
 	
 	% Second Tree
 	\begin{figure}[htb]
