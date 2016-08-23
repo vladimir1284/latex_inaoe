@@ -113,14 +113,14 @@
 %  using only those features in a reduct, is a reduced representation of the original data that allows obtaining  
 %  the same classification quality than the original information system. 
   However, the main restriction in practical applications of RST is that computing all reducts of an information 
-  system has an exponential complexity \citep{Skowron92}. Therefore an active research line is the development 
+  system has exponential complexity \citep{Skowron92}. Therefore an active research line is the development 
   of fast algorithms for reduct computation.
   
-  Several attempts to speed up the reduct computation have been reported. Many of these algorithms are based on some heuristics. The main drawback of this approach is that these algorithms do not necessarily return the complete set of reducts of an information system, and sometimes they may obtain super-reducts (non minimal subsets). Another way to speed up reduct computation is parallelization \citep{Strakowski08}. There are also interesting alternatives such as the use of a parallel version of genetic algorithms \citep{Wroblewski98} and the transformation of the reduct computation problem to the well known SAT problem \citep{Jensen14}.  
+  Several attempts to speed up reduct computation have been reported. Many of these algorithms are based on some heuristics. The main drawback of this approach is that these algorithms do not necessarily return the complete set of reducts of an information system, and sometimes they may obtain super-reducts (non minimal subsets). Another way to speed up reduct computation is parallelization \citep{Strakowski08}. There are also interesting alternatives such as the use of a parallel version of genetic algorithms \citep{Wroblewski98} and the transformation of the reduct computation problem to the well known SAT problem \citep{Jensen14}.  
   
   The main objective in our research is the \emph{development of new algorithms for computing reducts in  	information systems; which will be comparable to state of the art algorithms in most datasets, and faster in some specific kinds of datasets}. 
   
-  Recently the RST reducts have been related to the typical testors (TT) from the logical combinatorial approach 
+  Recently, RST reducts have been related to typical testors (TT) from the logical combinatorial approach 
   to pattern recognition \citep{Lazo15}. Testor Theory was created by \cite{Cheguis55} as a tool for analysis of 
   problems connected with control and diagnosis of faults in circuits. 
   Testor Theory can be used for feature selection as shown in \citep{Ruiz08} and \citep{Martinez01}. Algorithms for
@@ -132,17 +132,17 @@
   families of algorithms in the same arena.
   
   
-  The rest of the document is structured as follows. In the section~\ref{previous_results} we briefly expose the results of our research over the previous years. Then, in the section~\ref{current_results}, we make a detailed description of our advances in the evaluation period. Finally, in the section~\ref{sec_schedule}, we present the main task to be accomplished in the next period and our PhD research schedule.
+  The rest of the document is structured as follows. In the section~\ref{previous_results} we briefly expose the results of our research over the previous years. Then, in the section~\ref{current_results}, we make a detailed description of our advances in the second year of the PhD. Finally, in the section~\ref{sec_schedule}, we present the main tasks to be accomplished in the next period and our PhD research schedule.
   
   \section{Results of the previous years}\label{previous_results}
   
   The first step of our methodology includes the critical study of the most recent and fastest algorithms for computing reducts. In this direction, we started studying the hardware implementations of algorithms for computing typical testors. \cite{Rojas12} presented a hardware-software platform for computing typical testors, based on the BT algorithm, that included a module for eliminating most of the non typical testors before transferring them to a host software application for final filtering. The main disadvantages of this approach are the huge amount of data that must be transferred to the PC and the extra cost of the final filtering stage in the software component.  For this reason, we developed a new hardware module for eliminating all non typical testors on the hardware	component; reducing the amount of data that must be transferred to the PC and eliminating the final filtering	stage. 	This new module reduces the runtime of the architecture, and it can be used together with any algorithm for computing typical testors implemented on an FPGA device. This result was presented in the ``2014 International Conference on ReConFigurable Computing and FPGAs (ReConFig)"  \citep{Rodriguez14}. 
   
-  As a next step in our research, we presented a hardware implementation of the CT\_EXT algorithm, which is one of the most recent and fastest algorithms reported in the literature. After studying the work in \citep{Rojas12} we designed and implemented a new hardware architecture that traverses the search space in a different order than that one presented in \citep{Rojas07, Rojas12,Rodriguez14}. This strategy evaluates less	candidate subsets than previous architectures, which results in lower runtime. Moreover, unlike software versions of CT\_EXT \citep{Sanchez07, Sanchez10}, this platform evaluates a candidate every clock cycle, which leads to a faster execution. The runtime gain of this new hardware software platform is shown throughout experiments over synthetic datasets. This result was reported in the journal ``Expert Systems with Applications"  \citep{Rodriguez15}.
+  As next step in our research, we presented a hardware implementation of the CT\_EXT algorithm, which is one of the most recent and fastest algorithms reported in the literature. After studying the work in \citep{Rojas12} we designed and implemented a new hardware architecture that traverses the search space in a different order than that one presented in \citep{Rojas07, Rojas12,Rodriguez14}. This strategy evaluates less	candidate subsets than previous architectures, which results in lower runtime. Moreover, unlike software versions of CT\_EXT \citep{Sanchez07, Sanchez10}, this platform evaluates a candidate every clock cycle, which leads to a faster execution. The runtime gain of this new hardware software platform is shown throughout experiments over synthetic datasets. This result was reported in the journal ``Expert Systems with Applications"  \citep{Rodriguez15}.
   
-  Recently, we proposed a new algorithm for reduct computation (GCreduct). GCreduct finds reducts in the \textit{SBDM} computed from a dataset. This algorithm explores the search space evaluating some candidates and avoiding others, based on previous evaluations. Unlike other works \citep{WangP07,Lias13} where candidate evaluation is performed through operations with a high cost, GCreduct uses a simpler candidate evaluation, based on attribute contribution and gap elimination, to reduce the algorithm runtime. 
+  Additionally, we proposed a new algorithm for reduct computation (GCreduct). GCreduct finds reducts in the \textit{SBDM} computed from a dataset. This algorithm explores the search space evaluating some candidates and avoiding others, based on previous evaluations. Unlike other works \citep{WangP07,Lias13} where candidate evaluation is performed through operations with a high cost, GCreduct uses a simpler candidate evaluation, based on attribute contribution and gap elimination, which allows reducing its runtime. 
   
-  The period under evaluation was mainly devoted to the experiments and writing of the paper to report this algorithm. Thus, in the next section, we include the evaluation and discussion of this paper.
+  The experimental evaluation of GCreduct and the writing of the paper reporting this algorithm was mainly performed during the second year. Thus, in the next section, we include the evaluation and discussion of this paper.
 
 
 \section{Results of the Current Period}\label{current_results}
@@ -151,14 +151,14 @@
   	\itemsep0em 
   	\item Literature review.
   	%\item Critical study of algorithms for computing shortest reducts in information systems.
-  	\item Writing ``A New Algorithm for Reduct Computation based on Gap Elimination and Attribute Contribution" and summiting it to journal Information Sciences\footnote{Currently ``Under Review".}.
+  	\item Writing of the paper ``A New Algorithm for Reduct Computation based on Gap Elimination and Attribute Contribution", submitted to the Information Sciences journal\footnote{Currently ``Under Review".}.
   	\item Partially writing the PhD dissertation.
   \end{itemize}
   
 \subsection{GCreduct: a New Algorithm for Reduct Computation based on Gap Elimination and Attribute\\ Contribution}\label{evaluation}
-  In this section, we evaluate GCreduct over standard datasets \citep{Bache13} and synthetic \textit{Simplified Binary Discernibility Matrices} (\textit{SBDMs}). The \textit{SBDM} is a reduced representation of the relevant information, for reduct computation, in a dataset. We made a comparative analysis versus RGonCRS, fast--CT\_EXT, and fast--BR; which are the most recent and fastest algorithms for reduct computation reported in the literature. We used in all cases the author's implementation of the algorithms. All experiments were run on a Core i7-5820K Intel processor at 3.30GHz, with 32GB in RAM, running GNU/Linux.
+  In this section, we briefly describe the evaluation of GCreduct over standard datasets \citep{Bache13} and synthetic \textit{Simplified Binary Discernibility Matrices} (\textit{SBDMs}). The \textit{SBDM} is a reduced representation of the relevant information, for reduct computation, in a dataset. We made a comparative analysis versus RGonCRS, fast--CT\_EXT, and fast--BR; which are the most recent and fastest algorithms for reduct computation reported in the literature. We used in all cases the author's implementation of the algorithms. All experiments were run on a Core i7-5820K Intel processor at 3.30GHz, with 32GB in RAM, running GNU/Linux.
 
-  Since RGonCRS is implemented in Matlab and it operates directly over the dataset, in the subsection~\ref{sub:matlab}, GCreduct is compared against RGonCRS over standard datasets, using a Matlab implementation of our proposed algorithm. Then, in the subsection~\ref{sub:java} we show a comparative study of GCreduct against fast--CT\_EXT and fast--BR over \textit{SBDMs} computed from standard datasets, using a Java implementation of our proposed algorithm. Finally, in the subsection~\ref{sub:synth} we present a comparative study between fast--CT\_EXT, GCreduct and fast--BR over synthetic \textit{SBDMs}. In this final experiment we explore the algorithms performance regarding the density of 1's of the \textit{SBDM}.
+  Since RGonCRS is implemented in Matlab and it operates directly over the dataset, in the subsection~\ref{sub:matlab}, we present the comparison of  GCreduct against RGonCRS over standard datasets, using a Matlab implementation of our proposed algorithm. Afterwards, in the subsection~\ref{sub:java}, we show a comparative study of GCreduct against fast--CT\_EXT and fast--BR over \textit{SBDMs} computed from standard datasets, using a Java implementation of our proposed algorithm. Finally, in the subsection~\ref{sub:synth}, we present a comparative study between fast--CT\_EXT, GCreduct and fast--BR over synthetic \textit{SBDMs}. In this final experiment, we explore the performance of the algorithms regarding the density of 1's of the \textit{SBDM}.
 
 \subsection{GCreduct vs. RGonCRS}\label{sub:matlab}
   In order to make a fair comparison against RGonCRS, we used its author's implementation in Matlab and we implemented GCreduct in Matlab as well. For this experiment we selected 15 datasets from the UCI machine learning repository \citep{Bache13}. Objects with missing data were removed as in \citep{WangP07}. For numerical attributes we used the Weka's equal width discretization filter with 10 bins, as describe in \cite{Flores2010}. This experiment was run using MATLAB R2015a.
@@ -224,7 +224,7 @@
 	\end{tabular}
 \end{table}
 
-  The main conclusion that can be extracted from results in Table~\ref{tab:java} is that fast--CText has a worse performance in comparison with fast--BR and GCreduct. Even in the only case where fast--CText was the fastest, the runtime difference with GCreduct was insignificant. Fast--BR and GCreduct have 7 wins each one; thus, we cannot conclude a clearly better algorithm. Therefore, in the next subsection we show another experiment with different synthetic \textit{SBDMs}.
+  The main conclusion that can be extracted from the results in Table~\ref{tab:java} is that fast--CText has a worse performance in comparison with fast--BR and GCreduct. Even in the only case where fast--CText was the fastest, the runtime difference with GCreduct was insignificant. Fast--BR and GCreduct have 7 wins each one; thus, we cannot conclude a clearly better algorithm. Therefore, in the next subsection we show another experiment with different synthetic \textit{SBDMs}.
 
 \subsection{Evaluation Over Synthetic \textit{SBDMs}}\label{sub:synth}
 
@@ -242,7 +242,7 @@
 
   From Figure~\ref{fig:scattDensity}, we can see that the fastest algorithm for matrices with density under 0.36 was GCreduct, fast--BR was the fastest for matrices with density between 0.36 and 0.66, and the three algorithms shown similar performance for matrices with density above 0.66. The fact that high density \textit{SBDMs} do not constitute a complex computational task for reduct computation \citep{Rojas12} is clearly visible in Figure~\ref{fig:scattDensity}. For this reason, a detailed analysis in this region lacks of relevance.
 
-  In order to explain the line delimiting those \textit{SBDMs} for which GCreduct is faster than fast--BR (densities under 0.36), we must go deeply into the main difference between these algorithms. In GCreduct, we compute the exclusion mask and evaluate the attribute exclusion, for those candidates detected as super-reducts; in order to verify whether they are reducts. In fast--BR, on the other hand, the attribute exclusion is evaluated for each candidate with a contributing attribute. The evaluation of the attribute exclusion is the part with the highest computational complexity in both algorithms ($\Theta (nm)$). The attribute exclusion occurs when there is at least one column in the sub-matrix of the \textit{SBDM}, considering only the attributes in the current candidate, that can be removed without increasing the number of zero rows in this sub-matrix. The exclusion is more frequent in matrices with a higher density of 1's, since it is given by cumulative OR operations. The higher cost of candidate evaluation in fast--BR pays off for \textit{SBDMs} with higher densities (the limit identified from our experiment is 0.36), because supersets of candidates with attribute exclusion are excluded from subsequent evaluations. Take for instance the extreme case of the identity matrix, where there is no exclusion at all, since every attribute is indispensable to form a reduct. For this kind of \textit{SBDMs}, GCreduct needs to evaluate as many candidates as fast--BR but the former makes a single verification for exclusion with the set of all attributes. On the other hand, fast--BR verifies the exclusion for each candidate, which leads to a higher computational cost.
+  In order to explain the line delimiting those \textit{SBDMs} for which GCreduct is faster than fast--BR (densities under 0.36), we must go deeply into the main difference between these algorithms. In GCreduct, we compute the exclusion mask and evaluate the attribute exclusion, only for those candidates detected as super-reducts; in order to verify whether they are reducts. In fast--BR, on the other hand, the attribute exclusion is evaluated for each candidate with a contributing attribute, mo matters whether it is a reduct. The evaluation of the attribute exclusion is the part with the highest computational complexity in both algorithms ($\Theta (nm)$). The attribute exclusion occurs when there is at least one column in the sub-matrix of the \textit{SBDM}, considering only the attributes in the current candidate, that can be removed without increasing the number of zero rows in this sub-matrix. The exclusion is more frequent in matrices with a higher density of 1's, since it is given by cumulative OR operations. The higher cost of candidate evaluation in fast--BR pays off for \textit{SBDMs} with higher densities (the limit identified from our experiment is 0.36), because supersets of candidates with attribute exclusion are excluded from subsequent evaluations. Take for instance the extreme case of the identity matrix, where there is no exclusion at all, since every attribute is indispensable to form a reduct. For this kind of \textit{SBDMs}, GCreduct needs to evaluate as many candidates as fast--BR but our proposal makes a single verification for exclusion with the set of all attributes. On the other hand, fast--BR verifies the exclusion for each candidate, which leads to a higher computational cost.
 
   Friedman tests and post hoc Nemenyi-Damico-Wolfe-Dunn tests show that GCreduct was significantly faster (\textit{p--value} $< 10^{-16}$) than fast--CT\_EXT for low (under 0.36) and medium (between 0.36 and 0.66) density matrices. In relation to fast--BR, GCreduct showed a significant runtime reduction (\textit{p--value} $< 10^{-16}$) for low density matrices while it was significantly slower (\textit{p--value} $< 10^{-16}$) for medium density matrices. From this analysis, we conclude that GCreduct is the best algorithm for low density matrices; while fast--BR is the best for medium density matrices. For high (over 0.66) density matrices any algorithm can be used since, as we already commented, computing reducts on this kind of matrices does not constitute a complex computational task. Moreover, from these conclusions, a great advantage can be taken of selecting the appropriate algorithm for each dataset. 
 
@@ -274,19 +274,20 @@
 	\end{tabular}
 \end{table}
 
-  In Table~\ref{tab:density} we included the density of 1's of \textit{SBDMs} to the results shown in Table~\ref{tab:java}. We also sorted the datasets in Table~\ref{tab:density} in ascending order of the density of 1's in their associated \textit{SBDM}. Although this is a small heterogeneous sample, the rule obtained from synthetic data can be verified in this table. For datasets with densities close to the boundary of 0.36 we cannot conclude a fastest algorithm as it can be seen in Table~\ref{tab:density}. However, for those datasets which have a \textit{SBDM} with density clearly under 0.36, GCreduct performed faster. In the same way, fast-BR performed faster for those datasets with density clearly above 0.36.
+  In Table~\ref{tab:density} we included the density of 1's of the \textit{SBDMs} used to obtain the results shown in Table~\ref{tab:java}. We also sorted the datasets in Table~\ref{tab:density} in ascending order according to the density of 1's in their associated \textit{SBDM}. Although this is a small heterogeneous sample, the rule obtained from synthetic data can be verified in this table. For datasets with densities close to the boundary of 0.36 we cannot conclude a fastest algorithm as it can be seen in Table~\ref{tab:density}. However, for those datasets which have a \textit{SBDM} with density clearly under 0.36, GCreduct performed faster. In the same way, fast-BR performed faster for those datasets with density clearly above 0.36.
 
-\section{Schedule}\label{sec_schedule}
-  Table~\ref{tab_Schedule} shows the schedule of the main tasks that will be carried out throughout this research. As it can be seen, the executed tasks in the current period correspond to those related in Table~\ref{tab_Schedule}. In the same form, the work to be done in the next evaluation period, is related in the schedule and listed bellow:
+\section{Tasks for the next period}\label{sec_schedule}
+  Table~\ref{tab_Schedule} shows the schedule of the main tasks that will be carried out throughout this research. As it can be seen, the executed tasks in the current period correspond to those related in Table~\ref{tab_Schedule}. In the same form, the work to be done in the next evaluation period is shown in the schedule and listed bellow:
   
   \begin{itemize}
   	\itemsep0em 
   	\item Literature review.
   	\item Critical study of algorithms for computing shortest reducts in information systems.
   	\item Implementation of algorithms for computing shortest reducts in information systems.
-  	\item Experimental studies on algorithms for computing shortest reducts in information systems.
-  	\item Partially writing the PhD dissertation.
+  	\item Experimental study on algorithms for computing shortest reducts in information systems.
+  	\item Continue writing the PhD dissertation.
   \end{itemize}
+  
   
  \begin{table}[h!]
 		\caption{Research schedule (quarterly\protect\footnotemark).} \label{tab_Schedule}
@@ -351,6 +352,7 @@
  	\end{tabular}             
  \end{table}
  
+   Based on the results reported in this document, we can conclude that our goals can be reached into the expected time.
  \footnotetext{Quarters are: [January-April], [May-August] and [September-December]. Schedule starts in 
  			   September 2014, according to the admission of the student in the PhD program.}
 	  	
@@ -360,7 +362,7 @@
 %-------------------------------------------------------------------------------
 % Bibliography
 %-------------------------------------------------------------------------------
-\newpage 
+
 \bibliography{mybib}{}
 \bibliographystyle{authordate1}
 \end{document}
