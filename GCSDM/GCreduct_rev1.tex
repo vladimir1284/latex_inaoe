@@ -225,9 +225,9 @@
 	\begin{enumerate}
 		\item Let $Y=[c_i|Y']$ and $Z=[c_j|Z']$ bet two sorted lists of attributes. Then, $Y \prec Z$ if $i<j$.
 		\item Let $Y=[c_i|Y']$ and $Z=[c_i|Z']$ bet two sorted lists of attributes. Then, $Y \prec Z$ if $Y' \prec Z'$.
-		\item $\forall Y:  [] \prec Y$
+		\item $\forall Y:  [] \prec Y$.
 	\end{enumerate}
-	Herein after, we will refer to this order as the lexicographical order. Lets use the $+$ operator to denote lists concatenation. In this way: $$[c_1,c_3,c_4]+[c_6,c_7]=[c_1,c_3,c_4,c_6,c_7]$$.
+	Herein after, we will refer to this order as the lexicographical order. Lets use the $+$ operator to denote lists concatenation. In this way: $$[c_1,c_3,c_4]+[c_6,c_7]=[c_1,c_3,c_4,c_6,c_7]$$
 		
 	We say that $L$ is the ordered list of attributes associated to a subset of attributes $B = \lbrace c_{j_0},...,c_{j_s} \rbrace$ if $L = [c_{j_0},...,c_{j_s}]$, where $j_0<\cdots <j_s$ are the positions of their corresponding columns in the \textit{SBDM}.
 	
@@ -591,30 +591,30 @@
 	For this experiment, we implemented our proposed algorithm in Java to make a fair comparison against the Java implementations of fast--CT\_EXT and fast--BR, provided by their authors. The same 15 information systems of our previous experiment were used. The runtime in seconds for the three algorithms are shown in Table~\ref{tab:java}. 
 	
 	\begin{table}[!htb]
-		\centering \footnotesize
+		\centering \scriptsize 
 		\caption{Fast--CText, GCreduct and Fast--BR runtime for standard information systems.}
 		\label{tab:java}
 		\begin{tabular}{|l|r|c|r|c|r|c|}
 			\hline
 			\multicolumn{1}{|c|}{Information}  & \multicolumn{2}{c|}{Fast--CText} & \multicolumn{2}{c|}{Gcreduct} & \multicolumn{2}{c|}{Fast--BR}  \\
 			\cline{2-7}
-			\multicolumn{1}{|c|}{system} & runtime (s) & candidates & runtime (s)  & candidates & runtime (s) & candidates \\
+			\multicolumn{1}{|c|}{system} & runtime (s) & fraction & runtime (s)  & fraction & runtime (s) & fraction \\
 			\hline
-			Chess (kr-vs-kp)          & 7.45          & 622921794 & \textbf{$<$0.01} & 29 & 0.02         & 3683 \\
-			Connect-4                 & 12876.67      & & \textbf{44.23}   & & 160.61         &  \\
-			Credit-g                  & \textbf{0.05} & 235628 & 0.06 & 108660 & 0.12 & 105873 \\
-			Cylinder-bands            & 5.03          & 27245306 & 4.59 & 21548558 & \textbf{0.53}  & 1206002 \\
-			Dermatology               & 16.02         & 258296552 & 12.25            & 147387236 & \textbf{4.62}  & 22112064 \\
-			Diabetes                  & 86.99         & & \textbf{19.48}   & & 23.37          &  \\
-			Flags                     & 1.00          & & \textbf{0.74}    & & 1.06           &  \\
-			Keyword-activity          & 1.22          & & \textbf{0.42}    & & 0.90           &  \\
-			Landsat (train)           & 23797.99      & & \textbf{9949.31} & & 17732.49       &  \\
-			Lung-cancer               & 188.20        & & 133.43           & & \textbf{7.34}  &  \\
-			QSAR-biodeg               & 0.75          & & \textbf{0.19}    & & 0.33           &  \\
-			Sponge                    & 0.63          & & 0.58             & & \textbf{0.14}  &  \\
- 			Student-mat               & 1003.87       & & 929.46           & & \textbf{81.82} &  \\
-			Student-por               & 1874.57       & & 1657.90          & & \textbf{161.35}& \\
-			Waveform                  & 2.11          & & 1.88             & & \textbf{1.64}  & \\
+			Chess (kr-vs-kp) & 7.45          & 9.34E-03 & \textbf{$<$0.01} & \textbf{4.22E-10} & 0.02            & 5.36E-08          \\
+			Connect-4        & 12876.67      & 9.16E-02 & \textbf{44.23}   & 3.02E-04          & 160.61          & \textbf{2.25E-04} \\
+			Credit-g         & \textbf{0.05} & 2.12E-01 & 0.06             & \textbf{1.04E-01} & 0.12            & 1.11E-01          \\
+			Cylinder-bands   & 5.03          & 4.95E-05 & 4.59             & 3.91E-05          & \textbf{0.53}   & \textbf{2.20E-06} \\
+			Dermatology      & 16.02         & 1.18E-02 & 12.25            & 8.58E-03          & \textbf{4.62}   & \textbf{1.34E-03} \\
+			Diabetes         & 86.99         & 1.38E-06 & \textbf{19.48}   & 2.52E-07          & 23.37           & \textbf{1.46E-07} \\
+			Flags            & 1.00          & 3.71E-02 & \textbf{0.74}    & 2.22E-02          & 1.06            & \textbf{1.32E-02} \\
+			Keyword-activity & 1.22          & 1.47E-03 & \textbf{0.42}    & 3.97E-04          & 0.90            & \textbf{2.04E-04} \\
+			Landsat (train)  & 23797.99      & 5.86E-01 & \textbf{9949.31} & \textbf{1.64E-01} & 17732.49        & 2.73E-01          \\
+			Lung-cancer      & 188.20        & 4.27E-08 & 133.43           & 3.08E-08          & \textbf{7.34}   & \textbf{1.17E-09} \\
+			QSAR-biodeg      & 0.75          & 2.24E-05 & \textbf{0.19}    & 3.41E-06          & 0.33            & \textbf{1.66E-06} \\
+			Sponge           & 0.63          & 5.71E-07 & 0.58             & 4.18E-07          & \textbf{0.14}   & \textbf{1.02E-08} \\
+ 			Student-mat      & 1003.87       & 3.47E-01 & 929.46           & 2.97E-01          & \textbf{81.82}  & \textbf{5.63E-02} \\
+			Student-por      & 1874.57       & 5.61E-01 & 1657.90          & 4.64E-01          & \textbf{161.35} & \textbf{9.57E-02} \\
+			Waveform         & 2.11          & 5.73E-01 & 1.88             & \textbf{3.88E-01} & \textbf{1.64}   & 4.67E-01          \\
 			\hline
 		\end{tabular}
 	\end{table}
