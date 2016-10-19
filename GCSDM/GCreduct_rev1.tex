@@ -27,6 +27,10 @@
 \newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 
+% Hyphenation
+\hyphenation{SBDM}
+\hyphenation{SBDMs}
+
 \begin{document}
 
 	\title{A New Algorithm for Reduct Computation based on Gap Elimination and Attribute Contribution}
@@ -588,39 +592,50 @@
 
 \subsection{GCreduct vs. fast--CT\_EXT and fast--BR}\label{sub:java}
 	
-	For this experiment, we implemented our proposed algorithm in Java to make a fair comparison against the Java implementations of fast--CT\_EXT and fast--BR, provided by their authors. The same 15 information systems of our previous experiment were used. The runtime in seconds for the three algorithms are shown in Table~\ref{tab:java}. 
+	For this experiment, we implemented our proposed algorithm in Java to make a fair comparison against the Java implementations of fast--CT\_EXT and fast--BR, provided by their authors. The same 15 information systems of our previous experiment were used. In the second column of Table~\ref{tab:java}, the number of attribute subsets in the search space is shown. This value corresponds to the cardinality of the power set of conditional attributes in the information system. Then, the runtime in seconds and the fraction of evaluated candidates for the three algorithms are shown. The fraction of evaluated candidates is computed as the number of evaluated candidates over the number of attribute subsets in the search space.
 	
 	\begin{table}[!htb]
 		\centering \scriptsize 
 		\caption{Fast--CText, GCreduct and Fast--BR runtime for standard information systems.}
 		\label{tab:java}
-		\begin{tabular}{|l|r|c|r|c|r|c|}
+		\begin{tabular}{|l|c|r|c|r|c|r|c|}
 			\hline
-			\multicolumn{1}{|c|}{Information}  & \multicolumn{2}{c|}{Fast--CText} & \multicolumn{2}{c|}{Gcreduct} & \multicolumn{2}{c|}{Fast--BR}  \\
-			\cline{2-7}
-			\multicolumn{1}{|c|}{system} & runtime (s) & fraction & runtime (s)  & fraction & runtime (s) & fraction \\
+			\multicolumn{1}{|c|}{Information}  & Search &\multicolumn{2}{c|}{Fast--CText} & \multicolumn{2}{c|}{Gcreduct} & \multicolumn{2}{c|}{Fast--BR}  \\
+			\cline{3-8}
+			\multicolumn{1}{|c|}{system} & space & runtime (s) & fraction & runtime (s)  & fraction & runtime (s) & fraction \\
 			\hline
-			Chess (kr-vs-kp) & 7.45          & 9.34E-03 & \textbf{$<$0.01} & \textbf{4.22E-10} & 0.02            & 5.36E-08          \\
-			Connect-4        & 12876.67      & 9.16E-02 & \textbf{44.23}   & 3.02E-04          & 160.61          & \textbf{2.25E-04} \\
-			Credit-g         & \textbf{0.05} & 2.12E-01 & 0.06             & \textbf{1.04E-01} & 0.12            & 1.11E-01          \\
-			Cylinder-bands   & 5.03          & 4.95E-05 & 4.59             & 3.91E-05          & \textbf{0.53}   & \textbf{2.20E-06} \\
-			Dermatology      & 16.02         & 1.18E-02 & 12.25            & 8.58E-03          & \textbf{4.62}   & \textbf{1.34E-03} \\
-			Diabetes         & 86.99         & 1.38E-06 & \textbf{19.48}   & 2.52E-07          & 23.37           & \textbf{1.46E-07} \\
-			Flags            & 1.00          & 3.71E-02 & \textbf{0.74}    & 2.22E-02          & 1.06            & \textbf{1.32E-02} \\
-			Keyword-activity & 1.22          & 1.47E-03 & \textbf{0.42}    & 3.97E-04          & 0.90            & \textbf{2.04E-04} \\
-			Landsat (train)  & 23797.99      & 5.86E-01 & \textbf{9949.31} & \textbf{1.64E-01} & 17732.49        & 2.73E-01          \\
-			Lung-cancer      & 188.20        & 4.27E-08 & 133.43           & 3.08E-08          & \textbf{7.34}   & \textbf{1.17E-09} \\
-			QSAR-biodeg      & 0.75          & 2.24E-05 & \textbf{0.19}    & 3.41E-06          & 0.33            & \textbf{1.66E-06} \\
-			Sponge           & 0.63          & 5.71E-07 & 0.58             & 4.18E-07          & \textbf{0.14}   & \textbf{1.02E-08} \\
- 			Student-mat      & 1003.87       & 3.47E-01 & 929.46           & 2.97E-01          & \textbf{81.82}  & \textbf{5.63E-02} \\
-			Student-por      & 1874.57       & 5.61E-01 & 1657.90          & 4.64E-01          & \textbf{161.35} & \textbf{9.57E-02} \\
-			Waveform         & 2.11          & 5.73E-01 & 1.88             & \textbf{3.88E-01} & \textbf{1.64}   & 4.67E-01          \\
+			Chess (kr-vs-kp) & 6.87E+10 & 7.45          & 9.34E-03 & \textbf{$<$0.01} & \textbf{4.22E-10} & 0.02            & 5.36E-08          \\
+			Connect-4        & 4.40E+12 & 12876.67      & 9.16E-02 & \textbf{44.23}   & 3.02E-04          & 160.61          & \textbf{2.25E-04} \\
+			Credit-g         & 1.05E+06 & \textbf{0.05} & 2.12E-01 & 0.06             & \textbf{1.04E-01} & 0.12            & 1.11E-01          \\
+			Cylinder-bands   & 5.50E+11 & 5.03          & 4.95E-05 & 4.59             & 3.91E-05          & \textbf{0.53}   & \textbf{2.20E-06} \\
+			Dermatology      & 1.72E+10 & 16.02         & 1.18E-02 & 12.25            & 8.58E-03          & \textbf{4.62}   & \textbf{1.34E-03} \\
+			Diabetes         & 5.63E+14 & 86.99         & 1.38E-06 & \textbf{19.48}   & 2.52E-07          & 23.37           & \textbf{1.46E-07} \\
+			Flags            & 5.37E+08 & 1.00          & 3.71E-02 & \textbf{0.74}    & 2.22E-02          & 1.06            & \textbf{1.32E-02} \\
+			Keyword-activity & 6.87E+10 & 1.22          & 1.47E-03 & \textbf{0.42}    & 3.97E-04          & 0.90            & \textbf{2.04E-04} \\
+			Landsat (train)  & 6.87E+10 & 23797.99      & 5.86E-01 & \textbf{9949.31} & \textbf{1.64E-01} & 17732.49        & 2.73E-01          \\
+			Lung-cancer      & 7.21E+16 & 188.20        & 4.27E-08 & 133.43           & 3.08E-08          & \textbf{7.34}   & \textbf{1.17E-09} \\
+			QSAR-biodeg      & 2.20E+12 & 0.75          & 2.24E-05 & \textbf{0.19}    & 3.41E-06          & 0.33            & \textbf{1.66E-06} \\
+			Sponge           & 3.52E+13 & 0.63          & 5.71E-07 & 0.58             & 4.18E-07          & \textbf{0.14}   & \textbf{1.02E-08} \\
+ 			Student-mat      & 2.15E+09 & 1003.87       & 3.47E-01 & 929.46           & 2.97E-01          & \textbf{81.82}  & \textbf{5.63E-02} \\
+			Student-por      & 2.15E+09 & 1874.57       & 5.61E-01 & 1657.90          & 4.64E-01          & \textbf{161.35} & \textbf{9.57E-02} \\
+			Waveform         & 2.10E+06 & 2.11          & 5.73E-01 & 1.88             & \textbf{3.88E-01} & \textbf{1.64}   & 4.67E-01          \\
 			\hline
 		\end{tabular}
 	\end{table}
 
     The main conclusion that can be extracted from results in Table~\ref{tab:java} is that fast--CText has a worse performance in comparison with fast--BR and GCreduct. Even in the only case where fast--CText was the fastest, the runtime difference with GCreduct was insignificant. Fast--BR and GCreduct have 7 wins each one; thus, we cannot conclude a clearly better algorithm. Therefore, in the next subsection we show another experiment with different synthetic \textit{SBDMs}.
+					
+	\begin{figure}[htb]
+		\begin{center}
+			\includegraphics[height=8cm]{candidates.eps}
+		\end{center}
+		\caption{GCreduct fraction of evaluated candidates vs. the number of attributes of the information systems.}
+		\label{fig:candidates}
+	\end{figure}
 	
+	In Table~\ref{tab:java}, we can corroborate that fast--BR evaluates fewer candidates than fast--CText and GCreduct in most cases, as we said above. However, by it self, the evaluation of fewer candidates does not mean a lower runtime, as it can be seen in Table~\ref{tab:java}. Another interesting fact about the fraction of evaluated candidates of these algorithms is their decrease regarding the number of attributes in the information system. To illustrate this point, in Figure~\ref{fig:candidates}, we show the fraction of candidates evaluated by GCreduct, as a function of the number of attributes. Noting that in Figure~\ref{fig:candidates} we used a logarithmic ordinate axis, it is easy to see that there is an exponential reduction of this fraction regarding the number of attributes.
+		
+		
 \subsection{Evaluation Over Synthetic \textit{SBDMs}}\label{sub:synth}
 
 	Previous studies \citep{Rojas12,Lias13,Rodriguez15}, categorize the \textit{SBDMs} depending on the \emph{density of 1's} they have; i.e. the number of ones divided by the number of cells of the \textit{SBDM}. In order to explore the performance of GCreduct, fast--CT\_EXT and fast--BR regarding the density of 1's of the \textit{SBDM}; we conduct another experiment over 500 randomly generated \textit{SBDMs} with 2000 rows and 30 columns. The size of these matrices was selected in order to keep reasonable runtime for the three algorithms. Our 500 \textit{SBDMs} were generated with densities of 1's uniformly distributed in the range (0.20--0.80) using a step of 0.04. 
@@ -639,7 +654,7 @@
 		
 	In order to explain the line delimiting those \textit{SBDMs} for which GCreduct is faster than fast--BR (densities under 0.36), we must go deeply into the main difference between these algorithms. In GCreduct, we compute the exclusion mask and evaluate the attribute exclusion, using proposition~\ref{prop:exclude}, for those candidates detected as super-reducts; in order to verify whether they are reducts. In fast--BR, on the other hand, the proposition~\ref{prop:exclude} is evaluated for each candidate with a contributing attribute. The evaluation of the attribute exclusion is the part with the highest computational complexity in both algorithms ($\Theta (nm)$). The attribute exclusion occurs when there is at least one column in the sub-matrix of the \textit{SBDM}, considering only the attributes in the current candidate, that can be removed without increasing the number of zero rows in this sub-matrix. The exclusion is more frequent in matrices with a higher density of 1's, since it is given by cumulative OR operations. The higher cost of candidate evaluation in fast--BR pays off for \textit{SBDMs} with higher densities (the limit identified from our experiment is 0.36), because supersets of candidates with attribute exclusion are excluded from subsequent evaluations. Take for instance the extreme case of the identity matrix, where there is no exclusion at all, since every attribute is indispensable to form a reduct. For this kind of \textit{SBDMs}, GCreduct needs to evaluate as many candidates as fast--BR but the former makes a single verification for exclusion with the set of all attributes. On the other hand, fast--BR verifies the exclusion for each candidate, which leads to a higher computational cost.
 	
-	Friedman tests and post hoc Nemenyi-Damico-Wolfe-Dunn tests show that GCreduct was significantly faster (\textit{p--value} $< 10^{-16}$) than fast--CT\_EXT for low (under 0.36) and medium (between 0.36 and 0.66) density matrices. In relation to fast--BR, GCreduct showed a significant runtime reduction (\textit{p--value} $< 10^{-16}$) for low density matrices while it was significantly slower (\textit{p--value} $< 10^{-16}$) for medium density matrices. From this analysis, we conclude that GCreduct is the best algorithm for low density matrices; while fast--BR is the best for medium density matrices. For high (over 0.66) density matrices any algorithm can be used since, as we already commented, computing reducts on this kind of matrices does not constitute a complex computational task. Moreover, from these conclusions, a great advantage can be taken of selecting the appropriate algorithm for each information system. 
+	Friedman tests and post hoc Nemenyi-Damico-Wolfe-Dunn tests show that GCreduct was significantly faster (\textit{p--value} $< 10^{-16}$) than fast--CT\_EXT for low (under 0.36) and medium (between 0.36 and 0.66) density matrices. In relation to fast--BR, GCreduct showed a significant runtime reduction (\textit{p--value} $< 10^{-16}$) for low density matrices while it was significantly slower (\textit{p--value} $< 10^{-16}$) for medium density matrices. From this analysis, we conclude that GCreduct is the best algorithm for low density matrices; while fast--BR is the best for medium density matrices. For high (over 0.66) density matrices any algorithm can be used since, as we already commented, computing reducts on this kind of matrices does not constitute a complex computational task. Moreover, from these conclusions, a great advantage can be taken of selecting the appropriate algorithm for each information system. Furthermore, the density of 1's can be computed a priori with a relative low computational cost.
 		
 	\begin{table}[htb]
 		\centering
@@ -671,7 +686,7 @@
 	
 	In Table~\ref{tab:density} we included the density of 1's of \textit{SBDMs} to the runtime shown in Table~\ref{tab:java}. We also sorted the information systems in Table~\ref{tab:density} in ascending order of the density of 1's in their associated \textit{SBDM}. Although this is a small heterogeneous sample, the rule obtained from synthetic data can be verified in this table. For information systems with densities close to the boundary of 0.36 we cannot conclude a fastest algorithm as it can be seen in Table~\ref{tab:density}. However, for those information systems which have a \textit{SBDM} with density clearly under 0.36, GCreduct performed faster. In the same way, fast-BR performed faster for those information systems with density clearly above 0.36.
 	
-	The the density of 1's of the \textit{SBDM} is not the only parameter controlling the relative performance of these algorithms. This fact can be verified in Figure~\ref{fig:scattDensity} where we can see an overlapping of algorithms runtime for the same density. Thus, we may infer that the distributions of 1's within the \textit{SBDM} has a significant influence also. Several measures can be studied to account this influence although this study is out of the scope of this paper. The main of the density of 1's is that it can be computed a priori with a relative low computational cost.
+	The the density of 1's of the \textit{SBDM} is not the only parameter controlling the relative performance of these algorithms. This fact can be verified in Figure~\ref{fig:scattDensity}, where the vertical bars account for the variations of the runtime of different \textit{SBDMs} which have the same density. Thus, we may infer that the distribution of 1's within the \textit{SBDM} has a significant influence also. Several measures can be considered to account this influence, which deserves a deeper study. However, for density values aside 0.36 this variations have not effect on the determination of the fastest algorithm, as it can be seen in Figure~\ref{fig:scattDensity}. 
 
 \section{Conclusions}\label{conclusions}
 	In this work, we presented a new algorithm, GCreduct, for computing all reducts of information systems. In our proposed algorithm, the search space is traversed evaluating some candidate subsets and discarding others, based on previous evaluations. Algorithms reported in the literature use operations with a high cost for candidate evaluation in order to reduce the number of evaluated candidates. The main contribution of our proposal, on the other hand, is the use of simpler operations for candidate evaluation, based on the pruning properties of gap elimination and attribute contribution, which allows to reduce the runtime for reduct computation. 
