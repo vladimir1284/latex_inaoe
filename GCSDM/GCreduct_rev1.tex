@@ -48,7 +48,7 @@
 				 Circv. Nte. km 5$\frac{1}{2}$, Camag\"{u}ey, Cuba}
 	
 	\begin{abstract}
-		Attribute reduction is a key aspect of Rough Set Theory.  Finding the complete set of reducts is important for solving practical problems such as the assessment of attribute relevance, multi--objective 		cost--sensitive attribute reduction and dynamic reduct computation. The main limitation in the application of Rough Set methods is that finding all reducts of an information system has exponential complexity regarding the number of attributes. Several algorithms have been reported to reduce the cost of reduct computation. Unfortunately, most of these algorithms relay on high cost operations for candidate evaluation. Therefore, in this paper we propose a new algorithm for computing all reducts of an information system, based on the pruning properties of \textit{gap  elimination} and \textit{attribute contribution}, by using binary cumulative operations in order to reduce the algorithm runtime. Finally, the proposed algorithm is evaluated and compared against other state of the art algorithms, over synthetic and standard information systems.
+		Attribute reduction is a key aspect of Rough Set Theory.  Finding the complete set of reducts is important for solving practical problems such as the assessment of attribute relevance, multi--objective 		cost--sensitive attribute reduction and dynamic reduct computation. The main limitation in the application of Rough Set methods is that finding all reducts of an information system has exponential complexity regarding the number of attributes. Several algorithms have been reported to reduce the cost of reduct computation. Unfortunately, most of these algorithms relay on high cost operations for candidate evaluation. Therefore, in this paper we propose a new algorithm for computing all reducts of an information system, based on the pruning properties of \textit{gap  elimination} and \textit{attribute contribution}, by using binary cumulative operations in order to reduce the algorithm runtime. Finally, the proposed algorithm is evaluated and compared against other state of the art algorithms, over synthetic and real information systems.
 	\end{abstract}
 	
 	\begin{keyword}
@@ -163,21 +163,28 @@
   \end{table}
 
 \subsection{Simplified Binary Discernibility Matrix}\label{sect_SBDM}
-  The \textit{Simplified Binary Discernibility Matrix} (\textit{SBDM}) is a reduced version of the binary discernibility matrix after applying absorption laws. For this purpose, we represent rows in the Binary Discernibility Matrix as binary words. An OR operation is evaluated over every pair of rows, and one of the two rows is eliminated if it is equal to the resultant binary word. Reducts of an information system, can be computed from this reduced matrix \citep{Yao09}. Table~\ref{tab:SBDM1} shows the \textit{SBDM} from the binary discernibility matrix in Table~\ref{tab_BDM}.
-  
-     \begin{table}[htb]
-		\caption{Simplified Binary Discernibility Matrix of the Binary Discernibility Matrix in Table~\ref{tab_BDM}.}
-		\centering
- 	\begin{tabular}{ccccccc}\label{tab:SBDM1}
-            $c_0$ & $c_1$ & $c_2$ & $c_3$ & $c_4$ & $c_5$ & $c_6$\\
-        		\hline
-        		0&1&0&1&0&0&0\\
-        		1&0&0&0&0&0&0\\
-        		0&0&0&0&0&0&1\\
-        		0&0&1&0&1&0&0\\
-        		0&0&0&0&0&1&0\\
- 	\end{tabular}             
- \end{table}  
+  The \textit{Simplified Binary Discernibility Matrix} (\textit{SBDM}) is a reduced version of the binary discernibility matrix after applying absorption laws. 
+    
+  \begin{table}[htb]
+	\caption{Simplified Binary Discernibility Matrix of the Binary Discernibility Matrix in Table~\ref{tab_BDM}.}
+	\centering
+   	\begin{tabular}{ccccccc}\label{tab:SBDM1}
+              $c_0$ & $c_1$ & $c_2$ & $c_3$ & $c_4$ & $c_5$ & $c_6$\\
+          		\hline
+          		0&1&0&1&0&0&0\\
+          		1&0&0&0&0&0&0\\
+          		0&0&0&0&0&0&1\\
+          		0&0&1&0&1&0&0\\
+          		0&0&0&0&0&1&0\\
+   	\end{tabular}             
+  \end{table}  
+   
+  \begin{definition}\label{def:basic_row}
+	Let $B_{DM}$ be a binary discernibility matrix and $r_1 \in B_{DM}$ be a row of $B_{DM}$. We say that $r_1$ is a superfluous row of $B_{DM}$ if $\exists r \in B_{DM}$ such that $\exists i | (r(i) < r_1(i)) \wedge \forall i | (r(i) \leq r_1(i))$.
+  \end{definition}
+
+  The \textit{SBDM} is formed excluding all the superfluous rows from the binary discernibility matrix. Reducts of an information system, can be computed from this reduced matrix \citep{Yao09}. Table~\ref{tab:SBDM1} shows the \textit{SBDM} from the binary discernibility matrix in Table~\ref{tab_BDM}.
+
  
  
 \section{Related Work}\label{relatedWork}
@@ -347,7 +354,22 @@
 	
 	When the current candidate includes the last attribute of the information system, the next candidate subset is generated in one of the two following ways: a) If the current candidate is a reduct or it is not a super-reduct, the gap is eliminated by applying the proposition~\ref{prop:gap} or the corollary~\ref{coro:gap} (\textbf{Eliminate GAP}). In this way, subsets of the current candidate are avoided; b) If the current candidate is a super-reduct and it is not a reduct, the last two attributes added to the current candidate are removed and a new one is added (\textbf{Remove Two atts. Add one}).
 	
-	Each time a new candidate is generated, if the column of the \textit{SBDM} corresponding to the leftmost attribute, according to its order in the information system, has a zero in the first row, the algorithm finishes (\textbf{0 in the first row}). Notice that, from this point, the cumulative mask will always have a 0 in the bit corresponding to the first row of the \textit{SBDM}; due to the sorting process described above.
+	Each time a new candidate is generated, if the column of the \textit{SBDM} corresponding to the leftmost attribute, according to its order in the information system, has a zero in the first row, the algorithm finishes (\textbf{0 in the first row}). From this point, the first row of the sub-matrix formed considering only the attributes in the remaining candidates will be a zero row, due to the sorting process described above. Thus, according to the definition~\ref{def:testor} there is not any super-reduct in the remaining search space.
+	
+	\begin{corollary}
+		The algorithm GCreduct finds all the reducts of an information system.
+	\end{corollary}
+	
+	\begin{proof}
+		The algorithm GCreduct, traverses the search space of attribute subsets in the lexicographical order. During the search process, some attribute subsets are evaluated while other are skipped in the following cases:
+		\begin{itemize}
+			\item Supersets of an attribute subset which has a non contributing attribute (proposition~\ref{prop:contrib}).
+			\item Supersets of a super-reduct (which cannot be a reduct based on the condition~\ref{cond_2} of the subsection~\ref{def_reduct}).
+			\item When there is a gap (proposition~\ref{prop:gap}).
+			\item When the column of the \textit{SBDM} corresponding to the leftmost attribute, according to its order in the information system, has a zero in the first row (definition~\ref{def:testor}).
+		\end{itemize} 
+		Since the attribute subsets skipped through the searching process, are certainly not a reduct, we can state that GCreduct finds all the reducts of an information system.
+	\end{proof}
 	
 	%The computational complexity of the sorting process as well as the \textbf{Reduct} step, is $\Theta (nm)$, where $n$ corresponds to the number of columns and $m$ corresponds to the number of rows in the \textit{SBDM}. All other steps have lower complexity. Thus, the computational complexity of a complete cycle is $O (nm)$. However, since reduct computation is an NP--hard problem, the number of cycles has an exponential relation to $n$.
 		
@@ -439,130 +461,152 @@
 		\item The attribute $c$ contributes to $B$ and the current candidate is not a super--reduct; then the current attribute is added to $B$ (line~\ref{line:add1}) and the next attribute in the \textit{SBDM} is loaded to $c$ (line~\ref{line:add1End}). In this way, we simply follow the lexicographical order.
 	\end{enumerate}  
 	
-	In Table~\ref{tab:complexity}, we present a comparative analysis of the time complexity of the four algorithms that we will be evaluating in the next section. In the second column, the operation cost is shown, and the cells to its right show the number of times it is executed in each algorithm. $N_{cand}$ is the number of candidates evaluated for a given information system. $N_{contrib}$ is the number of candidates for which the new attribute contributes with the rest of the attribute subset. $N_{notExcl}$ is the number of candidates for which the new attribute is not exclusive with the rest of the attribute subset. $N_{super}$ is the number of candidates which are super--reduct. Finally, $N_{gap}$ is the number of gap eliminations, which in most cases satisfy $N_{cand}>>N_{gap}$.
+%	In Table~\ref{tab:complexity}, we present a comparative analysis of the time complexity of the four algorithms that we will be evaluating in the next section. In the second column, the operation cost is shown, and the cells to its right show the number of times it is executed in each algorithm. $N_{cand}$ is the number of candidates evaluated for a given information system. $N_{contrib}$ is the number of candidates for which the new attribute contributes with the rest of the attribute subset. $N_{notExcl}$ is the number of candidates for which the new attribute is not exclusive with the rest of the attribute subset. $N_{super}$ is the number of candidates which are super--reduct. Finally, $N_{gap}$ is the number of gap eliminations, which in most cases satisfy $N_{cand}>>N_{gap}$.
+%	
+%	\begin{table}[htb]
+%		\small
+%		\caption{Time complexity comparison.}
+%		\centering \label{tab:complexity}
+%		\begin{tabular}{|l|c|c|c|c|c|}
+%			\hline 
+%			Evaluation & Complexity & Fast--CT\_EXT & RGonCRS & Fast--BR & GCreduct\\
+%			\hline
+%			Contribution    & $\Theta(m)$  & $N_{cand}$ & $N_{cand}$ & $N_{cand}$ & $N_{cand}$ \\
+%			Super-reduct    & $\Theta(m)$  & $N_{contrib}$ & $N_{notExcl}$ & $N_{notExcl}$ & $N_{contrib}$ \\
+%			Exclusion       & $~~\Theta(nm)$ & $N_{super}$ & $N_{contrib}$ & $N_{contrib}$ & $N_{super}$ \\
+%			Gap Elimination & $\Theta(n)~$  & - & - & $N_{gap}$ & $N_{gap}$ \\
+%			\hline
+%		\end{tabular}             
+%	\end{table}  
+%	
+%	In Table~\ref{tab:order}, the relation between the number of evaluations for each algorithm is shown. These relations are extracted from the execution order of these operations within the algorithm. Note that no relation can be extracted between the number of evaluations of two different algorithms for the general case. These relations depends on the particular problem as it will be illustrated in the next section.
+%	
+%	\begin{table}[htb]
+%		\small
+%		\caption{Relations between the numbers of evaluations.}
+%		\centering \label{tab:order}
+%		\begin{tabular}{|l|l|}
+%			\hline 
+%			\multicolumn{1}{|c|}{Evaluation} & \multicolumn{1}{c|}{Relations}\\
+%			\hline
+%			Fast--CT\_EXT & $N_{cand} > N_{contrib} > N_{super}$ \\
+%			RGonCRS       & $N_{cand} > N_{contrib} > N_{notExcl}$ \\
+%			Fast--BR      & $N_{cand} > N_{contrib} > N_{notExcl} $ \\
+%			GCreduct      & $N_{cand} > N_{contrib} > N_{super}$ \\
+%			\hline
+%		\end{tabular}             
+%	\end{table} 
 	
-	\begin{table}[htb]
-		\small
-		\caption{Time complexity comparison.}
-		\centering \label{tab:complexity}
-		\begin{tabular}{|l|c|c|c|c|c|}
-			\hline 
-			Evaluation & Complexity & Fast--CT\_EXT & RGonCRS & Fast--BR & GCreduct\\
-			\hline
-			Contribution    & $\Theta(m)$  & $N_{cand}$ & $N_{cand}$ & $N_{cand}$ & $N_{cand}$ \\
-			Super-reduct    & $\Theta(m)$  & $N_{contrib}$ & $N_{notExcl}$ & $N_{notExcl}$ & $N_{contrib}$ \\
-			Exclusion       & $~~\Theta(nm)$ & $N_{super}$ & $N_{contrib}$ & $N_{contrib}$ & $N_{super}$ \\
-			Gap Elimination & $\Theta(n)~$  & - & - & $N_{gap}$ & $N_{gap}$ \\
-			\hline
-		\end{tabular}             
-	\end{table}  
-	
-	In Table~\ref{tab:order}, the relation between the number of evaluations for each algorithm is shown. These relations are extracted from the execution order of these operations within the algorithm. Note that no relation can be extracted between the number of evaluations of two different algorithms for the general case. These relations depends on the particular problem as it will be illustrated in the next section.
-	
-	\begin{table}[htb]
-		\small
-		\caption{Relations between the numbers of evaluations.}
-		\centering \label{tab:order}
-		\begin{tabular}{|l|l|}
-			\hline 
-			\multicolumn{1}{|c|}{Evaluation} & \multicolumn{1}{c|}{Relations}\\
-			\hline
-			Fast--CT\_EXT & $N_{cand} > N_{contrib} > N_{super}$ \\
-			RGonCRS       & $N_{cand} > N_{contrib} > N_{notExcl}$ \\
-			Fast--BR      & $N_{cand} > N_{contrib} > N_{notExcl} $ \\
-			GCreduct      & $N_{cand} > N_{contrib} > N_{super}$ \\
-			\hline
-		\end{tabular}             
-	\end{table} 
-	
-	In Table~\ref{tab:sample_GCreduct}, we show an example of the execution of GCreduct over the \textit{SBDM} of Table~\ref{tab:SSBDM1}. The columns labeled C, SR and R represent the result of the candidate evaluation on \textbf{C}ontribution, \textbf{S}uper-\textbf{R}educt and \textbf{R}educt conditions, respectively. The columns LA (Last Attribute), $\neg \mathrm{C} \vee \mathrm{SR}$ (\textbf{NOT} Contrib. \textbf{OR} Super Reduct) and $\mathrm{R} \vee \neg \mathrm{SR}$ (Reduct \textbf{OR NOT} Super Reduct) represent the result of the decision blocs on the right side of Figure~\ref{fig:flowchart}, for the candidate generation procedure. Using this information, the reader can follow the example step by step. Notice that the gap elimination occurs after candidates of iterations 7, 11, 16, 23 (reducts) and 19 (not super--reduct).
+	In Table~\ref{tab:sample_GCreduct}, we show an example of the execution of GCreduct over the \textit{SBDM} of Table~\ref{tab:SSBDM1}. The first column enumerates the candidate evaluations. The second column shows the position of the current candidate, according to the lexicographical order. Notice that, for this example, there are 127 attribute subsets in the search space. In the last column, the evaluation of the current candidate and the generation of the next candidate, are commented.
+%	The columns labeled C, SR and R represent the result of the candidate evaluation on \textbf{C}ontribution, \textbf{S}uper-\textbf{R}educt and \textbf{R}educt conditions, respectively. The columns LA (Last Attribute), $\neg \mathrm{C} \vee \mathrm{SR}$ (\textbf{NOT} Contrib. \textbf{OR} Super Reduct) and $\mathrm{R} \vee \neg \mathrm{SR}$ (Reduct \textbf{OR NOT} Super Reduct) represent the result of the decision blocs on the right side of Figure~\ref{fig:flowchart}, for the candidate generation procedure. Using this information, the reader can follow the example step by step. Notice that the gap elimination occurs after candidates of iterations 7, 11, 16, 23 (reducts) and 19 (not super--reduct).
 
 
-%\begin{table}[!htb]
-%	\caption{Execution of GCreduct over the SBDM of Table~\ref{tab:SSBDM1}.}\label{tab:sample_GCreduct}
-%	\centering \scriptsize
-%	\begin{tabular}{|c|l|c|l|c|c|c|l|}
-%		\hline
-%		Iter & \multicolumn{1}{c|}{$B$} & $c$ & \multicolumn{1}{c|}{$B\cup \lbrace c\rbrace$} 
-%		& C & SR & R & \multicolumn{1}{c|}{Comments}\\
-%		\hline
-%		~1 & \{\} 					& 0 & \{$c_0$\} 			    & True & False &   & Add a new attribute.\\
-%		~2 & \{$c_0$\} 				& 1 & \{$c_0,c_1$\}				& True & False &   & Add a new attribute.\\
-%		~3 & \{$c_0,c_1$\} 			& 2 & \{$c_0,c_1,c_2$\}			& True & False &   & Add a new attribute.\\
-%		~4 & \{$c_0,c_1,c_2$\} 		& 3 & \{$c_0,c_1,c_2,c_3$\}		& False &   &   & Remove $c_3$.\\
-%		~5 & \{$c_0,c_1,c_2$\} 		& 4 & \{$c_0,c_1,c_2,c_4$\}		& False &   &   & Remove $c_4$.\\
-%		~6 & \{$c_0,c_1,c_2$\}		& 5 & \{$c_0,c_1,c_2,c_5$\}		& True & False &   & Add a new attribute.\\
-%		~7 & \{$c_0,c_1,c_2,c_5$\}	& 6 & \{$c_0,c_1,c_2,c_5,c_6$\} 	& True & True & True & Eliminate the gap ($c_2$).\\
-%		~8 & \{$c_0,c_1$\} 			& 3 & \{$c_0,c_1,c_3$\}			& False &   &   & Remove $c_3$.\\
-%		~9 & \{$c_0,c_1$\}			& 4 & \{$c_0,c_1,c_4$\}			& True & False &   & Add a new attribute.\\
-%		10 & \{$c_0,c_1,c_4$\}		& 5 & \{$c_0,c_1,c_4,c_5$\}		& True & False &   & Add a new attribute.\\
-%		11 & \{$c_0,c_1,c_4,c_5$\}	& 6 & \{$c_0,c_1,c_4,c_5,c_6$\} 	& True & True & True & Eliminate the gap ($c_1$).\\
-%		12 & \{$c_0$\} 				& 2 & \{$c_0,c_2$\}				& True & False &   & Add a new attribute.\\
-%		14 & \{$c_0,c_2,c_3$\} 		& 4 & \{$c_0,c_2,c_3,c_4$\}		& False &   &   & Remove $c_4$.\\
-%		15 & \{$c_0,c_2,c_3$\}		& 5 & \{$c_0,c_2,c_3,c_5$\}		& True & False &   & Add a new attribute.\\
-%		16 & \{$c_0,c_2,c_3,c_5$\}	& 6 & \{$c_0,c_2,c_3,c_5,c_6$\} 	& True & True & True & Eliminate the gap ($c_3$).\\
-%		17 & \{$c_0,c_2$\} 			& 4 & \{$c_0,c_2,c_4$\}			& False &   &   & Remove $c_4$.\\
-%		18 & \{$c_0,c_2$\}			& 5 & \{$c_0,c_2,c_5$\}			& True & False &   & Add a new attribute.\\
-%		19 & \{$c_0,c_2,c_5$\}		& 6 & \{$c_0,c_2,c_5,c_6$\}		& True & False &   & Eliminate the gap ($c_2$).\\
-%		20 & \{$c_0$\} 				& 3 & \{$c_0,c_3$\}				& True & False &   & Add a new attribute.\\    		
-%		21 & \{$c_0,c_3$\}			& 4 & \{$c_0,c_3,c_4$\}			& True & False &   & Add a new attribute.\\
-%		22 & \{$c_0,c_3,c_4$\}		& 5 & \{$c_0,c_3,c_4,c_5$\}		& True & False &   & Add a new attribute.\\
-%		23 & \{$c_0,c_3,c_4,c_5$\}	& 6 & \{$c_0,c_3,c_4,c_5,c_6$\} 	& True & True & True & Eliminate the gap ($c_0$).\\
-%		\hline
-%		24 & \{\} 					& 1 & \{$c_1$\} 					& 
-%		\multicolumn{4}{p{5cm}|}{GCreduct finishes because $c_1$ has a 0 in the first row of the \textit{SBDM} (line~\ref{line:done})}\\
-%		\hline
-%	\end{tabular}
-%\end{table}
+\begin{table}[!htb]
+	\caption{Execution of GCreduct over the SBDM of Table~\ref{tab:SSBDM1}.}\label{tab:sample_GCreduct}
+	\centering \scriptsize
+	\begin{tabular}{|c|c|l|l|l|}
+		\hline
+		Iter & Pos & \multicolumn{1}{c|}{Candidate} & \multicolumn{1}{c|}{Comments}\\
+		\hline
+		~1 & ~1 & \{$c_0$\} 			    & \multicolumn{1}{p{8.5cm}|}{$c_0$ contributes to \{\} but the candidate is not a super-reduct. Add a new attribute.}\\
+				\hline
+		~2 & ~2 & \{$c_0,c_1$\}				& \multicolumn{1}{p{8.5cm}|}{$c_1$ contributes to \{$c_0$\} but the candidate is not a super-reduct. Add a new attribute.}\\
+				\hline
+		~3 & ~3 & \{$c_0,c_1,c_2$\}			& \multicolumn{1}{p{8.5cm}|}{$c_2$ contributes to \{$c_0,c_1$\} but the candidate is not a super-reduct. Add a new attribute.}\\
+				\hline				
+		~4 & ~4 & \{$c_0,c_1,c_2,c_3$\}		& \multicolumn{1}{p{8.5cm}|}{$c_3$ does not contributes to \{$c_0,c_1,c_2$\}. Remove $c_3$.}\\
+				\hline
+		~5 & 12 & \{$c_0,c_1,c_2,c_4$\}		& \multicolumn{1}{p{8.5cm}|}{$c_4$ does not contributes to \{$c_0,c_1,c_2$\}. Remove $c_4$.}\\
+				\hline
+		~6 & 16 & \{$c_0,c_1,c_2,c_5$\}		& \multicolumn{1}{p{8.5cm}|}{$c_5$ contributes to \{$c_0,c_1,c_2$\} but the candidate is not a super-reduct. Add a new attribute.}\\
+				\hline
+		~7 & 17 & \{$\mathbf{c_0,c_1,c_2,c_5,c_6}$\} & \multicolumn{1}{p{8.5cm}|}{The candidate is a reduct. Since the last attribute ($c_6$) is included, the gap ($c_2$) is eliminated.}\\
+				\hline
+		~8 & 19 & \{$c_0,c_1,c_3$\}			& \multicolumn{1}{p{8.5cm}|}{$c_3$ does not contributes to \{$c_0,c_1$\}. Remove $c_3$.}\\
+				\hline
+		~9 & 27 & \{$c_0,c_1,c_4$\}			& \multicolumn{1}{p{8.5cm}|}{$c_4$ contributes to \{$c_0,c_1$\} but the candidate is not a super-reduct. Add a new attribute.}\\
+				\hline
+		10 & 28 & \{$c_0,c_1,c_4,c_5$\}		& \multicolumn{1}{p{8.5cm}|}{$c_5$ contributes to \{$c_0,c_1,c_4$\} but the candidate is not a super-reduct. Add a new attribute.}\\
+				\hline
+		11 & 29 & \{$\mathbf{c_0,c_1,c_4,c_5,c_6}$\} & \multicolumn{1}{p{8.5cm}|}{The candidate is a reduct. Since the last attribute is included, the gap ($c_1$) is eliminated.}\\
+				\hline
+		12 & 34 & \{$c_0,c_2$\}				& \multicolumn{1}{p{8.5cm}|}{$c_2$ contributes to \{$c_0$\} but the candidate is not a super-reduct. Add a new attribute.}\\
+				\hline
+		13 & 35 & \{$c_0,c_2,c_3$\}	    	& \multicolumn{1}{p{8.5cm}|}{$c_3$ contributes to \{$c_0,c_2$\} but the candidate is not a super-reduct. Add a new attribute.}\\
+				\hline
+		14 & 36 & \{$c_0,c_2,c_3,c_4$\}		& \multicolumn{1}{p{8.5cm}|}{$c_4$ does not contributes to \{$c_0,c_2,c_3$\}. Remove $c_4$.}\\
+				\hline
+		15 & 40 & \{$c_0,c_2,c_3,c_5$\}		& \multicolumn{1}{p{8.5cm}|}{$c_5$ contributes to \{$c_0,c_2,c_3$\} but the candidate is not a super-reduct. Add a new attribute.}\\
+				\hline
+		16 & 41 & \{$\mathbf{c_0,c_2,c_3,c_5,c_6}$\} & \multicolumn{1}{p{8.5cm}|}{The candidate is a reduct. Since the last attribute is included, the gap ($c_3$) is eliminated.}\\
+				\hline
+		17 & 43 & \{$c_0,c_2,c_4$\}			& \multicolumn{1}{p{8.5cm}|}{$c_4$ does not contributes to \{$c_0,c_2$\}. Remove $c_4$.}\\
+				\hline
+		18 & 47 & \{$c_0,c_2,c_5$\}			& \multicolumn{1}{p{8.5cm}|}{$c_5$ contributes to \{$c_0,c_2$\} but the candidate is not a super-reduct. Add a new attribute.}\\
+				\hline
+		19 & 48 & \{$c_0,c_2,c_5,c_6$\}		& \multicolumn{1}{p{8.5cm}|}{$c_6$ contributes to \{$c_0,c_2,c_5$\} but the candidate is not a super-reduct. Since the last attribute is included, the gap ($c_2$) is eliminated.}\\
+				\hline
+		20 & 50 & \{$c_0,c_3$\}				& \multicolumn{1}{p{8.5cm}|}{$c_3$ contributes to \{$c_0$\} but the candidate is not a super-reduct. Add a new attribute.}\\    
+				\hline		
+		21 & 51 & \{$c_0,c_3,c_4$\}			& \multicolumn{1}{p{8.5cm}|}{$c_4$ contributes to \{$c_0,c_3$\} but the candidate is not a super-reduct. Add a new attribute.}\\
+				\hline
+		22 & 52 & \{$c_0,c_3,c_4,c_5$\}		& \multicolumn{1}{p{8.5cm}|}{$c_5$ contributes to \{$c_0,c_3,c_4$\} but the candidate is not a super-reduct. Add a new attribute.}\\
+				\hline
+		23 & 53 & \{$\mathbf{c_0,c_3,c_4,c_5,c_6}$\} & \multicolumn{1}{p{8.5cm}|}{The candidate is a reduct. Since the last attribute is included, the gap ($c_0$) is eliminated.}\\
+				\hline
+		24 & 65 & \{$c_1$\} 				& \multicolumn{1}{p{8.5cm}|}{GCreduct finishes because $c_1$ has a 0 in the first row of the \textit{SBDM}} \\ %(line~\ref{line:done})\\
+		\hline
+	\end{tabular}
+\end{table}
 	
-	\begin{table}[!htb]
-		\caption{Execution of GCreduct over the SBDM of Table~\ref{tab:SSBDM1}.}\label{tab:sample_GCreduct}
-      	\centering \scriptsize
-    		\begin{tabular}{|c|c|l|c|c|c|c|c|c|l|}
-    		\hline
-    		Iter & $c$ & \multicolumn{1}{c|}{$B\cup \lbrace c\rbrace$} & C & SR & R & LA & $\neg \mathrm{C} \vee \mathrm{SR}$ & $\mathrm{R} \vee \neg \mathrm{SR}$ & \multicolumn{1}{c|}{Comments}\\
-    		\hline
-    		~1 & 0 & \{$c_0$\} 			        & Y & N &   & N & N &   & Add a new attribute.\\
-    		~2 & 1 & \{$c_0,c_1$\}				& Y & N &   & N & N &   & Add a new attribute.\\
-    		~3 & 2 & \{$c_0,c_1,c_2$\}			& Y & N &   & N & N &   & Add a new attribute.\\
-    		~4 & 3 & \{$c_0,c_1,c_2,c_3$\}		& N &   &   & N & Y &   & Remove $c_3$.\\
-    		~5 & 4 & \{$c_0,c_1,c_2,c_4$\}		& N &   &   & N & Y &   & Remove $c_4$.\\
-    		~6 & 5 & \{$c_0,c_1,c_2,c_5$\}		& Y & N &   & N & N &   & Add a new attribute.\\
-    		~7 & 6 & \{$c_0,c_1,c_2,c_5,c_6$\} 	& Y & Y & Y & Y &   & Y & Eliminate the gap ($c_2$).\\
-    		~8 & 3 & \{$c_0,c_1,c_3$\}			& N &   &   & N & Y &   & Remove $c_3$.\\
-    		~9 & 4 & \{$c_0,c_1,c_4$\}			& Y & N &   & N & N &   & Add a new attribute.\\
-    		10 & 5 & \{$c_0,c_1,c_4,c_5$\}		& Y & N &   & N & N &   & Add a new attribute.\\
-    		11 & 6 & \{$c_0,c_1,c_4,c_5,c_6$\} 	& Y & Y & Y & Y &   & Y & Eliminate the gap ($c_1$).\\
-    		12 & 2 & \{$c_0,c_2$\}				& Y & N &   & N & N &   & Add a new attribute.\\
-    		14 & 4 & \{$c_0,c_2,c_3,c_4$\}		& N &   &   & N & Y &   & Remove $c_4$.\\
-    		15 & 5 & \{$c_0,c_2,c_3,c_5$\}		& Y & N &   & N & N &   & Add a new attribute.\\
-    		16 & 6 & \{$c_0,c_2,c_3,c_5,c_6$\} 	& Y & Y & Y & Y &   & Y & Eliminate the gap ($c_3$).\\
-    		17 & 4 & \{$c_0,c_2,c_4$\}			& N &   &   & N & Y &   & Remove $c_4$.\\
-    		18 & 5 & \{$c_0,c_2,c_5$\}			& Y & N &   & N & N &   & Add a new attribute.\\
-    		19 & 6 & \{$c_0,c_2,c_5,c_6$\}		& Y & N &   & Y &   & Y & Eliminate the gap ($c_2$).\\
-    		20 & 3 & \{$c_0,c_3$\}				& Y & N &   & N & N &   & Add a new attribute.\\    		
-    		21 & 4 & \{$c_0,c_3,c_4$\}			& Y & N &   & N & N &   & Add a new attribute.\\
-    		22 & 5 & \{$c_0,c_3,c_4,c_5$\}		& Y & N &   & N & N &   & Add a new attribute.\\
-    		23 & 6 & \{$c_0,c_3,c_4,c_5,c_6$\} 	& Y & Y & Y & Y &   & Y & Eliminate the gap ($c_0$).\\
-    		\hline
-    		24 & 1 & \{$c_1$\} 					& \multicolumn{7}{p{8cm}|}{GCreduct finishes because $c_1$ has a 0 in the first row of the \textit{SBDM} (line~\ref{line:done})}\\
-    		\hline
-		\end{tabular}
-	\end{table}
+%	\begin{table}[!htb]
+%		\caption{Execution of GCreduct over the SBDM of Table~\ref{tab:SSBDM1}.}\label{tab:sample_GCreduct}
+%      	\centering \scriptsize
+%    		\begin{tabular}{|c|c|l|c|c|c|c|c|c|l|}
+%    		\hline
+%    		Iter & $c$ & \multicolumn{1}{c|}{$B\cup \lbrace c\rbrace$} & C & SR & R & LA & $\neg \mathrm{C} \vee \mathrm{SR}$ & $\mathrm{R} \vee \neg \mathrm{SR}$ & \multicolumn{1}{c|}{Comments}\\
+%    		\hline
+%    		~1 & 0 & \{$c_0$\} 			        & Y & N &   & N & N &   & Add a new attribute.\\
+%    		~2 & 1 & \{$c_0,c_1$\}				& Y & N &   & N & N &   & Add a new attribute.\\
+%    		~3 & 2 & \{$c_0,c_1,c_2$\}			& Y & N &   & N & N &   & Add a new attribute.\\
+%    		~4 & 3 & \{$c_0,c_1,c_2,c_3$\}		& N &   &   & N & Y &   & Remove $c_3$.\\
+%    		~5 & 4 & \{$c_0,c_1,c_2,c_4$\}		& N &   &   & N & Y &   & Remove $c_4$.\\
+%    		~6 & 5 & \{$c_0,c_1,c_2,c_5$\}		& Y & N &   & N & N &   & Add a new attribute.\\
+%    		~7 & 6 & \{$c_0,c_1,c_2,c_5,c_6$\} 	& Y & Y & Y & Y &   & Y & Eliminate the gap ($c_2$).\\
+%    		~8 & 3 & \{$c_0,c_1,c_3$\}			& N &   &   & N & Y &   & Remove $c_3$.\\
+%    		~9 & 4 & \{$c_0,c_1,c_4$\}			& Y & N &   & N & N &   & Add a new attribute.\\
+%    		10 & 5 & \{$c_0,c_1,c_4,c_5$\}		& Y & N &   & N & N &   & Add a new attribute.\\
+%    		11 & 6 & \{$c_0,c_1,c_4,c_5,c_6$\} 	& Y & Y & Y & Y &   & Y & Eliminate the gap ($c_1$).\\
+%    		12 & 2 & \{$c_0,c_2$\}				& Y & N &   & N & N &   & Add a new attribute.\\
+%    		14 & 4 & \{$c_0,c_2,c_3,c_4$\}		& N &   &   & N & Y &   & Remove $c_4$.\\
+%    		15 & 5 & \{$c_0,c_2,c_3,c_5$\}		& Y & N &   & N & N &   & Add a new attribute.\\
+%    		16 & 6 & \{$c_0,c_2,c_3,c_5,c_6$\} 	& Y & Y & Y & Y &   & Y & Eliminate the gap ($c_3$).\\
+%    		17 & 4 & \{$c_0,c_2,c_4$\}			& N &   &   & N & Y &   & Remove $c_4$.\\
+%    		18 & 5 & \{$c_0,c_2,c_5$\}			& Y & N &   & N & N &   & Add a new attribute.\\
+%    		19 & 6 & \{$c_0,c_2,c_5,c_6$\}		& Y & N &   & Y &   & Y & Eliminate the gap ($c_2$).\\
+%    		20 & 3 & \{$c_0,c_3$\}				& Y & N &   & N & N &   & Add a new attribute.\\    		
+%    		21 & 4 & \{$c_0,c_3,c_4$\}			& Y & N &   & N & N &   & Add a new attribute.\\
+%    		22 & 5 & \{$c_0,c_3,c_4,c_5$\}		& Y & N &   & N & N &   & Add a new attribute.\\
+%    		23 & 6 & \{$c_0,c_3,c_4,c_5,c_6$\} 	& Y & Y & Y & Y &   & Y & Eliminate the gap ($c_0$).\\
+%    		\hline
+%    		24 & 1 & \{$c_1$\} 					& \multicolumn{7}{p{8cm}|}{GCreduct finishes because $c_1$ has a 0 in the first row of the \textit{SBDM} (line~\ref{line:done})}\\
+%    		\hline
+%		\end{tabular}
+%	\end{table}
 	
 %
 \section{Evaluation and Discussion}\label{evaluation}
-	In this section, we evaluate our proposed algorithm over standard information systems \citep{Bache13} and synthetic \textit{SBDMs}. We make a comparative analysis versus RGonCRS, fast--CT\_EXT, and fast--BR; which are the most recent and fastest algorithms for reduct computation reported in the literature. We used in all cases the author's implementation of the algorithms. All experiments were run on a Core i7-5820K Intel processor at 3.30GHz, with 32GB in RAM, running GNU/Linux.
+	In this section, we evaluate our proposed algorithm over information systems from UCI \citep{Bache13} and synthetic \textit{SBDMs}. We make a comparative analysis versus RGonCRS, fast--CT\_EXT, and fast--BR; which are the most recent and fastest algorithms for reduct computation reported in the literature. We used in all cases the author's implementation of the algorithms. All experiments were run on a Core i7-5820K Intel processor at 3.30GHz, with 32GB in RAM, running GNU/Linux.
 	
-	Since RGonCRS is implemented in Matlab and it operates directly	over the information system, in the subsection~\ref{sub:matlab}, GCreduct is compared against RGonCRS over standard information systems, using a Matlab implementation of our proposed algorithm. Then, in the subsection~\ref{sub:java} we show a comparative study of GCreduct against fast--CT\_EXT and fast--BR over \textit{SBDMs} computed from standard information systems, using a Java implementation of our proposed algorithm. Finally, in the subsection~\ref{sub:synth} we present a comparative study between fast--CT\_EXT, GCreduct and fast--BR over synthetic \textit{SBDMs}. In this final experiment we explore the algorithms performance regarding the density of 1's of the \textit{SBDM}.
+	Since RGonCRS is implemented in Matlab and it operates directly	over the information system, in the subsection~\ref{sub:matlab}, GCreduct is compared against RGonCRS over information systems, using a Matlab implementation of our proposed algorithm. Then, in the subsection~\ref{sub:java} we show a comparative study of GCreduct against fast--CT\_EXT and fast--BR over \textit{SBDMs} computed from information systems from UCI, using a Java implementation of our proposed algorithm. Finally, in the subsection~\ref{sub:synth} we present a comparative study between fast--CT\_EXT, GCreduct and fast--BR over synthetic \textit{SBDMs}. In this final experiment we explore the algorithms performance regarding the density of 1's of the \textit{SBDM}.
 	
-	The source code of the four algorithms as well as all the standard information systems and synthetic \textit{SBDMs} used in these experiments, can be downloaded from \url{http://ccc.inaoep.mx/~ariel/GCreduct}.
+	The source code of the four algorithms as well as all the information systems from UCI and synthetic \textit{SBDMs} used in these experiments, can be downloaded from \url{http://ccc.inaoep.mx/~ariel/GCreduct}.
 	
 \subsection{GCreduct vs. RGonCRS}\label{sub:matlab}
 	In order to make a fair comparison against RGonCRS, we used its author's implementation in Matlab and we implemented GCreduct in Matlab as well. For this experiment we selected 15 information systems from the UCI machine learning repository \citep{Bache13}. Objects with missing data were removed as in \citep{WangP07}. For numerical attributes we used the Weka's equal width discretization filter with 10 bins, as describe in \cite{Flores2010}. This experiment was run using MATLAB R2015a.
 	
 	\begin{table}[!htb]
-		\caption{RGonCRS and GCreduct runtime for standard information systems.}\label{tab:matlab}
+		\caption{RGonCRS and GCreduct runtime for information systems from UCI.}\label{tab:matlab}
 		\centering \footnotesize
 		\begin{tabular}{|l|c|c|c|r|r|}
 			\hline
@@ -596,7 +640,7 @@
 	
 	\begin{table}[!htb]
 		\centering \scriptsize 
-		\caption{Fast--CText, GCreduct and Fast--BR runtime for standard information systems.}
+		\caption{Fast--CText, GCreduct and Fast--BR runtime for information systems from UCI.}
 		\label{tab:java}
 		\begin{tabular}{|l|c|r|c|r|c|r|c|}
 			\hline
@@ -658,7 +702,7 @@
 		
 	\begin{table}[htb]
 		\centering
-		\caption{Fast--CText, GCreduct and Fast--BR runtime for standard information systems. Sorted by \textit{SBDM} density.}
+		\caption{Fast--CText, GCreduct and Fast--BR runtime for information systems from UCI. Sorted by \textit{SBDM} density.}
 		\label{tab:density}
 		\begin{tabular}{|l|c|r|r|r|}
 			\hline
@@ -691,7 +735,7 @@
 \section{Conclusions}\label{conclusions}
 	In this work, we presented a new algorithm, GCreduct, for computing all reducts of information systems. In our proposed algorithm, the search space is traversed evaluating some candidate subsets and discarding others, based on previous evaluations. Algorithms reported in the literature use operations with a high cost for candidate evaluation in order to reduce the number of evaluated candidates. The main contribution of our proposal, on the other hand, is the use of simpler operations for candidate evaluation, based on the pruning properties of gap elimination and attribute contribution, which allows to reduce the runtime for reduct computation. 
 	
-	After conducting a series of experiments over synthetic \textit{SBDMs} and standard information systems, we can conclude that GCreduct performs faster than the fastest previously reported alternatives on information systems with a density of 1's, in their associated \textit{SBDM}, under 0.36. This result provides an instrument to select the proper algorithm for a determined information system. Further studies should be devoted to explore the relation found between the fastest algorithm for reduct computation of an information system, and the density of 1's. Furthermore, the feasibility of the introduction of this relation for reduct computation, should be also studied as future work.
+	After conducting a series of experiments over synthetic \textit{SBDMs} and information systems from UCI, we can conclude that GCreduct performs faster than the fastest previously reported alternatives on information systems with a density of 1's, in their associated \textit{SBDM}, under 0.36. This result provides an instrument to select the proper algorithm for a determined information system. Further studies should be devoted to explore the relation found between the fastest algorithm for reduct computation of an information system, and the density of 1's. Furthermore, the feasibility of the introduction of this relation for reduct computation, should be also studied as future work.
 
 \section{Acknowledgements}
 	The first author gratefully acknowledge CONACyT for his doctoral fellowship.

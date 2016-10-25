@@ -1,0 +1,80 @@
+\documentclass{letter}
+
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+
+
+\address{Instituto Nacional de Astrofísica,\\ Óptica y Electrónica \\ Luis Enrrique Erro 1 \\ Sta. Ma. Tonantzintla,\\ Puebla}
+\begin{document}
+
+\begin{letter}{}
+  \opening{Dear Editor in Chief and Reviewers:}
+
+  We are pleased to resubmit a new version of our paper INS-D-16-1281: A New Algorithm for Reduct Computation based on Gap Elimination and Attribute Contribution. We want to thank the constructive criticisms of the reviewers as well as their comments and questions. We have modified the original paper accordingly to the reviewer comments and we hope that, in its present form, the paper can be accepted. We have addressed the reviewers concerns as outlined below.
+
+  \textbf{Reviewer \#1:} 
+  This paper introduced a new algorithm based on the pruning properties of gap elimination and attribute contribution, in which a simpler operations for candidate evaluation is used for pruning more candidates and to accelerate the computation of all reducts of an information system. I think that the proposed methods are novel and the results in this paper are interesting. I thus recommend that the paper can be accepted after the revision according to the comments, which are shown as follows:
+
+  \begin{enumerate}
+    \item Authors gave a rule to select fastest algorithm for a given information system by means of a comprehensive experiments over synthetic \textit{SBDMs}, which is only obtained via the density of 1's in their \textit{SBDM}. It seems that the distribution of ``1" in \textit{SBDM} also plays a critical role to solve the problem of computing all reducts. Could you please add some analyses about the relationship between the distribution and the performance of the algorithms in this paper.\\
+    \textbf{Authors’ response:} 
+  \end{enumerate}
+  
+  \textbf{Reviewer \#2:}
+  The paper deals with the problem of generating all reducts. This is a very important theoretical problem, with many potential applications. In this regard, the paper describes a new method of generating all reducts. The method is based on browsing candidates for reducts (subsets of attributes), and checking whether the candidates are reducts. However, during working this algorithm, they are not viewed all subsets, but only selected subsets in a special order. This is possible due to the proposed method of skipping candidates, which certainly are not reduct from the theoretical point of view (GAP elimination method).
+  It is worth noting that the Authors have present a detailed description of previous approaches to this problem.
+  
+  \begin{enumerate}
+    \item However, personally I am not  an advocate of method calculating all reducts by browsing subsets of attributes because I think that such methods are usually near to simple brutal force methods and must lead to high time complexity. Therefore, I think that such methods should not be published in the journal of this rank like the INF.\\
+    \textbf{Authors’ response:} 
+    
+    \item In addition, in relation to this method I have some doubts. It is not clear to me how much the method of reduction the candidates to reducts actually decreases the size the problem with respect to the naive method of brutal force, through all subsets.\\
+    \textbf{Authors’ response:} 
+
+    \item It seems to me that, in the present method there is no action removing redundant attributes of reducts, which should occur.\\
+    \textbf{Authors’ response:} 
+
+	\item According to me, the paper is too complicated. Description of the algorithm calculating all reducts is so long that it is readable only for a narrow range of readers. It might be worthwhile to split it into fragments (procedures).\\
+	\textbf{Authors’ response:} 
+
+	\item The paper presents the results of experiments performed on real data sets. I think that besides of that, in the paper an example of the application of the presented algorithm for a small data table (several objects and attributes) should be added. Then it would be easier to see how works the described method (step by step). It is important that in such description, the method based on the elimination of GAP should be well illustrated.\\
+	\textbf{Authors’ response:} 
+  \end{enumerate}    
+  
+  %In the current version of the paper, it is not valuable to the INS.
+  
+  \textbf{Reviewer \#3:} Dear Colleagues,
+  
+  The article ``A New Algorithm for Reduct Computation based on Gap Elimination and Attribute Contribution" submitted to the Information Sciences journal is not ready for publication and I recommend major revision of this work. In general, I think the article is valuable and has been prepared very carefully, I have no objection to its form. In my opinion there is not much to do to make it suitable for a publication. Nevertheless, I suggest a major review because in my opinion, article requires some number of amendments in terms of its content that should be verified/re-reviewed after adjustments.  
+  
+  \begin{enumerate}
+	  \item The main contribution of this work is GCreduct - a new algorithm for computing all reducts of an information system. In the construction of the algorithm, you involved results of a few other works that are referred in the article.  Understanding of those theories is necessary to verify the algorithm. However, some of the references are inaccessible  to me, e.g. are written in Spanish making it impossible for me to verify mentioned results. In my opinion this type of content should be partially rewritten (theory + proof).\\
+	  \textbf{Authors’ response:}  
+
+	  \item You claim that GCreduct algorithm performs faster than all other recent reported alternatives in a specific kind of information systems. There was no explicit definition of this information systems class.\\
+	  \textbf{Authors’ response:} 
+
+	  \item You performed a very brief computational complexity analysis, but did not confront results of this analysis with any other algorithm, hence there was a lack of a comparative analysis of complexity. Thus, the only form of performance comparison of algorithms was a very decent empirical comparison of several available implementations.\\
+	  \textbf{Authors’ response:} 
+
+	  \item The article's introduction should emphasize the motivation of this study, should describe the need for faster computation of all reducts and should indicate how GCreduct satisfy this need.\\
+	  \textbf{Authors’ response:} 
+	  
+	  \item Furthermore, the article is in some places inconsistent, e.g. in the introduction you  claim that the proposed algorithm is used to compute all reducts of an information system but in the summary you claim that algorithm is computing one reduct. \\
+	  \textbf{Authors’ response:} 
+  \end{enumerate}  
+     
+%  In the attached pdf file I placed selected, more detailed comments.
+  
+%  Regards
+  
+  
+  
+  Finally, some minor style changes were introduced to improve the overall quality of the paper.
+  Best regards,
+    
+  \begin{flushright}
+    The authors.
+  \end{flushright}
+\end{letter}
+\end{document}
