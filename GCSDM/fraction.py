@@ -9,7 +9,7 @@ Z = 10**(polyval(p,a))
 
 img = figure(figsize=(6,6))
 
-semilogy(a,Z,a,z,'ro')
+semilogy(a,Z,a,z,'bo')
 
 grid()
 title('GCredut fraction vs. the number of attributes')
