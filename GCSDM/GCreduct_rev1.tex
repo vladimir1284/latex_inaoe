@@ -501,9 +501,27 @@
 	
 	In Table~\ref{tab:sample_GCreduct}, we show an example of the execution of GCreduct over the \textit{SBDM} of Table~\ref{tab:SSBDM1}. The first column enumerates the candidate evaluations. The second column shows the position of the current candidate, according to the lexicographical order. Notice that, for this example, there are 127 attribute subsets in the search space. In the last column, the evaluation of the current candidate and the generation of the next candidate, are commented.
 
-	%TODO dar un recorrido al ejemplo
+	In this example, the algorithm starts with the subset $B=\lbrace \rbrace$ and its cumulative mask $cm_B=(00000)$. The first candidate is formed with $c=c_0$ ($B\cup c = \lbrace c_0\rbrace$) and we have $cm_{\lbrace c_0\rbrace}=(10000)$. This attribute contributes and it is saved in $B=\lbrace c_0\rbrace$. Then, the next attribute is added $c = c_1$. The new cumulative mask is $cm_{\lbrace c_0,c_1\rbrace}=(11000)\neq cm_{\lbrace c_0\rbrace}$ and $c_1$ contributes to $B$. Thus, we save the current attribute in $B = \lbrace c_0,c_1\rbrace$ and the next attribute is added $c = c_2$. In the same way, $cm_{\lbrace c_0,c_1,c_2\rbrace}=(11010)\neq cm_{\lbrace c_0,c_1\rbrace}$ and $c_2$ is saved in $B = \lbrace c_0,c_1,c_2\rbrace$ to add the next attribute $c = c_3$. This time, we have $cm_{\lbrace c_0,c_1,c_2,c_3\rbrace}=(11010) = cm_{\lbrace c_0,c_1,c_2\rbrace}$ so that $c_3$ does not contribute to $B$. At this point, all the supersets of $\lbrace c_0,c_1,c_2,c_3\rbrace$ supported by the proposition~\ref{prop:contrib}. Then, $B = \lbrace c_0,c_1,c_2\rbrace$ and $c = c_4$, skipping from the fourth to the twelfth candidate in the lexicographical order, as it can be seen in  Table~\ref{tab:sample_GCreduct}. The same result is obtained for $\lbrace c_0,c_1,c_2,c_4\rbrace$ so that $B = \lbrace c_0,c_1,c_2\rbrace$ and $c = c_5$ for the next evaluation. This time, $cm_{\lbrace c_0,c_1,c_2,c_5\rbrace}=(11011)\neq cm_{\lbrace c_0,c_1,c_2\rbrace}$ and $c_5$ contributes to $B$. Thus, we save the current attribute in $B = \lbrace c_0,c_1,c_2,c_52\rbrace$ and the next attribute is added $c = c_6$. We have $cm_{\lbrace c_0,c_1,c_2,c_5,c_6\rbrace}=(11111)\neq cm_{\lbrace c_0,c_1,c_2,c_5\rbrace}$ so that $\lbrace c_0,c_1,c_2,c_5,c_6\rbrace$ is a super-reduct. The next step is the exclusion evaluation over this super-reduct to verify whether it is a reduct.
+	
+	\begin{table}[!htb]
+		\caption{Exclusion mask computation for $\lbrace c_0,c_1,c_2,c_5,c_6\rbrace$.}\label{tab:em}
+		\centering 
+		\begin{tabular}{|l|c|c|c|}
+			\hline
+			$B\cup c_i$                          & $cm_{c_i}$ & $cm_B$  & $em_{B\cup c_i}$ \\
+			\hline
+			$\lbrace c_0\rbrace$                 & (10000)    & (00000) & (10000)          \\
+			$\lbrace c_0,c_1\rbrace$             & (01000)    & (10000) & (11000)          \\
+			$\lbrace c_0,c_1,c_2\rbrace$         & (00010)    & (11000) & (11010)          \\
+			$\lbrace c_0,c_1,c_2,c_5\rbrace$     & (00001)    & (11010) & (11011)          \\
+			$\lbrace c_0,c_1,c_2,c_5,c_6\rbrace$ & (00100)    & (11011) & (11111)          \\
+			\hline
+		\end{tabular}
+	\end{table}
+	
+  The exclusion verification stars with $cm_B = em_B = (00000)$ and, using the proposition~\ref{prop:cumul}, $em_{\lbrace c_0,c_1,c_2,c_5,c_6\rbrace}=(11111)$ is computed (Algorithm~\ref{alg:exclusion}) as it is illustrated in Table~\ref{tab:em}. Since it is obvious that $\forall c \in \lbrace c_0,c_1,c_2,c_5,c_6\rbrace : c\wedge em_{\lbrace c_0,c_1,c_2,c_5,c_6\rbrace} \neq (00000)$, we have that $\lbrace c_0,c_1,c_2,c_5,c_6\rbrace$ is a reduct. Given that the current candidate contains the last attribute ($c_6$) and it is a reduct, the gap ($c_2$) is eliminated and we have $B = \lbrace c_0,c_1\rbrace$, $c=c_3$ for the next evaluation. In this way, the rest of the example can be followed from Table~\ref{tab:sample_GCreduct}.
 
-\begin{table}[!htb]
+  \begin{table}[!htb]
 	\caption{Execution of GCreduct over the SBDM of Table~\ref{tab:SSBDM1}.}\label{tab:sample_GCreduct}
 	\centering \scriptsize
 	\begin{tabular}{|c|c|l|l|l|}
