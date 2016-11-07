@@ -338,6 +338,11 @@
 	\noindent
 	\textbf{Proof.} \textit{Due to the sorting process described above, if $c_{j0}[0]=0$ then, $\forall c \in L: c[0]=0$. Thus, the first row in the sub-matrix of DM considering only the attributes in $L$ is a zero row. According to the definition~\ref{def:testor}, $L$ is not associated to a super-reduct. Given $L \prec L'= [c_{jq},...,c_{jz}]$, we have that $j0<jq$. Thus, if $c_{j0}[0]=0$ then, $\forall c \in L': c[0]=0$ such that $L'$ has also a zero row and it cannot be associated to a super-reduct.}
 
+	Based on the definition of super-reduct that we gave in the subsection~\ref{def_reduct}, we present the following corollary.
+	
+	\begin{corollary}\label{coro:firstRow}
+		Let DM be a sorted SBDM and $L = [c_{j0},...,c_{js}]$ the ordered list associated to a subset of attributes from DM. If the first row of the column corresponding to $c_{j0}$ has a zero, $L$ is not associated to a reduct. Furthermore, there is not any list $L'$, such that $L\prec L'$, associated to a reduct.
+	\end{corollary}
 	
 	In the next subsection we will use these propositions to support the pruning of the search space in our proposed algorithm.
 
@@ -455,9 +460,9 @@
 		\end{algorithmic}
 	\end{algorithm}
 	
-	Each time a new candidate is generated, if the column of the \textit{SBDM} corresponding to the leftmost attribute, according to its order in the information system, has a zero in the first row, the algorithm finishes. From this point, the first row of the sub-matrix formed considering only the attributes in the remaining candidates will be a zero row, due to the sorting process described above. Thus, according to the definition~\ref{def:testor} there is not any super-reduct in the remaining search space.
+	Each time a new candidate is generated, if the column of the \textit{SBDM} corresponding to the leftmost attribute in the candidate has a zero in the first row, the algorithm finishes. This final pruning is possible because of the corollary~\ref{coro:firstRow}.
 	
-	The pseudocode for the gap elimination is shown in Algorithm~\ref{alg:eliminateGAP}. Every consecutive attribute in the current candidate, starting from the last attribute is eliminated as it was explained in the definition~\ref{def:gap}. The time complexity of this procedure is $\Theta(n)$. Since all other instructions within the \textit{candidateGenerator} procedure has $\Theta(1)$ time complexity, we can conclude that its overall time complexity is $\Theta(n)$. In the same way, it can be seen that the overall time complexity of a candidate evaluation cycle in GCreduct, is $\Theta(nm)$. However, since reduct computation is an NP--hard problem, the number of cycles has an exponential relation to $n$.
+	The pseudocode for the gap elimination is shown in Algorithm~\ref{alg:eliminateGAP}. Every consecutive attribute in the current candidate, starting from the last attribute is eliminated as it was explained in the definition~\ref{def:gap}. The time complexity of this procedure is $\Theta(n)$. Since all other instructions within the \textit{candidateGenerator} procedure has time complexity of $\Theta(1)$, we can conclude that the overall time complexity of \textit{candidateGenerator} is $\Theta(n)$. In the same way, it can be seen that the overall time complexity of a candidate evaluation cycle in GCreduct, is $\Theta(nm)$. However, since computing all reducts is an NP--hard problem, the number of cycles has an exponential relation to $n$.
 
 	\begin{algorithm}
 		\footnotesize
@@ -477,12 +482,12 @@
 		\end{algorithmic}
 	\end{algorithm}
 		
-	It is important to highlight that the problem of computing all the reducts has exponential complexity. This fact dues to the cardinality of the solution, since there are only exponential upper bounds to the number of reducts regarding the number of attributes in the information system~\cite{Skowron92}. Thus, there cannot exist an algorithm for computing all the reducts of an information system with a lower complexity. However, the performance of this algorithms is strongly related to the characteristics of the \textit{SBDM}. 
+	It is important to highlight that the problem of computing all reducts has exponential complexity. This fact is due to the cardinality of the solution, since there are only exponential upper bounds to the number of reducts regarding the number of attributes in the information system~\cite{Skowron92}. Thus, there cannot exist an algorithm for computing all the reducts of an information system with polynomial complexity. However, the performance of algorithms for computing all reducts is strongly related to the characteristics of the \textit{SBDM}. 
 	
 	\phantomsection\label{par:complexity}
-	In GCreduct, we compute the exclusion mask and evaluate the attribute exclusion, using proposition~\ref{prop:exclude}, for those candidates detected as super-reducts; in order to verify whether they are reducts. Super-reducts are, most of the times, a small fraction of the candidates evaluated. In fast--BR~\cite{Lias13} and RGonCRS~\cite{WangP07}, on the other hand, the exclusion is evaluated for each candidate with a contributing attribute. In this way, fast--BR and RGonCRS avoid the evaluation of all the supersets of a candidate with a redundant attribute. This can be a great advantage for a \textit{SBDM} in which the exclusion occurs with a high frequency. The evaluation of the attribute exclusion is the part with the highest complexity within these algorithms ($\Theta (nm)$). Thus, for \textit{SBDMs} in which the exclusion rarely occurs, GCreduct will perform faster, by making fewer exclusion evaluations.
+	In GCreduct, we compute the exclusion mask and evaluate the attribute exclusion, using proposition~\ref{prop:exclude}, for those candidates detected as super-reducts; in order to verify whether they are reducts. Super-reducts are, most of the times, a small fraction of the evaluated candidates. In fast--BR~\cite{Lias13} and RGonCRS~\cite{WangP07}, on the other hand, the exclusion is evaluated for each candidate with a contributing attribute. In this way, fast--BR and RGonCRS avoid the evaluation of all the supersets of a candidate with a redundant attribute. This can be a great advantage for a \textit{SBDM} in which the exclusion occurs frequently. The evaluation of the attribute exclusion is the procedure with the highest complexity into these algorithms ($\Theta (nm)$). Thus, for \textit{SBDMs} in which the exclusion rarely occurs, GCreduct will perform faster, by making fewer exclusion evaluations.
 	
-	During the search process, GCreduct evaluates some attribute subsets while skips some others. Based on the definitions and propositions from the previous subsection, there is not any reduct within these unevaluated subsets. As a result, the following corollary is stated.
+	During the search process, GCreduct evaluates some attribute subsets while skips some others. Propositions~\ref{prop:gap} and~\ref{prop:contrib} as well as  the corollary~\ref{coro:firstRow} and the irreducible condition of reducts, guarantees that none of the skipped attribute subsets is a reduct. This is summarized in the following proposition.
 	
 	\begin{proposition}
 		The algorithm GCreduct finds all the reducts of an information system.
@@ -494,14 +499,14 @@
 			\item Supersets of an attribute subset which has a non contributing attribute (proposition~\ref{prop:contrib}).
 			\item Supersets of a super-reduct (which cannot be a reduct based on the condition~\ref{cond_2} of the subsection~\ref{def_reduct}).
 			\item When there is a gap (proposition~\ref{prop:gap}).
-			\item When the column of the \textit{SBDM} corresponding to the leftmost attribute, according to its order in the information system, has a zero in the first row (definition~\ref{def:testor}).
+			\item When the column of the \textit{SBDM} corresponding to the leftmost attribute in the candidate, has a zero in the first row (corollary~\ref{coro:firstRow}).
 		\end{itemize} 
 		Since the attribute subsets skipped through the searching process, are certainly not a reduct, we can state that GCreduct finds all the reducts of an information system.}
 	
-	In Table~\ref{tab:sample_GCreduct}, we show an example of the execution of GCreduct over the \textit{SBDM} of Table~\ref{tab:SSBDM1}. The first column enumerates the candidate evaluations. The second column shows the position of the current candidate, according to the lexicographical order. Notice that, for this example, there are 127 attribute subsets in the search space. In the last column, the evaluation of the current candidate and the generation of the next candidate, are commented.
+	In Table~\ref{tab:sample_GCreduct}, we show an example of the execution of GCreduct over the \textit{SBDM} of Table~\ref{tab:SSBDM1}. The first column enumerates the candidate evaluations. The second column shows the position of the current candidate, according to the lexicographical order. Notice that, for this example, there are 127 attribute subsets in the search space from which, only 24 have to be analyzed. In the last column, the evaluation of the current candidate and the generation of the next candidate, are commented.
 	
 	\phantomsection\label{par:step}
-	In this example, the algorithm starts with the subset $B=\lbrace \rbrace$ and its cumulative mask $cm_B=(00000)$. The first candidate is formed with $c=c_0$ ($B\cup \lbrace c\rbrace = \lbrace c_0\rbrace$) and we have $cm_{\lbrace c_0\rbrace}=(10000)$. This attribute contributes and it is saved in $B=\lbrace c_0\rbrace$. Then, the next attribute is added $c = c_1$. The new cumulative mask is $cm_{\lbrace c_0,c_1\rbrace}=(11000)\neq cm_{\lbrace c_0\rbrace}$ and $c_1$ contributes to $B$. Thus, we save the current attribute in $B = \lbrace c_0,c_1\rbrace$ and the next attribute is added $c = c_2$. In the same way, $cm_{\lbrace c_0,c_1,c_2\rbrace}=(11010)\neq cm_{\lbrace c_0,c_1\rbrace}$ and $c_2$ is saved in $B = \lbrace c_0,c_1,c_2\rbrace$ to add the next attribute $c = c_3$. This time, we have $cm_{\lbrace c_0,c_1,c_2,c_3\rbrace}=(11010) = cm_{\lbrace c_0,c_1,c_2\rbrace}$ so that $c_3$ does not contribute to $B$. At this point, all the supersets of $\lbrace c_0,c_1,c_2,c_3\rbrace$ supported by the proposition~\ref{prop:contrib}. Then, $B = \lbrace c_0,c_1,c_2\rbrace$ and $c = c_4$, skipping from the fourth to the twelfth candidate in the lexicographical order, as it can be seen in  Table~\ref{tab:sample_GCreduct}. The same result is obtained for $\lbrace c_0,c_1,c_2,c_4\rbrace$ so that $B = \lbrace c_0,c_1,c_2\rbrace$ and $c = c_5$ for the next evaluation. This time, $cm_{\lbrace c_0,c_1,c_2,c_5\rbrace}=(11011)\neq cm_{\lbrace c_0,c_1,c_2\rbrace}$ and $c_5$ contributes to $B$. Thus, we save the current attribute in $B = \lbrace c_0,c_1,c_2,c_52\rbrace$ and the next attribute is added $c = c_6$. We have $cm_{\lbrace c_0,c_1,c_2,c_5,c_6\rbrace}=(11111)\neq cm_{\lbrace c_0,c_1,c_2,c_5\rbrace}$ so that $\lbrace c_0,c_1,c_2,c_5,c_6\rbrace$ is a super-reduct. The next step is the exclusion evaluation over this super-reduct to verify whether it is a reduct.
+	In this example, the algorithm starts with the subset $B=\lbrace \rbrace$ and its cumulative mask $cm_B=(00000)$. The first candidate is formed with $c=c_0$ ($B\cup \lbrace c\rbrace = \lbrace c_0\rbrace$) and we have $cm_{\lbrace c_0\rbrace}=(10000)$. This attribute contributes and it is saved in $B=\lbrace c_0\rbrace$. Then, the next attribute is added $c = c_1$. The new cumulative mask is $cm_{\lbrace c_0,c_1\rbrace}=(11000)\neq cm_{\lbrace c_0\rbrace}$ and $c_1$ contributes to $B$. Thus, we save the current attribute in $B = \lbrace c_0,c_1\rbrace$ and the next attribute is added $c = c_2$. In the same way, $cm_{\lbrace c_0,c_1,c_2\rbrace}=(11010)\neq cm_{\lbrace c_0,c_1\rbrace}$ and $c_2$ is saved in $B = \lbrace c_0,c_1,c_2\rbrace$ to add the next attribute $c = c_3$. This time, we have $cm_{\lbrace c_0,c_1,c_2,c_3\rbrace}=(11010) = cm_{\lbrace c_0,c_1,c_2\rbrace}$ then $c_3$ does not contribute to $B$. At this point, all the supersets of $\lbrace c_0,c_1,c_2,c_3\rbrace$ are pruned according to the proposition~\ref{prop:contrib}. Thus, $B = \lbrace c_0,c_1,c_2\rbrace$ and $c = c_4$, skipping from the fourth to the twelfth candidate in the lexicographical order, as it can be seen in  Table~\ref{tab:sample_GCreduct}. The same result is obtained for $\lbrace c_0,c_1,c_2,c_4\rbrace$ going to $B = \lbrace c_0,c_1,c_2\rbrace$ and $c = c_5$ for the next evaluation. This time, $cm_{\lbrace c_0,c_1,c_2,c_5\rbrace}=(11011)\neq cm_{\lbrace c_0,c_1,c_2\rbrace}$ and $c_5$ contributes to $B$. Thus, we save the current attribute in $B = \lbrace c_0,c_1,c_2,c_5\rbrace$ and the next attribute is added $c = c_6$. We have $cm_{\lbrace c_0,c_1,c_2,c_5,c_6\rbrace}=(11111)\neq cm_{\lbrace c_0,c_1,c_2,c_5\rbrace}$ so that $\lbrace c_0,c_1,c_2,c_5,c_6\rbrace$ is a super-reduct. The next step is the exclusion evaluation over this super-reduct to verify whether it is a reduct.
 	
 	\begin{table}[!htb]
 		\caption{Exclusion mask computation for $\lbrace c_0,c_1,c_2,c_5,c_6\rbrace$.}\label{tab:em}
@@ -519,7 +524,7 @@
 		\end{tabular}
 	\end{table}
 	
-  The exclusion verification stars with $cm_B = em_B = (00000)$ and, using the proposition~\ref{prop:cumul}, $em_{\lbrace c_0,c_1,c_2,c_5,c_6\rbrace}=(11111)$ is computed (Algorithm~\ref{alg:exclusion}) as it is illustrated in Table~\ref{tab:em}. Since it is obvious that $\forall c \in \lbrace c_0,c_1,c_2,c_5,c_6\rbrace : c\wedge em_{\lbrace c_0,c_1,c_2,c_5,c_6\rbrace} \neq (00000)$, we have that $\lbrace c_0,c_1,c_2,c_5,c_6\rbrace$ is a reduct. Given that the current candidate contains the last attribute ($c_6$) and it is a reduct, the gap ($c_2$) is eliminated and we have $B = \lbrace c_0,c_1\rbrace$, $c=c_3$ for the next evaluation. In this way, the rest of the example can be followed from Table~\ref{tab:sample_GCreduct}.
+  The exclusion verification stars with $cm_B = em_B = (00000)$ and, using the proposition~\ref{prop:cumul}, $em_{\lbrace c_0,c_1,c_2,c_5,c_6\rbrace}=(11111)$ is computed (Algorithm~\ref{alg:exclusion}) as it is illustrated in Table~\ref{tab:em}. Since it is obvious that $\forall c \in \lbrace c_0,c_1,c_2,c_5,c_6\rbrace : c\wedge em_{\lbrace c_0,c_1,c_2,c_5,c_6\rbrace} \neq (00000)$, we have that $\lbrace c_0,c_1,c_2,c_5,c_6\rbrace$ is a reduct. Given that the current candidate contains the last attribute ($c_6$) and it is a reduct, the gap ($c_2$) is eliminated and we have $B = \lbrace c_0,c_1\rbrace$, $c=c_3$ for the next evaluation. In this way, the rest of the example can be followed in Table~\ref{tab:sample_GCreduct}.
 
   \begin{table}[!htb]
 	\caption{Execution of GCreduct over the SBDM of Table~\ref{tab:SSBDM1}.}\label{tab:sample_GCreduct}
@@ -623,7 +628,7 @@
 	
 	For this experiment, we implemented our proposed algorithm in Java to make a fair comparison against the Java implementations of fast--CT\_EXT and fast--BR, provided by their authors. The same 15 information systems of our previous experiment were used. In the second column of Table~\ref{tab:java}, the number of attribute subsets in the search space is shown. This value corresponds to the cardinality of the power set of conditional attributes in the information system. Then, the runtime in seconds and the fraction of evaluated candidates for the three algorithms are shown. The fraction of evaluated candidates is computed as the number of evaluated candidates over the number of attribute subsets in the search space.
 	
-	\begin{table}[!htb]
+	\begin{table}[htb]
 		\centering \scriptsize 
 		\caption{Fast--CText, GCreduct and Fast--BR runtime for information systems from UCI.}
 		\label{tab:java}
@@ -653,6 +658,33 @@
 	\end{table}
 
     The main conclusion that can be extracted from results in Table~\ref{tab:java} is that fast--CText has a worse performance in comparison with fast--BR and GCreduct. Even in the only case where fast--CText was the fastest, the runtime difference with GCreduct was insignificant. Fast--BR and GCreduct have 7 wins each one; thus, we cannot conclude a clearly better algorithm. Therefore, in the next subsection we show another experiment with different synthetic \textit{SBDMs}.
+    
+    \begin{table}[htb]
+    \centering \footnotesize
+    \caption{Evaluated candidates.}
+    \label{tab:evluations}
+    \begin{tabular}{|l|r|r|r|r|}
+	    \hline
+	    \multicolumn{1}{|p{2cm}|}{Information System}  & \multicolumn{1}{c|}{Search space} & \multicolumn{1}{c|}{CT\_EXT} & \multicolumn{1}{c|}{GCreduct} & \multicolumn{1}{c|}{Fast-BR} \\
+	    \hline
+	    Credit-g         & 1048576           & 221907       & \textbf{108660}      & 116737                      \\
+	    Waveform         & 2097152           & 1202536      & \textbf{813642}      & 979590                      \\ 
+	    Flags            & 536870912         & 19932530     & 11937434             & \textbf{7066382}            \\
+	    Student-mat      & 2147483648        & 744414619    & 637470090            & \textbf{120955266}          \\
+	    Student-por      & 2147483648        & 1204081281   & 996828073            & \textbf{205510204}          \\  
+	    Dermatology      & 17179869184       & 203223849    & 147387236            & \textbf{23052782}           \\ 
+	    Chess (kr-vs-kp) & 68719476736       & 641828930    & \textbf{29}          & 3683                        \\
+	    Keyword-activity & 68719476736       & 100862368    & 27262976             & \textbf{14031884}           \\
+	    Landsat (train)  & 68719476736       & 40244443761  & \textbf{11250093188} & 18793943580                 \\
+	    Cylinder-bands   & 549755813888      & 27205388     & 21512347             & \textbf{1209414}            \\
+	    QSAR-biodeg      & 2199023255552     & 49343687     & 7507844              & \textbf{3656306}            \\
+	    Connect-4        & 4398046511104     & 402876708160 & 1330041392           & \textbf{987387495}          \\
+	    Sponge           & 35184372088832    & 20101164     & 14697055             & \textbf{359341}             \\ 
+	    Diabetes         & 562949953421312   & 775375612    & 141785474            & \textbf{82397743}           \\
+	    Lung-cancer      & 72057594037927900 & 3077180867   & 2222771074           & \textbf{84072658}           \\
+        \hline                
+    \end{tabular}
+    \end{table}
 					
 	\begin{figure}[htb]
 		\begin{center}
