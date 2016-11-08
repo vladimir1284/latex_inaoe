@@ -349,14 +349,15 @@
 \subsection{The algorithm GCreduct}\label{description}
 	GCreduct finds all reducts in the \textit{SBDM} computed from an information system. This algorithm explores the search space evaluating some candidates and avoiding others, based on previous evaluations. Unlike other works \citep{WangP07,Lias13} where candidate evaluation is performed through operations with a high cost, GCreduct uses a simpler candidate evaluation, based on attribute contribution and gap elimination, to reduce the algorithm runtime. 
 	
-	The pseudocode for GCreduct is shown in Algorithm~\ref{alg:GCreduct}. After initializing the current candidate with the first attribute, the cumulative mask is updated. Then, the attribute contribution is evaluated using the definition~\ref{def:contrib}. For those candidate subsets with a contributing attribute, the super--reduct condition is evaluated using definition~\ref{def:testor}. For each detected super--reduct, the proposition~\ref{prop:exclude} is evaluated in order to determine whether a super--reduct is a reduct, to be saved in the result ($RR$). At this point, the candidate evaluation is finished and the $candidateGenerator$ procedure is called to evaluate a new candidate subset.
+	\phantomsection\label{superfluous}
+	The pseudocode for GCreduct is shown in Algorithm~\ref{alg:GCreduct}. The algorithms operates over the sorted \textit{SBDM}, and as a preprocessing stage, superfluous attributes~\cite{Lazo-Cortes2013} are removed from the \textit{SBDM}. After initializing the current candidate with the first attribute, the cumulative mask is updated. Then, the attribute contribution is evaluated using the definition~\ref{def:contrib}. For those candidate subsets with a contributing attribute, the super--reduct condition is evaluated using definition~\ref{def:testor}. For each detected super--reduct, the proposition~\ref{prop:exclude} is evaluated in order to determine whether a super--reduct is a reduct, to be saved in the result ($RR$). At this point, the candidate evaluation is finished and the $candidateGenerator$ procedure is called to evaluate a new candidate subset.
 	
 	\begin{algorithm}
 	\footnotesize
 	\caption{GCreduct algorithm for computing all reducts}
 	\label{alg:GCreduct}
 	\begin{algorithmic}[1]
-		\Require \textit{SBDM}
+		\Require \textit{SBDM} - the sorted \textit{SBDM}
 		\Ensure $RR$ - set of all reducts
 		\State sortSBDM()
 		\State $RR \Leftarrow \emptyset$
@@ -758,7 +759,7 @@
 	Finally, since the density of 1's of the \textit{SBDM} is not the only factor that affects the performance of the algorithms, a wider study of some other factors is proposed as future work. These study should shed light on the influence of the distribution of 1's inside the \textit{SBDM} over the algorithm's performance. 
 
 \section{Acknowledgements}
-	The first author gratefully acknowledge CONACyT for his doctoral fellowship.
+	The first author gratefully acknowledge CONACyT for his doctoral fellowship, through the scholarship 399547.
 %-------------------------------------------------------------------------------
 % Bibliography
 %-------------------------------------------------------------------------------

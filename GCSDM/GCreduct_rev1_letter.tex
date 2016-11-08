@@ -30,15 +30,15 @@
   \begin{enumerate}
     \item However, personally I am not  an advocate of method calculating all reducts by browsing subsets of attributes because I think that such methods are usually near to simple brutal force methods and must lead to high time complexity. Therefore, I think that such methods should not be published in the journal of this rank like the INF.\\
     \textbf{Authors’ response:} \\
-    We added a new figure (Figure~\ref{fig:candidates}) and its discussion to illustrate the advantage of our algorithm over a simple brutal force approach, in terms of the number of evaluations (see page~\pageref{par:brutal}).
+    In order to address this concern, we added a new figure (Figure~\ref{fig:candidates}) and its discussion to illustrate the advantage of our algorithm over a simple brutal force approach, in terms of the number of candidate evaluations (see page~\pageref{par:brutal}).
     
     \item In addition, in relation to this method I have some doubts. It is not clear to me how much the method of reduction the candidates to reducts actually decreases the size the problem with respect to the naive method of brutal force, through all subsets.\\
     \textbf{Authors’ response:}  \\
-    We added to Table~\ref{tab:java}, the number of candidates evaluated by the three algorithms, as a fraction of the search space.
+    We added Table~\ref{tab:evluations} with number of candidates evaluated by the three algorithms over the information systems from the UCI repository. There are reductions up to ten order of magnitude, for some cases, over the brutal force approach.
 
     \item It seems to me that, in the present method there is no action removing redundant attributes of reducts, which should occur.\\
     \textbf{Authors’ response:} \\
-    In GCredut, the redundant attributes are detected by using the proposition~\ref{prop:exclude} as it is shown in Algorithm~\ref{alg:exclusion}.
+    In GCredut, the redundant attributes are detected by using the proposition~\ref{prop:exclude} as it is shown in Algorithm~\ref{alg:exclusion}. Furthermore, superfluous attributes are removed as a preprocessing stage, as commented in the second paragraph of the subsection \textit{The algorithm GCreduct} (see page~\pageref{superfluous}).
 
 	\item According to me, the paper is too complicated. Description of the algorithm calculating all reducts is so long that it is readable only for a narrow range of readers. It might be worthwhile to split it into fragments (procedures).\\
 	\textbf{Authors’ response:} \\
