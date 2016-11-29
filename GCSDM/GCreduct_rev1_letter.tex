@@ -20,7 +20,7 @@
   \begin{enumerate}
     \item Authors gave a rule to select fastest algorithm for a given information system by means of a comprehensive experiments over synthetic \textit{SBDMs}, which is only obtained via the density of 1's in their \textit{SBDM}. It seems that the distribution of ``1" in \textit{SBDM} also plays a critical role to solve the problem of computing all reducts. Could you please add some analyses about the relationship between the distribution and the performance of the algorithms in this paper.\\
     \textbf{Authors’ response:} \\
-    In order to address this comment, we have added a new paragraph, at the end of the \textit{``Evaluation and Discussion"} section, where we discus the relationship between the distribution of 1's and the performance of the algorithms in our paper (see page~\pageref{par:distribution}).
+    In order to address this comment, we have added a new paragraph, at the end of the \textit{``Evaluation and Discussion"} section, where we discuss the relationship between the distribution of 1's and the performance of the evaluated algorithms (see page~\pageref{par:distribution}).
   \end{enumerate}
   
   \textbf{Reviewer \#2:}
@@ -30,15 +30,15 @@
   \begin{enumerate}
     \item However, personally I am not  an advocate of method calculating all reducts by browsing subsets of attributes because I think that such methods are usually near to simple brutal force methods and must lead to high time complexity. Therefore, I think that such methods should not be published in the journal of this rank like the INF.\\
     \textbf{Authors’ response:} \\
-    In order to address this concern, we added a new figure (Figure~\ref{fig:candidates}), a new table (Table~\ref{tab:evluations}) and a discussion of the advantage of our algorithm, in terms of the number of candidate evaluations, over a simple brutal force approach (see page~\pageref{par:brutal}).
+    In order to address this concern, we added a new figure (Figure~\ref{fig:candidates}), a new table (Table~\ref{tab:evluations}) and a discussion of the advantage of our algorithm, in terms of the number of candidate evaluations, with respect to a simple brutal force approach (see page~\pageref{par:brutal}).
     
     \item In addition, in relation to this method I have some doubts. It is not clear to me how much the method of reduction the candidates to reducts actually decreases the size the problem with respect to the naive method of brutal force, through all subsets.\\
     \textbf{Authors’ response:}  \\
-    In the new version of our paper, we added Table~\ref{tab:evluations} where we report the number of candidates evaluated by fast-CT\_EXT, fast-BR, and GCreduct (our proposed algorithm), over the information systems from the UCI repository. In this table we can see that for some cases, there are reductions up to ten orders of magnitude over the brutal force approach.
+    In the new version of our paper, we added Table~\ref{tab:evluations} where we report the number of candidates evaluated by fast-CT\_EXT, fast-BR, and GCreduct (our proposed algorithm), over the information systems from the UCI repository. In this table, we can see that for some cases, there are reductions up to ten orders of magnitude with respect to the brutal force approach.
 
     \item It seems to me that, in the present method there is no action removing redundant attributes of reducts, which should occur.\\
     \textbf{Authors’ response:} \\
-    In GCreduct, redundant attributes are detected by using the proposition~\ref{prop:exclude}. The subsection \textit{``The algorithm GCreduct"}, was rewritten in order to better explain how the redundant attributes are removed. Additionally, in Algorithm~\ref{alg:exclusion}, we explicitly point out where the proposition~\ref{prop:exclude} is used. 
+    In GCreduct, redundant attributes are detected by using the proposition~\ref{prop:exclude}. The subsection \textit{``The algorithm GCreduct"}, was rewritten in order to better explain how redundant attributes are removed. Additionally, in Algorithm~\ref{alg:exclusion}, we explicitly point out where the proposition~\ref{prop:exclude} is used. 
     %Furthermore, superfluous attributes are removed as a preprocessing stage, as commented in the second paragraph of this subsection (see page~\pageref{superfluous}).
 
 	\item According to me, the paper is too complicated. Description of the algorithm calculating all reducts is so long that it is readable only for a narrow range of readers. It might be worthwhile to split it into fragments (procedures).\\
@@ -47,7 +47,7 @@
 
 	\item The paper presents the results of experiments performed on real data sets. I think that besides of that, in the paper an example of the application of the presented algorithm for a small data table (several objects and attributes) should be added. Then it would be easier to see how works the described method (step by step). It is important that in such description, the method based on the elimination of GAP should be well illustrated.\\
 	\textbf{Authors’ response:} \\
-	In Table~\ref{tab:sample_GCreduct}, we have added a step by step execution of our algorithm using  the \textit{SBDM} shown in Table~\ref{tab:SSBDM1}. In the last two paragraphs of the subsection \textit{``The algorithm GCreduct"} (see page~\pageref{par:step}), we describe the execution (step by step) of our algorithm, and we also take advantage of this example to illustrate the elimination of GAP.
+	In Table~\ref{tab:sample_GCreduct}, we have added a step by step execution of our algorithm using  the \textit{SBDM} shown in Table~\ref{tab:SSBDM1}. In the last two paragraphs of the subsection \textit{``The algorithm GCreduct"} (see page~\pageref{par:step}), we describe the execution (step by step) of our algorithm, and we also take advantage of this example to illustrate the GAP elimination.
   \end{enumerate}    
   
   %In the current version of the paper, it is not valuable to the INS.
@@ -63,11 +63,11 @@
 	
 	\item You claim that GCreduct algorithm performs faster than all other recent reported alternatives in a specific kind of information systems. There was no explicit definition of this information systems class.\\
 	\textbf{Authors’ response:}\\
-	In order to address this comment, in the penultimate paragraph of the section \textit{``Evaluation and Discussion"}	(see page~\pageref{par:kind}), we have added a sentence explicitly commenting the kind of information systems where GCreduct  performs faster than all other recent reported alternatives.
+	In order to address this comment, in the penultimate paragraph of the section \textit{``Evaluation and Discussion"}	(see page~\pageref{par:kind}), we have added a sentence explicitly commenting the kind of information systems where GCreduct  performs faster than all other reported alternatives.
 
 	\item You performed a very brief computational complexity analysis, but did not confront results of this analysis with any other algorithm, hence there was a lack of a comparative analysis of complexity. Thus, the only form of performance comparison of algorithms was a very decent empirical comparison of several available implementations.\\
 	\textbf{Authors’ response:} \\
-	It is important to highlight that the problem of computing all the reducts is NP-hard. Therefore, all algorithms has exponential complexity and their performance is strongly related to the characteristics of the \textit{SBDM}. For this reason, in the second paragraph from page~\pageref{par:complexity} we included a comparative analysis of the complexity of evaluating a single candidate for each algorithm, describing the scenarios where each of them would perform better.
+	It is important to highlight that the problem of computing all the reducts of an information system is NP-hard. Therefore, all algorithms has exponential complexity and their performance is strongly related to the characteristics of the \textit{SBDM}. For this reason, in the second paragraph of page~\pageref{par:complexity} we included a comparative analysis of the complexity of evaluating a single candidate in each algorithm, describing the scenarios where they would perform better.
 	
 	\item The article's introduction should emphasize the motivation of this study, should describe the need for faster computation of all reducts and should indicate how GCreduct satisfy this need.\\
 	\textbf{Authors’ response:} \\
@@ -77,6 +77,8 @@
 	\textbf{Authors’ response:} \\
 	You are right, in the new version of our paper we have corrected these inconsistencies. 
   \end{enumerate}  
+  
+  We are especially grateful to the third reviewer for his comments on the pdf document. All of these concerns were also attended in this new version of the paper.
      
 %  In the attached pdf file I placed selected, more detailed comments.
   
