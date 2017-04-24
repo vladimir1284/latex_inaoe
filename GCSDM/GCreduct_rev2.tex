@@ -186,7 +186,8 @@
  
  
 \section{Related Work}\label{relatedWork}
-
+  
+  \phantomsection\label{early}
   Early algorithms for computing the complete set of reducts \citep{Bazan2001,Ohrn00} are integrated in RSES and ROSETTA software for rough sets computation. However, these implementations are unable to solve even middle size problems. For example for dermatology data set~\citep{Bache13} neither RSES nor ROSETTA are able to calculate all reducts~\citep{Lazo15}; nevertheless, they can be computed in less than 5 seconds by fast--BR~\citep{Lias13}, as it can be seen in Table~\ref{tab:java}.
 
   Another early method for computing all reducts of a decision system was presented in \cite{Starzyk99,Starzyk00}.  This is a divide and conquer approach. On each step, the absorption laws are applied over the incoming discernibility function to obtain a reduced set of clauses. Then, those attributes that appear together in  clauses are compressed, avoiding duplicate combinations. The attribute appearing in the highest number of clauses is selected in each recursive call. In this way, a set of super--reducts is obtained and supersets must be removed in order to obtain the final reduct set. 
@@ -349,7 +350,8 @@
 \subsection{The algorithm GCreduct}\label{description}
 	GCreduct finds all reducts in the \textit{SBDM} computed from a decision system. This algorithm explores the search space evaluating some candidates and avoiding others, based on previous evaluations. Unlike other works \citep{WangP07,Lias13} where candidate evaluation is performed through operations with a high cost, GCreduct uses a simpler candidate evaluation, based on attribute contribution and gap elimination, to reduce the algorithm runtime. 
 	
-	The GCreduct algorithm starts with an empty candidate subset. Attributes from the decision system are added to the candidate in the lexicographical order. Once a new attribute is added, it is rejected if it does not reduce the number of zero rows regarding the previous version of the candidate (does not contribute). If the new attribute contributes, the candidate is evaluated for the super-reduct and reduct conditions to be saved in the result set if it is the case. If the current candidate is a super-reduct, the new attribute is rejected as well, since it makes no sense to evaluate supersets of a super-reduct. This process continues until the last attribute from the \textit{SBDM} is included in the candidate. At this point, the algorithm searches for a gap in the candidate to avoid the evaluation of unneeded candidates. Then, the process described above is continued until the first attribute in the candidate has a zero in the first row of the \textit{SBDM}. Once this condition is reached, the algorithm has finished since there are no reducts in the remaining search space.
+	\phantomsection\label{abstarct}
+	The GCreduct algorithm starts with an empty candidate subset. Attributes from the \textit{SBDM} are added to the candidate in the lexicographical order. Once a new attribute is added, it is rejected if it does not reduce the number of zero rows regarding the previous version of the candidate (does not contribute). If the new attribute contributes, the candidate is evaluated for the super-reduct and reduct conditions to be saved in the result set if it is the case. If the current candidate is a super-reduct, the new attribute is rejected as well, since it makes no sense to evaluate supersets of a super-reduct. This process continues until the last attribute from the \textit{SBDM} is included in the candidate. At this point, the algorithm searches for a gap in the candidate to avoid the evaluation of unneeded candidates. Then, the process described above is continued until the first attribute in the candidate has a zero in the first row of the \textit{SBDM}. Once this condition is reached, the algorithm has finished since there are no reducts in the remaining search space.
 	
 	\phantomsection\label{superfluous}
 	The pseudocode for GCreduct is shown in Algorithm~\ref{alg:GCreduct}. The algorithm operates over the sorted \textit{SBDM}, and as a preprocessing stage, superfluous attributes~\cite{Lazo-Cortes2013} are removed from the \textit{SBDM}. After initializing the current candidate with the first attribute, the cumulative mask is updated. Then, the attribute contribution is evaluated using the definition~\ref{def:contrib}. For those candidate subsets with a contributing attribute, the super--reduct condition is evaluated using definition~\ref{def:testor}. For each detected super--reduct, the proposition~\ref{prop:exclude} is evaluated in order to determine whether a super--reduct is a reduct, to be saved in the result ($RR$). At this point, the candidate evaluation is finished and the $candidateGenerator$ procedure is called to evaluate a new candidate subset.
@@ -692,7 +694,7 @@
 					
 	\begin{figure}[htb]
 		\begin{center}
-			%\includegraphics[height=8cm]{candidates.eps}
+			\includegraphics[height=8cm]{candidates.eps}
 		\end{center}
 		\caption{GCreduct fraction of evaluated candidates vs. the number of attributes of the decision systems.}
 		\label{fig:candidates}

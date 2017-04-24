@@ -21,11 +21,12 @@
 	\textbf{Authors’ response:} \\
 	We have improved the grammar in the current version of our paper.
 		 
-	\item I am also interested how you would compare your gcreduct algorithm with some very-well-known algorithms based on attribute orderings/permutations? Please take a look at the following publication for further references with this respect:
+	\item I am also interested how you would compare your gcreduct algorithm with some very-well-known algorithms based on attribute orderings/ permutations? Please take a look at the following publication for further references with this respect:
   
-	\url{http://www.sciencedirect.com/science/article/pii/S0888613X17301408}\\
+	\small{\url{ http://www.sciencedirect.com/science/article/pii/S0888613X17301408}}\\
+	\normalsize
 	\textbf{Authors’ response:} \\
-	We found that Stawicki et al. (2017) and also Slezak \& Janusz (2011) used modified versions of very-well-known algorithms based on attribute orderings/permutations for computing reducts. These works make reference to the algorithms reported by Bazan et al.(2000) which are implemented in ROSETTA. In the first paragraph of our section ``Related Work", we illustrate the low performance of these early algorithms. For this reason we did not included these algorithms in our experiments.
+	We found that Stawicki et al. (2017) and also Slezak \& Janusz (2011) used modified versions of very-well-known algorithms based on attribute orderings/ permutations for computing reducts. These works make reference to the algorithms reported by Bazan et al.(2000) which are implemented in ROSETTA. In the first paragraph of our section ``Related Work", we illustrate the low performance of these early algorithms (see page~\pageref{early}). For this reason we did not included these algorithms in our experiments.
   \end{enumerate}
   
   \textbf{Reviewer \#3:}
@@ -33,28 +34,31 @@
   The article ``A New Algorithm for Reduct Computation based on Gap Elimination and Attribute Contribution" submitted to the Information Sciences journal is not ready for publication and I recommend major revision of this work. In general, I think the article is valuable. However, I suggest a major review because, in my opinion, article requires a number of amendments in terms of its form and content that should be verified/re-reviewed after adjustments.
  
  \begin{enumerate}  
-	\item The main contribution of this work is GCReduct - a new algorithm for computing all reducts of an information system, based on the pruning properties of gap elimination and attribute contribution that performs faster than all other recent reported alternatives in a specific kind of information systems. You motivated the study and, in Section~2, introduced readers to basic concepts of rough sets theory. In sec~3 you provided interesting review of related works connected to the problem of all reducts computation. I have one minor remark with regard to that part of the article: You use the term `information system' instead of `decision system' what may confuse readers.\\
+	\item The main contribution of this work is GCreduct - a new algorithm for computing all reducts of an information system, based on the pruning properties of gap elimination and attribute contribution that performs faster than all other recent reported alternatives in a specific kind of information systems. You motivated the study and, in Section~2, introduced readers to basic concepts of rough sets theory. In sec~3 you provided interesting review of related works connected to the problem of all reducts computation. I have one minor remark with regard to that part of the article: You use the term `information system' instead of `decision system' what may confuse readers.\\
 	\textbf{Authors’ response:} \\
 	We agree with this reviewer's remark. In order to provide clarity we replaced the term `information system' by `decision system'.
 	
-	\item Next, you presented a set of theories and definition that are the foundation of GCReduct algorithm. In my opinion this Section requires a number of amendments:
+	\item Next, you presented a set of theories and definition that are the foundation of GCreduct algorithm. In my opinion this Section requires a number of amendments:
 	First of all, most of Propositions, Definitions and Proofs is unclear. In my opinion, the most confusing is the numbering of attributes in sorted list of attributes L and its relation to ``global" numbering in sorted \textit{SBDM}.  For example, from Definition~3 we may learn that attribute $j_{q}$ and $j_{q+1}$ may not be consecutive in \textit{SBDM}. However, in Proposition~1 I'm not so sure about the relation of $c_{p+1}$ and $c_{p}$ in \textit{SBDM}.\\
 	\textbf{Authors’ response:}\\
+	Esto está correcto en mi opinión solo q lo del gap es confuso en sí mismo. Espero por los cambios propuestos por Lazo!!
 	
 	\item Second, the structure of  Definitions, Propositions etc. should be improved. In current form reading them is very hard. Understanding them (the same as authors do) - barely possible.\\
 	\textbf{Authors’ response:}\\
+	Lazo está revisando esto!!
 	
 	\item Third, on page 17 you started to describe sorting procedure. However, the description explains sorting of only one row.\\
 	\textbf{Authors’ response:}\\
-	The sorting process used in GCreduct change the position of only one pair of rows. The first row is swapped with one of the rows with the fewest number of 1's. However, when the columns are reorganized, all the rows in the \textit{SBDM} are modified.
+	The sorting process used in GCreduct alters the position of only one pair of rows. The first row is swapped with one of the rows with the fewest number of 1's. However, when the columns are reorganized, all the rows in the \textit{SBDM} are modified.
 	
-	\item In section~4.2 the GCReduct algorithm is presented. In my opinion, at least the main algorithm should be presented in a more abstract way. In its current form, it is very hard to follow the algorithm and its description.\\
+	\item In section~4.2 the GCreduct algorithm is presented. In my opinion, at least the main algorithm should be presented in a more abstract way. In its current form, it is very hard to follow the algorithm and its description.\\
 	\textbf{Authors’ response:}\\
+	We added an abstract description of the algorithm in the second paragraph of the subsection~4.2 (see page~\pageref{abstarct}).
 
-	\item In Sec. 5 you presented experimental results of algorithm performance against some of related algorithms. In my opinion, you presented review and experimental  study of performance of implementations (not algorithms). Presented experiments and results showed that implementation of GCReduct is faster in case of SBDM with density of 1s below 0.36.\\
+	\item In Sec. 5 you presented experimental results of algorithm performance against some of related algorithms. In my opinion, you presented review and experimental  study of performance of implementations (not algorithms). Presented experiments and results showed that implementation of GCreduct is faster in case of SBDM with density of 1s below 0.36.\\
 	\textbf{Authors’ response:}\\
 	To attend this comment, we added the following sentence to the second paragraph of the section ``Evaluation and Discussion":\\
-	\textit{It is important to notice that all the conclusions drawn from these experiments refers rigorously to the implementations that we used.}
+	\textit{It is important to notice that all the conclusions drawn from these experiments refer rigorously to the implementations that we used.}
 	
 	\item Lastly, the form of the article and the style of the language should be improved.\\
 	\textbf{Authors’ response:}\\
@@ -70,13 +74,13 @@
 \end{letter}
 
 %% References without bibTeX database:
-
+\textbf{References}
 \begin{enumerate}
+	\item Bazan, J. G., Nguyen, H. S., Nguyen, S. H., Synak, P., \& Wróblewski, J. (2000). Rough Set Algorithms in Classification Problem. In L. Polkowski, S. Tsumoto, \& T. Y. Lin (Eds.), Rough Set Methods and Applications: New Developments in Knowledge Discovery in Information Systems (pp. 49--88).
+	
 	\item Slezak, D., \& Janusz, A. (2011). Ensembles of Bireducts: Towards Robust Classification and Simple Representation. Lecture Notes in Computer Science (Including Subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics), 7105(May), 64--77.
 	
 	\item Stawicki, S., Slezak, D., Janusz, A., \& Widz, S. (2017). Decision bireducts and decision reducts -- a comparison. International Journal of Approximate Reasoning, 84, 75--109.
-	
-	\item Bazan, J. G., Nguyen, H. S., Nguyen, S. H., Synak, P., \& Wróblewski, J. (2000). Rough Set Algorithms in Classification Problem. In L. Polkowski, S. Tsumoto, \& T. Y. Lin (Eds.), Rough Set Methods and Applications: New Developments in Knowledge Discovery in Information Systems (pp. 49--88).
 \end{enumerate}
 	
 	
