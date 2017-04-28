@@ -178,7 +178,7 @@
   \end{table}  
    
   \begin{definition}\label{def:basic_row}
-	Let $B_{DM}$ be a binary discernibility matrix and $r_1 \in B_{DM}$ be a row of $B_{DM}$. We say that $r_1$ is a superfluous row of $B_{DM}$ if $\exists r \in B_{DM}$ such that $\exists i | (r(i) < r_1(i)) \wedge \forall i | (r(i) \leq r_1(i))$.
+	Let $DM$ be a binary discernibility matrix and $r_1 \in DM$ be a row of $DM$. We say that $r_1$ is a superfluous row of $DM$ if $\exists r \in DM$ such that $\exists i | (r(i) < r_1(i)) \wedge \forall i | (r(i) \leq r_1(i))$.
   \end{definition}
 
   The \textit{SBDM} is formed excluding all the superfluous rows from the binary discernibility matrix. Reducts of a decision system, can be computed from this reduced matrix \citep{Yao09}. Table~\ref{tab:SBDM1} shows the \textit{SBDM} from the binary discernibility matrix in Table~\ref{tab_BDM}.
@@ -222,30 +222,30 @@
 	In this subsection, we will be referring to the binary representation of the simplified discernibility matrix (\textit{SBDM}, see Subsection~\ref{sect_SBDM}). The following definition of super--reduct is equivalent to the condition~\ref{cond_1} stated in Subsection~\ref{def_reduct} \citep{Lazo15}.
 	
 	\begin{definition}\label{def:testor}
-		Let DM be a SBDM and $B \subseteq C$ be a subset of condition attributes of a decision system. $B$ is a super--reduct iff in the sub-matrix of DM considering only the attributes in $B$, there is no zero row (a row having only zeros).
+		Let DM be a SBDM and $B \subseteq C$ be a subset of condition attributes. $B$ is a super--reduct iff in the sub-matrix of DM considering only the attributes in $B$, there is no zero row (a row of zeros).
 	\end{definition}
 	
 	The concept of gap, used in our proposal, was first introduced in~\cite{Santiesteban03} for the LEX algorithm, as shown in the definition~\ref{def:gap}.
 	
-	Let's first define the notation $[c|Y]$ to represent an ordered list of attributes such that $c$ is the first attribute in the list and $Y$ is the ordered list of the remaining elements. Notice that the order of elements in the list is relevant. If we have, for instance $[c_1,c_3,c_6]$, we can express it as $[c_1|[c_3,c_6]]$ according to this notation. In the same way, $[c_3,c_4]$ can be expressed as $[c_3|[c_4]]$.
+	Let us first define the notation $[c|Y]$ to represent an ordered list of attributes such that $c$ is the first attribute in the list and $Y$ is the ordered list of the remaining elements. Notice that the order of elements in the list is relevant. If we have, for instance $[c_1,c_3,c_6]$, we can express it as $[c_1|[c_3,c_6]]$ according to this notation. In the same way, $[c_3,c_4]$ can be expressed as $[c_3|[c_4]]$.
 	
-	Let's also define an order relation $\prec$ over the power set of attributes such that:
+	Let us also define an order relation $\prec$ over the set of ordered list of attributes as follows.
 	\begin{enumerate}
-		\item Let $Y=[c_i|Y']$ and $Z=[c_j|Z']$ bet two sorted lists of attributes. Then, $Y \prec Z$ if $i<j$.
-		\item Let $Y=[c_i|Y']$ and $Z=[c_i|Z']$ bet two sorted lists of attributes. Then, $Y \prec Z$ if $Y' \prec Z'$.
+		\item Let $Y=[c_i|Y']$ and $Z=[c_j|Z']$ be two sorted lists of attributes. Then, $Y \prec Z$ if $i<j$.
+		\item Let $Y=[c_i|Y']$ and $Z=[c_i|Z']$ be two sorted lists of attributes. Then, $Y \prec Z$ if $Y' \prec Z'$.
 		\item $\forall Y:  [] \prec Y$.
 	\end{enumerate}
-	Herein after, we will refer to this order as the lexicographical order. Let's use the $+$ operator to denote list concatenation. In this way: $$[c_1,c_3,c_4]+[c_6,c_7]=[c_1,c_3,c_4,c_6,c_7]$$
+	Herein after, we will refer to this order as the lexicographical order. Let us use the $+$ operator to denote list concatenation. In this way: $$[c_1,c_3,c_4]+[c_6,c_7]=[c_1,c_3,c_4,c_6,c_7]$$
 		
-	We say that $L$ is the ordered list of attributes associated to a subset of attributes $B = \lbrace c_{j_0},...,c_{j_s} \rbrace$ if $L = [c_{j_0},...,c_{j_s}]$, where $j_0<\cdots <j_s$ are the positions of their corresponding columns in the \textit{SBDM}.
+%	We say that $L$ is the ordered list of attributes associated to a subset of attributes $B = \lbrace c_{j_0},...,c_{j_s} \rbrace$ if $L = [c_{j_0},...,c_{j_s}]$, where $j_0<\cdots <j_s$ are the positions of their corresponding columns in the \textit{SBDM}.
 	
 	\begin{definition}\label{def:gap}
-		Let $L = [c_{j_0},...,c_{j_s}]$ be the ordered list associated to a subset of attributes from a decision system. The gap of $L$ is the attribute $c_p \in L$ with $j_0 \leq p <	j_s$ such that $p=\mathrm{max}(j_q | c_{j_q},c_{j_{q+1}} \in L \wedge j_{q+1} \neq j_q+1)$.
+		Let $L = [c_{j_0},...,c_{j_s}]$ be an ordered list of attributes. If there is an attribute $c_{j_p} \in L$ with $j_0 \leq {j_p} <	j_s$ such that ${j_p}=\mathrm{max}(j_q | c_{j_q},c_{j_{q+1}} \in L \wedge j_{q+1} \neq j_q+1)$, we say that $c_{j_p}$ gap of $L$.
 	\end{definition}
 	
-	In other words, the gap is the attribute in $L$ with the highest index such that its consecutive attribute in $L$ is not its consecutive attribute (column) in the \textit{SBDM}.
+	In other words, the gap of $L$ is the attribute with the highest index satisfying that its consecutive attribute in $L$ is not its consecutive attribute (column) in the \textit{SBDM}.
 	
-	Let's take for example a \textit{SBDM} with 7 attributes ($c_0 - c_6$):
+	Let us take for example a \textit{SBDM} with 7 attributes ($c_0 - c_6$):
 	$$\begin{array}{ll}
 	{[c_0,c_1,c_2,c_3]} 		& \mathrm{there~is~no~gap}\\
 	{[c_0,c_1,c_2,c_5,c_6]} 	& \mathrm{the~gap~is~} c_2\\
@@ -257,17 +257,17 @@
 	The pruning property of gap elimination is supported by the proposition~\ref{prop:gap} \citep{Santiesteban03}. 
 		
 	\begin{proposition}\label{prop:gap} 
-		Let DM be a SBDM, $B \subseteq C$ be a reduct, and $L = [c_{j_0},...,c_{j_s}]$ its associated ordered list, such that $c_{j_s}$ is the last attribute in DM. If there is a gap $c_p$ in $L$, and $L' = [c_{j_0},...,c_{j_k},c_{p+1}]$, $j_0<\cdots <j_k\leq p-1$; then, there is no list $Y$, such that $L \prec Y \prec L'$, associated to a reduct.
+		Let DM be a SBDM and $L = [c_{j_0},...,c_{j_s}]$ an ordered list associated to a reduct, such that $c_{j_s}$ is the last attribute in DM. If there is a gap $c_{j_p}$ in $L$, and $L'=[c_{j_0},...,j_{p-1},c_{j_p+1}]$; then, there is no list $Y$, such that $L \prec Y \prec L'$, associated to a reduct.
 	\end{proposition}	
 	
 	\noindent
 	\textbf{Proof.} \textit{\label{proof:gap} 
-	Let's denote $L$ as $L=W+Z$, where $Z=[c_{j_q},c_{j_{q+1}}, \dots, c_{j_s}]$, $j_q=p+1$ and $W=[c_{j_0}, \dots,c_{j_k}, c_{j_p}]$. According to the lexicographical order, any list $L \prec Y \prec L'$ can be denoted as $Y=W+V$. Since $c_p$ is a gap, we have from the definition~\ref{def:gap}, that all the attributes in $Z$ are consecutive in DM. Thus, noting that $c_{j_s}$ is the last attribute in DM, we have that $\forall c_j \in V: c_j \in Z$. Then, for any list $Y$ satisfying that $L \prec Y \prec L'$, its associated subset of attributes $B_Y \subseteq C$ is a proper subset of $B$. Thus, given that $B$ is a reduct, by the condition~\ref{cond_2} of the subsection~\ref{def_reduct} we have that $B_Y$ cannot be a reduct.}
+	Let us denote $L$ as $L=W+Z$, where $Z=[c_{j_q},c_{j_{q+1}}, \dots, c_{j_s}]$, $j_q=j_{p+1}$ and $W=[c_{j_0}, \dots,c_{j_{p-1}}, c_{j_p}]$. According to the lexicographical order, any list $L \prec Y \prec L'$ can be denoted as $Y=W+V$. Since $c_{j_p}$ is a gap, we have from the definition~\ref{def:gap}, that all the attributes in $Z$ are consecutive in DM. Thus, noting that $c_{j_s}$ is the last attribute in DM, we have that $\forall c_j \in V: c_j \in Z$. Then, for any list $Y$ satisfying that $L \prec Y \prec L'$, attributes in $Y$ are a proper subset of the attributes in $L$. Thus, given that $L$ is associated to a reduct, by the minimal condition of reducts, $Y$ cannot be associated to any reduct.}
 	
 	From the proposition~\ref{prop:gap} we have the following corollary \citep{Santiesteban03}; which is relevant for our proposed algorithm in order to avoid other unnecessary evaluations.
 	
 	\begin{corollary}\label{coro:gap} 
-		Let DM be a SBDM, $B \subseteq C$ be a non super--reduct, and $L = [c_{j_0},...,c_{j_s}]$ its associated ordered list, such that $c_{j_s}$ is the last attribute in DM. If there is a gap $c_p$ in $L$, and $L' = [c_{j_0},...,c_{j_k},c_{p+1}]$, $j_0<\cdots <j_k\leq p-1$; then, there is no list $Y$, such that $L \prec Y \prec L'$, associated to a reduct.
+		Let DM be a SBDM and $L = [c_{j_0},...,c_{j_s}]$ an ordered list associated to a non super--reduct, such that $c_{j_s}$ is the last attribute in DM. If there is a gap $c_{j_p}$ in $L$, and $L' = [c_{j_0},...,c_{j_{p-1}},c_{j_p+1}]$; then, there is no list $Y$, such that $L \prec Y \prec L'$, associated to a reduct.
 	\end{corollary}
 		
 	The following definition constitutes the key concept for CT\_EXT \citep{Sanchez07} and for our proposed algorithm, and it is also an important component of the algorithms BR \citep{Lias09} and RGonCRS \citep{WangP07}.
@@ -279,14 +279,14 @@
 	From this concept, the following proposition was stated and proved \cite{Sanchez07}.
 			
 	\begin{proposition}\label{prop:contrib} 
-		Let $B \subseteq C$ and  $c_i \in C$ such that $c_i \notin B$. If $c_i$ does not contribute to $B$, then $B\cup\{c_i\}$ cannot be a subset of any reduct.
+		Let $B \subseteq C$ and $c_i \in C$ such that $c_i \notin B$. If $c_i$ does not contribute to $B$, then $B\cup\{c_i\}$ cannot be a subset of any reduct.
 	\end{proposition}
 	
-	From Proposition~\ref{prop:contrib}, we present the following corollary supporting the use of the attribute contribution for pruning the search space.
+	Using Proposition~\ref{prop:contrib}, the evaluation of supersets of $B\cup\{c_i\}$ can be avoided, given that $c_i$ does not contribute to $B$.
 	
-	\begin{corollary}\label{coro:contrib} 
-		Let DM be a SBDM, $B \subseteq C$,  $c_i \in C$ such that $c_i \notin B$, $c_{i+1} \in C$ such that $c_{i+1} \notin B$, and $L$ the ordered list of attributes associated to $B$. Given that $c_{i+1}$ is the consecutive attribute of $c_i$ in DM, if $c_i$ does not contribute to $B$; then, there is not any list $Y$ such that $L+[c_i] \prec Y \prec L+[c_{i+1}]$ associated to a reduct.
-	\end{corollary}
+%	\begin{corollary}\label{coro:contrib} 
+%		Let DM be a SBDM, $B \subseteq C$,  $c_i \in C$ such that $c_i \notin B$, $c_{i+1} \in C$ such that $c_{i+1} \notin B$, and $L$ the ordered list of attributes associated to $B$. Given that $c_{i+1}$ is the consecutive attribute of $c_i$ in DM, if $c_i$ does not contribute to $B$; then, there is not any list $Y$ such that $L+[c_i] \prec Y \prec L+[c_{i+1}]$ associated to a reduct.
+%	\end{corollary}
 	
 	For a fast implementation of these algorithms \citep{Sanchez10,Lias13}, columns in a simplified discernibility matrix \textit{DM} are coded as binary words with as many bits as rows in \textit{DM}. The cumulative mask for an attribute $c_i$, denoted as $cm_{c_i}$, is defined as the binary word representing the $i$th column in \textit{DM}. The cumulative mask for a subset of attributes $B=\lbrace c_{i1},c_{i2},...,c_{ik} \rbrace$ is defined	as $cm_B = cm_{c_{i1}} \vee cm_{c_{i2}} \vee ... \vee cm_{c_{ik}}$ where $\vee$ represents the binary OR operator. It is not hard to see that the number of 0's in $cm_B$ is the same as the number of zero rows in the sub-matrix of the \textit{SBDM}, considering only the attributes in $B$. According to the definition~\ref{def:contrib}, $c_i$ contributes to $B$ iff $cm_{B\cup \lbrace c_i\rbrace}$ has more 1's than $cm_B$. The incremental nature of these algorithms, also included in  our proposed algorithm (GCreduct), is given by the associative property of the OR operation, such that  $cm_{B\cup \lbrace c_i\rbrace}=cm_B\vee cm_{c_i}$. Notice that, from this last formulation, $c_i$ contributes to $B$ iff $cm_{B\cup \lbrace c_i\rbrace}\neq cm_B$ since $cm_{B\cup \lbrace c_i\rbrace}$ cannot have less 1's than $cm_B$. It is easy to see, from the definition~\ref{def:testor} that $B \subseteq C$ is a super--reduct iff $cm_B=(1,...,1)$ ($cm_B$ has a 1 in every bit).
 	
@@ -294,7 +294,7 @@
 	exclusion mask, introduced in \cite{Lias09}, plays a fundamental role. 
 	
 	\begin{definition}\label{def:exclusion}
-		Let DM be a SBDM and $B \subseteq C$ be a subset of attributes from a decision system. We call exclusion mask of B, denoted as $em_B$, to the binary word in which the $i^{\mathit{th}}$ bit is 1 if the $i^{\mathit{th}}$ row in DM has a 1 in only one column of those columns corresponding to attributes in B, and it is 0 otherwise.
+		Let DM be a SBDM and $B \subseteq C$ be a subset of attributes. We call exclusion mask of B, denoted as $em_B$, to the binary word in which the $i^{\mathit{th}}$ bit is 1 if the $i^{\mathit{th}}$ row in DM has a 1 in only one column of those columns corresponding to attributes in B, and it is 0 otherwise.
 	\end{definition}
 	
 	For instance, from the \textit{SBDM} in Table~\ref{tab:SBDM1} we have:
@@ -304,22 +304,22 @@
 	  em_{\lbrace c_0,c_1,c_2,c_3,c_4\rbrace} &=& (0,1,0,0,0)
 	\end{array}$$
 	
-	In \cite{Lias13} the following proposition was introduced to support the cumulative computation of the exclusion mask.
+	In \cite{Lias13} the following propositions are introduced to support the cumulative computation of the exclusion mask.
 	
 	\begin{proposition}\label{prop:cumul} 
-		Let DM be a SBDM, $B \subseteq C$ be a subset of attributes from a decision system and $c_i \notin B$ an attribute of DM. The exclusion mask of $B \cup \lbrace c_i\rbrace$ is calculated as follows: $$em_{B \cup \lbrace c_i\rbrace}=(em_B \wedge \neg cm_{c_i}) \vee (\neg cm_B \wedge cm_{c_i})$$	where $cm$ refers to the cumulative mask.
+		Let DM be a SBDM, $B \subseteq C$ be a subset of attributes and $c_i \in C$ such that $c_i \notin B$. The exclusion mask of $B \cup \lbrace c_i\rbrace$ is calculated as follows: $$em_{B \cup \lbrace c_i\rbrace}=(em_B \wedge \neg cm_{c_i}) \vee (\neg cm_B \wedge cm_{c_i})$$	where $cm$ refers to the cumulative mask.
 	\end{proposition}
 	
-	Finally, they stated and proved the following proposition.
+%	Finally, they stated and proved the following proposition.
 	
 	\begin{proposition}\label{prop:exclude} 
-		Let DM be a SBDM, $B \subseteq C$ be a subset of attributes from a decision system and $c_i \notin B$ an attribute of DM. If $\exists c_x \in B$ such that $em_{B \cup \lbrace c_i\rbrace} \wedge cm_{c_x}=(0,...,0)$. Then, $B \cup \lbrace c_i\rbrace$ cannot be a subset of any reduct.
+		Let DM be a SBDM, $B \subseteq C$ be a subset of attributes and $c_i \in C$ such that $c_i \notin B$. If $\exists c_x \in B$ such that $em_{B \cup \lbrace c_i\rbrace} \wedge cm_{c_x}=(0,...,0)$. Then, $B \cup \lbrace c_i\rbrace$ cannot be a subset of any reduct.
 	\end{proposition}
 	
-	In order to reduce the search space, as in other works \citep{Sanchez07,Lias13}, GCreduct sorts the \textit{SBDM}. First of all, one of the rows of the \textit{SBDM} with the fewest number of 1's is randomly selected. Then, the selected row is moved to the top, and all columns in which it has a 1 are moved to the left. Table~\ref{tab:SSBDM1} shows the \textit{SBDM} from Table~\ref{tab:SBDM1}, sorted in this way. Hereinafter, the order of attributes in the \textit{SBDM} is the resulting order of this sorting process.
+	In order to reduce the search space, as in other works \citep{Sanchez07,Lias13}, GCreduct arranges the \textit{SBDM} as follows: first, one of the rows of the \textit{SBDM} with the fewest number of 1's is randomly selected. Then, the selected row is moved to the top, and all columns in which it has a 1 are moved to the left. It is important to highlight that this change in the order of columns does not modify the information of the \textit{SBDM}. Also, notice that the order of rows apart from the first one is irrelevant. Table~\ref{tab:SSBDM1} shows the \textit{SBDM} from Table~\ref{tab:SBDM1}, arranged in this way. Hereinafter, the order of attributes in the \textit{SBDM} is the resulting order of this process.
 			
 	\begin{table}[htb]
-		\caption{Sorted Simplified Binary Discernibility Matrix computed from Table~\ref{tab:SBDM1}.}
+		\caption{Arranged Simplified Binary Discernibility Matrix computed from Table~\ref{tab:SBDM1}.}
 		\centering
 		\begin{tabular}{ccccccc}\label{tab:SSBDM1}
 			$c_0$ & $c_1$ & $c_2$ & $c_3$ & $c_4$ & $c_5$ & $c_6$\\
@@ -333,17 +333,17 @@
 	\end{table}  
 	
 	\begin{proposition}\label{prop:firstRow}
-		Let DM be a sorted SBDM and $L = [c_{j0},...,c_{js}]$ the ordered list associated to a subset of attributes from DM. If the first row in the column corresponding to $c_{j0}$ has a zero, denoted as $c_{j0}[0]=0$, $L$ is not associated to a super-reduct. Furthermore, there is no list $L'$, such that $L\prec L'$, associated to a super-reduct.
+		Let DM be an arranged SBDM and $L = [c_{j_0},...,c_{j_s}]$ an ordered list of attributes. If the first row in the column corresponding to $c_{j_0}$ has a zero, denoted as $c_{j_0}[0]=0$, $L$ is not associated to a super-reduct. Furthermore, there is no list $L'$, such that $L\prec L'$, associated to a super-reduct.
 	\end{proposition}
 	
 	\noindent
-	\textbf{Proof.} \textit{Due to the sorting process described above, if $c_{j0}[0]=0$ then, $\forall c \in L: c[0]=0$. Thus, the first row in the sub-matrix of DM considering only the attributes in $L$ is a zero row. According to the definition~\ref{def:testor}, $L$ is not associated to a super-reduct. Given $L \prec L'= [c_{jq},...,c_{jz}]$, we have that $j0<jq$. Thus, if $c_{j0}[0]=0$ then, $\forall c \in L': c[0]=0$ therefore $L'$ has also a zero row and it is not associated to a super-reduct.}
+	\textbf{Proof.} \textit{Due to the arranging process described above, if $c_{j_0}[0]=0$ then, $\forall c \in L: c[0]=0$. Thus, the first row in the sub-matrix of DM considering only the attributes in $L$ is a zero row. According to the definition~\ref{def:testor}, $L$ is not associated to a super-reduct. Given $L \prec L'= [c_{j_q},...,c_{j_z}]$, we have that $j_0 \leq j_q$. Thus, if $c_{j_0}[0]=0$ then, $\forall c \in L': c[0]=0$ therefore $L'$ has also a zero row and it is not associated to a super-reduct.}
 
-	Based on the definition of super-reduct that we gave in the subsection~\ref{def_reduct}, we present the following corollary.
-	
-	\begin{corollary}\label{coro:firstRow}
-		Let DM be a sorted SBDM and $L = [c_{j0},...,c_{js}]$ the ordered list associated to a subset of attributes from DM. If the first row of the column corresponding to $c_{j0}$ has a zero, $L$ is not associated to a reduct. Furthermore, there is not any list $L'$, such that $L\prec L'$, associated to a reduct.
-	\end{corollary}
+%	Based on the definition of super-reduct that we gave in the subsection~\ref{def_reduct}, we present the following corollary.
+%	
+%	\begin{corollary}\label{coro:firstRow}
+%		Let DM be a arranged SBDM and $L = [c_{j0},...,c_{js}]$ the ordered list associated to a subset of attributes from DM. If the first row of the column corresponding to $c_{j0}$ has a zero, $L$ is not associated to a reduct. Furthermore, there is not any list $L'$, such that $L\prec L'$, associated to a reduct.
+%	\end{corollary}
 	
 	In the next subsection we will use these propositions to support the pruning of the search space in our proposed algorithm.
 
@@ -354,16 +354,16 @@
 	The GCreduct algorithm starts with an empty candidate subset. Attributes from the \textit{SBDM} are added to the candidate in the lexicographical order. Once a new attribute is added, it is rejected if it does not reduce the number of zero rows regarding the previous version of the candidate (does not contribute). If the new attribute contributes, the candidate is evaluated for the super-reduct and reduct conditions to be saved in the result set if it is the case. If the current candidate is a super-reduct, the new attribute is rejected as well, since it makes no sense to evaluate supersets of a super-reduct. This process continues until the last attribute from the \textit{SBDM} is included in the candidate. At this point, the algorithm searches for a gap in the candidate to avoid the evaluation of unneeded candidates. Then, the process described above is continued until the first attribute in the candidate has a zero in the first row of the \textit{SBDM}. Once this condition is reached, the algorithm has finished since there are no reducts in the remaining search space.
 	
 	\phantomsection\label{superfluous}
-	The pseudocode for GCreduct is shown in Algorithm~\ref{alg:GCreduct}. The algorithm operates over the sorted \textit{SBDM}, and as a preprocessing stage, superfluous attributes~\cite{Lazo-Cortes2013} are removed from the \textit{SBDM}. After initializing the current candidate with the first attribute, the cumulative mask is updated. Then, the attribute contribution is evaluated using the definition~\ref{def:contrib}. For those candidate subsets with a contributing attribute, the super--reduct condition is evaluated using definition~\ref{def:testor}. For each detected super--reduct, the proposition~\ref{prop:exclude} is evaluated in order to determine whether a super--reduct is a reduct, to be saved in the result ($RR$). At this point, the candidate evaluation is finished and the $candidateGenerator$ procedure is called to evaluate a new candidate subset.
+	The pseudocode for GCreduct is shown in Algorithm~\ref{alg:GCreduct}. The algorithm operates over the arranged \textit{SBDM}, and as a preprocessing stage, superfluous attributes~\cite{Lazo-Cortes2013} are removed from the \textit{SBDM}. After initializing the current candidate with the first attribute, the cumulative mask is updated. Then, the attribute contribution is evaluated using the definition~\ref{def:contrib}. For those candidate subsets with a contributing attribute, the super--reduct condition is evaluated using definition~\ref{def:testor}. For each detected super--reduct, the proposition~\ref{prop:exclude} is evaluated in order to determine whether a super--reduct is a reduct, to be saved in the result ($RR$). At this point, the candidate evaluation is finished and the $candidateGenerator$ procedure is called to evaluate a new candidate subset.
 	
 	\begin{algorithm}
 	\footnotesize
 	\caption{GCreduct algorithm for computing all reducts}
 	\label{alg:GCreduct}
 	\begin{algorithmic}[1]
-		\Require \textit{SBDM} - the sorted \textit{SBDM}
+		\Require \textit{SBDM} - the arranged \textit{SBDM}
 		\Ensure $RR$ - set of all reducts
-		\State sortSBDM()
+		\State arrangeSBDM()
 		\State $RR \Leftarrow \emptyset$
 		\State $B \Leftarrow \emptyset$  \Comment{Subset of attributes in the candidate.}
 		\State $c \Leftarrow 0$ \Comment{New attribute to add in the candidate.}
@@ -433,7 +433,7 @@
 	
 	If the last attribute is not reached yet, there are two possibilities:			
 	\begin{enumerate}
-		\item The current candidate is a super--reduct or the current attribute $c$ does not contribute to $B$; then we must replace $c$ by the next attribute in the sorted \textit{SBDM}. In this way, we are skipping all the supersets of $B\cup\lbrace c\rbrace$, taking advantage of the condition~\ref{cond_2} of the subsection~\ref{def_reduct} (if the current candidate is a super--reduct); or applying the corollary~\ref{coro:contrib} (if $c$ does not contribute~to~$B$).
+		\item The current candidate is a super--reduct or the current attribute $c$ does not contribute to $B$; then we must replace $c$ by the next attribute in the arranged \textit{SBDM}. In this way, we are skipping all the supersets of $B\cup\lbrace c\rbrace$, taking advantage of the condition~\ref{cond_2} of the subsection~\ref{def_reduct} (if the current candidate is a super--reduct); or applying Proposition~\ref{prop:contrib} (if $c$ does not contribute~to~$B$).
 		
 		\item The attribute $c$ contributes to $B$ and the current candidate is not a super--reduct; then the current attribute is added to $B$ and the next attribute in the \textit{SBDM} is loaded to $c$. In this way, we just follow the lexicographical order.
 	\end{enumerate}  	
@@ -466,7 +466,7 @@
 		\end{algorithmic}
 	\end{algorithm}
 	
-	Each time a new candidate is generated, if the column of the \textit{SBDM} corresponding to the leftmost attribute in the candidate has a zero in the first row, the algorithm finishes. This final pruning is possible because of the corollary~\ref{coro:firstRow}.
+	Each time a new candidate is generated, if the column of the \textit{SBDM} corresponding to the leftmost attribute in the candidate has a zero in the first row, the algorithm finishes. This final pruning is possible because of the proposition~\ref{prop:firstRow}.
 	
 	The pseudocode for the gap elimination is shown in Algorithm~\ref{alg:eliminateGAP}. Every consecutive attribute in the current candidate, starting from the last attribute is eliminated as it was explained in the definition~\ref{def:gap}. The time complexity of this procedure is $\Theta(n)$. Since all other instructions within the \textit{candidateGenerator} procedure has time complexity of $\Theta(1)$, we can conclude that the overall time complexity of \textit{candidateGenerator} is $\Theta(n)$. In the same way, it can be seen that the overall time complexity of a candidate evaluation cycle in GCreduct, is $\Theta(nm)$. However, since computing all reducts is an NP--hard problem, the number of cycles has an exponential relation to $n$.
 
@@ -502,10 +502,10 @@
 	\noindent
 	\textbf{Proof.} \textit{The algorithm GCreduct, traverses the search space of attribute subsets in the lexicographical order. During the search process, some attribute subsets are evaluated while other are skipped in the following cases:
 		\begin{itemize}
-			\item Supersets of an attribute subset which has a non contributing attribute (proposition~\ref{prop:contrib}).
+			\item Supersets of an attribute subset which has a non contributing attribute (Proposition~\ref{prop:contrib}).
 			\item Supersets of a super-reduct (which cannot be a reduct based on the condition~\ref{cond_2} of the subsection~\ref{def_reduct}).
-			\item When there is a gap (proposition~\ref{prop:gap}).
-			\item When the column of the \textit{SBDM} corresponding to the leftmost attribute in the candidate, has a zero in the first row (corollary~\ref{coro:firstRow}).
+			\item When there is a gap (Corollary~\ref{coro:gap}).
+			\item When the column of the \textit{SBDM} corresponding to the leftmost attribute in the candidate, has a zero in the first row (Proposition~\ref{prop:firstRow}).
 		\end{itemize} 
 		Since the attribute subsets skipped through the searching process, are certainly not a reduct, we can state that GCreduct finds all the reducts of a decision system.}
 	
