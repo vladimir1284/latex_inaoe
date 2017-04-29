@@ -99,14 +99,14 @@
  	\begin{tabular}{c||c|c|c|c|c|c|c||c}
  			  & $c_0$ & $c_1$ & $c_2$ &  $c_3$ & $c_4$ & $c_5$ &  $c_6$ & $d$ \\
  		\hline \hline
-		$x_1$ &   blue  & 0 & medium & 3 & 20 & $<1$  & 1 & bad   \\
-		$x_2$ &   red   & 1 & medium & 2 & 20 & $<1$  & 1 & bad   \\
-		$x_3$ &   red   & 0 & medium & 3 & 20 & $<1$  & 1 & good   \\
-		$x_4$ &   red   & 0 & medium & 3 & 20 & $<1$  & 0 & bad   \\
-		$x_5$ &   red   & 0 & long   & 3 & 12 & $<1$  & 1 & bad   \\
-		$x_6$ &   green & 0 & short  & 3 & 20 & $=1$  & 1 & good   \\
-		$x_7$ &   red   & 0 & medium & 3 & 20 & $=1$  & 1 & bad   \\
-		$x_8$ &   red   & 0 & short  & 3 & 20 & $>1$  & 1 & bad   \\
+		$x_1$ & 0 & blue  & medium & 3 & 20 & $<1$  & 1 & bad   \\
+		$x_2$ & 1 & red   & medium & 2 & 20 & $<1$  & 1 & bad   \\
+		$x_3$ & 0 & red   & medium & 3 & 20 & $<1$  & 1 & good   \\
+		$x_4$ & 0 & red   & medium & 3 & 20 & $<1$  & 0 & bad   \\
+		$x_5$ & 0 & red   & long   & 3 & 12 & $<1$  & 1 & bad   \\
+		$x_6$ & 0 & green & short  & 3 & 20 & $=1$  & 1 & good   \\
+		$x_7$ & 0 & red   & medium & 3 & 20 & $=1$  & 1 & bad   \\
+		$x_8$ & 0 & red   & short  & 3 & 20 & $>1$  & 1 & bad   \\
  	\end{tabular}             
  \end{table}
  
@@ -145,18 +145,18 @@
  	\begin{tabular}{c|ccccccc}
  		& $c_0$ & $c_1$ & $c_2$ & $c_3$ & $c_4$ & $c_5$ & $c_6$\\
  		\hline
-		$x_1,x_3$ & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\
-		$x_1,x_6$ & 1 & 0 & 1 & 0 & 0 & 1 & 0 \\
-		$x_2,x_3$ & 0 & 1 & 0 & 1 & 0 & 0 & 0 \\
+		$x_1,x_3$ & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\
+		$x_1,x_6$ & 0 & 1 & 1 & 0 & 0 & 1 & 0 \\
+		$x_2,x_3$ & 1 & 0 & 0 & 1 & 0 & 0 & 0 \\
 		$x_2,x_6$ & 1 & 1 & 1 & 1 & 0 & 1 & 0 \\
 		$x_4,x_3$ & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\
-		$x_4,x_6$ & 1 & 0 & 1 & 0 & 0 & 1 & 1 \\
+		$x_4,x_6$ & 0 & 1 & 1 & 0 & 0 & 1 & 1 \\
 		$x_5,x_3$ & 0 & 0 & 1 & 0 & 1 & 0 & 0 \\
-		$x_5,x_6$ & 1 & 0 & 1 & 0 & 1 & 1 & 0 \\
+		$x_5,x_6$ & 0 & 1 & 1 & 0 & 1 & 1 & 0 \\
 		$x_7,x_3$ & 0 & 0 & 0 & 0 & 0 & 1 & 0 \\
-		$x_7,x_6$ & 1 & 0 & 1 & 0 & 0 & 0 & 0 \\
+		$x_7,x_6$ & 0 & 1 & 1 & 0 & 0 & 0 & 0 \\
 		$x_8,x_3$ & 0 & 0 & 1 & 0 & 0 & 1 & 0 \\
-		$x_8,x_6$ & 1 & 0 & 0 & 0 & 0 & 1 & 0 
+		$x_8,x_6$ & 0 & 1 & 0 & 0 & 0 & 1 & 0 
  	\end{tabular}             
   \end{table}
 
@@ -169,8 +169,8 @@
    	\begin{tabular}{ccccccc}\label{tab:SBDM1}
               $c_0$ & $c_1$ & $c_2$ & $c_3$ & $c_4$ & $c_5$ & $c_6$\\
           		\hline
-          		0&1&0&1&0&0&0\\
-          		1&0&0&0&0&0&0\\
+          		1&0&0&1&0&0&0\\
+          		0&1&0&0&0&0&0\\
           		0&0&0&0&0&0&1\\
           		0&0&1&0&1&0&0\\
           		0&0&0&0&0&1&0\\
@@ -231,16 +231,16 @@
 	
 	Let us also define an order relation $\prec$ over the set of ordered list of attributes as follows.
 	\begin{enumerate}
-		\item Let $Y=[c_i|Y']$ and $Z=[c_j|Z']$ be two sorted lists of attributes. Then, $Y \prec Z$ if $i<j$.
-		\item Let $Y=[c_i|Y']$ and $Z=[c_i|Z']$ be two sorted lists of attributes. Then, $Y \prec Z$ if $Y' \prec Z'$.
+		\item Let $Y=[c_i|Y']$ and $Z=[c_j|Z']$ be two ordered lists of attributes. Then, $Y \prec Z$ if $i<j$.
+		\item Let $Y=[c_i|Y']$ and $Z=[c_i|Z']$ be two ordered lists of attributes. Then, $Y \prec Z$ if $Y' \prec Z'$.
 		\item $\forall Y:  [] \prec Y$.
 	\end{enumerate}
-	Herein after, we will refer to this order as the lexicographical order. Let us use the $+$ operator to denote list concatenation. In this way: $$[c_1,c_3,c_4]+[c_6,c_7]=[c_1,c_3,c_4,c_6,c_7]$$
+	Hereinafter, we will refer to this order as the lexicographical order. Let us use the $+$ operator to denote list concatenation. In this way: $$[c_1,c_3,c_4]+[c_6,c_7]=[c_1,c_3,c_4,c_6,c_7]$$
 		
 %	We say that $L$ is the ordered list of attributes associated to a subset of attributes $B = \lbrace c_{j_0},...,c_{j_s} \rbrace$ if $L = [c_{j_0},...,c_{j_s}]$, where $j_0<\cdots <j_s$ are the positions of their corresponding columns in the \textit{SBDM}.
 	
 	\begin{definition}\label{def:gap}
-		Let $L = [c_{j_0},...,c_{j_s}]$ be an ordered list of attributes. If there is an attribute $c_{j_p} \in L$ with $j_0 \leq {j_p} <	j_s$ such that ${j_p}=\mathrm{max}(j_q | c_{j_q},c_{j_{q+1}} \in L \wedge j_{q+1} \neq j_q+1)$, we say that $c_{j_p}$ gap of $L$.
+		Let $L = [c_{j_0},...,c_{j_s}]$ be an ordered list of attributes. If there exists an attribute $c_{j_p} \in L$ such that ${j_p}=\mathrm{max}\{j_q | j_{q+1} \neq j_q+1\}; 0 \leq q < s$, we say that $c_{j_p}$ is the gap of $L$.
 	\end{definition}
 	
 	In other words, the gap of $L$ is the attribute with the highest index satisfying that its consecutive attribute in $L$ is not its consecutive attribute (column) in the \textit{SBDM}.
@@ -257,23 +257,25 @@
 	The pruning property of gap elimination is supported by the proposition~\ref{prop:gap} \citep{Santiesteban03}. 
 		
 	\begin{proposition}\label{prop:gap} 
-		Let DM be a SBDM and $L = [c_{j_0},...,c_{j_s}]$ an ordered list associated to a reduct, such that $c_{j_s}$ is the last attribute in DM. If there is a gap $c_{j_p}$ in $L$, and $L'=[c_{j_0},...,j_{p-1},c_{j_p+1}]$; then, there is no list $Y$, such that $L \prec Y \prec L'$, associated to a reduct.
+		Let DM be a SBDM and $L = [c_{j_0},...,c_{j_s}]$ an ordered list associated to a reduct, such that $c_{j_s}$ is the last attribute in DM. If there is a gap $c_{j_p}$ in $L$, and $L'=[c_{j_0},\dots,c_{j_{p-1}},c_{j_p+1}]$; then, there is no list $Y$, such that $L \prec Y \prec L'$ and $L \neq Y \neq L'$, associated to a reduct.
 	\end{proposition}	
 	
 	\noindent
 	\textbf{Proof.} \textit{\label{proof:gap} 
-	Let us denote $L$ as $L=W+Z$, where $Z=[c_{j_q},c_{j_{q+1}}, \dots, c_{j_s}]$, $j_q=j_{p+1}$ and $W=[c_{j_0}, \dots,c_{j_{p-1}}, c_{j_p}]$. According to the lexicographical order, any list $L \prec Y \prec L'$ can be denoted as $Y=W+V$. Since $c_{j_p}$ is a gap, we have from the definition~\ref{def:gap}, that all the attributes in $Z$ are consecutive in DM. Thus, noting that $c_{j_s}$ is the last attribute in DM, we have that $\forall c_j \in V: c_j \in Z$. Then, for any list $Y$ satisfying that $L \prec Y \prec L'$, attributes in $Y$ are a proper subset of the attributes in $L$. Thus, given that $L$ is associated to a reduct, by the minimal condition of reducts, $Y$ cannot be associated to any reduct.}
+	Let us denote $L$ as $L=W+Z$, where $Z=[j_{p+1}, \dots, c_{j_s}]$ and $W=[c_{j_0},\dots,c_{j_{p-1}}, c_{j_p}]$. According to the lexicographical order, $Y$ can be denoted as $Y=W+V$. Since $c_{j_p}$ is a gap, we have from the definition~\ref{def:gap}, that all the attributes in $Z$ are consecutive in DM. Thus, noting that $c_{j_s}$ is the last attribute in DM, we have that $\forall c_j \in V: c_j \in Z$. Then, the set of attributes in $Y$ is a proper subset of the attributes in $L$. Thus, given that $L$ is associated to a reduct, by the minimal condition of reducts, $Y$ cannot be associated to any reduct.}
 	
 	From the proposition~\ref{prop:gap} we have the following corollary \citep{Santiesteban03}; which is relevant for our proposed algorithm in order to avoid other unnecessary evaluations.
 	
 	\begin{corollary}\label{coro:gap} 
 		Let DM be a SBDM and $L = [c_{j_0},...,c_{j_s}]$ an ordered list associated to a non super--reduct, such that $c_{j_s}$ is the last attribute in DM. If there is a gap $c_{j_p}$ in $L$, and $L' = [c_{j_0},...,c_{j_{p-1}},c_{j_p+1}]$; then, there is no list $Y$, such that $L \prec Y \prec L'$, associated to a reduct.
 	\end{corollary}
+	
+	Using Proposition~\ref{proof:gap} and the corollary~\ref{coro:gap}, the candidates between $L$ and $L'$ can be discarded (skipped).
 		
-	The following definition constitutes the key concept for CT\_EXT \citep{Sanchez07} and for our proposed algorithm, and it is also an important component of the algorithms BR \citep{Lias09} and RGonCRS \citep{WangP07}.
+	The following definition constitutes a key concept for CT\_EXT \citep{Sanchez07} and for our proposed algorithm, and it is also an important component of the algorithms BR \citep{Lias09} and RGonCRS \citep{WangP07}.
 			
 	\begin{definition}\label{def:contrib}
-		Let DM be a SBDM, $B \subseteq C$ and  $c_i \in C$ such that $c_i \notin B$. We say that $c_i$ contributes to $B$ iff the	number of zero rows, in the sub-matrix of DM considering only the attributes in $B\cup\{c_i\}$, is lower than considering only the attributes in $B$.
+		Let DM be a SBDM, $B \subseteq C$ and  $c_i \in C$ such that $c_i \notin B$. We say that $c_i$ contributes to $B$ iff the	number of zero rows, in the sub-matrix of DM considering the attributes in $B\cup\{c_i\}$, is lower than considering only the attributes in $B$.
 	\end{definition}
 			
 	From this concept, the following proposition was stated and proved \cite{Sanchez07}.
@@ -288,13 +290,13 @@
 %		Let DM be a SBDM, $B \subseteq C$,  $c_i \in C$ such that $c_i \notin B$, $c_{i+1} \in C$ such that $c_{i+1} \notin B$, and $L$ the ordered list of attributes associated to $B$. Given that $c_{i+1}$ is the consecutive attribute of $c_i$ in DM, if $c_i$ does not contribute to $B$; then, there is not any list $Y$ such that $L+[c_i] \prec Y \prec L+[c_{i+1}]$ associated to a reduct.
 %	\end{corollary}
 	
-	For a fast implementation of these algorithms \citep{Sanchez10,Lias13}, columns in a simplified discernibility matrix \textit{DM} are coded as binary words with as many bits as rows in \textit{DM}. The cumulative mask for an attribute $c_i$, denoted as $cm_{c_i}$, is defined as the binary word representing the $i$th column in \textit{DM}. The cumulative mask for a subset of attributes $B=\lbrace c_{i1},c_{i2},...,c_{ik} \rbrace$ is defined	as $cm_B = cm_{c_{i1}} \vee cm_{c_{i2}} \vee ... \vee cm_{c_{ik}}$ where $\vee$ represents the binary OR operator. It is not hard to see that the number of 0's in $cm_B$ is the same as the number of zero rows in the sub-matrix of the \textit{SBDM}, considering only the attributes in $B$. According to the definition~\ref{def:contrib}, $c_i$ contributes to $B$ iff $cm_{B\cup \lbrace c_i\rbrace}$ has more 1's than $cm_B$. The incremental nature of these algorithms, also included in  our proposed algorithm (GCreduct), is given by the associative property of the OR operation, such that  $cm_{B\cup \lbrace c_i\rbrace}=cm_B\vee cm_{c_i}$. Notice that, from this last formulation, $c_i$ contributes to $B$ iff $cm_{B\cup \lbrace c_i\rbrace}\neq cm_B$ since $cm_{B\cup \lbrace c_i\rbrace}$ cannot have less 1's than $cm_B$. It is easy to see, from the definition~\ref{def:testor} that $B \subseteq C$ is a super--reduct iff $cm_B=(1,...,1)$ ($cm_B$ has a 1 in every bit).
+	For a fast implementation of these algorithms \citep{Sanchez10,Lias13}, columns in a simplified discernibility matrix \textit{DM} are coded as binary words with as many bits as rows in \textit{DM}. The cumulative mask for an attribute $c_i$, denoted as $cm_{c_i}$, is defined as the binary word representing the $i$-th column in \textit{DM}. The cumulative mask for a subset of attributes $B=\lbrace c_{i_1},c_{i_2},...,c_{i_k} \rbrace$ is defined	as $cm_B = cm_{c_{i_1}} \vee cm_{c_{i_2}} \vee ... \vee cm_{c_{i_k}}$ where $\vee$ represents the binary OR operator. It is not hard to see that the number of 0's in $cm_B$ is the same as the number of zero rows in the sub-matrix of the \textit{SBDM}, considering only the attributes in $B$. According to the definition~\ref{def:contrib}, $c_i$ contributes to $B$ iff $cm_{B\cup \lbrace c_i\rbrace}$ has more 1's than $cm_B$. The incremental nature of these algorithms, also included in  our proposed algorithm (GCreduct), is given by the associative property of the OR operation, such that  $cm_{B\cup \lbrace c_i\rbrace}=cm_B\vee cm_{c_i}$. Notice that, from this last formulation, $c_i$ contributes to $B$ iff $cm_{B\cup \lbrace c_i\rbrace}\neq cm_B$ since $cm_{B\cup \lbrace c_i\rbrace}$ cannot have less 1's than $cm_B$. It is easy to see, from the definition~\ref{def:testor} that $B \subseteq C$ is a super--reduct iff $cm_B=(1,...,1)$ ($cm_B$ has a 1 in every bit).
 	
 	In order to determine whether a super--reduct is a reduct (verifying the irreducible condition) the
 	exclusion mask, introduced in \cite{Lias09}, plays a fundamental role. 
 	
 	\begin{definition}\label{def:exclusion}
-		Let DM be a SBDM and $B \subseteq C$ be a subset of attributes. We call exclusion mask of B, denoted as $em_B$, to the binary word in which the $i^{\mathit{th}}$ bit is 1 if the $i^{\mathit{th}}$ row in DM has a 1 in only one column of those columns corresponding to attributes in B, and it is 0 otherwise.
+		Let DM be a SBDM and $B \subseteq C$ be a subset of attributes. We call exclusion mask of B, denoted as $em_B$, to the binary word in which the $i{\mathit{-th}}$ bit is 1 if the $i{\mathit{-th}}$ row in DM has a 1 in only one column of those columns corresponding to attributes in B, and it is 0 otherwise.
 	\end{definition}
 	
 	For instance, from the \textit{SBDM} in Table~\ref{tab:SBDM1} we have:
@@ -304,7 +306,7 @@
 	  em_{\lbrace c_0,c_1,c_2,c_3,c_4\rbrace} &=& (0,1,0,0,0)
 	\end{array}$$
 	
-	In \cite{Lias13} the following propositions are introduced to support the cumulative computation of the exclusion mask.
+	In \cite{Lias13} the following two propositions are introduced to support the cumulative computation of the exclusion mask.
 	
 	\begin{proposition}\label{prop:cumul} 
 		Let DM be a SBDM, $B \subseteq C$ be a subset of attributes and $c_i \in C$ such that $c_i \notin B$. The exclusion mask of $B \cup \lbrace c_i\rbrace$ is calculated as follows: $$em_{B \cup \lbrace c_i\rbrace}=(em_B \wedge \neg cm_{c_i}) \vee (\neg cm_B \wedge cm_{c_i})$$	where $cm$ refers to the cumulative mask.
@@ -493,7 +495,7 @@
 	\phantomsection\label{par:complexity}
 	In GCreduct, we compute the exclusion mask and evaluate the attribute exclusion, using proposition~\ref{prop:exclude}, for those candidates detected as super-reducts in order to verify whether they are reducts. Super-reducts are, most of the times, a small fraction of the evaluated candidates. On the other hand, in algorithms such as fast--BR~\cite{Lias13} and RGonCRS~\cite{WangP07}, for each candidate with a contributing attribute, the exclusion is evaluated. In this way, fast--BR and RGonCRS avoid the evaluation of all the supersets of a candidate with a redundant attribute. This becomes a great advantage for those \textit{SBDMs} in which the exclusion occurs frequently. The evaluation of the attribute exclusion is the procedure with the highest complexity into these algorithms ($\Theta (nm)$). Thus, for those \textit{SBDMs} in which the exclusion rarely occurs, GCreduct will perform faster, by making fewer exclusion evaluations.
 	
-	During the search process, GCreduct evaluates some attribute subsets while skips some others. Propositions~\ref{prop:gap} and~\ref{prop:contrib} as well as  the corollary~\ref{coro:firstRow} and the irreducible condition of reducts, guarantees that none of the skipped attribute subsets is a reduct. This is summarized in the following proposition.
+	During the search process, GCreduct evaluates some attribute subsets while skips some others. Propositions~\ref{prop:gap},~\ref{prop:contrib} and~\ref{prop:firstRow} as well as the irreducible condition of reducts, guarantees that none of the skipped attribute subsets is a reduct. This is summarized in the following proposition.
 	
 	\begin{proposition}
 		The algorithm GCreduct finds all the reducts of a decision system.
@@ -504,7 +506,7 @@
 		\begin{itemize}
 			\item Supersets of an attribute subset which has a non contributing attribute (Proposition~\ref{prop:contrib}).
 			\item Supersets of a super-reduct (which cannot be a reduct based on the condition~\ref{cond_2} of the subsection~\ref{def_reduct}).
-			\item When there is a gap (Corollary~\ref{coro:gap}).
+			\item When there is a gap (Proposition~\ref{prop:gap} and Corollary~\ref{coro:gap}).
 			\item When the column of the \textit{SBDM} corresponding to the leftmost attribute in the candidate, has a zero in the first row (Proposition~\ref{prop:firstRow}).
 		\end{itemize} 
 		Since the attribute subsets skipped through the searching process, are certainly not a reduct, we can state that GCreduct finds all the reducts of a decision system.}
