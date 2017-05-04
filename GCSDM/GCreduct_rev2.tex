@@ -79,7 +79,7 @@
   The rest of this paper is structured as follows. Section~\ref{basicConcepts}  introduces some basic concepts. In Section~\ref{relatedWork}, we discuss the related work on reduct and typical testor computation.  In Section~\ref{GCreduct}, we introduce the GCreduct algorithm for computing all reducts of a decision system. An evaluation of the proposed algorithm and a discussion of the experimental results are presented in section~\ref{evaluation}. Finally, section~\ref{conclusions} shows our conclusions and some directions for future work.
    
 \section{Basic Concepts}\label{basicConcepts}
-  RST is based on the assumption that every object in the universe of discourse is described, through a set of attributes, by some information associated to it. This information constitutes the basis for the classification of unseen objects. RST motto is \textit{Let the data speak for themselves} \citep{Tiwari14}.
+  RST is based on the assumption that every object in the universe of discourse is described, through a set of attributes, by some information associated to the object. This information constitutes the basis for the classification of unseen objects. RST motto is \textit{Let the data speak for themselves} \citep{Tiwari14}.
 
   From the RST point of view, two objects are indistinguishable (indiscernible) if they have the same value for each attribute in their description. Indiscernibility relations arising in this way constitute the mathematical foundations of RST. Some basic concepts of RST are presented bellow.
   
@@ -178,7 +178,7 @@
   \end{table}  
    
   \begin{definition}\label{def:basic_row}
-	Let $DM$ be a binary discernibility matrix and $r_1 \in DM$ be a row of $DM$. We say that $r_1$ is a superfluous row of $DM$ if $\exists r \in DM$ such that $\exists i | (r(i) < r_1(i)) \wedge \forall i | (r(i) \leq r_1(i))$.
+	Let $DM$ be a binary discernibility matrix and $r_1 \in DM$ be a row of $DM$. We say that $r_1$ is a superfluous row of $DM$ if $\exists r \in DM$ such that $\exists i | (r[i] < r_1[i]) \wedge \forall i | (r[i] \leq r_1[i])$. Where $r[i]$ is the $i$-th element of the row $r$.
   \end{definition}
 
   The \textit{SBDM} is formed excluding all the superfluous rows from the binary discernibility matrix. Reducts of a decision system, can be computed from this reduced matrix \citep{Yao09}. Table~\ref{tab:SBDM1} shows the \textit{SBDM} from the binary discernibility matrix in Table~\ref{tab_BDM}.
