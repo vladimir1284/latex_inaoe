@@ -29,6 +29,14 @@
 	We found that Stawicki et al. (2017) and also Slezak \& Janusz (2011) used modified versions of very-well-known algorithms based on attribute orderings/ permutations for computing reducts. These works make reference to the algorithms reported by Bazan et al.(2000) which are implemented in ROSETTA. In the first paragraph of the ``Related Work" section, we illustrate the low performance of these early algorithms (see page~\pageref{early}). For this reason we did not included these algorithms in our experiments.
   \end{enumerate}
   
+  \textbf{Reviewer \#1:}
+  
+  The authors have addressed all my concerns and I thus recommend for publication.
+  
+  \textbf{Reviewer \#2:}
+  
+  I think that some of my negative comments from the previous review still refer to the current version of the paper. However, it should be noted that the authors have greatly improved the quality of paper, by taking into account the comments of the reviewers. Therefore, after a long reflection, I came to the conclusion that the paper can be published in the INS.
+  
   \textbf{Reviewer \#3:}
   
   The article ``A New Algorithm for Reduct Computation based on Gap Elimination and Attribute Contribution" submitted to the Information Sciences journal is not ready for publication and I recommend major revision of this work. In general, I think the article is valuable. However, I suggest a major review because, in my opinion, article requires a number of amendments in terms of its form and content that should be verified/re-reviewed after adjustments.
@@ -41,15 +49,16 @@
 	\item Next, you presented a set of theories and definition that are the foundation of GCreduct algorithm. In my opinion this Section requires a number of amendments:
 	First of all, most of Propositions, Definitions and Proofs is unclear. In my opinion, the most confusing is the numbering of attributes in sorted list of attributes L and its relation to ``global" numbering in sorted \textit{SBDM}.  For example, from Definition~3 we may learn that attribute $j_{q}$ and $j_{q+1}$ may not be consecutive in \textit{SBDM}. However, in Proposition~1 I'm not so sure about the relation of $c_{p+1}$ and $c_{p}$ in \textit{SBDM}.\\
 	\textbf{Authors’ response:}\\
-	Esto está correcto en mi opinión solo q lo del gap es confuso en sí mismo. Espero por los cambios propuestos por Lazo!!
+	To attend this concern, we added the following sentence in the paragraph after Definition~3:\\
+	\textit{Notice from the notation used above that $c_{j_q}$ and $c_{j_{q+1}}$ are consecutive in $L$ while $c_{j_q}$ and $c_{j_q+1}$ are consecutive in the \textit{SBDM}.}
 	
 	\item Second, the structure of  Definitions, Propositions etc. should be improved. In current form reading them is very hard. Understanding them (the same as authors do) - barely possible.\\
 	\textbf{Authors’ response:}\\
-	Lazo está revisando esto!!
+	We have modified Definitions, Propositions an Corollaries in order to improve their uniformity and clarity. We hope that in the current version of the paper they will be easier to read. 
 	
 	\item Third, on page 17 you started to describe sorting procedure. However, the description explains sorting of only one row.\\
 	\textbf{Authors’ response:}\\
-	The sorting process used in GCreduct alters the position of only one pair of rows. The first row is swapped with one of the rows with the fewest number of 1's. However, when the columns are reorganized, all the rows in the \textit{SBDM} are modified.
+	 We have modified this part of the paper explaining that in the same way as other algorithms previously reported in the literature, GCreduct arranges the \textit{SBDM} by moving to the first position one of the rows with the fewest number of 1's. Then, all the columns in which the first row has a 1 are moved to the left, this arrangement of columns implies that all the rows in the \textit{SBDM} change. However this change in the columns of \textit{SBDM} does not modify the information of \textit{SBDM}. We also included the ilustration of this process through the example shown in Table~\ref{tab:SSBDM1} (see page~\pageref{arrange}).
 	
 	\item In section~4.2 the GCreduct algorithm is presented. In my opinion, at least the main algorithm should be presented in a more abstract way. In its current form, it is very hard to follow the algorithm and its description.\\
 	\textbf{Authors’ response:}\\
@@ -57,8 +66,8 @@
 
 	\item In Sec. 5 you presented experimental results of algorithm performance against some of related algorithms. In my opinion, you presented review and experimental  study of performance of implementations (not algorithms). Presented experiments and results showed that implementation of GCreduct is faster in case of SBDM with density of 1s below 0.36.\\
 	\textbf{Authors’ response:}\\
-	To attend this comment, we added the following sentence to the second paragraph of the section ``Evaluation and Discussion":\\
-	\textit{It is important to notice that all the conclusions drawn from these experiments refer rigorously to the implementations that we used.}
+	To attend this comment, we added the following sentences to the second paragraph of the section ``Evaluation and Discussion":\\
+	\textit{Since these algorithms have exponential complexity, the only comparison that we can perform is through their implementations. Thus, all the conclusions drawn from these experiments refers rigorously to the implementations of the algorithms that we used.}
 	
 	\item Lastly, the form of the article and the style of the language should be improved.\\
 	\textbf{Authors’ response:}\\
