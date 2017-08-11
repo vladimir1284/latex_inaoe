@@ -11,6 +11,7 @@
 \usepackage{amsmath}				% Para el seudocódigo
 \usepackage[noend]{algpseudocode}	% Para el seudocódigo
 \usepackage{multicol}				% Para el seudocódigo
+\usepackage{soul}                   % Para el highlight
 
 \newtheorem{proposition}{Proposition}
 \newtheorem{definition}{Definition}
@@ -45,7 +46,7 @@
 				 Circv. Nte. km 5$\frac{1}{2}$, Camag\"{u}ey, Cuba}
 	
 	\begin{abstract}
-		Attribute reduction is a key aspect of Rough Set Theory.  Finding the complete set of reducts is important for solving problems such as the assessment of attribute relevance, multi--objective cost--sensitive attribute reduction and dynamic reduct computation. The main limitation in the application of Rough Set methods is that finding all reducts of a decision system has exponential complexity regarding the number of attributes. Several algorithms have been reported to reduce the cost of reduct computation. Unfortunately, most of these algorithms relay on high cost operations for candidate evaluation. Therefore, in this paper, we propose a new algorithm for computing all reducts of a decision system, based on the pruning properties of \textit{gap  elimination} and \textit{attribute contribution}, that uses simpler operations for candidate evaluation in order to reduce the runtime. Finally, the proposed algorithm is evaluated and compared to other state of the art algorithms, over synthetic and real decision systems.
+		Attribute reduction is a key aspect of Rough Set Theory.  Finding the complete set of reducts is important for solving problems such as the assessment of attribute relevance, multi--objective cost--sensitive attribute reduction and dynamic reduct computation. The main limitation in the application of Rough Set methods is that finding all reducts of a decision system has exponential complexity regarding the number of attributes. Several algorithms have been reported to reduce the cost of reduct computation. Unfortunately, most of these algorithms relay on high cost operations for candidate evaluation. Therefore, in this paper, we propose a new algorithm for computing all reducts of a decision system, based on the pruning properties of \textit{gap  elimination} and \textit{attribute contribution}, that uses simpler operations for candidate evaluation \hl{in order to reduce the runtime. Finally, the proposed algorithm is evaluated and compared with other state of the art algorithms, over synthetic and real decision systems}.
 	\end{abstract}
 	
 	\begin{keyword}
@@ -90,7 +91,7 @@
   Table~\ref{tab_IS} shows an example of an IS.
   
  \begin{table}[htb]
-		\caption{Example of a Decision System, where $c_0-c_6$ are conditional attributes and $d$ is a decision attribute.} \label{tab_IS}
+		\caption{Example of a \hl{Decision System}, where $c_0-c_6$ are conditional attributes and $d$ is a decision attribute.} \label{tab_IS}
 		\centering
  	\begin{tabular}{c||c|c|c|c|c|c|c||c}
  			  & $c_0$ & $c_1$ & $c_2$ &  $c_3$ & $c_4$ & $c_5$ &  $c_6$ & $d$ \\
@@ -109,7 +110,7 @@
   \textit{Decision attributes} determine the class an object belongs to. In the IS of Table~\ref{tab_IS}, $d$ is the decision attribute; this is a two-class system. \textit{Conditional attributes} do not absolutely determine the class but help to decide which class an object belongs to. In supervised classification, conditional attributes are the only information available for classifying new objects; while, decision attributes are only available for objects in the training set. An IS with $D \neq \emptyset$ is called a \textit{decision system}.
   
 \subsection{Positive Region}\label{subsect_Pos}
-  Decision attributes $D$ induce a partition of the universe $U$ into equivalence classes (\textit{decision classes}). Since we will be trying to associate a decision class to an object based on the attributes belonging to $B \subseteq C$, we are interested in those $B-$\textit{classes} (classes induced by $B$) which correspond to the decision classes. This idea leads to the notion of the  \textit{positive region of the decision}. The set $POS_B(D)$, called the \textit{B-positive region of D}, is defined as the set of all objects in $U$ such that if two of them have the same value for each attribute in B, they belong to the same decision class.
+  Decision attributes $D$ induce a partition of the universe $U$ into equivalence classes (\textit{decision classes}). Since we will be trying to associate a decision class to an object based on the attributes belonging to $B \subseteq C$, we are interested in those $B-$\textit{classes} (classes induced by $B$) which correspond to the decision classes. This idea leads to the notion of the  \textit{positive region of the decision}. \hl{The \textit{B-positive region of D}, denoted as $POS_B(D)$, is defined as the set of all objects in $U$ such that if two of them have the same value for every attribute in B, they belong to the same decision class.}
  
 \subsection{Reducts}\label{def_reduct}
   A subset $B \subseteq C$ is a decision \textit{reduct} of $IS$ relative to $D$ if
@@ -189,7 +190,7 @@
   \end{table}  
    
   \begin{definition}\label{def:basic_row}
-	Let $DM$ be a binary discernibility matrix and $r_k \in DM$ be a row of $DM$. We say that $r_k$ is a superfluous row of $DM$ if $\exists r \in DM$ such that $\exists i | (r[i] < r_k[i]) \wedge \forall i | (r[i] \leq r_k[i])$, where $r[i]$ is the $i$-th element of the row $r$.
+	\hl{Let $DM$ be a binary discernibility matrix and $r_k \in DM$ be a row of $DM$. We say that $r_k$ is a superfluous row of $DM$ if $\exists r \in DM$ such that\\ $\exists i | (r[i] < r_k[i]) \wedge \forall i | (r[i] \leq r_k[i])$, where $r[i]$ is the $i$-th element of the row $r$.}
 
   \end{definition}
 
@@ -220,7 +221,7 @@
   
   Later, a new algorithm called LEX \cite{Santiesteban03} was introduced. The main ideas behind LEX are a new traversing order of candidates (which resembles the lexicographical order in which string characters are compared) and the concept of \emph{gap}. In LEX, the typical (irreducible) condition is verified first and the testor condition is checked only for those potentially TT. Given a TT (or a non testor) which includes the last attribute in the decision system, the \emph{gap} elimination avoids the evaluation of any subset of this candidate. 
   
-  Afterwards the CT\_EXT algorithm for computing all TT was presented \cite{Sanchez07}. Following a traversing order similar to that one used for LEX, the algorithm CT\_EXT searches for testors without verifying the typical condition. In this way, a larger number of candidates is evaluated, in comparison to LEX; but the cost of each evaluation is lower. Results from their experiments show that CT\_EXT is faster than the previous existing algorithms for most decision systems. In \cite{Sanchez10} a cumulative procedure for the CT\_EXT algorithm was implemented. This fast--CT\_EXT implementation drastically reduces the runtime for most decision systems at no extra cost.
+  Afterwards the CT\_EXT algorithm for computing all TT was presented \cite{Sanchez07}. \hl{Following the traversing order of LEX, the CT\_EXT algorithm searches for testors without verifying the typical condition. In this way, a larger number of candidates is evaluated, in comparison to LEX; but the cost of each evaluation is lower}. Results from their experiments show that CT\_EXT is faster than the previous existing algorithms for most decision systems. In \cite{Sanchez10} a cumulative procedure for the CT\_EXT algorithm was implemented. This fast--CT\_EXT implementation drastically reduces the runtime for most decision systems at no extra cost.
   
   Then, in \cite{Lias09} the BR algorithm, a \textbf{R}ecursive algorithm based on \textbf{B}inary operations, was introduced. BR is very similar to LEX, but its recursive nature encloses a great improvement. Given a candidate subset, the remaining attributes are tested a priori and those being rejected are excluded from subsequent evaluations. Later, the pruning properties of gap elimination and column reduction are added to BR~\citep{Lias13}. The main drawback of this fast--BR and the original BR is, as in LEX, the high cost of evaluating the typical condition for each candidate.
   
@@ -231,7 +232,7 @@
  % \textcolor{red}{The main disadvantage of those algorithms that verify the compatibility condition before the super--reduct condition \citep{Santiesteban03,WangP07,Lias13}, is the high cost of candidate evaluation. Although they evaluate a reduced number of candidate subsets, their runtime may be high. For this reason, we propose a new algorithm based on attribute contribution and gap elimination, for computing all reducts of a decision system. The key novelty of the proposed algorithm is that the super--reduct condition is verified first, and the compatibility condition (which requires more complex operations) is tested only for super--reduct subsets.}
   
   
-\section{The GCreduct Algorithm}\label{GCreduct}
+\section{GCreduct}\label{GCreduct}
   In this section, we introduce the GCreduct algorithm for computing all reducts of a decision system. In  Subsection~\ref{properties}, we present the pruning properties used in GCreduct. Then, in Subsection~\ref{description}, we introduce the GCreduct algorithm and we illustrate its execution over the decision system of Table~\ref{tab_IS}.
   
 \subsection{Pruning Properties for GCreduct}\label{properties}
@@ -243,9 +244,9 @@
 	
 	The concept of gap used in our proposal was first introduced for the LEX algorithm~\cite{Santiesteban03}, as shown in Definition~\ref{def:gap}.
 	
-	Let us first define the notation $[c|Y]$ to represent an ordered list of attributes such that $c$ is the first attribute in the list and $Y$ is the ordered list of the remaining elements. Notice that the order of the elements in the list is relevant. If we have, for instance $[c_1,c_3,c_6]$, we can express it as $[c_1|[c_3,c_6]]$ according to this notation. In the same way, $[c_3,c_4]$ can be expressed as $[c_3|[c_4]]$.
+	Let us first define the notation $[c|Y]$ to represent an ordered list of attributes such that $c$ is the first attribute in the list and $Y$ is the ordered list of the remaining elements. \hl{Notice that the order of the elements in the list is relevant}. If we have, for instance $[c_1,c_3,c_6]$, we can express it as $[c_1|[c_3,c_6]]$ according to this notation. In the same way, $[c_3,c_4]$ can be expressed as $[c_3|[c_4]]$.
 	
-	Let us also define an order relation $\prec$ over the set of ordered lists of attributes as follows.
+	\hl{Let us also define an order relation $\prec$ over the set of ordered lists of attributes as follows.}
 	\begin{enumerate}
 		\item Let $Y=[c_i|Y']$ and $Z=[c_j|Z']$ be two ordered lists of attributes. Then, $Y \prec Z$ if $i<j$.
 		\item Let $Y=[c_i|Y']$ and $Z=[c_i|Z']$ be two ordered lists of attributes. Then, $Y \prec Z$ if $Y' \prec Z'$.
@@ -274,7 +275,7 @@
 	The pruning property of gap elimination is supported by Proposition~\ref{prop:gap} \citep{Santiesteban03}. 
 		
 	\begin{proposition}\label{prop:gap} 
-		Let DM be a SBDM and $L = [c_{j_0},...,c_{j_s}]$ be an ordered list associated to a reduct, such that $c_{j_s}$ is the last attribute in DM. If there is a gap $c_{j_p}$ in $L$, and $L'=[c_{j_0},\dots,c_{j_{p-1}},c_{j_p+1}]$; then, there is no list $Y$ associated to a reduct, such that $L \prec Y \prec L'$ and $L \neq Y \neq L'$.
+		Let DM be a SBDM and $L = [c_{j_0},...,c_{j_s}]$ \hl{be an ordered list associated to a reduct}, such that $c_{j_s}$ is the last attribute in DM. If there is a gap $c_{j_p}$ in $L$, and $L'=[c_{j_0},\dots,c_{j_{p-1}},c_{j_p+1}]$; then, there is no list $Y$ associated to a reduct, such that $L \prec Y \prec L'$ and $L \neq Y \neq L'$.
 	\end{proposition}	
 	
 	\noindent
@@ -284,7 +285,7 @@
 	From Proposition~\ref{prop:gap}, we have the following corollary \citep{Santiesteban03}; which is relevant for the proposed algorithm in order to avoid unnecessary evaluations.
 	
 	\begin{corollary}\label{coro:gap} 
-		Let DM be a SBDM and $L = [c_{j_0},...,c_{j_s}]$ be an ordered list associated to a non super--reduct, such that $c_{j_s}$ is the last attribute in DM. If there is a gap $c_{j_p}$ in $L$, and $L' = [c_{j_0},...,c_{j_{p-1}},c_{j_p+1}]$; then, there is no list $Y$ associated to a reduct, such that $L \prec Y \prec L'$ and $Y \neq L'$.
+	  \hl{Let DM be a SBDM and $L = [c_{j_0},...,c_{j_s}]$ be an ordered list associated to a non super--reduct}, such that $c_{j_s}$ is the last attribute in DM. If there is a gap $c_{j_p}$ in $L$, and $L' = [c_{j_0},...,c_{j_{p-1}},c_{j_p+1}]$; then, there is no list $Y$ associated to a reduct, such that $L \prec Y \prec L'$ and $Y \neq L'$.
 	\end{corollary}
 	
 	Using Proposition~\ref{prop:gap} and Corollary~\ref{coro:gap}, the candidates between $L$ and $L'$ can be discarded.
@@ -298,7 +299,7 @@
 	From this concept, the following proposition was stated and proved \cite{Sanchez07}.
 			
 	\begin{proposition}\label{prop:contrib} 
-		Let $B \subseteq C$ be a subset of attributes and $c_i \in C$ be an attribute, such that $c_i \notin B$. If $c_i$ does not contribute to $B$, then $B\cup\{c_i\}$ is not a subset of any reduct.
+		\hl{Let $B \subseteq C$ be a subset of attributes and $c_i \in C$ be an attribute, such that $c_i \notin B$}. If $c_i$ does not contribute to $B$, then $B\cup\{c_i\}$ is not a subset of any reduct.
 	\end{proposition}
 	
 	Using Proposition~\ref{prop:contrib}, the evaluation of supersets of $B\cup\{c_i\}$ can be avoided if $c_i$ does not contribute to $B$.
@@ -326,13 +327,13 @@
 	In \cite{Lias13} the following two propositions are introduced to support the cumulative computation of the exclusion mask.
 	
 	\begin{proposition}\label{prop:cumul} 
-		Let DM be a SBDM, $B \subseteq C$ be a subset of attributes and $c_i \in C$ be an attribute, such that $c_i \notin B$. The exclusion mask of $B \cup \lbrace c_i\rbrace$ is computed as follows: $$em_{B \cup \lbrace c_i\rbrace}=(em_B \wedge \neg cm_{c_i}) \vee (\neg cm_B \wedge cm_{c_i})$$ where $cm$ refers to the cumulative mask.
+		\hl{Let DM be a SBDM, $B \subseteq C$ be a subset of attributes and $c_i \in C$ be an attribute, such that $c_i \notin B$. The exclusion mask of $B \cup \lbrace c_i\rbrace$ is computed as follows}: $$em_{B \cup \lbrace c_i\rbrace}=(em_B \wedge \neg cm_{c_i}) \vee (\neg cm_B \wedge cm_{c_i})$$ where $cm$ refers to the cumulative mask.
 	\end{proposition}
 	
 %	Finally, they stated and proved the following proposition.
 	
 	\begin{proposition}\label{prop:exclude} 
-		Let DM be a SBDM, $B \subseteq C$ be a subset of attributes and $c_i \in C$ be an attribute, such that $c_i \notin B$. If $\exists c_x \in B$ such that $em_{B \cup \lbrace c_i\rbrace} \wedge cm_{c_x}=(0,...,0)$. Then, $B \cup \lbrace c_i\rbrace$ cannot be a subset of any reduct, and we say that $c_i$ is exclusionary with $B$.
+		\hl{Let DM be a SBDM, $B \subseteq C$ be a subset of attributes and $c_i \in C$ be an attribute, such that $c_i \notin B$.} If $\exists c_x \in B$ such that $em_{B \cup \lbrace c_i\rbrace} \wedge cm_{c_x}=(0,...,0)$. Then, $B \cup \lbrace c_i\rbrace$ cannot be a subset of any reduct, and we say that $c_i$ is exclusionary with $B$.
 	\end{proposition}
 	
 	We call exclusion evaluation to the application of Proposition~\ref{prop:exclude}. This proposition allows us to discard the supersets of $B \cup \lbrace c_i\rbrace$ if $c_i$ is exclusionary with $B$.
@@ -355,13 +356,13 @@
 	\end{table}  
 	
 	\begin{proposition}\label{prop:firstRow}
-		Let DM be an arranged SBDM and $L = [c_{j_0},...,c_{j_s}]$ be an ordered list of attributes. If the first row in the column corresponding to $c_{j_0}$ has a zero, denoted as $c_{j_0}[0]=0$, $L$ is not associated to a super-reduct. Furthermore, there is no list $L'$, such that $L\prec L'$, associated to a super-reduct.
+		\hl{Let DM be an arranged SBDM and $L = [c_{j_0},...,c_{j_s}]$ be an ordered list of attributes.} If the first row in the column corresponding to $c_{j_0}$ has a zero, denoted as $c_{j_0}[0]=0$, $L$ is not associated to a super-reduct. Furthermore, there is no list $L'$, such that $L\prec L'$, associated to a super-reduct.
 	\end{proposition}
 	
 	\noindent
 	\textbf{Proof.} \textit{Due to the arranging process described above, if $c_{j_0}[0]=0$ then, $\forall c \in L: c[0]=0$. Thus, the first row in the sub-matrix of DM considering only the attributes in $L$ is a zero row. According to Definition~\ref{def:testor}, $L$ is not associated to a super-reduct. Given $L \prec L'= [c_{j'_0},...,c_{j'_s}]$, we have that $j_0 \leq j'_0$. Thus, if $c_{j_0}[0]=0$ then, $\forall c \in L': c[0]=0$ therefore $L'$ has also a zero row and it is not associated to a super-reduct.}
 	
-	Based on this proposition, if we reach an ordered list $L$ satisfying $c_{j_0}=0$, the search can be stopped. 
+	Based on this proposition, if we reach an \hl{ordered list} $L$ satisfying $c_{j_0}=0$, the search can be stopped. 
 
 %	Based on the definition of super-reduct that we gave in the subsection~\ref{def_reduct}, we present the following corollary.
 %	
@@ -371,8 +372,8 @@
 	
 	In the next subsection we will use these propositions to support the pruning of the search space in the proposed algorithm.
 
-\subsection{The algorithm GCreduct}\label{description}
-	GCreduct finds all reducts in the \textit{SBDM} computed from a decision system. This algorithm explores the search space evaluating some candidates and discarding others, based on previous evaluations. Unlike other works \citep{WangP07,Lias13} where candidate evaluation is performed through operations with a high cost, GCreduct uses a simpler candidate evaluation based on attribute contribution and gap elimination to reduce the runtime. 
+\subsection{The GCreduct algorithm}\label{description}
+	GCreduct finds all reducts in the \textit{SBDM} computed from a decision system. This algorithm explores the search space evaluating some candidates and discarding others, based on previous evaluations. Unlike other works \citep{WangP07,Lias13} where candidate evaluation is performed through operations with a high cost, \hl{GCreduct uses a simpler candidate evaluation based on gap elimination and attribute contribution to reduce the runtime.}
 	
 	\phantomsection\label{abstarct}
 	The GCreduct algorithm traverses the search space in the lexicographical order. Once a new attribute is added, it is removed if it does not reduce the number of zero rows regarding the previous candidate (i.e. the attribute does not contribute). If the new attribute contributes, the candidate is evaluated for the super-reduct and reduct conditions. If it is a reduct, the candidate is saved in the result set. If the current candidate is a super-reduct, the new attribute is removed as well, since it does not make sense to evaluate supersets of a super-reduct. This process continues until the last attribute from the \textit{SBDM} has been included in the candidate. At this point, the algorithm searches for a gap in the candidate to avoid the evaluation of unneeded candidates. The algorithm continues until the first attribute in the candidate has a zero in the first row of the \textit{SBDM}. Once this condition is reached, the algorithm finishes because there are no remaining reducts (Proposition~\ref{prop:firstRow}).
@@ -449,7 +450,7 @@
 	
 	The pseudocode for the gap elimination is shown in Algorithm~\ref{alg:eliminateGAP}. Every consecutive attribute in the current candidate, starting from the last attribute is eliminated as it was explained in Definition~\ref{def:gap}. The time complexity of this procedure is $\Theta(n)$. Since all other instructions within the \textit{candidateGenerator} procedure has time complexity of $\Theta(1)$, we can conclude that the overall time complexity of \textit{candidateGenerator} is $\Theta(n)$. In the same way, it can be seen that the overall time complexity of a candidate evaluation cycle in GCreduct, is $\Theta(nm)$. However, since computing all reducts is an NP--hard problem, the number of candidate evaluation cycles has an exponential relation to $n$.
 	
-	The pseudocode for the exclusion evaluation is shown in Algorithm~\ref{alg:exclusion}. First, the exclusion mask is cumulatively computed using Proposition~\ref{prop:cumul}. Then, every attribute in $B$ is evaluated for exclusion applying Proposition~\ref{prop:exclude}. The time complexity of this procedure is $\Theta(nm)$. Here, $n$ represents the number of columns in the \textit{SBDM}.
+	The pseudocode for \hl{the} exclusion evaluation is shown in Algorithm~\ref{alg:exclusion}. First, the exclusion mask is cumulatively computed using Proposition~\ref{prop:cumul}. Then, every attribute in $B$ is evaluated for exclusion applying Proposition~\ref{prop:exclude}. The time complexity of this procedure is $\Theta(nm)$. Here, $n$ represents the number of columns in the \textit{SBDM}.
 	
 	\begin{algorithm}
 	\footnotesize
@@ -513,26 +514,26 @@
 	
 	Each time a new candidate is generated, the column of the \textit{SBDM} corresponding to the leftmost attribute in the candidate is verified to detect a zero in its first row. If it is the case, the algorithm finishes. This final pruning is possible because of Proposition~\ref{prop:firstRow}.
 		
-	It is important to highlight that the problem of computing all reducts has exponential complexity. This fact is due to the cardinality of the solution, since there are only exponential upper bounds to the number of reducts regarding the number of attributes in the decision system~\cite{Skowron92}. Thus, there is no  polynomial complexity algorithm for computing all the reducts of a decision system. However, the performance of the algorithms for computing all reducts is strongly related to the characteristics of the \textit{SBDM}. 
+	It is important to highlight that the problem of computing all reducts has exponential complexity. This fact is due to the cardinality of the solution, since there are only exponential upper bounds to the number of reducts regarding the number of attributes in the decision system~\cite{Skowron92}. Thus, there is \hl{no} polynomial complexity algorithm for computing all the reducts of a decision system. %However, the performance of \hl{the} algorithms for computing all reducts is strongly related to the characteristics of the \textit{SBDM}. 
 	
 	\phantomsection\label{par:complexity}
 	In GCreduct, we compute the exclusion mask and evaluate the attribute exclusion, using Proposition~\ref{prop:exclude}, for those candidates detected as super-reducts in order to verify whether they are reducts. Super-reducts are, most of the times, a small fraction of the evaluated candidates. On the other hand, in algorithms such as fast--BR~\cite{Lias13} and RGonCRS~\cite{WangP07}, for each candidate with a contributing attribute, the exclusion is evaluated. In this way, fast--BR and RGonCRS avoid the evaluation of all the supersets of a candidate which has an exclusionary attribute. This becomes a great advantage for those \textit{SBDMs} in which the exclusion occurs frequently. The evaluation of the attribute exclusion is the procedure with the highest complexity into these algorithms ($\Theta (nm)$). Thus, for those \textit{SBDMs} in which the exclusion rarely occurs, GCreduct will perform faster, by making fewer exclusion evaluations.
 	
-    %\textcolor{red}{During the search process, GCreduct evaluates some attribute subsets while discards some others. Propositions~\ref{prop:gap},~\ref{prop:contrib} and~\ref{prop:firstRow} as well as the irreducible condition of reducts, guarantee that none of the discarded attribute subsets is a reduct. This is summarized in the following proposition.}
+    During the search process, GCreduct evaluates some attribute subsets while discards some others. Propositions~\ref{prop:gap},~\ref{prop:contrib} and~\ref{prop:firstRow} as well as the irreducible condition of reducts, guarantee that none of the discarded attribute subsets is a reduct. This is summarized in the following proposition.
 	
-%	\begin{proposition}
-%		\textcolor{red}{The algorithm GCreduct finds all the reducts of a decision system.}
-%	\end{proposition}
+	\begin{proposition}
+		The algorithm GCreduct finds all the reducts of a decision system.
+	\end{proposition}
 	
-%	\noindent
-%	\textbf{Proof.} \textit{\textcolor{red}{The algorithm GCreduct traverses the search space of attribute subsets in the lexicographical order. During the search process, some attribute subsets are evaluated while other ones are discarded in the following cases:
-%		\begin{itemize}
-%			\item Supersets of an attribute subset which has a non contributing attribute (proposition~\ref{prop:contrib}).
-%			\item Supersets of a super-reduct (which cannot be a reduct based on the condition~\ref{cond_2} of the subsection~\ref{def_reduct}).
-%			\item Subsets of a reduct (proposition~\ref{prop:gap}), or a non super-reduct (corollary~\ref{coro:gap}), which includes the last attribute of the \textit{SBDM}.
-%			\item The remaining candidates, when the column of the \textit{SBDM} corresponding to the leftmost attribute in the candidate has a zero in the first row (proposition~\ref{prop:firstRow}).
-%		\end{itemize} 
-%		Since the attribute subsets discarded through the searching process, are certainly not a reduct, we can state that GCreduct finds all the reducts of a decision system.}}
+	\noindent
+	\textbf{Proof.} The algorithm GCreduct traverses the search space of attribute subsets in the lexicographical order. During the search process, some attribute subsets are evaluated while other ones are discarded in the following cases:
+		\begin{itemize}
+			\item Supersets of an attribute subset which has a non contributing attribute (Proposition~\ref{prop:contrib}).
+			\item Supersets of a super-reduct (which cannot be a reduct based on the condition~\ref{cond_2} of the subsection~\ref{def_reduct}).
+			\item Subsets of a reduct (Proposition~\ref{prop:gap}), or a non super-reduct (Corollary~\ref{coro:gap}), which includes the last attribute of the \textit{SBDM}.
+			\item The remaining candidates, when the column of the \textit{SBDM} corresponding to the leftmost attribute in the candidate has a zero in the first row (Proposition~\ref{prop:firstRow}).
+		\end{itemize} 
+		Since the attribute subsets discarded through the searching process, are certainly not a reduct, we can state that GCreduct finds all the reducts of a decision system.
 	
 	In Table~\ref{tab:sample_GCreduct}, we show an example of the execution of GCreduct over the \textit{SBDM} of Table~\ref{tab:SSBDM1}. The first column enumerates the candidate evaluations. The second column shows the position of the current candidate, according to the lexicographical order. Notice that, for this example, there are 127 attribute subsets in the search space from which, only 24 have to be analyzed. In the last column, some comments about the evaluation of the current candidate and the generation of the next one, are included.
 	
@@ -595,7 +596,7 @@
 	\end{table}
 		
 	\phantomsection\label{par:step}
-	In this example, the algorithm starts with the subset $B=\lbrace \rbrace$ and its cumulative mask $cm_B=(00000)$. The first candidate is built by assigning to $c$ the current attribute  $c_0$ ($B\cup \lbrace c\rbrace = \lbrace c_0\rbrace$) and we have $cm_{\lbrace c_0\rbrace}=(10000)$. According to Definition~\ref{def:contrib}, this attribute contributes, thus it is saved in $B=\lbrace c_0\rbrace$. Following, the next attribute is added  by doing $c = c_1$. The new cumulative mask is $cm_{\lbrace c_0,c_1\rbrace}=(11000)\neq cm_{\lbrace c_0\rbrace}$ and $c_1$ contributes to $B$. Thus, we save the current attribute in $B = \lbrace c_0,c_1\rbrace$ and the next attribute is added by doing $c = c_2$. In the same way, $cm_{\lbrace c_0,c_1,c_2\rbrace}=(11010)\neq cm_{\lbrace c_0,c_1\rbrace}$ and $c_2$ is saved in $B = \lbrace c_0,c_1,c_2\rbrace$ to add the next attribute by doing $c = c_3$. This time, we have $cm_{\lbrace c_0,c_1,c_2,c_3\rbrace}=(11010) = cm_{\lbrace c_0,c_1,c_2\rbrace}$ then $c_3$ does not contribute to $B$. At this point, all the supersets of $\lbrace c_0,c_1,c_2,c_3\rbrace$ are pruned according to Proposition~\ref{prop:contrib}. Thus, $B = \lbrace c_0,c_1,c_2\rbrace$ and $c = c_4$, discarding from the fourth to the twelfth candidate in the lexicographical order, as it can be seen in  Table~\ref{tab:sample_GCreduct}. The same result is obtained for $\lbrace c_0,c_1,c_2,c_4\rbrace$ going to $B = \lbrace c_0,c_1,c_2\rbrace$ and $c = c_5$ for the next evaluation. This time, $cm_{\lbrace c_0,c_1,c_2,c_5\rbrace}=(11011)\neq cm_{\lbrace c_0,c_1,c_2\rbrace}$ and $c_5$ contributes to $B$. Thus, we save the current attribute in $B = \lbrace c_0,c_1,c_2,c_5\rbrace$ and the next attribute is added by doing $c = c_6$. We have $cm_{\lbrace c_0,c_1,c_2,c_5,c_6\rbrace}=(11111)\neq cm_{\lbrace c_0,c_1,c_2,c_5\rbrace}$ so that $\lbrace c_0,c_1,c_2,c_5,c_6\rbrace$ is a super-reduct. The next step is the exclusion evaluation over this super-reduct to verify whether it is a reduct.
+	In this example, the algorithm \hl{starts} with the subset $B=\lbrace \rbrace$ and its cumulative mask $cm_B=(00000)$. The first candidate is built by assigning to $c$ the current attribute  $c_0$ ($B\cup \lbrace c\rbrace = \lbrace c_0\rbrace$) and we have $cm_{\lbrace c_0\rbrace}=(10000)$. According to Definition~\ref{def:contrib}, this attribute contributes, thus it is saved in $B=\lbrace c_0\rbrace$. Following, the next attribute is added  by doing $c = c_1$. The new cumulative mask is $cm_{\lbrace c_0,c_1\rbrace}=(11000)\neq cm_{\lbrace c_0\rbrace}$ and $c_1$ contributes to $B$. Thus, we save the current attribute in $B = \lbrace c_0,c_1\rbrace$ and the next attribute is added by doing $c = c_2$. In the same way, $cm_{\lbrace c_0,c_1,c_2\rbrace}=(11010)\neq cm_{\lbrace c_0,c_1\rbrace}$ and $c_2$ is saved in $B = \lbrace c_0,c_1,c_2\rbrace$ to add the next attribute by doing $c = c_3$. This time, we have $cm_{\lbrace c_0,c_1,c_2,c_3\rbrace}=(11010) = cm_{\lbrace c_0,c_1,c_2\rbrace}$ then $c_3$ does not contribute to $B$. At this point, all the supersets of $\lbrace c_0,c_1,c_2,c_3\rbrace$ are pruned according to Proposition~\ref{prop:contrib}. Thus, $B = \lbrace c_0,c_1,c_2\rbrace$ and $c = c_4$, discarding from the fourth to the twelfth candidate in the lexicographical order, as it can be seen in  Table~\ref{tab:sample_GCreduct}. The same result is obtained for $\lbrace c_0,c_1,c_2,c_4\rbrace$ going to $B = \lbrace c_0,c_1,c_2\rbrace$ and $c = c_5$ for the next evaluation. This time, $cm_{\lbrace c_0,c_1,c_2,c_5\rbrace}=(11011)\neq cm_{\lbrace c_0,c_1,c_2\rbrace}$ and $c_5$ contributes to $B$. Thus, we save the current attribute in $B = \lbrace c_0,c_1,c_2,c_5\rbrace$ and the next attribute is added by doing $c = c_6$. We have $cm_{\lbrace c_0,c_1,c_2,c_5,c_6\rbrace}=(11111)\neq cm_{\lbrace c_0,c_1,c_2,c_5\rbrace}$ so that $\lbrace c_0,c_1,c_2,c_5,c_6\rbrace$ is a super-reduct. The next step is the exclusion evaluation over this super-reduct to verify whether it is a reduct.
 	  
   	\begin{table}[!htb]
   		\caption{Exclusion mask computation for $\lbrace c_0,c_1,c_2,c_5,c_6\rbrace$.}\label{tab:em}
@@ -623,7 +624,7 @@
 	Since RGonCRS is implemented in Matlab and it operates directly	over the decision system, in the subsection~\ref{sub:matlab}, we compare GCreduct against RGonCRS over decision systems by using a Matlab implementation of the proposed algorithm. Then, in the subsection~\ref{sub:java}, we show a comparative study of GCreduct against fast--CT\_EXT and fast--BR over \textit{SBDMs} computed from decision systems of UCI, by using a Java implementation of the proposed algorithm. Finally, in the subsection~\ref{sub:synth}, we present a comparative study between fast--CT\_EXT, GCreduct and fast--BR over synthetic \textit{SBDMs}. In this final experiment, we discuss the algorithms performance regarding the density of 1's of the \textit{SBDM}. 
 	%Since these algorithms have exponential complexity, the only comparison that we can perform is through their implementations. Thus, all the conclusions drawn from these experiments refers rigorously to the implementations of the algorithms that we used. 
 	
-	The source code of the four algorithms, as well as all the decision systems from UCI and the synthetic \textit{SBDMs} used in these experiments, are available at \url{http://ccc.inaoep.mx/~ariel/GCreduct}.
+	\hl{The source code of the four algorithms, as well as all the decision systems used in these experiments, are available at} \url{http://ccc.inaoep.mx/~ariel/GCreduct}.
 	
 \subsection{GCreduct vs. RGonCRS}\label{sub:matlab}
 	In order to make a fair comparison against RGonCRS, we used its author's implementation in Matlab and we implemented GCreduct in Matlab as well. For this experiment, we selected 15 decision systems from the UCI machine learning repository \citep{Bache13}. Objects with missing data were removed as in \citep{WangP07}. For numerical attributes, we used the Weka's equal width discretization filter with 10 bins, as describe in \cite{Flores2010}. This experiment was run using Matlab R2015a.
@@ -693,7 +694,7 @@
     
     \begin{table}[htb]
     \centering \footnotesize
-    \caption{Runtime and candidates evaluated by Fast--CT\_EXT, GCreduct and Fast--BR for decision systems from UCI.}
+    \caption{\hl{Runtime and candidates evaluated by Fast--CT\_EXT, GCreduct and Fast--BR for decision systems from UCI.}}
     \label{tab:java}
     \begin{tabular}{|l|r|r|r|r|r|r|r|}
 	    \hline
@@ -744,13 +745,13 @@
 		\label{fig:scattDensity}
 	\end{figure}	
 
-	For clarity purposes, the 500 matrices were divided into 15 groups by discretizing the range of densities, each group having approximately 33 \textit{SBDMs}. Figure~\ref{fig:scattDensity} shows the average runtime for all  matrices in each group for the three algorithms, as a function of the density of 1's in the synthetic \textit{SBDMs}. In this figure, the vertical bars show the standard deviation of each bin. 
+	For clarity purposes, the 500 matrices were \hl{divided into 15 bins} by discretizing the range of densities, each \hl{bin} having approximately 33 \textit{SBDMs}. Figure~\ref{fig:scattDensity} shows the average runtime \hl{for} all  matrices in each \hl{bin} for the three algorithms, as a function of the density of 1's in the synthetic \textit{SBDMs}. In this figure, the vertical bars show the standard deviation of each bin. 
 		
 	From Figure~\ref{fig:scattDensity}, we can see that for matrices with density under 0.36  the fastest algorithm was GCreduct, fast--BR was the fastest for matrices with density between 0.36 and 0.66, and the three algorithms show a similar performance for matrices with density above 0.66. The fact that \textit{SBDMs} with a high density do not constitute a complex computational task for reduct computation \citep{Rojas12}, is clearly visible in Figure~\ref{fig:scattDensity}. For this reason, a detailed analysis in this region lacks of relevance.
 		
-	In order to explain the line delimiting those \textit{SBDMs} for which GCreduct is faster than fast--BR (densities under 0.36), we must go deeply into the main difference between these algorithms. The evaluation of the attribute exclusion is the part with the highest complexity within these algorithms ($\Theta (nm)$). This operation is executed more often in fast--BR than in GCreduct. The attribute exclusion occurs when there is at least one column in the sub-matrix of the \textit{SBDM}, considering only the attributes in the current candidate that can be removed without increasing the number of zero rows in this sub-matrix. The exclusion is more frequent in matrices with a higher density, where overlapping of 1's is more likely. The higher cost of candidate evaluation in fast--BR pays off for \textit{SBDMs} with higher densities (the limit identified from our experiment is 0.36), because supersets of candidates with attribute exclusion are excluded from subsequent evaluations. Take, for instance, the extreme case of the identity matrix, where there is no exclusion at all since every attribute is indispensable to form a reduct. For this kind of \textit{SBDMs}, GCreduct needs to evaluate as many candidates as fast--BR but the former one makes a single verification for exclusion with the set of all attributes. On the other hand, fast--BR verifies the exclusion for each candidate, which leads to a higher runtime.
+	In order to explain the line delimiting those \textit{SBDMs} for which GCreduct is faster than fast--BR (densities under 0.36), we must go deeply into the main difference between these algorithms. The evaluation of the attribute exclusion is the part with the highest complexity within these algorithms ($\Theta (nm)$). This operation is executed more \hl{often} in fast--BR than in GCreduct. The attribute exclusion occurs when there is at least one column in the sub-matrix of the \textit{SBDM}, considering only the attributes in the current candidate that can be removed without increasing the number of zero rows in this sub-matrix. The exclusion is more frequent in matrices with a higher density, where overlapping of 1's is more likely. The higher cost of candidate evaluation in fast--BR pays off for \textit{SBDMs} with higher densities (the limit identified from our experiment is 0.36), because supersets of candidates with attribute exclusion are excluded from subsequent evaluations. Take, for instance, the extreme case of the identity matrix, where there is no exclusion at all since every attribute is indispensable to form a reduct. For this kind of \textit{SBDMs}, GCreduct needs to evaluate as many candidates as fast--BR but the former makes a single verification for exclusion with the set of all attributes. On the other hand, fast--BR verifies the exclusion for each candidate, which leads to a higher runtime.
 	
-	The Friedman and post hoc Nemenyi-Damico-Wolfe-Dunn tests show that GCreduct was significantly faster (\textit{p--value} $< 10^{-16}$) than fast--CT\_EXT for low (under 0.36) and medium (between 0.36 and 0.66) density matrices. In relation to fast--BR, GCreduct showed a significant runtime reduction (\textit{p--value} $< 10^{-16}$) for low density matrices while it was significantly slower (\textit{p--value} $< 10^{-16}$) for medium density matrices. From this analysis, we conclude that GCreduct is the best algorithm for low density matrices; while fast--BR is the best for medium density matrices. For high density matrices (over 0.66), any algorithm can be used since, as we already stated, computing reducts on this kind of matrices does not constitute a complex computational task. Moreover, from these conclusions a great advantage can be taken of selecting the appropriate algorithm for each decision system, since the density of 1's can be computed a priori with a relatively low computational cost.
+	The Friedman and post hoc Nemenyi-Damico-Wolfe-Dunn tests show that GCreduct was significantly faster (\textit{p--value} $< 10^{-16}$) than fast--CT\_EXT for low (under 0.36) and medium (between 0.36 and 0.66) density matrices. In relation to fast--BR, GCreduct showed a significant runtime reduction (\textit{p--value} $< 10^{-16}$) for low density matrices while it was significantly slower (\textit{p--value} $< 10^{-16}$) for medium density matrices. From this analysis, we conclude that GCreduct is the best algorithm for low density matrices; while fast--BR is the best for medium density matrices. For high density matrices (over 0.66), any algorithm can be used since, as we already stated, computing reducts on this kind of matrices does not constitute a complex computational task. \hl{Moreover, from these conclusions a great advantage can be taken of selecting the appropriate algorithm for each decision system, since the density of 1's can be computed a priori with a relatively low computational cost.}
 		
 	\begin{table}[htb]
 		\centering \footnotesize
@@ -783,17 +784,17 @@
 	\phantomsection\label{par:kind}
 	In Table~\ref{tab:density}, we included the density of 1's and the runtime shown for each \textit{SBDM} in Table~\ref{tab:java}. We also sorted the decision systems of Table~\ref{tab:density} in ascending order of the density of 1's in their associated \textit{SBDM}. Although this is a small heterogeneous sample, the rule obtained from synthetic data can be verified in this table. For decision systems with \textit{SBDM} densities close to the boundary of 0.36 we cannot conclude which is the fastest algorithm, as it can be seen in Table~\ref{tab:density}. However, for those decision systems which have a \textit{SBDM} with density clearly under 0.36, GCreduct was the fastest. In the same way, fast-BR performed faster for those decision systems having a \textit{SBDM} with density clearly above 0.36.
 	
-	The density of 1's of the \textit{SBDM} is not the only parameter affecting the relative performance of these algorithms. This fact can be verified in Figure~\ref{fig:scattDensity}, where the vertical bars show the standard deviation of the runtime for different \textit{SBDMs} which have the same density. Thus, we may infer that the distribution of 1's within the \textit{SBDM} also has a significant influence, which deserves a deeper study. However, for density values not too close to 0.36 these variations in the distribution of 1's within the \textit{SBDMs} have no effect on the determination of the fastest algorithm, as it can be also seen in Figure~\ref{fig:scattDensity}.\phantomsection\label{par:distribution}
+	The density of 1's of the \textit{SBDM} is not the only parameter affecting the relative performance of these algorithms. This fact can be verified in Figure~\ref{fig:scattDensity}, where the vertical bars show the standard deviation of the runtime for different \textit{SBDMs} which have the same density. Thus, we may infer that the distribution of 1's within the \textit{SBDM} also has a significant influence, which deserves a deeper study. However, for density values not too close to 0.36 \hl{these} variations in the distribution of 1's within the \textit{SBDMs} have \hl{no} effect on the determination of the fastest algorithm, as it can be also seen in Figure~\ref{fig:scattDensity}.\phantomsection\label{par:distribution}
 
 \section{Conclusions}\label{conclusions}
 	In this work, we presented a new algorithm, GCreduct, for computing all reducts of a decision system. In the proposed algorithm, the search space is traversed evaluating some candidate subsets and, based on pruning properties, many others are discarded. Algorithms reported in the literature use operations with a high cost for candidate evaluation, in order to reduce the number of evaluated candidates. The main contribution of our proposal, unlike previous algorithms, is the use of simpler operations for candidate evaluation, based on the pruning properties of gap elimination and attribute contribution, for a faster reduct computation. 
 	
-	After conducting a series of experiments over synthetic \textit{SBDMs} and decision systems from the UCI repository, we can conclude that GCreduct performs faster than fast--BR and fast--CT\_EXT on those decision systems whose associated \textit{SBDM} has a density of 1's under 0.36. This result provides an instrument to select the proper algorithm for a determined decision system. Further studies should be undertaken to deeply explore the relation found between the fastest algorithm for reduct computation of a decision system and the density of 1's. 
+	After conducting a series of experiments over synthetic \textit{SBDMs} and decision systems from the UCI repository, we can conclude that GCreduct performs faster than \hl{fast--BR and fast--CT\_EXT} on those decision systems whose associated \textit{SBDM} has a density of 1's under 0.36. This result provides an instrument to select the proper algorithm for a determined decision system. Further studies should be \hl{undertaken to deeply} explore the relation found between the fastest algorithm for reduct computation of a decision system and the density of 1's \hl{of the associated \textit{SBDM}}. 
 	
-	Finally, since the density of 1's of the \textit{SBDM} is not the only factor affecting the performance of the algorithms, other factors deserves a wider study as future work. 
+	Finally, since the density of 1's of the \textit{SBDM} is not the only factor affecting the performance of the algorithms \hl{for computing reducts, other factors deserves a wider study as future work.}
 
 \section{Acknowledgements}
-	The first author gratefully acknowledge CONACyT for his doctoral fellowship, through the scholarship 399547.
+	The first author gratefully \hl{acknowledges} CONACyT for his doctoral fellowship, through the scholarship 399547.
 %-------------------------------------------------------------------------------
 % Bibliography
 %-------------------------------------------------------------------------------

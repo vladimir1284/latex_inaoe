@@ -20,69 +20,69 @@
   \begin{enumerate}
 	\item Show all changes made to the revised manuscript. \\
 	\textbf{Authors’ response:} \\
-	We have proofread the whole paper in order to improve the grammar in the current version of the paper. The changes accomplished to this end are summarized below:
+	The whole paper have been proofread in order to improve the grammar and style. All changes have been highlighted in yellow in the new version of our paper. The changes accomplished to this end are summarized below:
 	\begin{itemize}		
-		\item We made slight modifications to the last two sentences of the abstract to improve its readability.
+		\item We modified the last two sentences of the abstract in order to improve its readability, as follows:
+		
+		\textcolor{blue}{Therefore, in this paper, we propose a new algorithm for computing all reducts of a decision system, based on the pruning properties of \textit{gap  elimination} and \textit{attribute contribution}, that uses simpler operations for candidate evaluation in order to reduce the runtime. Finally, the proposed algorithm is evaluated and compared with other state of the art algorithms, over synthetic and real decision systems.}
+				 
+		\item We have rewritten the last sentence of the subsection ``Positive Region" as follows:
+		
+	    \textcolor{blue}{The \textit{B-positive region of D}, denoted as $POS_B(D)$, is defined as the set of all objects in $U$ such that if two of them have the same value for every attribute in B, they belong to the same decision class.}
+		
+		\item We have improved the last paragraph in page 8 as:
+		
+		\textcolor{blue}{Following the traversing order of LEX, the CT\_EXT algorithm searches for testors without verifying the typical condition. In this way, a larger number of candidates is evaluated, in comparison to LEX; but the cost of each evaluation is lower.}
+		
+		\item The second sentence of the fourth paragraph of the subsection 4.1 ``Pruning Properties for GCreduct", was modified as:
+		
+		\textcolor{blue}{Notice that the order of the elements in the list is relevant.}
 		 
-		\item We have rewritten the last sentence of the subsection ``Positive Region"  for clarity purposes. This sentence is reproduced below in its current form:
+		\item Another grammar correction was made in the fifth paragraph of the subsection 4.1 ``Pruning Properties for GCreduct", as it can be seen below:
 		
-		The set $POS_B(D)$, called the \textit{B-positive region of D}, is defined as the set of all objects in $U$ such that if two of them have the same value for each attribute in B, they belong to the same decision class.
+		\textcolor{blue}{Let us also define an order relation $\prec$ over the set of ordered lists of attributes as follows.}
 		
-		\item We have improved the grammar of the last paragraph in page 8 as it can be seen below.
+		\item Some modifications were introduced in Propositions~\ref{prop:gap}, \ref{prop:contrib}, \ref{prop:cumul}, \ref{prop:exclude} and \ref{prop:firstRow}, Corollary~\ref{coro:gap} and Definition~\ref{coro:gap}, to improve their grammar.  
 		
-		Following a traversing order similar to that one used for LEX, the algorithm CT\_EXT searches for testors without verifying the typical condition. In this way, a larger number of candidates is evaluated, in comparison to LEX; but the cost of each evaluation is lower.
+		\item The penultimate paragraph of the subsection 4.1 ``Pruning Properties for GCreduct" was improved as follows.
 		
-		\item In the fourth paragraph of the subsection ``Pruning Properties for GCreduct", we have corrected the grammar of the following sentence:
+		\textcolor{blue}{Based on this proposition, if we reach an ordered list $L$ satisfying $c_{j_0}=0$, the search can be stopped.}
 		
-		Notice that the order of the elements in the list is relevant.
-		 
-		\item Another grammar correction was made in the fifth paragraph of the subsection ``Pruning Properties for GCreduct", as it can be seen below:
+		\item The last sentence from the first paragraph of the subsection 4.2 ``The GCreduct algorithm" was improved as follows:
 		
-		Let us also define an order relation $\prec$ over the set of ordered lists of attributes as follows.
+	    \textcolor{blue}{Unlike other works [29,13] where candidate evaluation is performed through operations with a high cost, GCreduct uses a simpler candidate evaluation based on gap elimination and attribute contribution to reduce the runtime.}
 		
-		\item Slight modifications were introduced in Propositions~\ref{prop:gap}, \ref{prop:contrib}, \ref{prop:cumul}, \ref{prop:exclude} and \ref{prop:firstRow}, Corollary~\ref{coro:gap} and Definition~\ref{coro:gap}, to improve their grammar.  
+		\item We have improved the first sentence in the penultimate paragraph of page~18, as follows:
 		
-		\item The grammar of the penultimate paragraph of the subsection ``Pruning Properties for GCreduct" was improved as follows.
+		\textcolor{blue}{The pseudocode for the exclusion evaluation is shown in Algorithm~\ref{alg:exclusion}.}
 		
-		Based on this proposition, if we reach an ordered list $L$ satisfying $c_{j_0}=0$, the search can be stopped.
+		\item We have also changed the last sentence of the first paragraph of page 20, as follows:
 		
-		\item The last sentence from the first paragraph of the subsection ``The algorithm GCreduct" was improved as it can be seen below.
+		\textcolor{blue}{Thus, there is no polynomial complexity algorithm for computing all the reducts of a decision system.}% However, the performance of the algorithms for computing all reducts is strongly related to the characteristics of the \textit{SBDM}. 
 		
-		...GCreduct uses a simpler candidate evaluation based on attribute contribution and gap elimination to reduce the runtime. 
+		\item The first sentence in the first paragraph of page~23 was modified as follows:
 		
-		\item We have improved the grammar of the first sentence in the penultimate paragraph of page~18. This sentence can be seen below in its current form.
+		\textcolor{blue}{The exclusion verification starts with $cm_B = em_B = (00000)$.}
 		
-		The pseudocode for the exclusion evaluation is shown in Algorithm~\ref{alg:exclusion}.
+		\item The third paragraph of the section 5 ``Evaluation and Discussion" was modified as follows:
 		
-		\item We have also made changes to the first paragraph of page 20, as it can be seen below.
+		\textcolor{blue}{The source code of the four algorithms, as well as all the decision systems used in these experiments, are available at \url{http://ccc.inaoep.mx/~ariel/GCreduct}.}
 		
-		Thus, there is no  polynomial complexity algorithm for computing all the reducts of a decision system. However, the performance of the algorithms for computing all reducts is strongly related to the characteristics of the \textit{SBDM}. 
+		\item The second paragraph from the subsection 5.3 ``Evaluation Over Synthetic \textit{SBDMs}" was improved as follows:
 		
-		\item The first sentence in the first paragraph of page~23 was fixed as follows:
+		\textcolor{blue}{For clarity purposes, the 500 matrices were divided into 15 bins by discretizing the range of densities, each bin having approximately 33 \textit{SBDMs}. Figure~\ref{fig:scattDensity} shows the average runtime for all  matrices in each bin for the three algorithms, as a function of the density of 1's in the synthetic \textit{SBDMs}. In this figure, the vertical bars show the standard deviation of each bin.}
 		
-		The exclusion verification starts with $cm_B = em_B = (00000)$.
+		\item We have improved the third sentence of the last paragraph in page 27, as follows:
 		
-		\item The third paragraph from section ``Evaluation and Discussion" was modified for clarity purposes, as it can be seen below.
+		\textcolor{blue}{This operation is executed more often in fast--BR than in GCreduct.}
 		
-		The source code of the four algorithms, as well as all the decision systems from UCI and the synthetic \textit{SBDMs} used in these experiments, are available at \url{http://ccc.inaoep.mx/~ariel/GCreduct}.
+		\item The last sentence of the second paragraph in page~28 was rewritten as follows:
 		
-		\item The grammar of the second paragraph from the subsection ``Evaluation Over Synthetic \textit{SBDMs}" was improved as follows:
+		\textcolor{blue}{Moreover, from these conclusions a great advantage can be taken of selecting the appropriate algorithm for each decision system, since the density of 1's can be computed a priori with a relatively low computational cost.}
 		
-		For clarity purposes, the 500 matrices were divided into 15 groups by discretizing the range of densities, each group having approximately 33 \textit{SBDMs}. Figure~\ref{fig:scattDensity} shows the average runtime for all  matrices in each group for the three algorithms, as a function of the density of 1's in the synthetic \textit{SBDMs}. In this figure, the vertical bars show the standard deviation of each bin. 
+		\item The last sentence of the last paragraph of the subsection 5.3 ``Evaluation Over Synthetic \textit{SBDMs}" was modified as follows:
 		
-		\item We have improved the grammar of the last paragraph in page 27 as it can be seen below.
-		
-		This operation is executed more often in fast--BR than in GCreduct.\\
-		
-		For this kind of \textit{SBDMs}, GCreduct needs to evaluate as many candidates as fast--BR but the former one makes a single verification for exclusion with the set of all attributes.
-		
-		\item The last sentence of the second paragraph in page~28 was rewritten as it can be seen below.
-		
-		Moreover, from these conclusions a great advantage can be taken of selecting the appropriate algorithm for each decision system, since the density of 1's can be computed a priori with a relatively low computational cost.
-		
-		\item The last sentence from the subsection ``Evaluation Over Synthetic \textit{SBDMs}" was fixed as follows:
-		
-		However, for density values not too close to 0.36 these variations in the distribution of 1's within the \textit{SBDMs} have no effect on the determination of the fastest algorithm, as it can be also seen in Figure~\ref{fig:scattDensity}.
+		\textcolor{blue}{However, for density values not too close to 0.36 these variations in the distribution of 1's within the \textit{SBDMs} have no effect on the determination of the fastest algorithm, as it can be also seen in Figure~\ref{fig:scattDensity}.}
 		
 		\item The second and third paragraph of the conclusions were modified to improve their grammar and clarity.
 		
@@ -90,18 +90,18 @@
 		 
 	\item Shorten the paper - 35 pages max.\\
 	\textbf{Authors’ response:} \\
-	The paper was modified to fit the 35 pages. The following modifications were made to this end:
+	The paper was modified to fit 35 pages. The following modifications were made to this end:
 	\begin{itemize}
 		\item We removed the third paragraph from the Introduction where we discussed some recent applications of the algorithms for computing all reducts.
 		
 		\item From the  Basic Concepts, we removed the second paragraph where we introduced the meaning of indistinguishable objects. This term will be not used further in the current version of the paper.
 
 		
-		\item We have shorten the ``Related Work" section by eliminating the discussion of some previous works that we found less related to our proposed algorithm.
+		\item We have shortened the ``Related Work" section by eliminating the discussion of some previous works that we found less related to our proposed algorithm.
 		
-		\item From the subsection ``The algorithm GCreduct", we removed the proposition where we explicitly show that the algorithm GCreduct finds all the reducts of a decision system. 
+		%\item From the subsection ``The GCreduct algorithm", we removed the proposition where we explicitly show that the algorithm GCreduct finds all the reducts of a decision system. 
 		
-		\item We have shorten the subsection ``GCreduct vs. fast--CT\_EXT and fast--BR" by including the information shown in Table~9 (Candidates evaluated by Fast--CT\_EXT, GCreduct and Fast--BR for decision systems from UCI) within Table~8 (Candidates evaluated by Fast--CT\_EXT, GCreduct and Fast--BR for decision systems from UCI). We also eliminated the Figure~1 (GCreduct fraction of evaluated candidates vs. the number of attributes of the decision systems) since the information shown in this figure is implicit in the new Table~\ref{tab:java} (Runtime and candidates evaluated by Fast--CT\_EXT, GCreduct and Fast--BR for decision systems from UCI).
+		\item We have shorten the subsection ``GCreduct vs. fast--CT\_EXT and fast--BR" by including the information shown in Table~9 (Candidates evaluated by Fast--CT\_EXT, GCreduct and Fast--BR for decision systems from UCI) within Table~8 (Candidates evaluated by Fast--CT\_EXT, GCreduct and Fast--BR for decision systems from UCI). We also eliminated Figure~1 (GCreduct fraction of evaluated candidates vs. the number of attributes of the decision systems) since the information shown in this figure is implicit in the new Table~\ref{tab:java} (Runtime and candidates evaluated by Fast--CT\_EXT, GCreduct and Fast--BR for decision systems from UCI).
 		
 		
 	\end{itemize}
@@ -116,7 +116,9 @@
  \begin{enumerate}  
 	\item (page 5) you still confuse Information System with Decision System - see Table~1: ``Example of an Information System, where $c_0 - c_6$ are condition attributes and $d$ is a decision attribute".\\
 	\textbf{Authors’ response:} \\	
-	We agree this remark and we modified the caption of Table~\ref{tab_IS} as ``Example of a Decision System, where $c_0-c_6$ are conditional attributes and $d$ is a decision attribute.".
+	We agree this remark and we modified the caption of Table~\ref{tab_IS} as follows:
+	
+	\textcolor{blue}{``Example of a Decision System, where $c_0-c_6$ are conditional attributes and $d$ is a decision attribute.".}
 	
 	\item condition attributes $=>$ conditional attributes.\\
 	\textbf{Authors’ response:}\\
@@ -124,24 +126,23 @@
 	
 	\item (page 6) Definition 1 should be corrected: $r_1 => r_k.$\\
 	\textbf{Authors’ response:}\\
-	We specially thank the reviewer for this remark since this error in the definition causes confusion to the reader. We made the corrections, and the definition in its new form is shown below.
+	We specially thank the reviewer for this remark since this error in the definition would cause confusion to the reader. We made the corrections, and the definition in its new form is shown below.
 	
 	\begin{definition}\label{def:basic_row}
-		Let $DM$ be a binary discernibility matrix and $r_k \in DM$ be a row of $DM$. We say that $r_k$ is a superfluous row of $DM$ if $\exists r \in DM$ such that $\exists i | (r[i] < r_k[i]) \wedge \forall i | (r[i] \leq r_k[i])$, where $r[i]$ is the $i$-th element of the row $r$.
-		
+		\textcolor{blue}{Let $DM$ be a binary discernibility matrix and $r_k \in DM$ be a row of $DM$. We say that $r_k$ is a superfluous row of $DM$ if $\exists r \in DM$ such that $\exists i | (r[i] < r_k[i]) \wedge \forall i | (r[i] \leq r_k[i])$, where $r[i]$ is the $i$-th element of the row $r$.}	
 	\end{definition}	 
 	
 	\item (page 35) There are still some issues with the article language, i.e.: ``within the SBDM have not effect on the determination of the fastest algorithm" $=>$ ..have no effect on the determination.. or ..have not affected the determination..\\
 	\textbf{Authors’ response:}\\
-	The sentence was corrected as follows:
+	This sentence was corrected as follows:
 	
-	However, for density values not too close to 0.36 these variations in the distribution of 1's within the \textit{SBDMs} have no effect on the determination of the fastest algorithm, as it can be also seen in Figure~\ref{fig:scattDensity}.
+	\textcolor{blue}{However, for density values not too close to 0.36 these variations in the distribution of 1's within the \textit{SBDMs} have no effect on the determination of the fastest algorithm, as it can be also seen in Figure~\ref{fig:scattDensity}.}
 	
 	\item (page 35) In my opinion the conclusion ``we can conclude that GCreduct performs faster than the fastest previously reported algorithms" should be rephrased to $=>$  ..GCreduct performs faster than: fast-BR, ..."\\
 	\textbf{Authors’ response:}\\
-	We modified this sentence to address this remark as it can be seen below.
+	We modified this sentence as suggested:
 	
-	After conducting a series of experiments over synthetic \textit{SBDMs} and decision systems from the UCI repository, we can conclude that GCreduct performs faster than fast--BR and fast--CT\_EXT on those decision systems whose associated \textit{SBDM} has a density of 1's under 0.36.
+	\textcolor{blue}{After conducting a series of experiments over synthetic \textit{SBDMs} and decision systems from the UCI repository, we can conclude that GCreduct performs faster than fast--BR and fast--CT\_EXT on those decision systems whose associated \textit{SBDM} has a density of 1's under 0.36.}
 	
   \end{enumerate}     
   
@@ -151,5 +152,4 @@
   
 \end{letter}
 
-	
 \end{document}
