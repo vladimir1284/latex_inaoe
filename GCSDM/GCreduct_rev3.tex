@@ -521,19 +521,19 @@
 	
     During the search process, GCreduct evaluates some attribute subsets while discards some others. Propositions~\ref{prop:gap},~\ref{prop:contrib} and~\ref{prop:firstRow} as well as the irreducible condition of reducts, guarantee that none of the discarded attribute subsets is a reduct. This is summarized in the following proposition.
 	
-	\begin{proposition}
+	\begin{proposition}\label{prop:findall}
 		The algorithm GCreduct finds all the reducts of a decision system.
 	\end{proposition}
 	
 	\noindent
-	\textbf{Proof.} The algorithm GCreduct traverses the search space of attribute subsets in the lexicographical order. During the search process, some attribute subsets are evaluated while other ones are discarded in the following cases:
+	\textbf{Proof.} \textit{The algorithm GCreduct traverses the search space of attribute subsets in the lexicographical order. During the search process, some attribute subsets are evaluated while other ones are discarded in the following cases:}
 		\begin{itemize}
-			\item Supersets of an attribute subset which has a non contributing attribute (Proposition~\ref{prop:contrib}).
-			\item Supersets of a super-reduct (which cannot be a reduct based on the condition~\ref{cond_2} of the subsection~\ref{def_reduct}).
-			\item Subsets of a reduct (Proposition~\ref{prop:gap}), or a non super-reduct (Corollary~\ref{coro:gap}), which includes the last attribute of the \textit{SBDM}.
-			\item The remaining candidates, when the column of the \textit{SBDM} corresponding to the leftmost attribute in the candidate has a zero in the first row (Proposition~\ref{prop:firstRow}).
+			\item \textit{Supersets of an attribute subset which has a non contributing attribute (Proposition~\ref{prop:contrib}).}
+			\item \textit{Supersets of a super-reduct (which cannot be a reduct based on the condition~\ref{cond_2} of the subsection~\ref{def_reduct}).}
+			\item \textit{Subsets of a reduct (Proposition~\ref{prop:gap}), or a non super-reduct (Corollary~\ref{coro:gap}), which includes the last attribute of the \textit{SBDM}.}
+			\item \textit{The remaining candidates, when the column of the \textit{SBDM} corresponding to the leftmost attribute in the candidate has a zero in the first row (Proposition~\ref{prop:firstRow}).}
 		\end{itemize} 
-		Since the attribute subsets discarded through the searching process, are certainly not a reduct, we can state that GCreduct finds all the reducts of a decision system.
+	\textit{\hl{Since the attribute subsets discarded by the searching process are certainly not reducts, we can state that GCreduct finds all the reducts of a decision system.}}
 	
 	In Table~\ref{tab:sample_GCreduct}, we show an example of the execution of GCreduct over the \textit{SBDM} of Table~\ref{tab:SSBDM1}. The first column enumerates the candidate evaluations. The second column shows the position of the current candidate, according to the lexicographical order. Notice that, for this example, there are 127 attribute subsets in the search space from which, only 24 have to be analyzed. In the last column, some comments about the evaluation of the current candidate and the generation of the next one, are included.
 	
@@ -630,7 +630,7 @@
 	In order to make a fair comparison against RGonCRS, we used its author's implementation in Matlab and we implemented GCreduct in Matlab as well. For this experiment, we selected 15 decision systems from the UCI machine learning repository \citep{Bache13}. Objects with missing data were removed as in \citep{WangP07}. For numerical attributes, we used the Weka's equal width discretization filter with 10 bins, as describe in \cite{Flores2010}. This experiment was run using Matlab R2015a.
 	
 	\begin{table}[!htb]
-		\caption{RGonCRS and GCreduct runtime for decision systems from UCI.}\label{tab:matlab}
+		\caption{RGonCRS and GCreduct runtime for decision systems \hl{taken} from UCI.}\label{tab:matlab}
 		\centering \footnotesize
 		\begin{tabular}{|l|c|c|c|r|r|}
 			\hline
@@ -694,7 +694,7 @@
     
     \begin{table}[htb]
     \centering \footnotesize
-    \caption{\hl{Runtime and candidates evaluated by Fast--CT\_EXT, GCreduct and Fast--BR for decision systems from UCI.}}
+    \caption{\hl{Runtime and candidates evaluated by Fast--CT\_EXT, GCreduct and Fast--BR for decision systems taken from UCI.}}
     \label{tab:java}
     \begin{tabular}{|l|r|r|r|r|r|r|r|}
 	    \hline
@@ -745,17 +745,17 @@
 		\label{fig:scattDensity}
 	\end{figure}	
 
-	For clarity purposes, the 500 matrices were \hl{divided into 15 bins} by discretizing the range of densities, each \hl{bin} having approximately 33 \textit{SBDMs}. Figure~\ref{fig:scattDensity} shows the average runtime \hl{for} all  matrices in each \hl{bin} for the three algorithms, as a function of the density of 1's in the synthetic \textit{SBDMs}. In this figure, the vertical bars show the standard deviation of each bin. 
+	For clarity purposes, the 500 \hl{synthetic \textit{SBDMs} were divided into 15 bins} by discretizing the range of densities, each \hl{bin} having approximately 33 \textit{SBDMs}. Figure~\ref{fig:scattDensity} shows the average runtime \hl{for} all  matrices in each \hl{bin} for the three algorithms, as a function of the density of 1's in the synthetic \textit{SBDMs}. In this figure, the vertical bars show the standard deviation \hl{in} each bin. 
 		
 	From Figure~\ref{fig:scattDensity}, we can see that for matrices with density under 0.36  the fastest algorithm was GCreduct, fast--BR was the fastest for matrices with density between 0.36 and 0.66, and the three algorithms show a similar performance for matrices with density above 0.66. The fact that \textit{SBDMs} with a high density do not constitute a complex computational task for reduct computation \citep{Rojas12}, is clearly visible in Figure~\ref{fig:scattDensity}. For this reason, a detailed analysis in this region lacks of relevance.
 		
-	In order to explain the line delimiting those \textit{SBDMs} for which GCreduct is faster than fast--BR (densities under 0.36), we must go deeply into the main difference between these algorithms. The evaluation of the attribute exclusion is the part with the highest complexity within these algorithms ($\Theta (nm)$). This operation is executed more \hl{often} in fast--BR than in GCreduct. The attribute exclusion occurs when there is at least one column in the sub-matrix of the \textit{SBDM}, considering only the attributes in the current candidate that can be removed without increasing the number of zero rows in this sub-matrix. The exclusion is more frequent in matrices with a higher density, where overlapping of 1's is more likely. The higher cost of candidate evaluation in fast--BR pays off for \textit{SBDMs} with higher densities (the limit identified from our experiment is 0.36), because supersets of candidates with attribute exclusion are excluded from subsequent evaluations. Take, for instance, the extreme case of the identity matrix, where there is no exclusion at all since every attribute is indispensable to form a reduct. For this kind of \textit{SBDMs}, GCreduct needs to evaluate as many candidates as fast--BR but the former makes a single verification for exclusion with the set of all attributes. On the other hand, fast--BR verifies the exclusion for each candidate, which leads to a higher runtime.
+	In order to explain the line delimiting those \textit{SBDMs} for which GCreduct is faster than fast--BR (densities under 0.36), we must go deeply into the main difference between these algorithms. The evaluation of the attribute exclusion is the part with the highest complexity within these algorithms ($\Theta (nm)$). This operation is executed more \hl{often} in fast--BR than in GCreduct. The attribute exclusion occurs when there is at least one column in the sub-matrix of the \textit{SBDM}, considering only the attributes in the current candidate that can be removed without increasing the number of zero rows in this sub-matrix. The exclusion is more frequent in matrices with a higher density, where overlapping of 1's is more likely. The higher cost of candidate evaluation in fast--BR pays off for \textit{SBDMs} with higher densities (the limit identified from our experiment is 0.36), because supersets of candidates with attribute exclusion are excluded from subsequent evaluations. \hl{For instance, taking} the extreme case of the identity matrix, where there is no exclusion at all since every attribute is indispensable to form a reduct. For this kind of \textit{SBDMs}, GCreduct needs to evaluate as many candidates as fast--BR but the former makes a single verification for exclusion with the set of all attributes. On the other hand, fast--BR verifies the exclusion for each candidate, which leads to a higher runtime.
 	
-	The Friedman and post hoc Nemenyi-Damico-Wolfe-Dunn tests show that GCreduct was significantly faster (\textit{p--value} $< 10^{-16}$) than fast--CT\_EXT for low (under 0.36) and medium (between 0.36 and 0.66) density matrices. In relation to fast--BR, GCreduct showed a significant runtime reduction (\textit{p--value} $< 10^{-16}$) for low density matrices while it was significantly slower (\textit{p--value} $< 10^{-16}$) for medium density matrices. From this analysis, we conclude that GCreduct is the best algorithm for low density matrices; while fast--BR is the best for medium density matrices. For high density matrices (over 0.66), any algorithm can be used since, as we already stated, computing reducts on this kind of matrices does not constitute a complex computational task. \hl{Moreover, from these conclusions a great advantage can be taken of selecting the appropriate algorithm for each decision system, since the density of 1's can be computed a priori with a relatively low computational cost.}
+	The Friedman and post hoc Nemenyi-Damico-Wolfe-Dunn tests show that GCreduct was significantly faster (\textit{p--value} $< 10^{-16}$) than fast--CT\_EXT for low (under 0.36) and medium (between 0.36 and 0.66) density matrices. In relation to fast--BR, GCreduct showed a significant runtime reduction (\textit{p--value} $< 10^{-16}$) for low density matrices while it was significantly slower (\textit{p--value} $< 10^{-16}$) for medium density matrices. From this analysis, we conclude that GCreduct is the best algorithm for low density matrices; while fast--BR is the best for medium density matrices. For high density matrices (over 0.66), any algorithm can be used since, as we already stated, computing reducts on this kind of matrices does not constitute a complex computational task. \hl{Moreover, from these conclusions a great advantage can be taken of selecting the appropriate algorithm for a specific decision system, since the density of 1's can be computed a priori with a relatively low computational cost.}
 		
 	\begin{table}[htb]
 		\centering \footnotesize
-		\caption{Fast--CT\_EXT, GCreduct and Fast--BR runtime for decision systems from UCI. Sorted by \textit{SBDM} density.}
+		\caption{Fast--CT\_EXT, GCreduct and Fast--BR runtime for decision systems \hl{taken} from UCI. Sorted by \textit{SBDM} density.}
 		\label{tab:density}
 		\begin{tabular}{|l|c|r|r|r|}
 			\hline
@@ -784,14 +784,14 @@
 	\phantomsection\label{par:kind}
 	In Table~\ref{tab:density}, we included the density of 1's and the runtime shown for each \textit{SBDM} in Table~\ref{tab:java}. We also sorted the decision systems of Table~\ref{tab:density} in ascending order of the density of 1's in their associated \textit{SBDM}. Although this is a small heterogeneous sample, the rule obtained from synthetic data can be verified in this table. For decision systems with \textit{SBDM} densities close to the boundary of 0.36 we cannot conclude which is the fastest algorithm, as it can be seen in Table~\ref{tab:density}. However, for those decision systems which have a \textit{SBDM} with density clearly under 0.36, GCreduct was the fastest. In the same way, fast-BR performed faster for those decision systems having a \textit{SBDM} with density clearly above 0.36.
 	
-	The density of 1's of the \textit{SBDM} is not the only parameter affecting the relative performance of these algorithms. This fact can be verified in Figure~\ref{fig:scattDensity}, where the vertical bars show the standard deviation of the runtime for different \textit{SBDMs} which have the same density. Thus, we may infer that the distribution of 1's within the \textit{SBDM} also has a significant influence, which deserves a deeper study. However, for density values not too close to 0.36 \hl{these} variations in the distribution of 1's within the \textit{SBDMs} have \hl{no} effect on the determination of the fastest algorithm, as it can be also seen in Figure~\ref{fig:scattDensity}.\phantomsection\label{par:distribution}
+	The density of 1's of the \textit{SBDM} is not the only parameter affecting the relative performance of these algorithms. This fact can be verified in Figure~\ref{fig:scattDensity}, where the vertical bars show the standard deviation of the runtime for different \textit{SBDMs} which have the same density. Thus, we may infer that the distribution of 1's within the \textit{SBDM} also has a significant influence, which deserves a deeper study. However, \hl{in our experiments,} for density values not too close to 0.36 \hl{these} variations in the distribution of 1's within the \textit{SBDMs} have \hl{no} effect on the determination of the fastest algorithm, as it can be also seen in Figure~\ref{fig:scattDensity}.\phantomsection\label{par:distribution}
 
 \section{Conclusions}\label{conclusions}
 	In this work, we presented a new algorithm, GCreduct, for computing all reducts of a decision system. In the proposed algorithm, the search space is traversed evaluating some candidate subsets and, based on pruning properties, many others are discarded. Algorithms reported in the literature use operations with a high cost for candidate evaluation, in order to reduce the number of evaluated candidates. The main contribution of our proposal, unlike previous algorithms, is the use of simpler operations for candidate evaluation, based on the pruning properties of gap elimination and attribute contribution, for a faster reduct computation. 
 	
 	After conducting a series of experiments over synthetic \textit{SBDMs} and decision systems from the UCI repository, we can conclude that GCreduct performs faster than \hl{fast--BR and fast--CT\_EXT} on those decision systems whose associated \textit{SBDM} has a density of 1's under 0.36. This result provides an instrument to select the proper algorithm for a determined decision system. Further studies should be \hl{undertaken to deeply} explore the relation found between the fastest algorithm for reduct computation of a decision system and the density of 1's \hl{of the associated \textit{SBDM}}. 
 	
-	Finally, since the density of 1's of the \textit{SBDM} is not the only factor affecting the performance of the algorithms \hl{for computing reducts, other factors deserves a wider study as future work.}
+	Finally, since the density of 1's of the \textit{SBDM} is not the only factor affecting the performance of the algorithms \hl{for computing reducts, other factors deserve a wider study as future work.}
 
 \section{Acknowledgements}
 	The first author gratefully \hl{acknowledges} CONACyT for his doctoral fellowship, through the scholarship 399547.
