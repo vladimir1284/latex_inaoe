@@ -57,10 +57,10 @@
 
 \begin{document}
 	
-	\title{Development of fast algorithms for reduct computation}
+	\title{Development of fast algorithms for reduct computation\\{\large Third year report}}
 	
-	\author{Vlad\'imir Rodr\'iguez Diez}
-	\author{Jos\'e Francisco Mart\'inez Trinidad}
+	\author{Vlad\'imir Rodr\'iguez Diez\\ 
+		\textbf{Advisor:} Dr. Jos\'e Francisco Mart\'inez Trinidad}
 	
 	\address{Computer Science Department\\National Institute of
 	Astrophysics, Optics and Electronics\\
@@ -91,6 +91,7 @@
 %	\end{keyword}
 
 	\maketitle
+	
 
 %\pagebreak 
 %\tableofcontents
@@ -102,98 +103,99 @@
 \section{Introduction}
   Rough set theory (RST), proposed by Z. Pawlak in 1982 \citep{Pawlak81,Pawlak81-2,Pawlak82,Pawlak91}, is a relatively new mathematical theory to deal with imperfect knowledge, in particular with vague concepts. Into RST, information systems are tables of objects (rows) described by a set of attributes (columns). When data is collected or recorded, every single aspect (attribute) of the object under study is considered to have a complete representation and to ensure that no potentially useful information is lost. As a result, information systems are usually characterized by a large number of attributes, degrading the performance of machine learning tools \citep{Parthalain08}. One of the main concepts in RST is the notion of reduct, which is a minimal subset of attributes preserving the discernibility capacity of the whole set of attributes \citep{Pawlak91}. However, the main restriction in practical applications of RST is that computing all reducts of an information system has exponential complexity \citep{Skowron92}. Therefore an active research line is the development of fast algorithms for reduct computation.
   
-  Several attempts to speed up reduct computation have been reported. Many of these algorithms are based on some heuristics. The main drawback of this approach is that these algorithms do not necessarily return the complete set of reducts of an information system, and sometimes they may obtain super-reducts (non minimal subsets). Another way to speed up reduct computation is parallelization \citep{Strakowski08}. There are also interesting alternatives such as the use of a parallel version of genetic algorithms \citep{Wroblewski98} and the transformation of the reduct computation problem to the well known SAT problem \citep{Jensen14}.  
-  
   The main objective in our research is the \emph{development of new algorithms for computing reducts in  	information systems; which will be comparable to state of the art algorithms in most datasets, and faster in some specific kinds of datasets}. 
+  
+  Several attempts to speed up reduct computation have been reported. Many of these algorithms are based on some heuristics. The main drawback of this approach is that these algorithms do not necessarily return the complete set of reducts of an information system, and sometimes they may obtain super-reducts (non minimal subsets). Another way to speed up reduct computation is parallelization \citep{Strakowski08}. There are also interesting alternatives such as the use of a parallel version of genetic algorithms \citep{Wroblewski98} and the transformation of the reduct computation problem to the well known SAT problem \citep{Jensen14}.  
   
   Recently, RST reducts have been related to typical testors (TT) from the logical combinatorial approach   to pattern recognition \citep{Lazo15}. Testor Theory was created by \cite{Cheguis55} as a tool for analysis of problems connected with control and diagnosis of faults in circuits. Testor Theory can be used for feature selection as shown in \citep{Ruiz08} and \citep{Martinez01}. Algorithms for typical testors computation like \citep{Ruiz85}, \citep{Santiesteban03}, \citep{Sanchez07} and \citep{Lias09}, can be applied to reduct computation due to the similarity between these two concepts. Fast implementations of these algorithms; based on cumulative binary operations \citep{Sanchez10}, genetic   algorithms \citep{Sanchez99} and hardware architectures \citep{Rojas12}; have been developed to reduce the computation time. One strength of our research is that we will be evaluating, for the first time, these two families of algorithms in the same arena.  
   
-  The rest of the document is structured as follows. In the section~\ref{previous_results} we briefly expose the results of our research over the previous years. Then, in the section~\ref{current_results}, we make a detailed description of our advances in the second year of the PhD. Finally, in the section~\ref{sec_schedule}, we present the main tasks to be accomplished in the next period and our PhD research schedule.
+  The rest of the document is structured as follows. In the section~\ref{previous_results} we briefly expose the results of our research over the previous years. Then, in the section~\ref{current_results}, we make a detailed description of our advances in the third year. Finally, in the section~\ref{sec_schedule}, we present the main tasks to be accomplished in the next period and our PhD research schedule.
   
   \section{Results of the previous years}\label{previous_results}
   
-  The first step of our methodology includes the critical study of the most recent and fastest algorithms for computing reducts. In this direction, we started studying the hardware implementations of algorithms for computing typical testors. \cite{Rojas12} presented a hardware-software platform for computing typical testors, based on the BT algorithm, that included a module for eliminating most of the non typical testors before transferring them to a host software application for final filtering. The main disadvantages of this approach are the huge amount of data that must be transferred to the PC and the extra cost of the final filtering stage in the software component.  For this reason, we developed a new hardware module for eliminating all non typical testors on the hardware	component; reducing the amount of data that must be transferred to the PC and eliminating the final filtering	stage. 	This new module reduces the runtime of the architecture, and it can be used together with any algorithm for computing typical testors implemented on an FPGA device. This result was presented in the ``2014 International Conference on ReConFigurable Computing and FPGAs (ReConFig)"  \citep{Rodriguez14}. 
+  The first step of our methodology includes the critical study of the most recent and fastest algorithms for computing reducts. In this direction, we started studying the hardware implementations of algorithms for computing typical testors. \cite{Rojas12} presented a hardware-software platform for computing typical testors, based on the BT algorithm, that included a module for eliminating most of the non typical testors before transferring them to a host software application for a final filtering. The main disadvantages of this approach are the huge amount of data that must be transferred to the PC and the extra cost of the final filtering stage in the software component.  For this reason, we developed a new hardware module for eliminating all non typical testors on the hardware	component; reducing the amount of data that must be transferred to the PC and eliminating the final filtering	stage. 	This new module reduces the runtime of the architecture, and it can be used together with any algorithm for computing typical testors implemented on an FPGA device. This result was presented in the ``2014 International Conference on ReConFigurable Computing and FPGAs (ReConFig)"  \citep{Rodriguez14}. 
   
-  As next step in our research, we presented a hardware implementation of the CT\_EXT algorithm, which is one of the most recent and fastest algorithms reported in the literature. After studying the work in \citep{Rojas12} we designed and implemented a new hardware architecture that traverses the search space in a different order than that one presented in \citep{Rojas07, Rojas12,Rodriguez14}. This strategy evaluates less	candidate subsets than previous architectures, which results in lower runtime. Moreover, unlike software versions of CT\_EXT \citep{Sanchez07, Sanchez10}, this platform evaluates a candidate every clock cycle, which leads to a faster execution. The runtime gain of this new hardware software platform is shown throughout experiments over synthetic datasets. This result was reported in the journal ``Expert Systems with Applications"  \citep{Rodriguez15}.
+  As next step in our research, we presented a hardware implementation of the CT\_EXT algorithm, which is one of the most recent and fastest algorithms reported in the literature. After studying the work in \citep{Rojas12} we designed and implemented a new hardware architecture that traverses the search space in a different order from that followed in \citep{Rojas07, Rojas12,Rodriguez14}. This strategy evaluates less	candidate subsets than previous architectures, which results in lower runtime. Moreover, unlike software versions of CT\_EXT \citep{Sanchez07, Sanchez10}, this platform evaluates a candidate every clock cycle, which leads to a faster execution. The runtime gain of this new hardware software platform is shown throughout experiments over synthetic datasets. This result was reported in the journal ``Expert Systems with Applications"  \citep{Rodriguez15}.
   
-  Then, we proposed a new algorithm for reduct computation (GCreduct). GCreduct finds reducts in the Simplified Binary Discernibility Matrix (\textit{SBDM}) computed from a dataset. The \textit{SBDM} is a reduced representation of the discernibility between objects which belong to different classes in the dataset. This new algorithm explores the search space evaluating some candidates and avoiding others, based on previous evaluations. Unlike other works \citep{WangP07,Lias13} where candidate evaluation is performed through operations with a high cost, GCreduct uses a simpler candidate evaluation, based on attribute contribution and gap elimination, which allows reducing its runtime. This result was summited to the journal Information Sciences and it is currently under the third revision with the editor, after the acceptance of all the reviewers.
+  Then, we proposed a new algorithm for reduct computation (GCreduct). GCreduct finds reducts in the Simplified Binary Discernibility Matrix (\textit{SBDM}) computed from a dataset. A \textit{SBDM} is a reduced representation of the discernibility between objects belonging to different classes in a dataset. This new algorithm explores the search space evaluating some candidates and avoiding others, based on previous evaluations. Unlike other works \citep{WangP07,Lias13} where candidate evaluation is performed through operations with a high cost, GCreduct uses a simpler candidate evaluation based on attribute contribution and gap elimination, which allows reducing its runtime. This result was summited to the journal ``Information Sciences" and it is currently under revision with the editor, after the acceptance of all the reviewers.
   
-  We have also presented a work entitled ``Fast-BR vs. Fast-CT EXT: An Empirical Performance Study" in the 9th Mexican Conference on Pattern Recognition. In this work, we proposed an evaluation framework for reduct computation algorithms, which uses a set of synthetically generated \textit{SBDMs}. The application of this procedure provides more substantial information than the traditional evaluation over a random sample of datasets. From this assessment, we may discover the characteristics in the \textit{SBDMs} for which a given algorithm is the fastest.
-  
-  We have mainly devoted the third year of our PhD. research to  the development of a new algorithm for computing all shortest reducts of an information system. Thus, in the next section, we present this new algorithm as well as its evaluation.
+  We have also presented a work entitled ``Fast-BR vs. Fast-CT EXT: An Empirical Performance Study" in the ``9th Mexican Conference on Pattern Recognition". In this work, we proposed an evaluation framework for reduct computation algorithms, which uses a set of synthetically generated \textit{SBDMs}. The application of this procedure provides more substantial information than the traditional evaluation over a random sample of datasets. From this assessment, we may discover the characteristics in the \textit{SBDMs} for which a given algorithm is the fastest.
 
 
 \section{Results of the Current Period}\label{current_results}
+
+  We have mainly devoted the third year of our PhD. research to  the development of a new algorithm for computing all shortest reducts of an information system. Thus, in this section, we present this new algorithm as well as its evaluation.
+
   In this period we accomplished the following tasks:
   \begin{itemize}
   	\itemsep0em 
-  	\item Literature review.
+  	\item Literature review on hardware accelerations of algorithms for computing reducts in information systems.
   	\item Critical study of algorithms for computing shortest reducts in information systems.
   	\item Experimental study on algorithms for computing shortest reducts in information systems.
   	\item Development of a new algorithm for computing shortest reducts in information systems.
   	\item Critical study of hardware accelerations of algorithms for computing reducts in information systems.
-  	\item Partially writing the PhD dissertation.
+  	\item Partially writing the PhD dissertation. Specifically we have worked in three chapters: ``Introduction", ``Related Work", and ``A Fast Algorithm for Computing All the Reducts".
   \end{itemize}
   
 \subsection{MinReduct: a New Algorithm for Shortest Reduct Computation}\label{evaluation}
   
-  In the development of MinReduct, we will use our previous experience with algorithm for the computation of all reducts in information systems. From these previous studies, we found that there are two  relevant algorithms which should be taken into account: GCreduct and fast--BR~\citep{Lias13}. We found that GCreduct was the fastest algorithm for \textit{SBDMs} with density under 0.36 and otherwise, fast--BR was the fastest. We will first modify these two algorithm to compute only the shortest reducts.
+  From our previous experience with algorithms for computing all reducts in information systems, we found that there are two  relevant algorithms which should be taken into account: GCreduct and fast--BR~\citep{Lias13}. We found that GCreduct is the fastest algorithm for \textit{SBDMs} with density under 0.36, otherwise, fast--BR is the fastest. We will first modify these two algorithms to compute only the shortest reducts as it is explained below.
   
-  One of the early algorithm for computing shortest reduct, was reported by \cite{Lin04}. In this approach, two main ideas are proposed: first, they compute an approximate short reduct; then, the cardinality of this reduct is used to prune the search space. Following this line of thinking, we have modified GCreduct and fast--BR so that they prune attribute subsets with a cardinality higher than the shortest reduct found. Once the algorithm finds a reduct with a lower cardinality, it is taken as the new shortest reduct and all previous reducts are dismissed.
+  One of the early algorithms for computing shortest reducts, was reported by \cite{Lin04}. In this approach, they compute first a short reduct; then, the cardinality of this reduct is used to prune the search space. Following this idea, we have modified GCreduct and fast--BR so that they prune attribute subsets with a cardinality higher than the shortest reduct found so far. Once the algorithm finds a reduct with a lower cardinality, this reduct is taken as the new shortest reduct and all previous reducts are dismissed.
 
-  As we have proposed in our previous studies, we conducted an experiment over 500 randomly generated \textit{SBDMs} with 2000 rows and 30 columns. The size of these matrices was selected in order to keep reasonable runtime for the three algorithms. Our 500 \textit{SBDMs} were generated with densities of 1's uniformly distributed in the range (0.20--0.80) using a step of 0.04. The \emph{density of 1's} is computed as the number of ones divided by the number of cells of the \textit{SBDM}. All experiments were run on a Core i7-5820K Intel processor at 3.30GHz, with 32GB in RAM, running GNU/Linux.
+  As we have done in our previous studies, we conducted an experiment over 500 randomly generated \textit{SBDMs} with 2000 rows and 30 columns. The size of these matrices was selected in order to keep reasonable runtime for both algorithms. Our 500 \textit{SBDMs} were generated with densities of 1's uniformly distributed in the range (0.20--0.80) using a step of 0.04. The \emph{density of 1's} is computed as the number of ones divided by the number of cells of the \textit{SBDM}. All experiments were run on a Core i7-5820K Intel processor at 3.30GHz, with 32GB in RAM, running GNU/Linux.
   
-  For clarity purposes, the 500 matrices were divided into 15 groups by discretizing the range of densities, each group having approximately 33 \textit{SBDMs}. Figure~\ref{fig:noinfo} shows the average runtime for all  matrices in each group for both algorithms, as a function of the density of 1's in the synthetic \textit{SBDMs}. In this figure, the vertical bars show the standard deviation of each bin.
+  For clarity purposes, the 500 matrices were divided into 15 bins by discretizing the range of densities, each bin having approximately 33 \textit{SBDMs}. Figure~\ref{fig:noinfo} shows the average runtime for all  matrices in each group for both algorithms, as a function of the density of 1's in the synthetic \textit{SBDMs}. In this figure, the vertical bars show the standard deviation of each bin.
   
-  In Figure~\ref{fig:noinfo}, we can see that GCshortest (the version of GCreduct for computing the shortest reducts) outperforms BRshortest (the version of fast--BR for computing the shortest reducts) for all the rage of densities. This result differs from the behavior of GCreduct and fast--BR for computing all the reducts. We must look into the differences between these two algorithm to understand this change in their relative performance. When computing all the reducts, fast-BR takes advantage of a heavier candidate evaluation process to produce a better prune of the search space regarding GCreduct. This strategy is more effective for higher densities. However, when computing shortest reducts, the main pruning strategy relays in the limit of the cardinality imposed by the shortest reduct found. Thus, for the problem of computing the shortest reducts, the heavier candidate evaluation of fast-BR is a disadvantage in all cases.
+  In Figure~\ref{fig:noinfo}, we can see that GCshortest (the version of GCreduct for computing the shortest reducts) outperforms BRshortest (the version of fast--BR for computing the shortest reducts) for all the rage of densities. This result differs from the behavior of GCreduct and fast--BR for computing all the reducts. We must look into the differences between these two algorithms to understand this change in their relative performance. When computing all the reducts, fast-BR takes advantage of a heavier candidate evaluation process to produce a better prune of the search space than GCreduct. This strategy is more effective for higher densities. However, when computing shortest reducts, the main pruning strategy relays in the limit of the cardinality imposed by the shortest reduct found so far. Thus, for the problem of computing the shortest reducts, the heavier candidate evaluation of fast-BR is a disadvantage in all cases.
   
   \begin{figure}[htb]
 	  \begin{minipage}{.48\linewidth}  	
 	  	\begin{center}
 	  		\includegraphics[height=8cm]{ctVSbr.eps}
 	  	\end{center}
-	  	\caption{Average algorithms' runtime vs. density of 1's.  ~~~~~~ GCshortest and BRshortest.\bigskip}
+	  	\caption{Average runtime vs. density of 1's for GCshortest and BRshortest.\bigskip}
 	  	\label{fig:noinfo}
 	  \end{minipage}
 	  \begin{minipage}{.48\linewidth}  
 	  	\begin{center}
 	  		\includegraphics[height=8cm]{infoVSnoInfo.eps}
 	  	\end{center}
-	  	\caption{Average algorithms' runtime vs. density of 1's. GChortest and GCshortest* (this version uses the size of the shortest reducts as preliminary information)}
+	  	\caption{Average runtime vs. density of 1's for GChortest and GCshortest* (this version uses the size of the shortest reducts as preliminary information)}
 	  	\label{fig:info}
 	  \end{minipage}
   \end{figure}  
 
- Another strategy that we learn from~\cite{Lin04} is that we can compute a priori a single short reduct by using an approximate method. To evaluate the advantage of this procedure we will use the information from our previous experiment. In this way, we will run GCshortest over the same 500 \textit{SBDMs}, but this time, the algorithm will use the exact size of the shortest reduct from the beginning to prune the search space. It can be seen in Figure~\ref{fig:info} that no significant improvement is obtained from this approach. Furthermore, it must be noticed that in this experiment we did not account for the time needed by an approximate algorithm to estimate a priori the size of the shortest reducts.
+ Another strategy that we learn from~\cite{Lin04} is that we can compute a priori a single short reduct by using an approximate method. To evaluate the advantage of this procedure we used the information from our previous experiment. In this way, we ran GCshortest over the same 500 \textit{SBDMs}, but this time, the algorithm used the exact size of the shortest reduct, from the beginning, to prune the search space. It can be seen in Figure~\ref{fig:info} that no significant improvement is obtained from this approach. Furthermore, it must be noticed that in this graph we did not include the time needed by an approximate algorithm to estimate a priori the size of the shortest reducts.
  
- \cite{Zhou2009} proposed one of the most sophisticated algorithms for computing shortest reducts. They introduced a simple idea: when looking for the shortest reducts, there is no need for the verification of the minimality condition of reducts. That is, we must look for super--reducts instead of reducts. This idea comes at no extra cost, thus, we will introduce this modification in GCshortest algorithm. We will call this new algorithm MinReduct, and it will be evaluated against GCshortest over the same 500 \textit{SBDMs}.
+ \cite{Zhou2009} proposed one of the most sophisticated algorithms for computing shortest reducts. They introduced a simple idea: when looking for the shortest reducts, there is no need for the verification of the minimality condition of reducts. That is, we must look for super--reducts instead of reducts. This idea comes at no extra cost, thus, we introduced this modification into the GCshortest algorithm, and we named this new algorithm MinReduct. MinReduct was compared against GCshortest over the same 500 \textit{SBDMs}.
  
- As it can be seen in Figure~\ref{fig:minreduct}, this modification to GCshortest was not a great improvement in terms of runtime. However, we will keep this simplification since there is no cost associated to it. In addition, the algorithm is simpler in this new form. 
+ As it can be seen in Figure~\ref{fig:minreduct}, this modification introduced to GCshortest was not a great improvement in terms of runtime. However, we will keep this simplification since there is no cost associated to it. In addition, the algorithm is simpler in this new form. 
  
    \begin{figure}[htb]
    	\begin{minipage}{.48\linewidth}  	
    		\begin{center}
    			\includegraphics[height=8cm]{gcVSmr.eps}
    		\end{center}
-   		\caption{Average algorithms' runtime vs. density of 1's. MinReduct and GCshortest.}
+   		\caption{Average runtime vs. density of 1's for MinReduct and GCshortest.}
    		\label{fig:minreduct}
    	\end{minipage}
    	\begin{minipage}{.48\linewidth}  
    		\begin{center}
    			\includegraphics[height=8cm]{mrVScamardf.eps}
    		\end{center}
-   		\caption{Average algorithms' runtime vs. density of 1's. MinReduct and CAMARDF.}
+   		\caption{Average runtime vs. density of 1's for MinReduct and CAMARDF.}
    		\label{fig:camardf}
    	\end{minipage}
    \end{figure}
    
-   The algorithm proposed by \cite{Zhou2009} (CAMARDF) is a very elaborated approach to the problem of computing all shortest reduct of a dataset. There are two main differences between CAMARDF  and our MinReduct algorithm. First, CAMARDF is designed to operate over the discernibility function which is related to inefficient candidate evaluation procedures. MinReduct uses the \textit{SBDM} and an evaluation procedure based on binary cumulative operations which we have found faster in our previous studies. The second difference that should be noticed is that CAMARDF sorts the remaining attributes at each recursion level by they significance. In this way, the attributes which discern between more pairs of objects confused by the current candidate, are added first. This strategy reduces the search space but computing the attribute significance has a high cost.
+   The algorithm proposed by \cite{Zhou2009} (CAMARDF) is a very elaborated approach to the problem of computing all shortest reduct of a dataset. There are two main differences between CAMARDF  and our MinReduct algorithm. First, CAMARDF is designed to operate over the discernibility function which is related to inefficient candidate evaluation procedures. MinReduct uses the \textit{SBDM} and an evaluation procedure based on binary cumulative operations which we have found faster in our previous studies. The second difference that should be noticed is that CAMARDF sorts the remaining attributes at each recursion level by their significance. In this way, those attributes which discern between more pairs of objects confused by the current candidate, are added first. This strategy reduces the search space; however, computing the attribute significance has a high cost.
    
-   The result of evaluating CAMARDF and MinReduct over our 500 \textit{SBDMs} can be seen in Figure~\ref{fig:camardf}. Although MinReduct showed a better performance for most \textit{SBDMs}, it is interesting to notice that for densities of 1's under 0.27, CAMARDF was faster. This behavior can be explained by looking into the differences between these algorithms that we exposed above. The discernibility function for \textit{SBDMs} with a low density of 1's is very small. Thus, candidate evaluations and significance computing becomes very fast in their approach. However, for MinReduct, the dimensions of the \textit{SBDM} has no relation with its density. Furthermore, for MinReduct there are no simplifications in the candidate evaluation process for low densities of 1's. On the contrary, low densities are associated to higher cardinality of shortest reducts and thus, to a higher search space.
+   The results of evaluating CAMARDF and MinReduct over our 500 \textit{SBDMs} are shown in Figure~\ref{fig:camardf}. Although MinReduct showed a better performance for most \textit{SBDMs}, it is interesting to notice that for densities of 1's under 0.27, CAMARDF was faster. This behavior can be explained by looking into the differences between these algorithms that we exposed above. The discernibility function for \textit{SBDMs} with a low density of 1's is very small. Thus, candidate evaluations and significance computation becomes very fast in CAMARDF. However, for MinReduct, the dimensions of the \textit{SBDM} has no relation with its density. Furthermore, for MinReduct there are no simplifications in the candidate evaluation process for low densities of 1's. On the contrary, low densities are associated to higher cardinality of shortest reducts and thus, to a higher search space.
    
-\subsection{Evaluation over datasets from UCI}
+\subsection{Evaluation over real datasets}
 
-  In order to evaluate the relation found before, here we present a comparative experiment between our proposed algorithm MinReduct and CAMARDF over a sample of 10 datasets taken from the UCI machine learning repository~\citep{Bache13}. For numerical attributes, we used the Weka's equal width discretization filter with 10 bins, as describe by~\cite{Flores2010}. In this experiment we did not takeinto consideration the time needed to compute the \textit{SBDM} since this step is required for both algorithms. 
+  In order to evaluate the relation found before, here we present a comparative experiment between our proposed algorithm MinReduct and CAMARDF over a sample of 10 real datasets taken from the UCI machine learning repository~\citep{Bache13}. For numerical attributes, we used the Weka's equal width discretization filter with 10 bins, as describe by~\cite{Flores2010}. In this experiment we did not take into consideration the time needed to compute the \textit{SBDM}, since this step is required for both algorithms. 
 
 	\begin{table}[htb]
 		\centering
@@ -204,40 +206,38 @@
 			&&&&&& \multicolumn{1}{c|}{CAMARDF} & \multicolumn{1}{c|}{MinReduct}  \\
 			\multicolumn{1}{|c|}{Dataset}       & Attributes & Instances & Density & Reducts & Size & runtime (s)  & runtime (s)  \\
 			\hline
-			Keyword-activity          & 37 & 1530   & 0.04    & & & &   \\
-			Connect-4                 & 43 & 6756   & 0.05    & & & &    \\
-			QSAR-biodeg               & 42 & 1055   & 0.12    & & & &  \\
-			Anneal                    & 38 & 63     & 0.21    & 15  & 7  & \textbf{5} & 27 \\
-			Landsat (train)           & 37 & 4435   & 0.33    & & & &   \\
-			Dermatology               & 35 & 366    & 0.34    & 137 & 6  & 207        & \textbf{147}   \\
-			Diabetes                  & 50 & 101766 & 0.38    & & & &   \\
-			Sponge                    & 46 & 76     & 0.42    & & & & \\
-			Student-mat               & 32 & 395    & 0.43    & 6   & 18 & 1007       & \textbf{277}  \\
-			Lung-cancer               & 57 & 32     & 0.47    & 112 & 4  & 1053       & \textbf{47}   \\
-			Waveform                  & 22 & 5000   & 0.50    & & & &  \\
-			Cylinder-bands            & 40 & 512    & 0.55    & 2   & 2  & 13         & \textbf{5}   \\
-			Ozone                     & 72 & 5751   & 0.93    & 239 & 2  & 220        & \textbf{13}   \\
+			Keyword-activity          & 37 & 1530   & 0.04    & 1   & 25 & \textbf{$<$1} & 578  \\
+			Connect-4                 & 43 & 6756   & 0.05    & 10  & 24 & \textbf{9}    &  915046 \\
+			QSAR-biodeg               & 42 & 1055   & 0.12    & 2   & 13 & \textbf{13}   & 484 \\
+			Anneal                    & 38 & 63     & 0.21    & 15  & 7  & \textbf{5}    & 27 \\
+			Landsat (train)           & 37 & 4435   & 0.33    & 6   & 14 & 3045201       & \textbf{2209878} \\
+			Dermatology               & 35 & 366    & 0.34    & 137 & 6  & 207           & \textbf{147}   \\
+			Student-mat               & 32 & 395    & 0.43    & 6   & 18 & 1007          & \textbf{277}  \\
+			Lung-cancer               & 57 & 32     & 0.47    & 112 & 4  & 1053          & \textbf{47}   \\
+			Cylinder-bands            & 40 & 512    & 0.55    & 2   & 2  & 13            & \textbf{5}   \\
+			Ozone                     & 72 & 5751   & 0.93    & 239 & 2  & 220           & \textbf{13}   \\
 			\hline
 		\end{tabular}
 	\end{table}   
 			
-  In Table~\ref{tab:density}, we show the name of the datasets used in this experiments and their dimensions. Datasets in Table~\ref{tab:density} are sorted in ascending order of the density of 1's of their \textit{SBDM}, which can be seen in the column \textit{Density}. Finally, we show the number and cardinality of shortest reducts for each dataset, as well as the runtime of both algorithms. From this experiment, we conclude that the rule obtained for synthetic matrices is satisfied also by real datasets, i.e. CAMARDF is the fastest for \textit{SBDMs} which have a density of 1's under 0.27 and MinReduct is the fastest otherwise.
+  In Table~\ref{tab:density}, we show the name of the datasets used in our experiment and their dimensions. Datasets in Table~\ref{tab:density} are sorted in ascending order regarding the density of 1's of their \textit{SBDM}, which can be seen in the column \textit{Density}. Finally, we show the number and cardinality of the shortest reducts for each dataset, as well as the runtime of both algorithms. From this experiment, we conclude that the rule obtained for synthetic matrices is also satisfied by real datasets, i.e. CAMARDF is the fastest for \textit{SBDMs} which have a density of 1's under 0.27, otherwise MinReduct is the fastest.
   
 \subsection{Conclusions} 
 
-  We have proposed a new algorithm for computing all shortest reducts of a dataset (MinReduct). For the design of this algorithm we used our experiences from previous studies of algorithms for computing all reducts of a dataset. Then, we evaluated the proposed algorithm against CAMARDF, which is one of the fastest and newest algorithm reported in the literature for computing shortest reducts. We have found that MinReduct  is the fastest approach for computing all shortest reducts in those datasets which have medium or high density of 1's in their \textit{SBDM}. It is important to notice that computing the density of 1's in a \textit{SBDM} has a very low computational cost. Thus, based on the relation obtained in our experiments, the appropriate algorithm ca be selected a priori for a given dataset.
+  During the third year of the PhD, we have proposed a new algorithm for computing all shortest reducts of an information system. For the design of this algorithm, we used our experience from previous studies on algorithms for computing all reducts of an information system. We evaluated the proposed algorithm (MinReduct) against one of the fastest and newest algorithms reported in the literature for computing shortest reducts (CAMARDF). We have found that MinReduct  is the fastest approach for computing all shortest reducts in those datasets which have medium or high density of 1's in their \textit{SBDM}. It is important to notice that computing the density of 1's in a \textit{SBDM} has a very low computational cost. Thus, based on the relation obtained in our experiments, the appropriate algorithm can be selected a priori for a given dataset.
 
-\section{Schedule}\label{sec_schedule}
-  Table~\ref{tab_Schedule} shows the schedule of the main tasks that will be carried out throughout this research. The work to be done in the next evaluation period, is related in the schedule and listed bellow:
+\section{Work for the next period and Schedule}\label{sec_schedule}
+  The work to be done in the next evaluation period, is listed bellow:
   
   \begin{itemize}
   	\itemsep0em 
   	\item Literature review.
-  	\item Critical study of algorithms for computing shortest reducts in information systems.
-  	\item Implementation of algorithms for computing shortest reducts in information systems.
-  	\item Experimental study on algorithms for computing shortest reducts in information systems.
-  	\item Continue writing the PhD dissertation.
+  	\item Critical study of hardware accelerations of algorithms for computing reducts in information systems.
+  	\item Designing and implementing in hardware the proposed algorithms.
+  	\item Submit final draft of the PhD dissertation to advisor.
   \end{itemize}
+  
+  Table~\ref{tab_Schedule} shows the schedule of the main tasks that will be carried out throughout this research. 
   
   
  \begin{table}[h!]
@@ -295,7 +295,7 @@
 		Writing the PhD dissertation &&&&\cellcolor{blue}&\cellcolor{blue}&\cellcolor{blue}&
 		\cellcolor{blue}&\cellcolor{blue}&\cellcolor{blue}&&&\\
 		\hline
-		Submit final draft of the PhD dissertation to the advisors &&&&&&&&&&\cellcolor[gray]{0.9}&&\\
+		Submit final draft of the PhD dissertation to advisor &&&&&&&&&&\cellcolor[gray]{0.9}&&\\
 		\hline
 		Submit final version of the PhD dissertation to the PhD committee &&&&&&&&&&&\cellcolor[gray]{0.9}&\\
 		\hline
@@ -313,7 +313,7 @@
 %-------------------------------------------------------------------------------
 % Bibliography
 %-------------------------------------------------------------------------------
-
+\newpage
 \bibliography{mybib}{}
 \bibliographystyle{authordate1}
 \end{document}
