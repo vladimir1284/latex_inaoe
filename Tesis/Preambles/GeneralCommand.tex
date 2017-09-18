@@ -1,0 +1,69 @@
+%% Seting level of numbering (equal to 3 include subsubsection numbering).
+\setcounter{secnumdepth}{4} 
+
+%% Defining blank page
+\newcommand\blankpage{%
+    \pagestyle{empty}%
+    \addtocounter{page}{-1}%
+     \clearpage\mbox{}\clearpage
+		  \pagestyle{fancy}
+			}
+			
+% Front Page data
+\newcommand{\INAOETitle}{Development of fast algorithms for reduct computation}
+\newcommand{\INAOEAuthor}{Vlad\'imir Rodr\'iguez Diez}
+\newcommand{\INAOEAdvisorA}{Jos\'e Francisco Mart\'inez Trinidad}
+%\newcommand{\INAOEAdvisorB}{Name of my second advisor}
+\newcommand{\INAOEAffiliationA}{Coordination of Computer Science\par \href{http://www.inaoep.mx}{INAOE}, Mexico}
+\newcommand{\INAOEAffiliationB}{Departament\par University (\href{http://}{XXXX}), Country}
+\newdateformat{INAOEDate}{\monthname[\THEMONTH], \THEYEAR}
+
+%% Box Command
+\newcommand{\placetextbox}[3]{% \placetextbox{<horizontal pos>}{<vertical pos>}{<stuff>}
+  \setbox0=\hbox{#3}% Put <stuff> in a box
+  \AddToShipoutPictureFG*{% Add <stuff> to current page foreground
+    \put(\LenToUnit{#1\paperwidth},\LenToUnit{#2\paperheight}){\vtop{{\null}\parbox{8cm}{#3}}}%
+  }%
+}%
+
+
+%% To show the impact factor and quartile of each journal in the publication section.
+\newcommand{\JournalDetail}[2]{{\footnotesize{[IF: #1}}, 
+\ifnum #2=1
+{{\color{red!50!black}{\footnotesize{\textbf{Q#2}}}}\footnotesize{]}}
+\else \ifnum #2=2
+{{\color{purple!50!black}{\footnotesize{\textbf{Q#2}}}}\footnotesize{]}}
+\else \ifnum #2=3
+{{\color{violet!50!black}{\footnotesize{\textbf{Q#2}}}}\footnotesize{]}}
+\else
+{{\color{orange!50!black}{\footnotesize{\textbf{Q#2}}}}\footnotesize{]}}
+\fi\fi\fi
+}
+
+%% To create pretty reference
+\def\figureautorefname{Figure}
+\newrefformat{fig}{\autoref{#1}}
+
+\def\tableautorefname{Table}
+\newrefformat{tab}{\autoref{#1}}
+
+\def\chapterautorefname{Chapter}
+\newrefformat{chap}{\autoref{#1}}
+
+\def\sectionautorefname{Section}
+\newrefformat{sec}{\autoref{#1}}
+
+\def\subsectionautorefname{Section}
+\newrefformat{subsec}{\autoref{#1}}
+
+\def\subsubsectionautorefname{Section}
+\newrefformat{subsubsec}{\autoref{#1}}
+
+\def\equationautorefname{Equation}
+\newrefformat{eq}{\autoref{#1}}
+
+\def\algorithmautorefname{Algorithm}
+\newrefformat{alg}{\autoref{#1}}
+
+\def\appendixautorefname{Appendix}
+\newrefformat{app}{\autoref{#1}}

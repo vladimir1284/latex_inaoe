@@ -1,0 +1,170 @@
+\documentclass[letterpaper, twoside, openright, 12pt]{book}%
+\usepackage{watermark} % For the Cover (FrontPage)
+\usepackage[pscoord]{eso-pic} % For the Cover (FrontPage)
+\usepackage{graphicx} % For images
+\usepackage{xcolor} % For color
+\graphicspath{{Figures/}}   % Location of my graphics files
+\usepackage[hypertex, breaklinks, dvipdfm, bookmarks]{hyperref} % to view the links into the document
+\usepackage[UKenglish]{babel} % to English language
+\usepackage[square]{natbib} % for (Author, Year) format
+\usepackage{datetime} % For DateTime Format
+\usepackage{fix-cm} % For big font style
+\usepackage{fancyhdr} % for the Header Style
+\usepackage{emptypage} % For removing header on blank pages
+\usepackage{titlesec}% for the Chapter Style
+\usepackage{prettyref} % For reference style into the document
+\usepackage{enumerate} % For enumerate style into the document
+\usepackage[top=3cm, left=3cm, right=3cm, bottom=3cm]{geometry} % For margin style into the document
+\usepackage{setspace} % For space style into the document
+\usepackage{xstring} % To define a new command with different arguments
+\usepackage{multirow, tabularx, booktabs} % For create xtabular Tables.
+\usepackage{amsmath} % For equations style
+\usepackage{paralist} % For writing item list into a paragraph
+\usepackage[ruled,vlined]{algorithm2e} % For describing algorithms
+\usepackage{longtable} %For creating long tables
+\hypersetup
+{
+pdftitle={Development of fast algorithms for reduct computation}, 
+pdfauthor={Vlad\'imir Rodr\'iguez Diez}, 
+pdfsubject={Dissertation submitted for the degree of PhD. in Computer Science, October 2017}, 
+pdfkeywords={some keywords},
+pdfcreator={Instituto Nacional de Astrof\'isica, \'Optica y Electr\'onica (INAOE)},
+colorlinks,
+linkcolor=blue,
+citecolor=blue,
+urlcolor=blue
+}
+
+
+\begin{document}
+%% General Commands Defined
+\input{Preambles/GeneralCommand}
+
+% Input Front Page - Cover (INAOE)
+\input{FrontPage/FrontPage}
+
+%% Header and footer style
+\input{Preambles/PageStyle}
+
+\frontmatter
+\doublespacing
+
+\chapter*{Abstract} \markboth{Abstract}{}
+
+	Information systems in Rough Set Theory (RST) are tables of objects described by a set of attributes. This type of tables are widely used in different pattern recognition problems, particularly in supervised classification. RST reducts are minimal subsets of attributes preserving the discernibility capacity of the whole set of attributes. Reduct computation has an exponential complexity regarding the number of attributes in the information system. In the literature, several	algorithms for reduct computation have been reported, but their high computational cost makes them infeasible in large problems. For this reason, in this research we will develop new fast algorithms in two directions, the computation of all reducts and the computation of globally shortest reducts. The proposed algorithms will be faster than state of the art algorithms, and hence 
+		the reduct computation will be viable for larger information systems than it is today. As part of this 
+		PhD research proposal, we present some preliminary results, which show that it is possible to develop
+		faster algorithms for computing reducts.
+
+
+\chapter*{Resumen} \markboth{Resumen}{}
+\onehalfspacing
+....
+
+
+\chapter*{Acknowledgment} \markboth{Acknowledgments}{}
+\onehalfspacing
+
+.....
+
+\begin{flushright}
+\singlespace  
+\textbf{Thanks to all of you,}\\ \href{https://}{My name}. \\ Tonantzintla, Puebla, Mexico.\\ \INAOEDate\today.
+\end{flushright} 
+
+\tableofcontents
+\setcounter{tocdepth}{2}
+\listoffigures
+\addcontentsline{toc}{chapter}{\listfigurename}
+\listoftables
+\addcontentsline{toc}{chapter}{\listtablename}
+
+\chapter*{Acronyms} \markboth{Acronyms}{}
+\addcontentsline{toc}{chapter}{Acronyms}
+\begin{longtable}{>{\bfseries}p{3cm}p{11cm}}
+Acronyms & Description \\
+
+\end{longtable}
+
+\mainmatter
+\input{Preambles/ChapterStyle}
+
+\chapter{Introduction} \label{chap:Introduction}
+how to use the references this one is the conventional \citep{Loyola2016}.
+
+This is for citing the names out the brackets \cite{Loyola2016}.
+
+This is for citing only the author names \citeauthor{Loyola2016}.
+
+This is for citing only the year of the publication \citeyear{Loyola2016}.
+
+This one is for reference some section \prettyref{sec:RW_Discussion} or chapter \prettyref{chap:RelatedWork} into the document. 
+
+
+\section{Motivation and justification of the problem}
+
+\section{Objectives}
+The \textbf{general objective} of this research is .\\
+
+Our \textbf{specific objectives} are:
+
+\begin{enumerate}[1.]
+{
+ \item Propose an algorithm for .......
+}
+\end{enumerate}
+
+\section{Contributions}
+
+
+\section{Thesis organization}
+.....
+
+\newpage 
+\chapter{Related work} \label{chap:RelatedWork} 
+....
+
+\section{Discussion} \label{sec:RW_Discussion}
+.....
+
+
+\chapter{Conclusions} \label{chap:Conclusions}
+
+
+\section{Conclusions} \label{sec:Conclusions}
+
+Regarding our study about the effect of class imbalance on quality measures for patterns, based on our experimental results, we can conclude that:
+
+
+\section{Future work} \label{sec:Futurework}
+
+\section{Publications} \label{sec:Publications}
+
+
+\singlespace 
+
+\textbf{JCR Journals:}
+
+\begin{itemize}
+% JournalDetail function has two parameters, first one is the impact factor of the journal, and the second one is the quartile of the journal. All based on the JCR report.
+\item my publications. \JournalDetail{4.529}{1}
+\end{itemize}
+
+\singlespace
+\small
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliographystyle{apalike}
+\bibliography{Bibliography}
+
+\pagestyle{fancy}
+\normalsize
+\appendix
+\addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
+
+\chapter{some appendix} \label{app:StatisticalTests}
+
+
+
+%\backmatter
+
+\end{document}
