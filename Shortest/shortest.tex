@@ -28,13 +28,10 @@
 \newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 
-% Hyphenation
-\hyphenation{SBDM}
-\hyphenation{SBDMs}
 
 \begin{document}
 
-	\title{A New Algorithm for Computing Shortest Reducts}
+	\title{A New Algorithm for Computing the Shortest Reducts}
 	
 	\author[inaoe,uc]{Vlad\'{\i}mir~Rodr\'{\i}guez-Diez\corref{cor1}}
 	\ead{vladimir.rodriguez@inaoep.mx}
@@ -49,7 +46,7 @@
 				 Circv. Nte. km 5$\frac{1}{2}$, Camag\"{u}ey, Cuba}
 	
 	\begin{abstract}
-		This paper deals with the problem of computing shortest reducts of an information system. The shortest reducts are useful for attribute reduction in classification problems and data size reduction. Unfortunately, finding the shortest reducts of an information system has exponential complexity regarding the number of attributes. Several algorithms have been reported to overcome the complexity of shortest reduct computation. However, most of these algorithms relay on inefficient operations and non-optimal data representations. Therefore, in this paper, we propose a new algorithm for computing shortest reducts based on binary cumulative operations over the basic matrix, in order to reduce the runtime. Finally, the proposed algorithm is evaluated and compared against other state of the art algorithms, over synthetic and real decision systems.
+		This paper deals with the problem of computing the shortest reducts of a decision system. The shortest reducts are useful for attribute reduction in classification problems and data size reduction. Unfortunately, finding the shortest reducts of a decision system has exponential complexity regarding the number of attributes. Several algorithms have been reported to overcome the complexity of computing the shortest reducts. However, most of these algorithms relay on inefficient operations and non-optimal data representations. Therefore, in this paper, we propose a new algorithm for computing the shortest reducts based on binary cumulative operations over the basic matrix and a fast candidate evaluation process, in order to reduce the runtime. Finally, the proposed algorithm is evaluated and compared against other state of the art algorithms, over synthetic and real--world decision systems.
 	\end{abstract}
 	
 	\begin{keyword}
@@ -62,40 +59,34 @@
 % your earth-shattering contribution
 
 \section{Introduction}
-  Rough Set Theory (RST), proposed by Z. Pawlak in 1981 \citep{Pawlak81,Pawlak81-2,Pawlak82,Pawlak91}, 
-  is a relatively new mathematical theory to deal with imperfect knowledge, in particular with vague 
-  concepts. Into RST, decision systems are tables of objects (rows) described by a set of attributes (columns). 
-  When data is collected or recorded, every single aspect (attribute) of the objects under study is
-  %TODO indivisible considered
-  considered to have a complete representation and to ensure that no potentially useful information is lost. As a result, decision systems are usually characterized by a large number of attributes, which degrades the performance of machine learning tools \citep{Parthalain08}. One of the main concepts in RST is the notion of reduct, which is a minimal subset of attributes preserving the discernibility capacity of the whole set of attributes \citep{Pawlak91}. However, the main restriction in practical applications of RST is that computing all reducts of a decision system is NP--hard \citep{Skowron92}. 
+  Rough Set Theory (RST), proposed by Z. Pawlak in 1981~\citep{Pawlak81,Pawlak81-2,Pawlak82,Pawlak91}, is an effective tool to deal with attribute reduction while preserving semantics. When data is collected, every single aspect of the objects under study is saved to have a complete representation and to ensure that no potentially useful information is lost. As a result, information systems usually contain a large number of attributes, which degrades the performance of machine learning tools and requires a huge storage capacity. 
+  
+  Reducts from RST are minimal subsets of attributes preserving the discernibility capacity of the whole set of attributes \citep{Pawlak91}. The use of reducts for feature selection has been deeply studied~\citep{Chen11,Nguyen2016,Alwesabi2016}. Reducts are useful in multi-objective cost-sensitive attribute reduction~\citep{Xu2013,Song2017}, attribute relevance evaluation~\citep{Inuiguchi2017} and classification~\citep{Ishii2018,Own2015} among others.
+  
+  The main restriction of reducts in practical applications is that computing all reducts of a dataset is NP--hard~\citep{Skowron92}. For this reason, several approximate algorithms for reduct computation have been developed~\citep{Chen10,Chen15,Chen2015a}. These approximate algorithms generate a subset of all reducts or find approximate solutions instead of reducts. An approximate solution is an attribute subset that preserves the discernibility capacity of the complete set of attributes, but it includes redundant attributes; or it is an attribute subset that preserves the discernibility capacity to a certain degree. There are also several algorithms developed for computing a single reduct~\citep{Yang08, ZHOU2014,Jensen14,Jiang15}.
+  
+  Generating the complete set of reducts for a dataset, requires a high computational effort and results, most of the times, in a large amount of reducts. However, in practice, usually only a subset of reducts that satisfy some additional restrictions~\citep{Jiang15}, is needed. A particular case is the computation of all the reducts with the minimum cardinality (the shortest reducts). This subset is a representative sample of all reducts~\citep{Susmaga}. Shortest reducts are specially useful, for instance, in data reduction applications and classification~\citep{Zhou2009}. Unfortunately, the problem of computing all shortest reducts of a decision system is also NP--hard~\citep{Skowron92}. Thus, the search of new algorithms for computing the set of all shortest reducts is a challenging research topic.
+  
+  %TODO referencias de aplicaciones de los reductos más cortos
    
-   RST reducts have been related to Typical Testors (TT) from the logical combinatorial approach to pattern recognition \citep{Chikalov2013}. Testor Theory was originally created by Cheguis and Yablonskii \cite{Cheguis55} as a tool for analysis of problems connected with control and diagnosis of faults in circuits.  However, Testor Theory has been extended in order to be used for feature selection as shown in \citep{Dmitriev1966,Martinez01,Ruiz08}.
-
-  The complete set of reducts of a decision system is needed for solving some practical problems and real--world applications. In \cite{Xu2013} a multi-objective cost-sensitive attribute reduction was developed. First, they compute all reducts of a decision system. Then, they separately calculate the cost, in terms of time and money, of every reduct. Finally, the worst reducts are dismissed, leaving a Pareto optimal solution set. From this smaller set of reducts, a user selects an attribute subset. On the other hand, in \cite{Mukamakuza2014} three new algorithms for dynamic reduct computation were developed. The first step of the three algorithms is finding all reducts. Then, the complete set of reducts is filtered in order to obtain an optimum subset, from which dynamic reducts are computed. They showed that this procedure improves the performance of dynamic reduct computation algorithms. From Testor Theory \cite{Torres2014}, the informational weight, computed through the whole set of typical testors (reducts), was used to identify risk factors on transfusion related to acute lung injury; and to establish an assessment for each attribute.  
-  %In \citep{Torres2014}, the informational weight of an attribute is computed as the percentage of times the attribute appears in the whole set of typical testors. This computation is not possible without the complete set of typical testors.
+  In this work, we present a new algorithm, called MinReduct, for computing all shortest reducts. For developing this new algorithm, some of the most effective pruning properties used in state of the art algorithms for computing all reducts~\citep{Sanchez10,Lias13,Rodriguez2018} are adapted to compute only the shortest reducts. MinReduct is supported mainly in attribute contribution and binary cumulative operations. The proposed algorithm is compared against two algorithms taken from the state of the art over synthetic and standard datasets. 
   
-
-  In this work, we propose a new algorithm, MinReduct, for computing all reducts based on the pruning properties of Gap elimination and attribute Contribution. 
-  %Additionally, we show the advantages of fast binary cumulative operations used in \citep{Sanchez10,Lias13} over other approaches from rough set theory \citep{WangP07,Jensen14}. 
-  In relation to fast--BR \citep{Lias13}, which is one of the latest and fastest reported algorithms; the proposed algorithm evaluates more candidates in most cases, but the evaluation cost is lower. Finally, we show that MinReduct performs faster than all other recent reported alternatives in a specific kind of decision systems. 
+  The rest of this paper is structured as follows. First, in Section~\ref{relatedWork}, some relevant works reported in the literature are discussed. In Section~\ref{basicConcepts} we give basic concepts of Rough Set Theory. In Section~\ref{MinReduct} we introduce the MinReduct algorithm for computing all shortest reducts of a decision system. In  Section~\ref{evaluation}, an evaluation of the proposed algorithm and a discussion of the experimental results are presented. Finally, our conclusions and some directions for future work appear in Section~\ref{conclusions}.
   
-  We have organise the rest of this paper in the following way. Section~\ref{basicConcepts} introduces basic concepts of Rough Sets Theory.  In Section~\ref{MinReduct}, we present the MinReduct algorithm for computing shortest reducts of a decision system. An evaluation of the proposed algorithm and a discussion of the experimental results are presented in section~\ref{evaluation}. Finally, section~\ref{conclusions} shows our conclusions and some directions for future work.
+\section{Related work}\label{relatedWork}
+  One of the early works reported for computing all shortest reducts was presented in~\citep{Susmaga}. In this work, after a strong discussion on reduct computation and the role of the shortest reducts within RST applications, two algorithms were presented. One for computing all $k$-reducts (reducts with cardinality no greater than $k$), and other one to compute all shortest reducts (SRGA). Both algorithms were built on top of the Modified Reduct Generation Algorithm (MRGA), which is the core proposal of the author. MRGA introduces the application of absorption laws over the discernibility function, which is a representation of the discernibility information; this allows a runtime reduction in comparison to previous algorithms. However, in this approach every candidate is evaluated, looking for superfluous attributes. This is an operation with a high computational cost, which reduces the performance of the algorithm in some cases.
+   
+  In~\citep{Lin04}, a heuristic approach to reduce the runtime of computing the shortest reducts is presented. This heuristic consists in finding a single short reduct and then, uses its cardinality to limit the search space by considering only those attribute combinations with lower cardinality. The main drawback of this algorithm is that the second step searches for reducts by checking all possible $s$-subtables of the whole database. An $s$-subtable is a decision table with a conditional attribute subset of size $s$ plus the decision attributes of the original table. This final process uses no pruning strategy and explores all possible attribute combinations, which is infeasible in most cases.
+   
+  The algorithm proposed in \citep{Zhou2009} (CAMARDF) is a very elaborated approach to the problem of computing all shortest reduct of a dataset. This algorithm operates over the reduced discernibility function which is a representation of the discernibility information after applying absorption laws. This representation is related to inefficient candidate evaluation procedures. Furthermore, CAMARDF sorts the attributes to be processed at each recursion level by their significance. In this way, those attributes that discern between more pairs of objects confused by the current candidate, are added first. This strategy reduces the search space; however, computing the attribute significance has a high computational cost.
    
 \section{Basic Concepts}\label{basicConcepts}
-  From the RST point of view, two objects are indistinguishable (indiscernible) if they have the same value for each attribute in their description. Indiscernibility relations arising in this way constitute the mathematical foundations of RST. Some basic concepts of RST are presented bellow.
-  
-\subsection{Information System}
-  The basic representation of data in RST is an \emph{Information System} (IS). An IS is a table with rows
-  representing objects while columns specify attributes or features. Formally, an IS is defined as a pair
-  $IS=(U,A)$ where $U$ is a finite non-empty set of objects $U=\lbrace x_1,x_2,...,x_n\rbrace$ and $A$ is a 
-  finite non-empty set
-  of attributes (features, variables). Every attribute in $A$ is a map: $a: U \rightarrow V_a$. The set $V_a$ is
-  called the \textit{value set} of $a$. Attributes in $A$ are further divided into condition attributes $C$ and 
-  decision attributes $D$ such that $A=C \cup D$, $C \neq \emptyset$ and $C \cap D =\emptyset$. 
-  Table~\ref{tab_IS} shows an example of an IS.
+  In this section, we introduce some basic concepts from Rough Set Theory (RST); which provide the theoretical basis for understanding the proposed algorithm.
+
+  \emph{Information Systems} are the basic representation of information in RST. A decision system (IS) is a table with rows representing objects while columns represent attributes or features. An IS is formally defined as a pair $IS=(U,A)$ where $U$ is a finite non-empty set of objects $U=\lbrace x_1,x_2,...,x_n\rbrace$ and $A$ is a finite non-empty set of attributes (features, variables). For every attribute in $A$ there is a mapping: $a: U \rightarrow V_a$. The set $V_a$ is called the \textit{value set} of $a$. Attributes in $A$ are further divided into condition attributes $C$ and decision attributes $D$ such that $A=C \cup D$, $C \neq \emptyset$ and $C \cap D =\emptyset$. 
   
  \begin{table}[htb]
-		\caption{Example of an Information System, where $c_0-c_6$ are condition attributes and $d$ is a decision attribute.} \label{tab_IS}
+		\caption{Example of a decision system, where $c_0-c_6$ are condition attributes and $d$ is the decision attribute.} \label{tab_IS}
 		\centering
  	\begin{tabular}{c||c|c|c|c|c|c|c||c}
  			  & $c_0$ & $c_1$ & $c_2$ &  $c_3$ & $c_4$ & $c_5$ &  $c_6$ & $d$ \\
@@ -111,37 +102,29 @@
  	\end{tabular}             
  \end{table}
  
-  \textit{Decision attributes} determine the class an object belongs to. In the IS of Table~\ref{tab_IS}, $d$ is the decision attribute; this is a two-class system. \textit{Condition attributes} do not absolutely determine the class but help to decide which class an object belongs to. In supervised classification, condition attributes are the only information available for classifying new objects; while, decision attributes are only available for objects in the training set. An IS with $D \neq \emptyset$ is called a \textit{decision system}.
+  \textit{Decision attributes} determine the class an object belongs to. In the example of Table~\ref{tab_IS}, $d$ is the only decision attribute; this is a two-class system. \textit{Condition attributes} do not absolutely determine the class but help to decide which class an object belongs to. In supervised classification, condition attributes are the only information available for classifying new objects; while, decision attributes are only available for objects in the training set. An IS with $D \neq \emptyset$ is called a \textit{Decision System} (DS) Table~\ref{tab_IS} shows an example of a DS.
   
-\subsection{Indiscernibility Relation}\label{subsect_Pos}
-  The \textit{Indiscernibility Relation} for a set $B \subseteq A$ is defined as:
-  $$IND(B) = \lbrace (x,y)\in U\times U|~\rho(x,c)=\rho(y,c)~\forall c \in B \rbrace $$
-  where $\rho(x,c)$ is the value of the attribute $c$ for the object $x$.
+  The \textit{Indiscernibility Relation} for a subset of attributes $B \subseteq A$ is defined as:
+  $$IND(B) = \lbrace (x,y)\in U\times U|~a(x)=a(y)~\forall a \in B \rbrace $$
+  where $a(x)$ is the value of the attribute $a$ for the object $x$.
   
-  The indiscernibility relation of $B$, is the set of all the pairs of objects in $U$ which cannot be distinguished by considering only the values of attributes in $B$.
- 
-\subsection{Reducts}\label{def_reduct}
-  A set $B \subseteq A$ is an \textit{absolute reduct} of $IS$ if:
-  \begin{enumerate}
-  	\item $\forall p \in U\times U \lbrace p \notin IND(B) \implies p \notin IND(A)\rbrace$. \label{cond_1}
-  	\item $B$ is a minimal subset (with respect to inclusion) satisfying condition~\ref{cond_1}.\label{cond_2}
-  \end{enumerate}
- 
+  The indiscernibility relation for $B$, is the set of all pairs of objects in $U$ that cannot be distinguished by considering only the values of attributes in $B$. 
   
-  For desicion systems we want, most of the times, to discern between objects which belogn to different clases. For this purpose, it is relevant the concept of \textit{desicion reduct}. A set $B \subseteq C$ is a desicion reduct if:
+  For decision systems we want, most of the times, to discern between objects that belong to different classes. For this purpose, it is relevant the concept of \textit{decision reduct}; which we define in terms of the indiscernibility relations. 
+  
+  Let $D$ be the set of decision attributes and $C$ be the set of conditional attributes of a decision system $DS$, the set $B \subseteq C$ is a decision reduct of $DS$ if:
   \begin{enumerate}
    	\item $\forall p \in U\times U \lbrace [p \notin IND(D) \wedge p \notin IND(C)] \implies p \notin IND(B)\rbrace$. \label{cond_1}
    	\item $B$ is a minimal subset (with respect to inclusion) satisfying condition~\ref{cond_1}.\label{cond_2}
   \end{enumerate}
   
-  Desicion reducts have the same capability of the complete set of conditon attributes ($C$) for discerning objects which belong to different classes.
+  Decision reducts have the same capability as the complete set of condition attributes for discerning objects that belong to different classes.
    
-  We call super--reduct to any set $B$ satisfying condition~\ref{cond_1}, regardless of condition~\ref{cond_2}. Hereinafter, we will be dealing only with desicion reducts. However, the algorithms studied in this paper can be used for computing both: absolute and desicion reducts.
+  We call super--reduct to any set $B$ satisfying condition~\ref{cond_1}, regardless of condition~\ref{cond_2}. Hereinafter, we will call reducts to the decision reducts for simplicity.
   
 %  
-\subsection{Binary Discernibility Matrix}
-  The \textit{Binary Discernibility Matrix} is a binary table representing the discernibility sets between pairs 
-  of objects. In the binary discernibility matrix, columns are single condition attributes and rows represent pairs of objects belonging to different classes. The discernibility element $m(i, j, c)$ for two objects $x_i$ and $x_j$ and a single condition attribute $c \in C$ is given in a binary representation, such that:
+\subsection{Binary Discernibility Matrix}\label{sect_SBDM}
+  The \textit{Binary Discernibility Matrix} is a binary table where columns are single condition attributes and rows represent pairs of objects belonging to different classes. The discernibility element $m(i, j, c)$ for two objects $x_i$ and $x_j$ and a single condition attribute $c \in C$ is given in a binary representation, such that:
   
   \begin{equation}
   	m(i, j, c)=\left\lbrace\begin{array}{cl}
@@ -173,11 +156,10 @@
  	\end{tabular}             
   \end{table}
 
-\subsection{Basic Matrix}\label{sect_SBDM}
-  The \textit{Basic Matrix} is a reduced version of the binary discernibility matrix after applying absorption laws. 
+  The \textit{Simplified Binary Discernibility Matrix} is a reduced version of the binary discernibility matrix after applying absorption laws. In Testor Theory~\citep{Lazo01}, this concept is called \textit{Basic Matrix}. Hereinafter, we will refer to this simplified representation as basic matrix.
     
   \begin{table}[htb]
-	\caption{Basic Matrix of the Binary Discernibility Matrix in Table~\ref{tab_BDM}.}
+	\caption{Basic Matrix of the Binary Discernibility Matrix shown in Table~\ref{tab_BDM}.}
 	\centering
    	\begin{tabular}{ccccccc}\label{tab:SBDM1}
               $c_0$ & $c_1$ & $c_2$ & $c_3$ & $c_4$ & $c_5$ & $c_6$\\
@@ -192,121 +174,127 @@
   \end{table}  
    
   \begin{definition}\label{def:basic_row}
-	Let $BM$ be a basic matrix and $r_k \in BM$ be a row of $BM$. We say that $r_k$ is a superfluous row of $BM$ if $\exists r \in BM$ such that $\exists i | (r[i] < r_1[i]) \wedge \forall i | (r[i] \leq r_1[i])$, where $r[i]$ is the $i$-th element of the row $r$.
+	Let $DM$ be a discernibility matrix and let $r_k$ be a row of $DM$. $r_k$ is a superfluous row of $DM$ if there exist a row $r$ in $DM$ such that $\exists i | (r[i] < r_k[i]) \wedge \forall i | (r[i] \leq r_k[i])$, where $r[i]$ is the $i$-th element of the row $r$.
   \end{definition}
 
-  The basic matrix is obtained by excluding all the superfluous rows from the basic matrix. Reducts of a decision system, can be computed from this reduced matrix \citep{Yao09}. Table~\ref{tab:SBDM1} shows the basic matrix from the binary discernibility matrix of Table~\ref{tab_BDM}.
-
+  The basic matrix is obtained by removing every superfluous row from the binary discernibility matrix. Table~\ref{tab:SBDM1} shows the basic matrix from the binary discernibility matrix of Table~\ref{tab_BDM}. An important fact is that all reducts of a decision system, can be computed from this reduced matrix \citep{Yao09}.
   
-\section{The MinReduct Algorithm}\label{MinReduct}
-  In this section, we introduce the MinReduct algorithm for computing all reducts of a decision system. In  Subsection~\ref{properties}, we present the pruning properties used in MinReduct. Then, in Subsection~\ref{description}, we introduce the MinReduct algorithm and we illustrate its execution over the decision system of Table~\ref{tab_IS}.
+\section{Proposed Algorithm}\label{MinReduct}
+  In this section, we introduce the MinReduct algorithm for computing all shortest reducts of a decision system. First, in Subsection~\ref{properties}, we present some definitions and propositions supporting MinReduct. Then, in Subsection~\ref{description}, we introduce the MinReduct algorithm, including an illustrative example of its execution over the decision system of Table~\ref{tab_IS}.
   
-\subsection{Pruning Properties for Reduct Computation}\label{properties}
-	In this subsection, we will be referring to the binary representation of the simplified discernibility matrix (basic matrix, see Subsection~\ref{sect_SBDM}). The following definition of super--reduct is equivalent to the condition~\ref{cond_1} stated in Subsection~\ref{def_reduct} \citep{Lazo15}.
+\subsection{Fundamentals}\label{properties}
+	%In this subsection, we will use the binary representation of the simplified discernibility matrix (basic matrix) as the main representation of the discernibility information for our proposed algorithm. 
 	
-	\begin{definition}\label{def:testor}
-		Let DM be a SBDM and $B \subseteq C$ be a subset of condition attributes. $B$ is a super--reduct iff in the sub-matrix of DM considering only the attributes in $B$, there is no zero row (a row of zeros).
-	\end{definition}
+	Let $[c|Y]$ denote an ordered list of attributes such that $c$ is the first attribute in the list and $Y$ is the ordered list of the remaining attributes. If we have, for instance $[c_1,c_3,c_6]$, we can express it as $[c_1|[c_3,c_6]]$ according to this notation. In the same way, $[c_3,c_4]$ can be expressed as $[c_3|[c_4]]$. The empty list is denoted as $[~]$.
 	
-	The concept of gap used in our proposal was first introduced for the LEX algorithm~\cite{Santiesteban03}, as shown in the definition~\ref{def:gap}.
-	
-	Let us first define the notation $[c|Y]$ to represent an ordered list of attributes such that $c$ is the first attribute in the list and $Y$ is the ordered list of the remaining elements. Notice that the order of elements in the list is relevant. If we have, for instance $[c_1,c_3,c_6]$, we can express it as $[c_1|[c_3,c_6]]$ according to this notation. In the same way, $[c_3,c_4]$ can be expressed as $[c_3|[c_4]]$.
-	
-	Let us also define an order relation $\prec$ over the set of ordered list of attributes as follows.
+	Let us also define an order relation $\prec$ over the set of ordered lists of attributes as follows.
 	\begin{enumerate}
 		\item Let $Y=[c_i|Y']$ and $Z=[c_j|Z']$ be two ordered lists of attributes. Then, $Y \prec Z$ if $i<j$.
 		\item Let $Y=[c_i|Y']$ and $Z=[c_i|Z']$ be two ordered lists of attributes. Then, $Y \prec Z$ if $Y' \prec Z'$.
-		\item $\forall Y:  [] \prec Y$.
+		\item $\forall Y:  [~] \prec Y$.
 	\end{enumerate}
-	Hereinafter, we will refer to this order as the lexicographical order. Let us use the $+$ operator to denote list concatenation. In this way: $$[c_1,c_3,c_4]+[c_6,c_7]=[c_1,c_3,c_4,c_6,c_7]$$
-		
-%	We say that $L$ is the ordered list of attributes associated to a subset of attributes $B = \lbrace c_{j_0},...,c_{j_s} \rbrace$ if $L = [c_{j_0},...,c_{j_s}]$, where $j_0<\cdots <j_s$ are the positions of their corresponding columns in the basic matrix.
+	Hereinafter, we will refer to this order as the lexicographical order. We denote the cardinality of a list $L$ as $|L|$. Furthermore, we will use the $+$ operator to denote list concatenation such that: 
 	
-	\begin{definition}\label{def:gap}
-		Let $L = [c_{j_0},...,c_{j_s}]$ be an ordered list of attributes. If there exists an attribute $c_{j_p} \in L$ such that ${j_p}=\mathrm{max}\{j_q | j_{q+1} \neq j_q+1\}; 0 \leq q < s$, we say that $c_{j_p}$ is the gap of $L$.
+	$$[c_1,c_3,c_4]+[c_6,c_7]=[c_1,c_3,c_4,c_6,c_7]$$
+	
+	The following definition of super--reduct is equivalent to the condition~\ref{cond_1} stated in Definition~\ref{def:reduct}~\citep{Lazo15}. In this section, we will use this definition for making clearer the explanation of MinReduct.
+		
+	\begin{definition}\label{def:testor}
+		Let BM be a basic matrix and $L$ be an ordered list of condition attributes. $L$ is associated to a super--reduct iff in the sub--matrix of BM considering only the attributes in $L$, there is no zero row (a row with only zeros).
 	\end{definition}
-	
-	In other words, the gap of $L$ is the attribute with the highest index satisfying that its consecutive attribute in $L$ is not its consecutive attribute (column) in the basic matrix. Notice from the notation used above that $c_{j_q}$ and $c_{j_{q+1}}$ are consecutive in $L$ while $c_{j_q}$ and $c_{j_q+1}$ are consecutive in the basic matrix.
-	
-	Let us take for example a basic matrix with 7 attributes ($c_0 - c_6$):
-	$$\begin{array}{ll}
-	{L_1=[c_0,c_1,c_2,c_3]} 		& \mathrm{there~is~no~gap}\\
-	{L_2=[c_0,c_1,c_2,c_5,c_6]} 	& \mathrm{the~gap~is~} c_2\\
-	{L_3=[c_0,c_1,c_2,c_4,c_6]} 	& \mathrm{the~gap~is~} c_4\\
-	%{[c_0,c_1,c_4,c_5,c_6]} 	& \mathrm{the~gap~is~} c_1
-	\end{array}$$
-	In the first example, there is no gap since all the attributes in $L_1$ are consecutive in the basic matrix. In the second example, the consecutive attribute of $c_2$ in $L_2$ is $c_5$, which is not its consecutive in the basic matrix. Thus, for $L_2$, the gap is $c_2$. This is also the case for $c_2$ in $L_3$, however, since $c_4$ has a higher index and its consecutive attribute in $L_3$ is not its consecutive in the basic matrix, $c_4$ is the gap in $L_3$.
-
-
-	The pruning property of gap elimination is supported by the proposition~\ref{prop:gap} \citep{Santiesteban03}. 
 		
-	\begin{proposition}\label{prop:gap} 
-		Let DM be a SBDM and $L = [c_{j_0},...,c_{j_s}]$ an ordered list associated to a reduct, such that $c_{j_s}$ is the last attribute in DM. If there is a gap $c_{j_p}$ in $L$, and $L'=[c_{j_0},\dots,c_{j_{p-1}},c_{j_p+1}]$; then, there is no list $Y$ associated to a reduct, such that $L \prec Y \prec L'$ and $L \neq Y \neq L'$.
-	\end{proposition}	
-	
-	\noindent
-	\textbf{Proof.} \textit{\label{proof:gap} 
-	Let us denote $L$ as $L=W+Z$, where $W=[c_{j_0},\dots,c_{j_{p-1}}, c_{j_p}]$ and $Z=[c_{j_{p+1}}, \dots, c_{j_s}]$. According to the lexicographical order, $Y$ can be denoted as $Y=W+V$ where $Z \prec V$. Since $c_{j_p}$ is a gap, we have from the definition~\ref{def:gap}, that all the attributes in $Z$ are consecutive in DM. Thus, since $c_{j_s}$ is the last attribute in DM, we have that $\forall c_j \in V: c_j \in Z$. Then, the set of attributes in $Y$ is a proper subset of the attributes in $L$. Thus, given that $L$ is associated to a reduct, by the minimal condition of reducts, $Y$ cannot be associated to a reduct.}
-	
-	From the proposition~\ref{prop:gap} we have the following corollary \citep{Santiesteban03}; which is relevant for the proposed algorithm in order to avoid unnecessary evaluations.
-	
-	\begin{corollary}\label{coro:gap} 
-		Let DM be a SBDM and $L = [c_{j_0},...,c_{j_s}]$ an ordered list associated to a non super--reduct, such that $c_{j_s}$ is the last attribute in DM. If there is a gap $c_{j_p}$ in $L$, and $L' = [c_{j_0},...,c_{j_{p-1}},c_{j_p+1}]$; then, there is no list $Y$ associated to a reduct, such that $L \prec Y \prec L'$ and $Y \neq L'$.
-	\end{corollary}
-	
-	Using the proposition~\ref{prop:gap} and the corollary~\ref{coro:gap}, the candidates between $L$ and $L'$ can be discarded.
-		
-	The following definition constitutes a key concept for CT\_EXT \citep{Sanchez07} and for the proposed algorithm, and it is also an important component of the algorithms BR \citep{Lias09} and RGonCRS \citep{WangP07}.
+	%In this work, we refer to a reduct or a super--reduct as a set or as an ordered list of attributes, indistinguishably. 
+	Now we define the concept of \textit{contribution} which is a fundamental component in most algorithms for reduct computation \citep{Sanchez07,WangP07,Lias09, Rodriguez2018}. 
 			
 	\begin{definition}\label{def:contrib}
-		Let DM be a SBDM, $B \subseteq C$ a subset of attributes and  $c_i \in C$ an attribute, such that $c_i \notin B$. We say that $c_i$ contributes to $B$ iff the	number of zero rows, in the sub-matrix of DM considering the attributes in $B\cup\{c_i\}$, is lower than considering only the attributes in $B$.
+		Let BM be a basic matrix, $L$ be an ordered list of attributes and $c_i \in C$ be an attribute, such that $c_i \notin L$. $c_i$ contributes to $L$ iff the number of zero rows, in the sub-matrix of BM considering the attributes in $L+[c_i]$, is lower than considering only the attributes in $L$.
 	\end{definition}
 			
-	From this concept, the following proposition was stated and proved \cite{Sanchez07}.
+	From this concept, the following proposition was stated and proved \citep{Sanchez07}.
 			
 	\begin{proposition}\label{prop:contrib} 
-		Let $B \subseteq C$ be a subset of attributes and $c_i \in C$ an attribute, such that $c_i \notin B$. If $c_i$ does not contribute to $B$, then $B\cup\{c_i\}$ cannot be a subset of any reduct.
+		Let $L$ be an ordered list of attributes and $c_i \in C$ be an attribute such that $c_i \notin L$. If $c_i$ does not contribute to $L$, then $L+[c_i]$ cannot be associated to a subset of any reduct.
 	\end{proposition}
 	
-	Using Proposition~\ref{prop:contrib}, the evaluation of supersets of $B\cup\{c_i\}$ can be avoided if $c_i$ does not contribute to $B$.
+	Using Proposition~\ref{prop:contrib}, the evaluation of supersets of candidate associated to $L+[c_i]$ can be avoided if $c_i$ does not contribute to $L$.
 	
-%	\begin{corollary}\label{coro:contrib} 
-%		Let DM be a SBDM, $B \subseteq C$,  $c_i \in C$ such that $c_i \notin B$, $c_{i+1} \in C$ such that $c_{i+1} \notin B$, and $L$ the ordered list of attributes associated to $B$. Given that $c_{i+1}$ is the consecutive attribute of $c_i$ in DM, if $c_i$ does not contribute to $B$; then, there is not any list $Y$ such that $L+[c_i] \prec Y \prec L+[c_{i+1}]$ associated to a reduct.
-%	\end{corollary}
+	In our proposed algorithm, the columns of a basic matrix \textit{BM} are coded as binary words with as many bits as rows in \textit{BM}. We define the cumulative mask for an attribute $c_i$, denoted as $cm_{c_i}$, as the binary word representing the $i$-th column in \textit{BM}. The cumulative mask for a sorted list of attributes $L=[c_{i_1},c_{i_2},...,c_{i_k}]$ is defined	as $cm_L = cm_{c_{i_1}} \vee cm_{c_{i_2}} \vee ... \vee cm_{c_{i_k}}$ where $\vee$ represents the binary OR operator.
 	
-	For a fast implementation of these algorithms \citep{Sanchez10,Lias13}, the columns of a simplified discernibility matrix \textit{DM} are coded as binary words with as many bits as rows in \textit{DM}. The cumulative mask for an attribute $c_i$, denoted as $cm_{c_i}$, is defined as the binary word representing the $i$-th column in \textit{DM}. The cumulative mask for a subset of attributes $B=\lbrace c_{i_1},c_{i_2},...,c_{i_k} \rbrace$ is defined	as $cm_B = cm_{c_{i_1}} \vee cm_{c_{i_2}} \vee ... \vee cm_{c_{i_k}}$ where $\vee$ represents the binary OR operator. It is not hard to see that the number of 0's in $cm_B$ is the same as the number of zero rows in the sub-matrix of the basic matrix, considering only the attributes in $B$. According to the definition~\ref{def:contrib}, $c_i$ contributes to $B$ iff $cm_{B\cup \lbrace c_i\rbrace}$ has more 1's than $cm_B$. The incremental nature of these algorithms, also included in  the proposed algorithm (MinReduct), is given by the associative property of the OR operation (we can compute $cm_{B\cup \lbrace c_i\rbrace}=cm_B\vee cm_{c_i}$). Notice from this last formulation, that $c_i$ contributes to $B$ iff $cm_{B\cup \lbrace c_i\rbrace}\neq cm_B$, since $cm_{B\cup \lbrace c_i\rbrace}$ cannot have less 1's than $cm_B$. It is easy to see, from the definition~\ref{def:testor}, that $B \subseteq C$ is a super--reduct iff $cm_B=(1,...,1)$ ($cm_B$ has a 1 in every bit).
+	It should be noted that the number of 0's in $cm_L$ corresponds to the number of zero rows in the sub-matrix of \textit{BM}, considering only those attributes in $L$. From Definition~\ref{def:contrib}, $c_i$ contributes to $L$ iff $cm_{L+[c_i]}$ has less 0's than $cm_L$. The incremental nature of MinReduct is given by the associative property of the OR operation (we can compute $cm_{L+[c_i]}=cm_L\vee cm_{c_i}$). From this fact, we infer that $c_i$ contributes to $L$ iff $cm_{L+[c_i]}\neq cm_L$, since $cm_{L+[c_i]}$ cannot have less 1's than $cm_L$. We can also infer from Definition~\ref{def:testor} that $L$ is a super--reduct iff $cm_L=(1,...,1)$ ($cm_L$ has 1 in every bit).
 	
 	In order to determine whether a super--reduct is a reduct (verifying the irreducible condition) the
-	exclusion mask, introduced in \cite{Lias09}, plays a fundamental role. 
+	exclusion mask, introduced in \citep{Lias09}, plays a fundamental role. 
 	
 	\begin{definition}\label{def:exclusion}
-		Let DM be a SBDM and $B \subseteq C$ be a subset of attributes. We call exclusion mask of B, denoted as $em_B$, to the binary word in which the $i{\mathit{-th}}$ bit is 1 if the $i{\mathit{-th}}$ row in DM has a 1 in only one column of those columns corresponding to attributes in B, and it is 0 otherwise.
+		Let BM be a basic matrix and $L$ be an ordered list of attributes. The exclusion mask of $L$, denoted as $em_L$, is the binary word in which the $i{\mathit{-th}}$ bit is 1 if the $i{\mathit{-th}}$ row in BM has 1 in only one column from those columns corresponding to attributes in $L$, and 0 otherwise.
 	\end{definition}
 	
 	For instance, from the basic matrix of Table~\ref{tab:SBDM1} we have:
 	$$\begin{array}{lcc}
-	  em_{\lbrace c_0,c_1,c_2\rbrace}         &=& (1,1,0,1,0)\\
-	  em_{\lbrace c_0,c_1,c_2,c_3\rbrace}     &=& (0,1,0,1,0)\\
-	  em_{\lbrace c_0,c_1,c_2,c_3,c_4\rbrace} &=& (0,1,0,0,0)
+	  em_{[ c_0,c_1,c_2]}         &=& (0,1,1,0,1,1)\\
+	  em_{[ c_0,c_1,c_2,c_3]}     &=& (0,1,0,1,1,0)\\
+	  em_{[ c_0,c_1,c_2,c_3,c_4]} &=& (1,0,0,1,1,0)
 	\end{array}$$
 	
-	In \cite{Lias13} the following two propositions are introduced to support the cumulative computation of the exclusion mask.
+	In \citep{Lias13} the following two propositions are introduced for supporting the cumulative computation of the exclusion mask.
 	
 	\begin{proposition}\label{prop:cumul} 
-		Let DM be a SBDM, $B \subseteq C$ be a subset of attributes and $c_i \in C$ an attribute, such that $c_i \notin B$. The exclusion mask of $B \cup \lbrace c_i\rbrace$ is computed as follows: $$em_{B \cup \lbrace c_i\rbrace}=(em_B \wedge \neg cm_{c_i}) \vee (\neg cm_B \wedge cm_{c_i})$$ where $cm$ refers to the cumulative mask.
+		Let BM be a basic matrix, $L$ be an ordered list of attributes and $c_i \in C$ be an attribute such that $c_i \notin L$. The exclusion mask of $L+[c_i]$ can be computed as follows: $$em_{L+[c_i]}=(em_L \wedge \neg cm_{c_i}) \vee (\neg cm_L \wedge cm_{c_i})$$ where $cm$ refers to the cumulative mask.
 	\end{proposition}
 	
 %	Finally, they stated and proved the following proposition.
 	
 	\begin{proposition}\label{prop:exclude} 
-		Let DM be a SBDM, $B \subseteq C$ be a subset of attributes and $c_i \in C$ an attribute, such that $c_i \notin B$. If $\exists c_x \in B$ such that $em_{B \cup \lbrace c_i\rbrace} \wedge cm_{c_x}=(0,...,0)$. Then, $B \cup \lbrace c_i\rbrace$ cannot be a subset of any reduct, and we say that $c_i$ is exclusionary with $B$.
+		Let BM be a basic matrix and $L$ be an ordered list of attributes. If $\exists c_x \in L$ such that $em_{L} \wedge cm_{c_x}=(0,...,0)$. Then, $L$ is not associated to a reduct.
 	\end{proposition}
 	
-	We call exclusion evaluation to the application of the proposition~\ref{prop:exclude}. This proposition allows us to discard the supersets of $B \cup \lbrace c_i\rbrace$ if $c_i$ is exclusionary with $B$.
+	We call exclusion evaluation to the application of the proposition~\ref{prop:exclude} to verify whether a super--reduct is a reduct. This property guarantees that there are not superfluous attributes in the reduct. 
 	
-	\phantomsection\label{arrange}
-	In order to reduce the search space, in the same way as \citep{Sanchez07,Lias13}, MinReduct arranges the basic matrix as follows: first, one of the rows of the basic matrix with the fewest number of 1's is selected. Then, the selected row is moved to the top, and all columns in which it has a 1 are moved to the left. Table~\ref{tab:SSBDM1} shows the basic matrix from Table~\ref{tab:SBDM1}, after performing the arrangement above explained. In this example, the second row is moved to the top and it becomes the first row. Then, the second column is moved to the left such that $c'_0 = c_1$ and $c'_1 = c_0$. Hereinafter, the identifiers for attributes in the basic matrix will be those resulting from this process, and we will omit the prime symbol of attributes for simplicity.
+	The concept of gap (Definition~\ref{def:gap}) was first introduced for LEX~\citep{Santiesteban03}, an algorithm for computing all irreducible testors. It is useful to avoid the evaluation of candidates that are subsets of reducts or non super--reducts.
+				
+	\begin{definition}\label{def:gap}
+		Let $L = [c_{j_0},...,c_{j_s}]$ be an ordered list of attributes. If there exists an attribute $c_{j_p} \in L$ such that ${j_p}=\mathrm{max}\{j_q | j_{q+1} \neq j_q+1\}; 0 \leq q < s$, $c_{j_p}$ is the gap of $L$.
+	\end{definition}
+	
+	In other words, the gap of $L$ is the attribute with the highest index satisfying that its consecutive attribute in $L$ is not its consecutive attribute (column) in the basic matrix. Notice, from the notation used above, that $j_q$ and $j_{q+1}$ are consecutive indexes in $L$ while $j_q$ and $j_q+1$ are consecutive indexes in the basic matrix.
+	
+	Let us take, for example, a basic matrix with 7 attributes ($c_0 - c_6$), then:
+	$$\begin{array}{ll}
+	{L_1=[c_0,c_1,c_2,c_3]} 		& \mathrm{there~is~no~gap}\\
+	{L_2=[c_0,c_1,c_2,c_5,c_6]} 	& \mathrm{the~gap~is~} c_2\\
+	{L_3=[c_0,c_1,c_2,c_4,c_6]} 	& \mathrm{the~gap~is~} c_4\\
+	\end{array}$$
+	In the first example, there is no gap since all the attributes in $L_1$ are consecutive in the basic matrix. In the second example, the consecutive attribute of $c_2$ in $L_2$ is $c_5$, which is not its consecutive in the basic matrix. Thus, for $L_2$, the gap is $c_2$. This is also the case for $c_2$ in $L_3$, however, since $c_4$ has a higher index and its consecutive attribute in $L_3$ is not its consecutive in the basic matrix, $c_4$ is the gap in $L_3$.
+
+	The pruning property of gap elimination is supported by the proposition~\ref{prop:gap}. The proof of this proposition can be seen in~\citep{Rodriguez2018}. 
 			
+	\begin{proposition}\label{prop:gap} 
+		Let BM be a basic matrix and $L = [c_{j_0},...,c_{j_s}]$ an ordered list associated to a reduct, such that $c_{j_s}$ is the last attribute in BM. If there is a gap $c_{j_p}$ in $L$, and $L'=[c_{j_0},\dots,c_{j_{p-1}},c_{j_p+1}]$; then, there is no list $Y$ associated to a reduct, such that $L \prec Y \prec L'$ and $L \neq Y \neq L'$.
+	\end{proposition}	
+		
+	From the proposition~\ref{prop:gap} we have the following corollary; which is relevant for the proposed algorithm in order to avoid unnecessary evaluations.
+	
+	\begin{corollary}\label{coro:gap} 
+		Let BM be a basic matrix and $L = [c_{j_0},...,c_{j_s}]$ an ordered list associated to a non super--reduct, such that $c_{j_s}$ is the last attribute in BM. If there is a gap $c_{j_p}$ in $L$, and $L' = [c_{j_0},...,c_{j_{p-1}},c_{j_p+1}]$; then, there is no list $Y$ associated to a reduct, such that $L \prec Y \prec L'$ and $Y \neq L'$.
+	\end{corollary}
+	
+	Using the proposition~\ref{prop:gap} and the corollary~\ref{coro:gap}, the candidates between $L$ and $L'$ can be discarded.
+	
+	The following proposition, introduced in~\citep{Zhou2009}, has a remarkable relevance for computing the shortest reducts.
+	
+	\begin{proposition}\label{prop:sr} 
+		Let BM be a basic matrix and $B \subseteq A$, if $B$ is one of the shortest super--reducts of BM, then it is also one of the shortest reducts of BM.
+	\end{proposition}	
+	
+	In other words, the shortest super--reducts in a decision system are also the shortest reducts. 
+	%This property can be easily corroborated from the definition of reduct given in Subsection~\ref{def_reduct}. 
+	Notice that every reduct is a super--reduct; and from the condition~\ref{cond_2} of the reduct definition, reducts are minimal with respect to inclusion. 
+	%Thus, assuming that one of the shortest super--reduct is not a reduct leads to the contradiction of the existence of a reduct (super--reduct) with smaller cardinality.
+	Proposition~\ref{prop:sr} is specially useful when computing the shortest reducts because a huge amount of exclusion evaluations can be avoided.
+	% Usually, the number of super--reducts found is much larger than the number of reducts in a decision system. Thus, evaluating the exclusion for each super--reduct increases the algorithm runtime.
+	
+	In order to reduce the search space, in the same way as \citep{Sanchez07,Lias13,Rodriguez2018}, MinReduct arranges the basic matrix as follows: first, one of the rows of the basic matrix with the fewest number of 1's is selected. Then, the selected row is moved to the top, and all columns in which it has 1 are moved to the left. Table~\ref{tab:SSBDM1} shows the basic matrix from Table~\ref{tab:SBDM1}, after performing the arrangement above explained.
+	
 	\begin{table}[htb]
 		\caption{Arranged Basic Matrix computed from Table~\ref{tab:SBDM1}.}
 		\centering
@@ -324,42 +312,39 @@
 	\end{table}  
 	
 	\begin{proposition}\label{prop:firstRow}
-		Let DM be an arranged SBDM and $L = [c_{j_0},...,c_{j_s}]$ an ordered list of attributes. If the first row in the column corresponding to $c_{j_0}$ has a zero, denoted as $c_{j_0}[0]=0$, $L$ is not associated to a super-reduct. Furthermore, there is no list $L'$, such that $L\prec L'$, associated to a super-reduct.
+		Let BM be an arranged basic matrix and $L = [c_{j_0},...,c_{j_s}]$ an ordered list of attributes. If the first row in the column corresponding to $c_{j_0}$ has 0, denoted as $c_{j_0}[0]=0$, $L$ is not associated to a super--reduct. Furthermore, there is no list $L'$, such that $L\prec L'$, associated to a super--reduct.
 	\end{proposition}
 	
-	\noindent
-	\textbf{Proof.} \textit{Due to the arranging process described above, if $c_{j_0}[0]=0$ then, $\forall c \in L: c[0]=0$. Thus, the first row in the sub-matrix of DM considering only the attributes in $L$ is a zero row. According to the definition~\ref{def:testor}, $L$ is not associated to a super-reduct. Given $L \prec L'= [c_{j'_0},...,c_{j'_s}]$, we have that $j_0 \leq j'_0$. Thus, if $c_{j_0}[0]=0$ then, $\forall c \in L': c[0]=0$ therefore $L'$ has also a zero row and it is not associated to a super-reduct.}
+%	\noindent
+%	\textbf{Proof.} \textit{Due to the arranging process described above, if $c_{j_0}[0]=0$ then, $\forall c \in L: c[0]=0$. Thus, the first row in the sub-matrix of BM considering only the attributes in $L$ is a zero row. According to the definition~\ref{def:testor}, $L$ is not associated to a super--reduct. Given $L \prec L'= [c_{j'_0},...,c_{j'_s}]$, we have that $j_0 \leq j'_0$. Thus, if $c_{j_0}[0]=0$ then, $\forall c \in L': c[0]=0$ therefore $L'$ has also a zero row and it is not associated to a super--reduct.}
 	
-	Based on this proposition, if we reach an $L$ satisfying $c_{j_0}=0$, the search can be stopped. 
+	Based on this proposition, if we reach an ordered list of attributes $L$ satisfying $c_{j_0}=0$, the search can be stopped. 
+	
+	In the next subsection we will use these propositions for supporting the pruning of the search space in our proposed algorithm.
 
-%	Based on the definition of super-reduct that we gave in the subsection~\ref{def_reduct}, we present the following corollary.
-%	
-%	\begin{corollary}\label{coro:firstRow}
-%		Let DM be a arranged SBDM and $L = [c_{j0},...,c_{js}]$ the ordered list associated to a subset of attributes from DM. If the first row of the column corresponding to $c_{j0}$ has a zero, $L$ is not associated to a reduct. Furthermore, there is not any list $L'$, such that $L\prec L'$, associated to a reduct.
-%	\end{corollary}
-	
-	In the next subsection we will use these propositions to support the pruning of the search space in the proposed algorithm.
+\subsection{The MinReduct algorithm}\label{description}
 
-\subsection{The algorithm MinReduct}\label{description}
-	MinReduct finds all reducts in the basic matrix computed from a decision system. This algorithm explores the search space evaluating some candidates and discarding others, based on previous evaluations. Unlike other works \citep{WangP07,Lias13} where candidate evaluation is performed through operations with a high cost, MinReduct uses a simpler candidate evaluation based on attribute contribution and gap elimination, to reduce the algorithm's runtime. 
+	MinReduct finds all shortest reducts in the basic matrix computed from a decision system. The key aspects about the proposed algorithm are the use of binary cumulative operations and a fast candidate evaluation process. The search space is pruned such that candidates larger than the shortest reduct found so far are not evaluated. MinReduct searches for super--reducts since the shortest super--reducts are indeed the shortest reducts~\citep{Zhou2009}.
 	
-	The MinReduct algorithm traverses the search space in the lexicographical order. Once a new attribute is added, it is removed if it does not reduce the number of zero rows regarding the previous candidate (i.e. the attribute does not contribute). If the new attribute contributes, the candidate is evaluated for the super-reduct and reduct conditions. If it is a reduct, the candidate is saved in the result set. If the current candidate is a super-reduct, the new attribute is removed as well, since it does not make sense to evaluate supersets of a super-reduct. This process continues until the last attribute from the basic matrix has been included in the candidate. At this point, the algorithm searches for a gap in the candidate to avoid the evaluation of unneeded candidates. The algorithm continues until the first attribute in the candidate has a zero in the first row of the basic matrix. Once this condition is reached, the algorithm finishes because there are no remaining reducts (proposition~\ref{prop:firstRow}).
+	The MinReduct algorithm traverses the search space in the lexicographical order. A new attribute is added to the current candidate if the candidate is shorter than the shortest super--reducts found so far and the new attribute contributes to the candidate (i.e. the new attribute allows reducing the number of zero rows). If the new attribute contributes, the candidate is evaluated for the super--reduct condition. If it is a super--reduct there are two possibilities: the candidate has the same cardinality of the shortest super--reducts found so far, or the candidate has smaller cardinality than the shortest super--reducts found so far. In the first case the candidate is saved in the result set; in the second case all previously saved super--reducts are removed, and the current candidate is saved as the only element of the result. When the last attribute from the basic matrix is included in the candidate, the algorithm searches for a gap in order to avoid the evaluation of unneeded candidates. This process continues until the first attribute in the candidate has 0 in the first row of the basic matrix. Once this condition is reached, the algorithm finishes because there are no remaining reducts (proposition~\ref{prop:firstRow}).
 	
-	The pseudocode for MinReduct is shown in Algorithm~\ref{alg:MinReduct}. The algorithm operates over the arranged basic matrix, and as a preprocessing stage, superfluous attributes~\cite{Lazo-Cortes2013} are removed from the basic matrix. After initializing the current candidate with the first attribute, the cumulative mask is updated. Then, the attribute contribution is evaluated using the definition~\ref{def:contrib}. For those candidate subsets with a contributing attribute, the super--reduct condition is evaluated using definition~\ref{def:testor}. For each detected super--reduct, the proposition~\ref{prop:exclude} is evaluated in order to determine whether a super--reduct is a reduct, to be saved in the result ($RR$). At this point, the candidate evaluation is finished and the $candidateGenerator$ procedure is called to evaluate a new candidate subset.
+	Algorithm~\ref{alg:MinReduct} shows the pseudocode of MinReduct. MinReduct operates over the arranged basic matrix.
+	% and, as a preprocessing stage, superfluous attributes~\citep{Lazo-Cortes2013} are removed from the basic matrix. A column corresponding to a  superfluous attribute in the basic matrix contains only zeros. Thus, superfluous attributes cannot be included in a reduct. 
+	After initializing the current candidate with the first attribute, the attribute contribution is evaluated by means of Definition~\ref{def:contrib}. For those candidates with a contributing attribute, the super--reduct condition is evaluated by means of Definition~\ref{def:testor}. super--reducts, are saved in the result ($SR$) and if the current candidate has smaller cardinality than the minimum found so far ($maxCard$), the previously stored super--reducts are removed. At this point, the candidate evaluation is finished and the next candidate subset is generated.
 	
 	\begin{algorithm}
 	\footnotesize
 	\caption{MinReduct algorithm for computing all shortest reducts}
 	\label{alg:MinReduct}
 	\begin{algorithmic}[1]
-		\Require basic matrix \Comment{the arranged basic matrix}
-		\Statex	 \hspace{1.5em}$c_{x}$ \Comment{first attribute with a 0 in the first row}
-		\Statex	 \hspace{1.5em}$c_{max}$ \Comment{last attribute in the arranged basic matrix}
-		\Ensure $SR$ \Comment{set of all shortest reducts}
-		\State $SR \Leftarrow \emptyset$
-		\State $B \Leftarrow []$  \Comment{Subset of attributes in the candidate}
+		\Require BM \Comment{The arranged basic matrix}
+		\Statex	 \hspace{1.5em}$c_{x}$ \Comment{First attribute with a 0 in the first row}
+		\Statex	 \hspace{1.5em}$c_{max}$ \Comment{Last attribute in the arranged basic matrix}
+		\Ensure $SR$ \Comment{Set of all shortest reducts}
+		%\State $SR \Leftarrow \emptyset$
+		\State $B \Leftarrow [~]$  \Comment{Subset of attributes in the candidate}
 		\State $c \Leftarrow c_0$ \Comment{New attribute to add in the candidate}
-		\State $minCard \Leftarrow \infty$ \Comment{Cardinality of the shortest super-reduct found so far}
+		\State $maxCard \Leftarrow \infty$ \Comment{Cardinality of the shortest super--reduct found so far}
 		\While {$B \neq [c_{x}]$}
 			\State $contributes \Leftarrow \mathrm{False}$
 			\State $superReduct \Leftarrow \mathrm{False}$
@@ -369,9 +354,9 @@
 		  		\If {SuperReduct($B+ [c]$)}\label{line:superReduct}
 		  			\State $superReduct \Leftarrow \mathrm{True}$
 		  				%\State $reduct \Leftarrow \mathrm{True}$
-		  				\If {$|B+ [c]| < minCard$}
-			  				\State $minCard \Leftarrow |B+ [c]|$
-			  				\State $SR \Leftarrow \lbrace B+ [c] \rbrace$
+		  				\If {$|B+ [c]| < maxCard$}
+			  				\State $maxCard \Leftarrow |B+ [c]|$
+			  				\State $SR \Leftarrow \lbrace B+ [c] \rbrace$ \Comment{All previous super--reducts are discarded}
 			  			\Else
 				  			\State $SR \Leftarrow SR \cup \lbrace B+ [c] \rbrace$
 		  				\EndIf
@@ -382,14 +367,16 @@
 				\If {$superReduct = \mathrm{False}$}\label{line:gap}
 					\State $B+[c] \Leftarrow $ eliminateGap($B$)
 				\Else
-					\If {Exclusion($B+[c]$) = False}\label{line:reduct}
-						\State $B+[c] \Leftarrow $ eliminateGap($B$)\Comment{candidate is a reduct}
+					\If {exclusion($B+[c]$) = False}\label{line:reduct}
+						\State $B+[c] \Leftarrow $ eliminateGap($B$)\Comment{Candidate is a reduct}
 					\Else	
 						\State $B+[c] \Leftarrow $ eliminateOne($B$)
+						\State $maxCard \Leftarrow maxCard-1$\Comment{A super--reduct that is not a reduct}
+						\State $SR \Leftarrow \emptyset$
 					\EndIf
 				\EndIf
 			\Else
-				\If {$contributes = \mathrm{True} \wedge superReduct = \mathrm{False} \wedge |B+ [c]| < minCard$}\label{line:keep}
+				\If {$(contributes = \mathrm{True}) \wedge (superReduct = \mathrm{False}) \wedge (|B+ [c]| < maxCard)$}\label{line:keep}
 					\State $B \Leftarrow B+ [c]$
 				\EndIf				
 				\State $c \Leftarrow$ Next($c$) 
@@ -398,151 +385,199 @@
 		\end{algorithmic}
 	\end{algorithm}
 	
+	The candidate generation process follows the lexicographical order, skipping some unnecessary candidates when possible. If the current candidate includes the last attribute of the arranged basic matrix, the gap is eliminated. Otherwise, the lexicographical order is followed avoiding candidates with a cardinality greater than $maxCard$, and supersets of candidates with a non contributing attribute.
+	
+	The function $eliminateGap$ searches for a gap in the current candidate and eliminates it by skipping unnecessary candidates as it is proposed in the Corollary~\ref{coro:gap}. The function $exclusion$ evaluates the exclusion for the current candidate, as described in Propositions~\ref{prop:cumul} and~\ref{prop:exclude}. The function $eliminateOne$ generates the next candidate following the lexicographical order. The function $Next$ returns the following attribute in the arranged basic matrix.
+		
+	An example of the execution of MinReduct over the basic matrix of Table~\ref{tab:SSBDM1} is shown in Table~\ref{tab:sample_MinReduct}. The first column shows the iteration number corresponding to the evaluated candidate. The second column shows the position of the current candidate in the lexicographical order. It is important to notice that there are 127 attribute subsets in the search space of this example, but only 34 of them are evaluated. In the last column, some relevant comments are included.
 
-		
-	It is important to highlight that the problem of computing all reducts has exponential complexity. This fact is due to the cardinality of the solution, since there are only exponential upper bounds to the number of reducts regarding the number of attributes in the decision system~\cite{Skowron92}. Thus, there is not  polynomial complexity algorithm for computing all the reducts of a decision system. However, the performance of algorithms for computing all reducts is strongly related to the characteristics of the basic matrix. 
-	
-	In MinReduct, we compute the exclusion mask and evaluate the attribute exclusion, using proposition~\ref{prop:exclude}, for those candidates detected as super-reducts in order to verify whether they are reducts. Super-reducts are, most of the times, a small fraction of the evaluated candidates. On the other hand, in algorithms such as fast--BR~\cite{Lias13} and RGonCRS~\cite{WangP07}, for each candidate with a contributing attribute, the exclusion is evaluated. In this way, fast--BR and RGonCRS avoid the evaluation of all the supersets of a candidate which has an exclusionary attribute. This becomes a great advantage for those basic matrices in which the exclusion occurs frequently. The evaluation of the attribute exclusion is the procedure with the highest complexity into these algorithms ($\Theta (nm)$). Thus, for those basic matrices in which the exclusion rarely occurs, MinReduct will perform faster, by making fewer exclusion evaluations.
-	
-		
-	In Table~\ref{tab:sample_MinReduct}, we show an example of the execution of MinReduct over the basic matrix of Table~\ref{tab:SSBDM1}. The first column enumerates the candidate evaluations. The second column shows the position of the current candidate, according to the lexicographical order. Notice that, for this example, there are 127 attribute subsets in the search space from which, only 24 have to be analyzed. In the last column, some comments about the evaluation of the current candidate and the generation of the next one, are included.
-	
-%	\begin{table}[!htb] %TODO corregir la posicion en el orden lexicografico
-%		\caption{Execution of MinReduct over the basic matrix of Table~\ref{tab:SSBDM1}.}\label{tab:sample_MinReduct}
 		{\scriptsize	\def\arraystretch{2}
 		\begin{longtable}{cclll}				
+			\caption{Execution of MinReduct over the basic matrix of Table~\ref{tab:SSBDM1}.}\label{tab:sample_MinReduct}\\
 			\hline
-			Iter & Pos & \multicolumn{1}{c}{Candidate} & \multicolumn{1}{c}{Comments}\\
+			Iter & Pos & \multicolumn{1}{c}{$B+[c]$} & \multicolumn{1}{c}{Comments}\\
+			\hline
+			\endfirsthead
+			\hline
+			Iter & Pos & \multicolumn{1}{c}{$B+[c]$} & \multicolumn{1}{c}{Comments}\\
 			\hline
 			\endhead % all the lines above this will be repeated on every page
-			~1 & ~1 & \{$c'_0$\} 			     & \noindent\parbox[c]{9.4cm}{ $c'_0$ contributes to \{\} but the candidate is not a super-reduct. Add a new attribute.}\\
-			~2 & ~2 & \{$c'_0,c'_1$\}			     & \multicolumn{1}{{p{9.4cm}}}{$c'_1$ does not contributes to \{$c'_0$\}. Remove $c'_1$.}\\
-			~3 & 34 & \{$c'_0,c'_2$\}			     & \noindent\parbox[c]{9.4cm}{$c'_2$ contributes to \{$c'_0$\} but the candidate is not a super-reduct. Add a new attribute.}\\		
-			~4 & 35 & \{$c'_0,c'_2,c'_3$\}		     & \noindent\parbox[c]{9.4cm}{$c'_3$ contributes to \{$c'_0,c'_2$\} but the candidate is not a super-reduct. Add a new attribute.}\\
-			~5 & 36 & \{$c'_0,c'_2,c'_3,c'_4$\}		 & \noindent\parbox[c]{9.4cm}{The candidate is a super-reduct, it is saved and its cardinality (4) is taken as the new limit for candidates' size.}\\
-			~6 & 40 & \{$c'_0,c'_2,c'_3,c'_5$\}		 & \noindent\parbox[c]{9.4cm}{The candidate is a super-reduct and it is saved.}\\
-			~7 & 42 & \{$c'_0,c'_2,c'_3,c'_6$\}      & \noindent\parbox[c]{9.4cm}{The candidate is a super-reduct and it is saved.}\\ %TODO explicar este caso q no es reducto y no hay gap elim
-			~8 & 43 & \{$\mathbf{c'_0,c'_2,c'_4}$\} & \noindent\parbox[c]{9.4cm}{The candidate is a super-reduct, it is saved and its cardinality (3) is taken as the new limit for candidates' size. All previous super-reducts are dismissed.}\\
-			~9 & 47 & \{$c'_0,c'_2,c'_5$\}			 & \noindent\parbox[c]{9.4cm}{$c'_5$ contributes to \{$c'_0,c'_2$\} but the limit of candidate's size is reached. Remove $c'_5$.}\\
-			10 & 49 & \{$c'_0,c'_2,c'_6$\}		     & \noindent\parbox[c]{9.4cm}{The candidate is not a super-reduct. Since the last attribute is included, the gap ($c'_2$) is eliminated.}\\
-			11 & 50 & \{$c'_0,c'_3$\}              & \noindent\parbox[c]{9.4cm}{$c'_3$ contributes to \{$c'_0$\} but the candidate is not a super-reduct. Add a new attribute.}\\
-			12 & 51 & \{$c'_0,c'_3,c'_4$\}			 & \noindent\parbox[c]{9.4cm}{$c'_4$ contributes to \{$c'_0,c'_3$\} but the limit of candidate's size is reached. Remove $c'_4$.}\\
-			13 & 55 & \{$c'_0,c'_3,c'_5$\}	    	 & \noindent\parbox[c]{9.4cm}{$c'_5$ contributes to \{$c'_0,c'_3$\} but the limit of candidate's size is reached. Remove $c'_5$.}\\
-			14 & 57 & \{$\mathbf{c'_0,c'_3,c'_6}$\} & \noindent\parbox[c]{9.4cm}{The candidate is a super-reduct and it is saved. Since the last attribute is included and the candidate is a reduct, the gap ($c'_3$) is eliminated.}\\
-			15 & 58 & \{$c'_0,c'_4$\}	             & \noindent\parbox[c]{9.4cm}{$c'_4$ contributes to \{$c'_0$\} but the candidate is not a super-reduct. Add a new attribute.}\\
-			16 & 59 & \{$c'_0,c'_4,c'_5$\}          & \noindent\parbox[c]{9.4cm}{$c'_5$ does not contributes to \{$c'_0,c'_4$\}. Remove $c'_5$.}\\
-			17 & 61 & \{$\mathbf{c'_0,c'_4,c'_6}$\} & \noindent\parbox[c]{9.4cm}{The candidate is a super-reduct and it is saved. Since the last attribute is included and the candidate is a reduct, the gap ($c'_4$) is eliminated.}\\
-			18 & 62 & \{$c'_0,c'_5$\}			     & \noindent\parbox[c]{9.4cm}{$c'_5$ contributes to \{$c'_0$\} but the candidate is not a super-reduct. Add a new attribute.}\\
-			19 & 63 & \{$c'_0,c'_5,c'_6$\}		     & \noindent\parbox[c]{9.4cm}{The candidate is not a super-reduct. Since the last attribute is included, the gap ($c'_0$) is eliminated.}\\
-			20 & 65 & \{$c'_1$\}				     & \noindent\parbox[c]{9.4cm}{$c'_1$ contributes to \{\} but the candidate is not a super-reduct. Add a new attribute.}\\    
-			21 & 66 & \{$c'_1,c'_2$\}			     & \noindent\parbox[c]{9.4cm}{$c'_2$ contributes to \{$c'_1$\} but the candidate is not a super-reduct. Add a new attribute.}\\
-			22 & 67 & \{$c'_1,c'_2,c'_3$\}		     & \noindent\parbox[c]{9.4cm}{$c'_3$ contributes to \{$c'_1,c'_2$\} but the limit of candidate's size is reached. Remove $c'_3$.}\\
-			23 & 75 & \{$c'_1,c'_2,c'_4$\}		     & \noindent\parbox[c]{9.4cm}{$c'_4$ contributes to \{$c'_1,c'_2$\} but the limit of candidate's size is reached. Remove $c'_4$.}\\
-			24 & 79 & \{$c'_1,c'_2,c'_5$\}		     & \noindent\parbox[c]{9.4cm}{$c'_5$ contributes to \{$c'_1,c'_2$\} but the limit of candidate's size is reached. Remove $c'_5$.}\\
-			25 & 81 & \{$c'_1,c'_2,c'_6$\}		     & \noindent\parbox[c]{9.4cm}{The candidate is not a super-reduct. Since the last attribute is included, the gap ($c'_2$) is eliminated.}\\
-			26 & 82 & \{$c'_1,c'_3$\}			     & \noindent\parbox[c]{9.4cm}{$c'_3$ contributes to \{$c'_1$\} but the candidate is not a super-reduct. Add a new attribute.}\\
-			27 & 83 & \{$c'_1,c'_3,c'_4$\}		     & \noindent\parbox[c]{9.4cm}{$c'_4$ contributes to \{$c'_1,c'_3$\} but the limit of candidate's size is reached. Remove $c'_4$.}\\
-			28 & 87 & \{$c'_1,c'_3,c'_5$\}		     & \noindent\parbox[c]{9.4cm}{$c'_5$ contributes to \{$c'_1,c'_3$\} but the limit of candidate's size is reached. Remove $c'_5$.}\\
-			29 & 89 & \{$c'_1,c'_3,c'_6$\}		     & \noindent\parbox[c]{9.4cm}{The candidate is not a super-reduct. Since the last attribute is included, the gap ($c'_3$) is eliminated.}\\
-			30 & 90 & \{$c'_1,c'_4$\}			     & \noindent\parbox[c]{9.4cm}{$c'_4$ contributes to \{$c'_1$\} but the candidate is not a super-reduct. Add a new attribute.}\\
-			31 & 91 & \{$c'_1,c'_4,c'_5$\}		     & \noindent\parbox[c]{9.4cm}{$c'_5$ contributes to \{$c'_1,c'_4$\} but the limit of candidate's size is reached. Remove $c'_5$.}\\
-			32 & 93 & \{$c'_1,c'_4,c'_6$\}		     & \noindent\parbox[c]{9.4cm}{The candidate is not a super-reduct. Since the last attribute is included, the gap ($c'_4$) is eliminated.}\\
-			33 & 94 & \{$c'_1,c'_5$\}			     & \noindent\parbox[c]{9.4cm}{$c'_5$ contributes to \{$c'_1$\} but the candidate is not a super-reduct. Add a new attribute.}\\
-			34 & 95 & \{$c'_1,c'_5,c'_6$\}		     & \noindent\parbox[c]{9.4cm}{The candidate is not a super-reduct. Since the last attribute is included, the gap ($c'_1$) is eliminated.}\\
+			~1 & ~1 & [$c'_0$] 			     & \noindent\parbox[c]{9.4cm}{ $c'_0$ contributes to [] but the candidate is not a super--reduct. Add a new attribute.}\\
+			~2 & ~2 & [$c'_0,c'_1$]			     & \multicolumn{1}{{p{9.4cm}}}{$c'_1$ does not contributes to [$c'_0$]. Remove $c'_1$.}\\
+			~3 & 34 & [$c'_0,c'_2$]			     & \noindent\parbox[c]{9.4cm}{$c'_2$ contributes to [$c'_0$] but the candidate is not a super--reduct. Add a new attribute.}\\		
+			~4 & 35 & [$c'_0,c'_2,c'_3$]		     & \noindent\parbox[c]{9.4cm}{$c'_3$ contributes to [$c'_0,c'_2$] but the candidate is not a super--reduct. Add a new attribute.}\\
+			~5 & 36 & [$c'_0,c'_2,c'_3,c'_4$]		 & \noindent\parbox[c]{9.4cm}{The candidate is a super--reduct, it is saved and its cardinality (4) is taken as the new limit for candidates' size.}\\
+			~6 & 40 & [$c'_0,c'_2,c'_3,c'_5$]		 & \noindent\parbox[c]{9.4cm}{The candidate is a super--reduct and it is saved.}\\
+			~7 & 42 & [$c'_0,c'_2,c'_3,c'_6$]      & \noindent\parbox[c]{9.4cm}{The candidate is a super--reduct. Since it is not a reduct, gap cannot be eliminated. The limit of cardinality is decremented (3). All previous super--reducts are dismissed.}\\ 
+			~8 & 43 & [$\mathbf{c'_0,c'_2,c'_4}$] & \noindent\parbox[c]{9.4cm}{The candidate is a super--reduct, it is saved.}\\
+			~9 & 47 & [$c'_0,c'_2,c'_5$]			 & \noindent\parbox[c]{9.4cm}{$c'_5$ contributes to [$c'_0,c'_2$] but the limit of candidate's size is reached. Remove $c'_5$.}\\
+			10 & 49 & [$c'_0,c'_2,c'_6$]		     & \noindent\parbox[c]{9.4cm}{The candidate is not a super--reduct. Since the last attribute is included, the gap ($c'_2$) is eliminated.}\\
+			11 & 50 & [$c'_0,c'_3$]              & \noindent\parbox[c]{9.4cm}{$c'_3$ contributes to [$c'_0$] but the candidate is not a super--reduct. Add a new attribute.}\\
+			12 & 51 & [$c'_0,c'_3,c'_4$]			 & \noindent\parbox[c]{9.4cm}{$c'_4$ contributes to [$c'_0,c'_3$] but the limit of candidate's size is reached. Remove $c'_4$.}\\
+			13 & 55 & [$c'_0,c'_3,c'_5$]	    	 & \noindent\parbox[c]{9.4cm}{$c'_5$ contributes to [$c'_0,c'_3$] but the limit of candidate's size is reached. Remove $c'_5$.}\\
+			14 & 57 & [$\mathbf{c'_0,c'_3,c'_6}$] & \noindent\parbox[c]{9.4cm}{The candidate is a super--reduct and it is saved. Since the last attribute is included and the candidate is a reduct, the gap ($c'_3$) is eliminated.}\\
+			15 & 58 & [$c'_0,c'_4$]	             & \noindent\parbox[c]{9.4cm}{$c'_4$ contributes to [$c'_0$] but the candidate is not a super--reduct. Add a new attribute.}\\
+			16 & 59 & [$c'_0,c'_4,c'_5$]          & \noindent\parbox[c]{9.4cm}{$c'_5$ does not contributes to [$c'_0,c'_4$]. Remove $c'_5$.}\\
+			17 & 61 & [$\mathbf{c'_0,c'_4,c'_6}$] & \noindent\parbox[c]{9.4cm}{The candidate is a super--reduct and it is saved. Since the last attribute is included and the candidate is a reduct, the gap ($c'_4$) is eliminated.}\\
+			18 & 62 & [$c'_0,c'_5$]			     & \noindent\parbox[c]{9.4cm}{$c'_5$ contributes to [$c'_0$] but the candidate is not a super--reduct. Add a new attribute.}\\
+			19 & 63 & [$c'_0,c'_5,c'_6$]		     & \noindent\parbox[c]{9.4cm}{The candidate is not a super--reduct. Since the last attribute is included, the gap ($c'_0$) is eliminated.}\\
+			20 & 65 & [$c'_1$]				     & \noindent\parbox[c]{9.4cm}{$c'_1$ contributes to [~] but the candidate is not a super--reduct. Add a new attribute.}\\    
+			21 & 66 & [$c'_1,c'_2$]			     & \noindent\parbox[c]{9.4cm}{$c'_2$ contributes to [$c'_1$] but the candidate is not a super--reduct. Add a new attribute.}\\
+			22 & 67 & [$c'_1,c'_2,c'_3$]		     & \noindent\parbox[c]{9.4cm}{$c'_3$ contributes to [$c'_1,c'_2$] but the limit of candidate's size is reached. Remove $c'_3$.}\\
+			23 & 75 & [$c'_1,c'_2,c'_4$]		     & \noindent\parbox[c]{9.4cm}{$c'_4$ contributes to [$c'_1,c'_2$] but the limit of candidate's size is reached. Remove $c'_4$.}\\
+			24 & 79 & [$c'_1,c'_2,c'_5$]		     & \noindent\parbox[c]{9.4cm}{$c'_5$ contributes to [$c'_1,c'_2$] but the limit of candidate's size is reached. Remove $c'_5$.}\\
+			25 & 81 & [$c'_1,c'_2,c'_6$]		     & \noindent\parbox[c]{9.4cm}{The candidate is not a super--reduct. Since the last attribute is included, the gap ($c'_2$) is eliminated.}\\
+			26 & 82 & [$c'_1,c'_3$]			     & \noindent\parbox[c]{9.4cm}{$c'_3$ contributes to [$c'_1$] but the candidate is not a super--reduct. Add a new attribute.}\\
+			27 & 83 & [$c'_1,c'_3,c'_4$]		     & \noindent\parbox[c]{9.4cm}{$c'_4$ contributes to [$c'_1,c'_3$] but the limit of candidate's size is reached. Remove $c'_4$.}\\
+			28 & 87 & [$c'_1,c'_3,c'_5$]		     & \noindent\parbox[c]{9.4cm}{$c'_5$ contributes to [$c'_1,c'_3$] but the limit of candidate's size is reached. Remove $c'_5$.}\\
+			29 & 89 & [$c'_1,c'_3,c'_6$]		     & \noindent\parbox[c]{9.4cm}{The candidate is not a super--reduct. Since the last attribute is included, the gap ($c'_3$) is eliminated.}\\
+			30 & 90 & [$c'_1,c'_4$]			     & \noindent\parbox[c]{9.4cm}{$c'_4$ contributes to [$c'_1$] but the candidate is not a super--reduct. Add a new attribute.}\\
+			31 & 91 & [$c'_1,c'_4,c'_5$]		     & \noindent\parbox[c]{9.4cm}{$c'_5$ contributes to [$c'_1,c'_4$] but the limit of candidate's size is reached. Remove $c'_5$.}\\
+			32 & 93 & [$c'_1,c'_4,c'_6$]		     & \noindent\parbox[c]{9.4cm}{The candidate is not a super--reduct. Since the last attribute is included, the gap ($c'_4$) is eliminated.}\\
+			33 & 94 & [$c'_1,c'_5$]			     & \noindent\parbox[c]{9.4cm}{$c'_5$ contributes to [$c'_1$] but the candidate is not a super--reduct. Add a new attribute.}\\
+			34 & 95 & [$c'_1,c'_5,c'_6$]		     & \noindent\parbox[c]{9.4cm}{The candidate is not a super--reduct. Since the last attribute is included, the gap ($c'_1$) is eliminated. $SR=\lbrace [c'_0,c'_2,c'_4],[c'_0,c'_3,c'_6],[c'_0,c'_4,c'_6]\rbrace$}\\
 				\hline
 		\end{longtable}}
 	%\end{table}
 		
-	\phantomsection\label{par:step}
-	In this example, the algorithm starts with the subset $B=\lbrace \rbrace$ and its cumulative mask $cm_B=(00000)$. The first candidate is built by assigning to $c$ the current attribute  $c_0$ ($B\cup \lbrace c\rbrace = \lbrace c_0\rbrace$) and we have $cm_{\lbrace c_0\rbrace}=(10000)$. According to the definition~\ref{def:contrib}, this attribute contributes, thus it is saved in $B=\lbrace c_0\rbrace$. Following, the next attribute is added  by doing $c = c_1$. The new cumulative mask is $cm_{\lbrace c_0,c_1\rbrace}=(11000)\neq cm_{\lbrace c_0\rbrace}$ and $c_1$ contributes to $B$. Thus, we save the current attribute in $B = \lbrace c_0,c_1\rbrace$ and the next attribute is added by doing $c = c_2$. In the same way, $cm_{\lbrace c_0,c_1,c_2\rbrace}=(11010)\neq cm_{\lbrace c_0,c_1\rbrace}$ and $c_2$ is saved in $B = \lbrace c_0,c_1,c_2\rbrace$ to add the next attribute by doing $c = c'_3$. This time, we have $cm_{\lbrace c_0,c_1,c_2,c_3\rbrace}=(11010) = cm_{\lbrace c_0,c_1,c_2\rbrace}$ then $c_3$ does not contribute to $B$. At this point, all the supersets of $\lbrace c_0,c_1,c_2,c_3\rbrace$ are pruned according to the proposition~\ref{prop:contrib}. Thus, $B = \lbrace c_0,c_1,c_2\rbrace$ and $c = c_4$, discarding from the fourth to the twelfth candidate in the lexicographical order, as it can be seen in  Table~\ref{tab:sample_MinReduct}. The same result is obtained for $\lbrace c_0,c_1,c_2,c_4\rbrace$ going to $B = \lbrace c_0,c_1,c_2\rbrace$ and $c = c_5$ for the next evaluation. This time, $cm_{\lbrace c_0,c_1,c_2,c_5\rbrace}=(11011)\neq cm_{\lbrace c_0,c_1,c_2\rbrace}$ and $c_5$ contributes to $B$. Thus, we save the current attribute in $B = \lbrace c_0,c_1,c_2,c_5\rbrace$ and the next attribute is added by doing $c = c_6$. We have $cm_{\lbrace c_0,c_1,c_2,c_5,c_6\rbrace}=(11111)\neq cm_{\lbrace c_0,c_1,c_2,c_5\rbrace}$ so that $\lbrace c_0,c_1,c_2,c_5,c_6\rbrace$ is a super-reduct. The next step is the exclusion evaluation over this super-reduct to verify whether it is a reduct.
-	  
-  	\begin{table}[!htb]
-  		\caption{Exclusion mask computation for $\lbrace c_0,c_1,c_2,c_5,c_6\rbrace$.}\label{tab:em}
-  		\centering 
-  		\begin{tabular}{|l|c|c|c|}
-  			\hline
-  			$B\cup \lbrace c_i\rbrace$                          & $cm_{c_i}$ & $cm_B$  & $em_{B\cup \lbrace c_i\rbrace}$ \\
-  			\hline
-  			$\lbrace c_0\rbrace$                 & (10000)    & (00000) & (10000)          \\
-  			$\lbrace c_0,c_1\rbrace$             & (01000)    & (10000) & (11000)          \\
-  			$\lbrace c_0,c_1,c_2\rbrace$         & (00010)    & (11000) & (11010)          \\
-  			$\lbrace c_0,c_1,c_2,c_5\rbrace$     & (00001)    & (11010) & (11011)          \\
-  			$\lbrace c_0,c_1,c_2,c_5,c_6\rbrace$ & (00100)    & (11011) & (11111)          \\
-  			\hline
-  		\end{tabular}
-  	\end{table}
-	  	
-	The exclusion verification stars with $cm_B = em_B = (00000)$. The final value $em_{\lbrace c_0,c_1,c_2,c_5,c_6\rbrace}=(11111)$ is computed as it is illustrated in Table~\ref{tab:em}, by using the proposition~\ref{prop:cumul} (Algorithm~\ref{alg:exclusion}). Since it is obvious that $\forall c \in \lbrace c_0,c_1,c_2,c_5,c_6\rbrace : em_{\lbrace c_0,c_1,c_2,c_5,c_6\rbrace}\wedge cm_c \neq (00000)$, we have that $\lbrace c_0,c_1,c_2,c_5,c_6\rbrace$ is a reduct. Given that the current candidate contains the last attribute ($c_6$) and it is a reduct, the gap ($c_2$) is eliminated and we have $B = \lbrace c_0,c_1\rbrace$ with $c=c_3$ for the next evaluation. In this way, the rest of the example can be followed in Table~\ref{tab:sample_MinReduct}.
-
+	In this example, MinReduct starts with the list $B=[~]$ and $c=c'_0$ such that the first candidate is $B+[c]=[c'_0]$. Clearly the new attribute ($c'_0$) contributes to $B=[~]$, therefore the next candidate is $[c'_0,c'_1]$. As it can be seen in Table~\ref{tab:SSBDM1}, the attribute $c'_1$ does not contribute to $[c'_0]$ since there are three zero rows in the sub-matrix formed by $[c'_0,c'_1]$ as well as in the sub-matrix formed by $[c'_0]$. Thus, the attribute $c'_1$ is removed and all the supersets of $[c'_0,c'_1]$ are avoided. Following the lexicographical order, the next candidate is $[c'_0,c'_2]$. Notice that using Proposition~\ref{prop:contrib}, we have jumped from the second candidate in the search space to  the candidate number 34. $c'_2$ contributes to $[c'_0]$; then, the next candidate is constructed by keeping $c'_2$ ($B+[c]=[c'_0,c'_2,c'_3]$). $c'_3$ contributes to $[c'_0,c'_2]$; thus, the next candidate is $[c'_0,c'_2,c'_3,c'_4]$. This candidate is a super--reduct since there are no zero rows in the sub-matrix formed by the attributes in this list. Thus,  $[c'_0,c'_2,c'_3,c'_4]$ is stored in $SR$ and $maxCard$ is updated to four, since there is no reason for analysing greater candidates. The attribute $c'_4$ is removed to form the next candidate $[c'_0,c'_2,c'_3,c'_5]$ jumping from the 36th to the 40th candidate. This candidate is also a super--reduct and it is saved in $SR$. The next candidate is $[c'_0,c'_2,c'_3,c'_6]$ because $c'_5$ has been removed in the same way as $c'_4$. This new candidate is also a super--reduct and it is also saved. This time, the last attribute has been reached, but the candidate is not a reduct. Since the candidate is a super--reduct but it is not a reduct, the gap cannot be eliminated. Indeed, we have found that there are reducts with a cardinality smaller than $maxCard$; thus, we make $SR = \emptyset$ and $maxCard = maxCard-1$ (three). The next candidate is $[c'_0,c'_2,c'_4]$, which is the following candidate in the lexicographical order. This candidate is a super--reduct and it is saved. Then, $c'_4$ is eliminated and $B+[c]=[c'_0,c'_2,c'_5]$. $c'_5$ contributes to $[c'_0,c'_2]$ but this candidate is not a super--reduct; since the maximum allowed cardinality has been reached, it makes no sense to add a new attribute. Thus, $c'_5$ is eliminated and $B+[c]=[c'_0,c'_2,c'_6]$. This candidate is not a super--reduct but includes the last attribute. Then, the gap is eliminated to avoid subsets of this candidate. The gap in this case is $c'_2$ and the next candidate is $[c'_0,c'_3]$. $c'_3$ contributes to $[c'_0]$; then, we keep $c'_3$ and $B+[c]=[c'_0,c'_3,c'_4]$. This candidate is not a super--reduct and $c'_4$ is removed because the maximum cardinality has been reached. Thus, the next candidate is $[c'_0,c'_3,c'_5]$. This candidate is not a super--reduct and again the last attribute is removed; therefore, the next candidate is $[c'_0,c'_3,c'_6]$. The current candidate is a super--reduct (also a reduct) and it is saved in $SR$. This time, the gap is eliminated to avoid subsets of a reduct. The rest of the example in Table~\ref{tab:sample_MinReduct} follows the above described process. The algorithm finishes after the candidate $[c'_1,c'_5,c'_6]$ while evaluating $[c'_2]$, which has a 0 in the first row of the basic matrix.
 	
-%
+	
+	During the search process, MinReduct evaluates some attribute subsets while discards some others.
+	
+	Propositions~\ref{prop:gap},~\ref{prop:contrib} and~\ref{prop:firstRow} as well as the irreducible condition of reducts, guarantee that none of the discarded attribute subsets is a reduct. 
+	
+	This is formalized in Proposition~\ref{prop:findall}.
+	
+	\begin{proposition}\label{prop:findall}
+		The algorithm MinReduct finds all shortest reducts of a decision system.
+	\end{proposition}
+	
+	\noindent
+	\textbf{Proof.} \textit{The algorithm MinReduct traverses the search space of attribute subsets in the lexicographical order. During the search process, some attribute subsets are evaluated while other ones are discarded in the following cases:}
+	\begin{itemize}
+		
+		\item \textit{Supersets of an attribute subset which has a non contributing attribute (Proposition~\ref{prop:contrib}).}
+		\item \textit{Candidates larger than the shortest super--reduct found so far.}
+		%\item \textit{Supersets of a super--reduct (which cannot be a reduct based on the definition of reduct).}
+		\item \textit{Subsets of a reduct (Proposition~\ref{prop:gap}), or a non super--reduct (Corollary~\ref{coro:gap}), which includes the last attribute of the basic matrix.}
+		\item \textit{The remaining candidates, when the column of the basic matrix corresponding to the leftmost attribute in the candidate has a zero in the first row (Proposition~\ref{prop:firstRow}).}
+		
+	\end{itemize} 
+	\textit{Since the attribute subsets discarded by the searching process are certainly not within the shortest reducts, we can state that MinReduct finds all shortest reducts of a decision system.}
+	
+	
 \section{Evaluation and Discussion}\label{evaluation}
-	In this section, we perform a comparative analysis of the proposed algorithm (MinReduct) versus RGonCRS, fast--CT\_EXT, and fast--BR; which are the most recent and fastest algorithms for reduct computation reported in the literature. Since these algorithms have exponential complexity, we perform a comparison through their implementations. Thus, all the conclusions drawn from these experiments refers rigorously to the implementations of the algorithms that we used. We evaluate all algorithms over decision systems from UCI~\cite{Bache13} and synthetic basic matrices. In all cases the author's implementation of the algorithm was used. All experiments were run on a Core i7-5820K Intel processor at 3.30GHz, with 32GB in RAM, running GNU/Linux.
+	In this section, we perform a comparative analysis of the proposed algorithm (MinReduct) versus SRGA~\citep{Susmaga} and CAMARDF~\citep{Zhou2009}. We have selected SRGA and CAMARDF because they are the fastest algorithms in the state of the art. Since all these algorithms have exponential complexity, we perform a comparison through their implementations. For our experiments, we have implemented MinReduct and SRGA in Java, and we use the implementation of CAMARDF provided by their authors in C. 
 	
-	Since RGonCRS is implemented in Matlab and it operates directly	over the decision system, in the subsection~\ref{sub:matlab}, we compare MinReduct against RGonCRS over decision systems by using a Matlab implementation of the proposed algorithm. Then, in the subsection~\ref{sub:java}, we show a comparative study of MinReduct against fast--CT\_EXT and fast--BR over basic matrices computed from decision systems of UCI, by using a Java implementation of the proposed algorithm. Finally, in the subsection~\ref{sub:synth}, we present a comparative study between fast--CT\_EXT, MinReduct and fast--BR over synthetic basic matrices. In this final experiment, we discuss the algorithms performance regarding the density of 1's of the basic matrix. 
-	
-	The source code of the four algorithms as well as all the decision systems from UCI and synthetic basic matrices used in these experiments, can be downloaded from \url{http://ccc.inaoep.mx/~ariel/MinReduct}.
+	Evaluations are performed over synthetic basic matrices and real--world datasets taken from the UCI machine learning repository~\citep{Bache13}. All experiments were run on a PC with a Core i7-5820K Intel processor at 3.30GHz, with 32GB in RAM, running GNU/Linux. The source code of the algorithms as well as all the datasets and synthetic basic matrices used in our experiments, can be downloaded from \url{http://ccc.inaoep.mx/~ariel/MinReduct}.
 	
 \subsection{Evaluation Over Synthetic Basic Matrices}\label{sub:synth}
 
-	In \citep{Rodriguez2017} categorize the basic matrices depending on the \emph{density of 1's} they have; i.e. the number of ones divided by the number of cells of the basic matrix. In order to explore the performance of MinReduct, fast--CT\_EXT and fast--BR regarding the density of 1's of the basic matrix; we conduct another experiment over 500 randomly generated basic matrices with 2000 rows and 30 columns. The size of these matrices was selected in order to keep reasonable runtime for the three algorithms. The 500 basic matrices were generated with densities of 1's uniformly distributed in the range (0.20--0.80) using a step of 0.04. 
+	In \citep{Rodriguez2017} a new scheme for assessing algorithms that compute all reducts was introduced. In this scheme, synthetic basic matrices for algorithm evaluation are generated in a wide range of \emph{densities of 1's}; i.e. the number of ones divided by the number of cells of the basic matrix. Following this idea for evaluating the performance of MinReduct, SRGA and CAMARDF; we present here an experiment over 500 randomly generated basic matrices with 2000 rows and 30 columns. The size of these matrices was selected in order to keep reasonable runtime for the three algorithms. The 500 basic matrices were generated with densities of 1's uniformly distributed in the range (0.20--0.80) using a step of 0.04. 
 				
-	\begin{figure}[htb]
+	\begin{figure}[hbt]
 		\begin{center}
-			\includegraphics[height=8cm]{mrVScamardf.eps}
+			\includegraphics[height=8cm]{infoVSnoInfo.eps}
 		\end{center}
-		\caption{Average runtime vs. density of 1's for MinReduct and CAMARDF.}
-		\label{fig:camardf}
-	\end{figure}	
+		\caption{Average runtime vs. density of 1's for SRGA, CAMARDF and MinReduct.}
+		\label{fig:synthetic}
+	\end{figure}  
 
-	For clarity purposes, the 500 matrices were split up into 15 groups by discretizing the range of densities, each group having approximately 33 basic matrices. Figure~\ref{fig:scattDensity} shows the average runtime of all  matrices in each group for the three algorithms, as a function of the density of 1's in the synthetic basic matrices. In this figure, the vertical bars show the standard deviation of each bin. 
+	Figure~\ref{fig:synthetic} shows the average runtime for the three algorithms, as a function of the density of 1's in the synthetic basic matrices. For clarity purposes, the 500 matrices were divided into 15 bins by discretizing the range of densities, each bin having approximately 33 basic matrices. In this figure, the vertical bars show the standard deviation of each bin.
 		
-	From Figure~\ref{fig:scattDensity}, we can see that for matrices with density under 0.36  the fastest algorithm was MinReduct, fast--BR was the fastest for matrices with density between 0.36 and 0.66, and the three algorithms show a similar performance for matrices with density above 0.66. The fact that basic matrices with a high density do not constitute a complex computational task for reduct computation \citep{Rojas12}, is clearly visible in Figure~\ref{fig:scattDensity}. For this reason, a detailed analysis in this region lacks of relevance.
+	From Figure~\ref{fig:synthetic}, we notice that CAMARDF was the fastest for matrices with a density under 0.24 while MinReduct was the fastest for matrices with a density above 0.24. Although MinReduct had better performance for most basic matrices, it should be pointed out that for densities of 1's under 0.24, our proposed algorithm showed a not so good performance. This behavior can be explained by looking into the main differences between MinReduct and the other two algorithms. The discernibility function for basic matrices with a low density of 1's is very small. Thus, candidate evaluations become very fast in CAMARDF as well as in SRGA, since they iterate over the complete discernibility function. However, for MinReduct, the dimensions of the basic matrix has no relation with its density. Furthermore, for MinReduct there are no simplifications in the candidate evaluation process for low densities of 1's. 
+	%On the contrary, low densities are associated to higher cardinality of the shortest reducts and thus, to a higher search space.
+	
+	
+\subsection{Evaluation over real datasets}
+	In order to evaluate the relation found before, between the density of a basic matrix and the performance of the algorithms, we present a comparative experiment between our proposed algorithm MinReduct and the other two algorithms over a sample of 14 real--world datasets taken from the UCI machine learning repository~\citep{Bache13}. For numerical attributes, we used the Weka's equal width discretization method with 10 bins, as describe in~\citep{Flores2010}.
+	% In this experiment we did not take into account the time needed to compute the basic matrix, since this step is required for the three algorithms. 
+
+	\begin{table}[htb]
+		\centering
+		\caption{Datasets taken from UCI. Sorted by the density of their basic matrix.}
+		\label{tab:datasets}
+		\begin{tabular}{lccccr}
+			\hline
+			\multicolumn{1}{c}{Dataset} & Attributes & Instances & Density & Rows & \multicolumn{1}{c}{Reducts} \\
+			\hline
+			%Chess (KR vs. KP)& 36  & 3196 & 0.03 & 29   & 4 \\
+			Keyword-activity & 37  & 1530 & 0.04 & 26   & 3 \\
+			%Connect-4        & 43  & 6756 & 0.05 & 406  & 35 \\
+			%Audiology        & 69  & 226  & 0.08 & 174  &  \\
+			Soybean          & 35  & 307  & 0.11 & 28   & 359 \\
+			QSAR-biodeg      & 42  & 1055 & 0.12 & 40   & 256 \\
+			Anneal           & 38  & 63   & 0.21 & 62   & 313 \\
+			%Landsat (train)  & 37  & 4435 & 0.33 & 9815 & 12412798 \\
+			%Mushroom        & 22  & 8124 & 0.33 & 28   & 264 \\
+			Dermatology      & 35  & 366  & 0.34 & 1103 & 112708 \\
+			LED24            & 25  & 200  & 0.34 & 2458 & 66800 \\
+			Student-mat      & 32  & 395  & 0.43 & 6253 & 679121 \\
+			Lung-cancer      & 57  & 32   & 0.47 & 237  & 4183355 \\
+			Arrhythmia       & 279 & 452  & 0.54 & 52951& -~~~~~~~\\
+			%Cylinder-bands   & 40  & 512  & 0.55 & 1148 & 23534 \\
+			Optdigits (train)& 64  & 382  & 0.59 & 29758& 20923529 \\
+			Landsat (test)   & 36  & 2000 & 0.74 & 7980 & 1050755 \\
+			%Ionosphere       & 34  & 351  & 0.74 & 250  & 5759 \\
+			SPECT Heart      & 22  & 267  & 0.90 & 2284 & 38473 \\
+			Ozone            & 72  & 575  & 0.93 & 5751 & 82755 \\
+			Sonar            & 60  & 208  & 0.95 & 426  & 3423 \\
+			\hline
+		\end{tabular}
+	\end{table}
 		
-	The results of evaluating CAMARDF and MinReduct over our 500 basic matrices are shown in Figure~\ref{fig:camardf}. Although MinReduct showed a better performance for most basic matrices, it is interesting to notice that for densities of 1's under 0.27, CAMARDF was faster. This behavior can be explained by looking into the differences between these algorithms that we exposed above. The discernibility function for basic matrices with a low density of 1's is very small. Thus, candidate evaluations and significance computation becomes very fast in CAMARDF. However, for MinReduct, the dimensions of the basic matrix has no relation with its density. Furthermore, for MinReduct there are no simplifications in the candidate evaluation process for low densities of 1's. On the contrary, low densities are associated to higher cardinality of shortest reducts and thus, to a higher search space.
+	In Table~\ref{tab:datasets}, we show the name of the datasets used in our experiment and their dimensions, as well as the density of 1's and the number of rows of their basic matrix, and their total number of reducts. Datasets in Table~\ref{tab:datasets} are sorted in ascending order regarding the density of their basic matrix. 
 	
-	Friedman and post hoc Nemenyi-Damico-Wolfe-Dunn tests show that MinReduct was significantly faster (\textit{p--value} $< 10^{-16}$) than fast--CT\_EXT for low (under 0.36) and medium (between 0.36 and 0.66) density matrices. In relation to fast--BR, MinReduct showed a significant runtime reduction (\textit{p--value} $< 10^{-16}$) for low density matrices while it was significantly slower (\textit{p--value} $< 10^{-16}$) for medium density matrices. From this analysis, we conclude that MinReduct is the best algorithm for low density matrices; while fast--BR is the best for medium density matrices. For high density matrices (over 0.66), any algorithm can be used since, as we already commented, computing reducts on this kind of matrices does not constitute a complex computational task. Moreover, from these conclusions a great advantage can be taken of selecting the appropriate algorithm for each decision system. Furthermore, the density of 1's can be computed a priori with a relative low computational cost.
-			
-	The density of 1's of the basic matrix is not the only parameter affecting the relative performance of these algorithms. This fact can be verified in Figure~\ref{fig:scattDensity}, where the vertical bars show the standard deviation of the runtime for different basic matrices which have the same density. Thus, we may infer that the distribution of 1's within the basic matrix also has a significant influence, which deserves a deeper study. However, for density values not too close to 0.36 this variations in the distribution of 1's	within the basic matrix have not effect on the determination of the fastest algorithm, as it can be also seen in Figure~\ref{fig:scattDensity}.\phantomsection\label{par:distribution}
-	
-	
-\subsection{Evaluation Over Real Datasets}\label{sub:uci}
-	In order to evaluate the relation found before, here we present a comparative experiment between our proposed algorithm MinReduct and CAMARDF over a sample of 10 real datasets taken from the UCI machine learning repository~\citep{Bache13}. For numerical attributes, we used the Weka's equal width discretization filter with 10 bins, as describe by~\cite{Flores2010}. In this experiment we did not take into consideration the time needed to compute the \textit{SBDM}, since this step is required for both algorithms. 
-	
-		\begin{table}[htb]
-			\centering
-			\caption{CAMARDF and MinReduct runtime for datasets from UCI. Sorted by \textit{SBDM} density.}
-			\label{tab:density}
-			\begin{tabular}{|l|c|c|c|c|c|r|r|}
-				\hline
-				&&&&&& \multicolumn{1}{c|}{CAMARDF} & \multicolumn{1}{c|}{MinReduct}  \\
-				\multicolumn{1}{|c|}{Dataset}       & Attributes & Instances & Density & Reducts & Size & runtime (s)  & runtime (s)  \\
-				\hline
-				Keyword-activity          & 37 & 1530   & 0.04    & 1   & 25 & \textbf{$<$1} & 578  \\
-				Connect-4                 & 43 & 6756   & 0.05    & 10  & 24 & \textbf{9}    &  915046 \\
-				QSAR-biodeg               & 42 & 1055   & 0.12    & 2   & 13 & \textbf{13}   & 484 \\
-				Anneal                    & 38 & 63     & 0.21    & 15  & 7  & \textbf{5}    & 27 \\
-				Landsat (train)           & 37 & 4435   & 0.33    & 6   & 14 & 3045201       & \textbf{2209878} \\
-				Dermatology               & 35 & 366    & 0.34    & 137 & 6  & 207           & \textbf{147}   \\
-				Student-mat               & 32 & 395    & 0.43    & 6   & 18 & 1007          & \textbf{277}  \\
-				Lung-cancer               & 57 & 32     & 0.47    & 112 & 4  & 1053          & \textbf{47}   \\
-				Cylinder-bands            & 40 & 512    & 0.55    & 2   & 2  & 13            & \textbf{5}   \\
-				Ozone                     & 72 & 5751   & 0.93    & 239 & 2  & 220           & \textbf{13}   \\
-				\hline
-			\end{tabular}
-		\end{table}   
-				
-	  In Table~\ref{tab:density}, we show the name of the datasets used in our experiment and their dimensions. Datasets in Table~\ref{tab:density} are sorted in ascending order regarding the density of 1's of their \textit{SBDM}, which can be seen in the column \textit{Density}. Finally, we show the number and cardinality of the shortest reducts for each dataset, as well as the runtime of both algorithms. From this experiment, we conclude that the rule obtained for synthetic matrices is also satisfied by real datasets, i.e. CAMARDF is the fastest for \textit{SBDMs} which have a density of 1's under 0.27, otherwise MinReduct is the fastest.
+	\begin{table}[tb]
+		\footnotesize  
+		\centering
+		\caption{CAMARDF, SRGA and MinReduct runtime for datasets from UCI.}
+		\label{tab:density}
+		\begin{tabular}{lcccrrr}
+			\hline
+			&&Shortest&& \multicolumn{1}{c}{CAMARDF} & \multicolumn{1}{c}{SRGA} & \multicolumn{1}{c}{MinReduct} \\
+			\multicolumn{1}{c}{Dataset} & Density  & Reducts & Size & runtime (ms)  & runtime (ms) & runtime (ms)  \\
+			\hline
+			%Chess (KR vs. KP)& 0.03 & 4    & 29 & \textbf{$<$1} & 4              & \textbf{$<$1}  \\
+			Keyword-activity & 0.04 & 1    & 25 & \textbf{$<$1} & 3              & 431  \\
+			%Connect-4        & 0.05 & 10   & 24 & \textbf{7}    & 95             & 644973 \\
+			%Audiology        & 0.08 & 6    & 15 & 1063          & \textbf{13}    & 64570824  \\
+			Soybean          & 0.11 & 29   & 11 & \textbf{$<$1} & 3              & 284 \\
+			QSAR-biodeg      & 0.12 & 2    & 13 & 7             & 3              & 278 \\
+			Anneal           & 0.21 & 15   & 7  & \textbf{2}    & 4              & 16 \\
+			%Landsat (train)  & 0.33 & 6    & 14 & 28825117      & \textbf{24041} & 1346503 \\
+			%Mushroom         & 0.33 & 21   & 4  & \textbf{$<$1} & 2              & 1   \\
+			Dermatology      & 0.34 & 137  & 6  & 114           & \textbf{45}    & 73   \\
+			LED24            & 0.34 & 95   & 11 & 1368          & \textbf{521}   & 540   \\
+			Student-mat      & 0.43 & 6    & 18 & 530           & 178            & \textbf{155}  \\
+			Lung-cancer      & 0.47 & 112  & 4  & 619           & 26             & \textbf{25}   \\
+			Arrhythmia       & 0.54 & 405  & 2  &  -            & 2632           & \textbf{57}   \\
+			%Cylinder-bands   & 0.55 & 2    & 2  & 7             & 4              & \textbf{2}   \\
+			Optdigits (train)& 0.59 & 600  & 5  & 48368         & 15492          & \textbf{3754} \\
+			Landsat (test)   & 0.74 & 432  & 5  &   -           & 1815           & \textbf{131}   \\
+			%Ionosphere       & 0.74 & 10   & 2  & 3             & 3              & \textbf{1}   \\
+			SPECT Heart      & 0.90 & 3551 & 3  &  -            & 747            & \textbf{15}   \\
+			Ozone            & 0.93 & 239  & 2  & 117           & 193            & \textbf{6}   \\
+			Sonar            & 0.95 & 1222 & 2  &  -            & 48             & \textbf{2}   \\
+			\hline
+		\end{tabular}
+	\end{table} 
+
+	In Table~\ref{tab:density} we show the number and cardinality of the shortest reducts for each dataset, as well as the runtime of the three algorithms. Notice that CAMARDF ran out of memory for four datasets. From this experiment, we conclude that the rule obtained for synthetic matrices is also satisfied by real datasets, i.e. CAMARDF and SRGA are faster for basic matrices with a low density of 1's, otherwise MinReduct is the fastest. 
+	%There is, of course, a group of basic matrices with density around 0.24 for which any algorithm could perform faster.
+
+	Notice from Table~\ref{tab:datasets} that, for Arrhythmia the total number of reducts could not be computed after 1500 hours. However, all shortest reducts in Arrhythmia were found in a very small time by MinReduct. This runtime reduction makes the shortest reduct computation useful larger datasets, specially those with a high dimensionality, for which computing all reducts is infeasible.
 	  
-	  \section{Conclusions}\label{conclusions}
-	In this work, we presented a new algorithm, MinReduct, for computing all reducts of a decision system. In the proposed algorithm, the search space is traversed evaluating some candidate subsets and, based on pruning properties, many others are discarded. Algorithms reported in the literature use operations with a high cost for candidate evaluation, in order to reduce the number of evaluated candidates. The main contribution of our proposal, unlike previous algorithms, is the use of simpler operations for candidate evaluation, based on the pruning properties of gap elimination and attribute contribution, for a faster reduct computation. 
+\section{Conclusions}\label{conclusions}
+	In this work, we presented a new algorithm, MinReduct, for computing all shortest reducts of a dataset. The proposed algorithm uses binary cumulative operations and a fast candidate evaluation process. Previous algorithms, reported in the literature, operate over the discernibility function and relay on costly operations for generating and evaluating candidates. 
 	
-	After conducting a series of experiments over synthetic basic matrices and decision systems from the UCI repository, we can conclude that MinReduct performs faster than the fastest previously reported algorithms on those decision systems whose associated basic matrix has a density of 1's under 0.36. This result provides an instrument to select the proper algorithm for a determined decision system. Further studies should be devoted to deeper explore the relation found between the fastest algorithm for reduct computation of a decision system and the density of 1's. 
+	After conducting a series of experiments over synthetic basic matrices and real datasets from the UCI repository, we can conclude that MinReduct performs faster than the fastest previously reported algorithms on those datasets whose associated basic matrix has a density of 1's above 0.24. This result provides also an instrument to select the proper algorithm for a determined dataset. 
 	
-	Finally, since the density of 1's of the basic matrix is not the only factor affecting the performance of the algorithms, including other factors deserves a wider study as future work. 
+	Further studies would include a wider analysis of the density threshold found in our experiments, together with a deeper exploration of the relation between some other dataset properties and the performance of different strategies for computing the shortest reducts. We think that the selection of the appropriate strategy for a given dataset can drastically reduce the runtime algorithm.
 
-\section{Acknowledgements}
-	The first author gratefully acknowledge CONACyT for his doctoral fellowship, through the scholarship 399547.
+\section{Acknowledgment}
+	The first author gratefully acknowledges CONACyT for its support through the scholarship 399547.
 %-------------------------------------------------------------------------------
 % Bibliography
 %-------------------------------------------------------------------------------
